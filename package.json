@@ -1,0 +1,37 @@
+{
+  "name": "message_desktop_client",
+  "version": "1.0.0",
+  "description": "A message desktop client",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "lexnnov",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^2.0.0"
+  },
+  "dependencies": {
+    "@nodeutils/defaults-deep": "^1.1.0",
+    "libp2p": "^0.21.0",
+    "libp2p-connection-manager": "0.0.2",
+    "libp2p-kad-dht": "^0.10.0",
+    "libp2p-mdns": "^0.12.0",
+    "libp2p-mplex": "^0.8.0",
+    "libp2p-railing": "^0.9.1",
+    "libp2p-secio": "^0.10.0",
+    "libp2p-spdy": "^0.12.1",
+    "libp2p-tcp": "^0.12.0",
+    "libp2p-websockets": "^0.12.0",
+    "peer-id": "^0.10.7",
+    "peer-info": "^0.14.1"
+  }
+}
