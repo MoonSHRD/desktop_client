@@ -6,7 +6,7 @@ To clone and run this repository you'll need [Git](https://git-scm.com) and [Nod
 
 ```bash
 # Clone this repository
-git clone https://github.com/electron/desktop_client
+git clone https://github.com/MoonSHRD/desktop_client
 # Go into the repository
 cd desktop_client
 # Install dependencies
