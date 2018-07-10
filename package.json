@@ -6,6 +6,32 @@
   "scripts": {
     "start": "electron ."
   },
+  "devDependencies": {
+    "babel-cli": "^6.9.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-regenerator": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "bake-cli": "^0.1.6",
+    "eslint": "^2.10.2",
+    "eslint-config-standard": "^5.3.1",
+    "eslint-plugin-promise": "^1.1.0",
+    "eslint-plugin-standard": "^1.3.2",
+    "mocha": "^2.5.2",
+    "standard-version": "^2.2.1",
+    "watchd": "github:mklabs/watchd",
+    "electron": "^2.0.0"
+  },
+  "bake": {
+    "description": "Scaffold a basic ES6 setup",
+    "scripts": {
+      "start": "echo Starting generation of default template",
+      "prestart": "echo prestart",
+      "poststart": "echo poststart",
+      "install": "npm install --loglevel warn --cache-min Infinity",
+      "preinstall": "echo Installing dependencies ...",
+      "postinstall": "npm ls --depth 0"
+    }
+  },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
     "Electron",
@@ -16,11 +42,15 @@
   ],
   "author": "lexnnov",
   "license": "CC0-1.0",
-  "devDependencies": {
-    "electron": "^2.0.0"
-  },
   "dependencies": {
     "@nodeutils/defaults-deep": "^1.1.0",
+    "electron-better-dialog": "^1.0.5",
+    "electron-settings": "^3.2.0",
+    "express": "^4.16.3",
+    "file-loader": "^1.1.11",
+    "ipfs": "^0.29.3",
+    "jquery": "^3.3.1",
+    "json-loader": "^0.5.7",
     "libp2p": "^0.21.0",
     "libp2p-connection-manager": "0.0.2",
     "libp2p-kad-dht": "^0.10.0",
@@ -31,7 +61,10 @@
     "libp2p-spdy": "^0.12.1",
     "libp2p-tcp": "^0.12.0",
     "libp2p-websockets": "^0.12.0",
+    "node-blockly": "^1.0.35",
+    "orbit-db": "^0.19.8",
     "peer-id": "^0.10.7",
-    "peer-info": "^0.14.1"
+    "peer-info": "^0.14.1",
+    "yarn": "^1.7.0"
   }
 }

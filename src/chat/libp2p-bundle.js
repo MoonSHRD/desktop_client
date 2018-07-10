@@ -52,22 +52,26 @@ class Node extends libp2p {
         ],
         dht: KadDHT
       },
-      config: {
-        peerDiscovery: {
-          mdns: {
-            interval: 10000,
-            enabled: false
-          },
-          bootstrap: {
-            interval: 10000,
-            enabled: false,
-            list: _options.bootstrapList
-          }
-        },
-        dht: {
-          kBucketSize: 20
+        config: {
+            peerDiscovery: {
+                mdns: {
+                    interval: 10000,
+                    enabled: false
+                },
+                bootstrap: {
+                    interval: 10000,
+                    enabled: false,
+                    list: _options.bootstrapList
+                }
+            },
+            dht: {
+                kBucketSize: 20
+            },
+            EXPERIMENTAL: {
+                dht: true,
+                pubsub: true
+            }
         }
-      }
     }
 
     super(defaultsDeep(_options, defaults))

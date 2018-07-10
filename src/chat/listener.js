@@ -1,6 +1,7 @@
 'use strict'
 
 const PeerId = require('peer-id')
+const jquery = require('jquery')
 const PeerInfo = require('peer-info')
 const Node = require('./libp2p-bundle.js')
 const pull = require('pull-stream')
@@ -8,9 +9,13 @@ const Pushable = require('pull-pushable')
 const p = Pushable()
 const input = document.getElementById('zxcvb')
 
-const send1 = document.getElementById('send1')
 const messageBlock = document.getElementById('messageBlock')
-const connectedPeers = document.getElementById('connectedPeers')
+const connectedPeersL = document.getElementById('connectedPeersL')
+const mainNodeId='QmYcuVrDn76jLz62zAQDmfttX9oSFH1cGXSH9rdisbHoGP';
+const mainNodeIp='192.168.1.12';
+
+
+
 
 PeerId.createFromJSON(require('./peer-id-listener'), (err, idListener) => {
     if (err) {
@@ -22,21 +27,27 @@ PeerId.createFromJSON(require('./peer-id-listener'), (err, idListener) => {
         peerInfo: peerListener
     })
 
+
+
     nodeListener.start((err) => {
         if (err) {
-            send1.hidden = true;
+            jquery('#send1').hide();
 
             throw err
         }
         send.hidden = true;
+
+
         nodeListener.on('peer:connect', (peerInfo) => {
 
-
+            // connectedPeersL.innerText += peerInfo.id.toB58String() + " connect to you \n"
             p.push("you connect to " + peerListener.id._idB58String)
-            console.log(peerInfo.id.toB58String())
+            // console.log(peerInfo.id.toB58String())
         })
 
         nodeListener.handle('/chat/1.0.0', (protocol, conn) => {
+
+
             pull(
                 p,
                 conn
@@ -46,7 +57,7 @@ PeerId.createFromJSON(require('./peer-id-listener'), (err, idListener) => {
                 conn,
                 pull.map((data) => {
                     if (data.toString('utf8').search(/peer/i) == 0) {
-                        connectedPeers.innerText += data + "\n"
+                        connectedPeersL.innerText += data + "\n"
 
                     } else {
                         messageBlock.innerText += data + "\n"
@@ -75,9 +86,9 @@ PeerId.createFromJSON(require('./peer-id-listener'), (err, idListener) => {
 
         })
 
-        send1.onclick = function () {
+        jquery('#send1').click(function () {
             p.push(input.value)
-        };
+        })
 
         input.onkeyup = function (e) {
             e = e || window.event;
@@ -87,6 +98,26 @@ PeerId.createFromJSON(require('./peer-id-listener'), (err, idListener) => {
 
             return false;
         }
+        nodeListener.pubsub.subscribe('news', (msg) => {
+            console.log(msg.from, msg.data.toString());
+            try {
+                let data = JSON.parse(msg.data.toString());
+                connectedPeersD.innerText = ""
+                console.log(data);
+                for (var key in data.data) {
+                    connectedPeersD.innerText += key + " online \n"
+                }
+            } catch (e) {
+
+            }
+        }, () => {
+        });
+
+        nodeListener.dial('/ip4/' + mainNodeIp + '/tcp/10333/ipfs/' + mainNodeId, (err, conn) => {
+            if (err) {
+                throw err
+            }
+        });
 
     })
 })

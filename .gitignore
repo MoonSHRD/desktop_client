@@ -1,3 +1,9 @@
 # Node.js package manager
 node_modules
 
+.eslintignore
+idea
+.npmignore
+Makefile
+yarn.lock
+

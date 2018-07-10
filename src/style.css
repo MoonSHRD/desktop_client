@@ -8,7 +8,7 @@ html, body {
 
 .chat {
     display: flex;
-    width: 40%;
+    width: 100%;
     overflow: hidden;
     flex-direction: column;
     text-align: center;
@@ -21,9 +21,26 @@ html, body {
 
 }
 
+.footer {
+    position: absolute;
+    display: flex;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+    color: lightblue;
+}
+
 .connected {
-    display: block;
+
     width: 60%;
+    overflow: hidden;
+    color: lightblue;
+}
+
+.loginText {
+    display: block;
+    bottom: 0;
+    width: 40%;
     overflow: hidden;
     color: lightblue;
 }
@@ -70,3 +87,16 @@ nav a:hover {
   font-size: 30px;
     cursor: pointer;
 }
+
+.login {
+    background: black;
+    opacity: 0.5;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+
+    justify-content: space-around;
+    align-items: center;
+    display: flex;
+}
+

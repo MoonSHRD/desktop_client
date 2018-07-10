@@ -5,10 +5,15 @@
     <title>Hello World!</title>
     <link rel="stylesheet" href="src/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-
+    <script src="node_modules/orbit-db/dist/orbitdb.min.js"></script>
 
   </head>
   <body>
+  <!--<div class="login">-->
+    <!--<h2 style="color: red">write your login</h2>-->
+    <!--<input id="loginInput" type="text">-->
+    <!--<button id="loginOk">OK</button>-->
+  <!--</div>-->
   <div class="wrapper">
     <div class="chat">
 
@@ -20,8 +25,12 @@
       </div>
 
     </div>
+    <div class="footer">
     <div class="connected">
-      <h5 id="connectedPeers"></h5>
+      <h5 style="color: red" id="connectedPeersD"></h5>
+      <h5 style="color: green" id="connectedPeersL"></h5>
+    </div>
+    <div class="loginText"><h5 id="loginText"></h5></div>
     </div>
   </div>
     <!--<nav >-->
@@ -30,14 +39,13 @@
       <!--<a href="">third</a>-->
     <!--</nav>-->
 
-
     <script>
       // You can also require other files to run in this process
 
       require('./renderer.js')
       require('./src/chat/libp2p-bundle.js')
       require('./src/chat/listener.js')
-      require('./src/chat/dialer.js')
+      // require('./src/chat/dialer.js')
       // require('./src/geo.js')
 
     </script>
