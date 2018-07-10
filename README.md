@@ -6,9 +6,9 @@ To clone and run this repository you'll need [Git](https://git-scm.com) and [Nod
 
 ```bash
 # Clone this repository
-git clone https://github.com/electron/messenger_desktop_client
+git clone https://github.com/MoonSHRD/desktop_client
 # Go into the repository
-cd messenger_desktop_client
+cd desktop_client
 # Install dependencies
 npm install
 # Run the app
