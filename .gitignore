@@ -1,3 +1,5 @@
 # Node.js package manager
 node_modules
 src/chat/
+yarn.lock
+.idea
