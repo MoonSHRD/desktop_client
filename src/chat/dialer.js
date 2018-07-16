@@ -17,6 +17,9 @@ const send = document.getElementById('send')
 const connectedPeers = document.getElementById('connectedPeers')
 var peer;
 
+// const IPFS = require('ipfs')
+const OrbitDB = require('orbit-db')
+
 async.parallel([
   (callback) => {
     PeerId.create({bits: 1024}, (err, idDialer) => {
