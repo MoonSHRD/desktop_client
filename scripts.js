@@ -1,5 +1,4 @@
 
-
 const jquery = require("jquery")
 const Messenger = require ('./src/core/messaging/index.js');
 const chat_protocol = '/chat/1.0.0';

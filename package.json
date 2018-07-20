@@ -24,7 +24,13 @@
     "@nodeutils/defaults-deep": "^1.1.0",
     "async": "^2.6.1",
     "bcrypt": "^3.0.0",
+    "bip39": "^2.5.0",
+    "eslint": "^5.1.0",
+    "ethereumjs-testrpc": "^6.0.3",
+    "ethereumjs-wallet": "^0.6.0",
+    "ethers": "^3.0.25",
     "jquery": "^3.3.1",
+    "keythereum": "^1.0.4",
     "libp2p": "^0.21.0",
     "libp2p-connection-manager": "0.0.2",
     "libp2p-kad-dht": "^0.10.0",
@@ -37,6 +43,9 @@
     "libp2p-websockets": "^0.12.0",
     "peer-id": "^0.10.7",
     "peer-info": "^0.14.1",
-    "sharp": "^0.20.5"
+    "scrypt": "^6.0.3",
+    "sharp": "^0.20.5",
+    "web3": "^0.20.6"
+
   }
 }
