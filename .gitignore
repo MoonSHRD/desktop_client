@@ -2,7 +2,7 @@
 node_modules
 
 .eslintignore
-idea
+.idea
 .npmignore
 Makefile
 yarn.lock

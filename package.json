@@ -61,10 +61,12 @@
     "libp2p-spdy": "^0.12.1",
     "libp2p-tcp": "^0.12.0",
     "libp2p-websockets": "^0.12.0",
+    "moonshard_core": "0.0.1",
     "node-blockly": "^1.0.35",
     "orbit-db": "^0.19.8",
     "peer-id": "^0.10.7",
     "peer-info": "^0.14.1",
+    "pug": "^2.0.3",
     "yarn": "^1.7.0"
   }
 }
