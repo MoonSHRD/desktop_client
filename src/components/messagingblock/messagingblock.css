@@ -1,0 +1,17 @@
+.messagingblock_block {
+    flex: 1;
+    height: 100vh;
+    position: relative;
+    /*background-color: lightgoldenrodyellow;*/
+}
+
+.send_message {
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    /*background: red;*/
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

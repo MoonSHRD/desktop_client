@@ -1,0 +1,45 @@
+style
+    include navbar.css
+
+#menu(class='icon-bar')
+    div(class='menu')
+        a(href='#')
+            div(class='image')
+                img(src="src/components/navbar/img/logo.png")
+            span MOON SHARD
+        a(href='#', class='menuBtn')
+            div(class='image')
+                img(src="src/components/navbar/img/burger.png")
+            span
+        a(href='#')
+            div(class='image')
+                img(src="src/components/navbar/img/men.png")
+            span Люди
+            label(notice='{4}')
+        a(href='#')
+            div(class='image')
+                img(src="src/components/navbar/img/groups.png")
+            span Группы
+            label(notice='{7}/')
+        a(href='#')
+            div(class='image')
+                img(src="src/components/navbar/img/balance.png")
+            span Кошелек
+            label(notice='{14}/')
+        a(href='#')
+            div(class='image')
+                img(src="src/components/navbar/img/calendar.png")
+            span Календарь
+            label(notice='{2}/')
+        a(href='#')
+            div(class='image')
+                img(src="src/components/navbar/img/settings.png")
+            span Настройки
+    div(class='exit')
+        a(href='#')
+            div(class='image')
+                img(src="src/components/navbar/img/logout.png")
+            span
+
+script
+    include ./script.js

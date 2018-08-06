@@ -1,0 +1,36 @@
+.chats_block {
+
+    position: relative;
+    width: 350px;
+    background-color: #F3F3F3;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation-direction: revert;
+    /*position: absolute;*/
+    /*right: 0;*/
+
+
+}
+
+.chats_block_header {
+
+    justify-content: center;
+    background-image: url(src/components/chatsblock/infopanel/header.png);
+    background-size: contain;
+    height: 100%;
+    background-repeat: no-repeat;
+
+}
+
+.chats_block_header_title {
+
+    font-family: 'Open Sans', sans-serif;
+
+}
+
+.resize1 {
+
+    width: 300px;
+}

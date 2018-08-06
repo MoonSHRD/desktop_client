@@ -1,0 +1,82 @@
+.icon-bar {
+    width: 70px; /* Set a specific width */
+    background-color: #363C64; /* Dark-grey background */
+    /*height: 100%;*/
+    z-index: 100;
+    font-family: 'Open Sans', sans-serif;
+    /*min-height: 100%;*/
+    overflow: hidden;
+
+}
+
+
+
+.image{
+    width: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.icon-bar a,.exit a {
+    display: inline-flex; /* Make the links appear below each other instead of side-by-side */
+    padding: 15px; /* Add some padding */
+    transition: all 0.3s ease; /* Add transition for hover effects */
+    color: white; /* White text color */
+    font-size: 25px; /* Increased font-size */
+    text-decoration: none;
+    box-sizing: border-box;
+    width: 220px;
+    align-items: center;
+    position: relative;
+}
+
+.icon-bar a:first-child {
+    /*padding-left: 27px;*/
+}
+
+
+.menu{
+    height: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+
+
+}
+
+.icon-bar input {
+    margin-left: 30px;
+    border-radius: 10px;
+}
+
+.icon-bar span {
+    font-size: 15px;
+    margin-left: 30px;
+    white-space: nowrap
+}
+
+.icon-bar a:hover {
+    background-color: #000; /* Add a hover color */
+}
+
+.active {
+    background-color: #4CAF50; /* Add an active/current color */
+}
+
+.menuFull {
+    background-color: #363C64;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 71px;
+    z-index: 0;
+    height: 100vh;
+}
+
+.resize {
+    width: 220px;
+    -moz-box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Для Firefox */
+    -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Для Safari и Chrome */
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+}
+
+
