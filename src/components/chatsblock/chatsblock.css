@@ -8,6 +8,7 @@
     display: flex;
     flex-direction: column;
     animation-direction: revert;
+    border-right: 1px solid #d0d0d0;
     /*position: absolute;*/
     /*right: 0;*/
 

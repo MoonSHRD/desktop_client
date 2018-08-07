@@ -1,6 +1,7 @@
 window.onload = function () {
+    var Pilot = require('pilotjs')
 
-
+// ["http://site.com/airport/", "http://site.com/airport/depot/", ..]
     $('.menuBtn').click(function() {
         // var options = { to: { width: 200, direction: "right"} };
         $('.chats_block').toggleClass('resize1', 400);
@@ -22,5 +23,8 @@ window.onload = function () {
         }
     }
     // container.addEventListener("click", onOffSwitch, false);
+
+
+
 
 };

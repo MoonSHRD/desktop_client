@@ -15,7 +15,7 @@ app.on('ready', async () => {
         // Could not initiate 'electron-pug'
     }
 
-    let mainWindow = new BrowserWindow({ width: 800, height: 600 })
+    let mainWindow = new BrowserWindow({ width: 900, height: 600 })
 
     mainWindow.loadURL(`file://${__dirname}/index.pug`)
     // the rest...
