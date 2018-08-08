@@ -40,30 +40,9 @@ window.onload = function() {
 
     // asyncrhonously fetch the html template partial from the file directory,
     // then set its contents to the html of the parent element
-    function loadHTML(url, id) {
-        req = new XMLHttpRequest();
-        req.open('GET', url);
-        req.send();
-        req.onload = () => {
-            $id(id).innerHTML = req.responseText;
-        };
-    }
 
     // use #! to hash
-    router = new Navigo(null, true, '#!');
 
-
-    // set the default route
-    router.on(() => {
-        $id('view').innerHTML = loadHTML('./index.pug', 'view');
-    });
-
-    // set the 404 route
-    router.notFound((query) => {
-        $id('messaging_block').innerHTML = '<h3>Couldn\'t find the page you\'re looking for...</h3>';
-    });
-
-    router.resolve();
 
     function add() {
         var arrObjects = [];
@@ -88,12 +67,12 @@ window.onload = function() {
         $('ul').empty()
 
         arrObjects.map(function (value, index) {
-            if(router._routes.length < arrObjects.length) {
-                router.on('#/user/' + value.jid + '', function () {
-                    // console.log('/user/' + value.jid + '')
-                    loadHTML('./src/components/messagingblock/qqq.pug', 'messaging_history');
-                })
-            }
+            // if(router._routes.length < arrObjects.length) {
+            //     router.on('#/user/' + value.jid + '', function () {
+            //         // console.log('/user/' + value.jid + '')
+            //         loadHTML('./src/components/messagingblock/qqq.pug', 'messaging_history');
+            //     })
+            // }
 
             // .resolve();
             $('ul').append("<li><a href='#/user/" + value.jid + "' data-navigo>" + value.jid + "\n" + value.state + "</a></li>")
