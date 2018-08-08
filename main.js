@@ -22,4 +22,4 @@ app.on('ready', async () => {
 
     mainWindow.loadURL(`file://${__dirname}/index.pug`)
     // the rest...
-})
+});
