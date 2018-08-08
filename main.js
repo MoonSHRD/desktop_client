@@ -1,8 +1,10 @@
 'use strict';
+let Router = require('electron-routes')
 
 const {app, BrowserWindow} = require('electron')
 const locals = {/* ...*/}
 const setupPug = require('electron-pug')
+
 
 
 // Standard stuff
@@ -15,7 +17,8 @@ app.on('ready', async () => {
         // Could not initiate 'electron-pug'
     }
 
-    let mainWindow = new BrowserWindow({ width: 900, height: 600 })
+    let mainWindow = new BrowserWindow({ width: 900, height: 600, webPreferences: {
+            nodeIntegration: true   } })
 
     mainWindow.loadURL(`file://${__dirname}/index.pug`)
     // the rest...
