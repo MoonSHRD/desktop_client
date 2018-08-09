@@ -1,12 +1,13 @@
+// const router = new Navigo(null, true, '#!');
+
 window.onload = function() {
-
-
 
     $('.menuBtn').click(function () {
         // var options = { to: { width: 200, direction: "right"} };
         $('.chats_block').toggleClass('resize1', 400);
 
         $('.icon-bar').toggleClass('resize', 400);
+
 
     });
 
@@ -38,7 +39,7 @@ window.onload = function() {
 
         arrObjects.map(function (value, index) {
 
-            $('.chats ul').append("<li><a id=" +value.jid+ " href='#/user_messages/:id" + value.jid + "' data-navigo><img src='./src/components/chatsblock/chats/img/mat_61911.jpg' width='40' height='40' /><span class='stateLabel'></span>" + value.name + "\n" + "<div class='label'></div></a></li>")
+            $('.chats ul').append("<li><a id=" +value.jid+ " href='#/user_messages/" + value.jid + "' data-navigo><img src='./src/components/chatsblock/chats/img/mat_61911.jpg' width='40' height='40' /><span class='stateLabel'></span>" + value.name + "\n" + "<div class='label'></div></a></li>")
 
             $('.chats li a').click(function () {
                 console.log($(this).attr('href'));
