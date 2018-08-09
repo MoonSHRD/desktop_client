@@ -15,8 +15,8 @@ function $id(id) {
 
 router.on('user_messages/:id', function (params) {
     // console.log(params.id);
-    return UserController.get_messages(params.id);
-    // console.log(UserController.get_messages(params.id));
+    // return UserController.get_messages(params.id);
+    console.log(UserController.get_messages(params.id));
 });
 
 // set the 404 route
