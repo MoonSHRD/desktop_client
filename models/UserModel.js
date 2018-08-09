@@ -35,15 +35,24 @@ class UserModel {
                 data:"13:53"
             },
             {
-                text:"Hello world",
-                data:"13:53"
+                text:"Hello world!",
+                data:"13:54"
             },
             {
-                text:"Hello world",
-                data:"13:53"
+                text:"Hello world!!",
+                data:"13:55"
             },
         ];
-    }
+    };
+
+    static get_profile = (id)=>{
+        return {
+            first_name: 'Вася',
+            second_name: 'Пупкин',
+            address: '0xertt54bw35y54by44w'
+        }
+    };
+
 }
 
 module.exports=UserModel;

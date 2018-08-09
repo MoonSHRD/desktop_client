@@ -8,7 +8,7 @@ function UserController() {
     };
 
     this.get_profile=(id)=>{
-
+        return UserModel.get_profile(id)
     };
 }
 
