@@ -1,11 +1,7 @@
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
-
-
-
-    // const Pilot =require('pilotjs')
-window.onload = function() {
+ window.onload = function() {
 
 
 
@@ -16,24 +12,24 @@ window.onload = function() {
         $('.icon-bar').toggleClass('resize', 400);
 
     })
-    //
-    // var container = document.querySelector("#switchContainer");
-    //
-    // function onOffSwitch() {
-    //     if (container.classList.contains("switchOn")) {
-    //         container.classList.remove("switchOn");
-    //         container.classList += " switchOff";
-    //     }
-    //     else {
-    //         container.classList.remove("switchOff");
-    //         container.classList += " switchOn";
-    //     }
-    // }
+
+    var container = document.querySelector("#switchContainer");
+
+    function onOffSwitch() {
+        if (container.classList.contains("switchOn")) {
+            container.classList.remove("switchOn");
+            container.classList += " switchOff";
+        }
+        else {
+            container.classList.remove("switchOff");
+            container.classList += " switchOn";
+        }
+    }
 
     // container.addEventListener("click", onOffSwitch, false);
 
 
-//
+
     function $id(id) {
         return document.getElementById(id);
     }
@@ -48,18 +44,22 @@ window.onload = function() {
         var arrObjects = [];
 
         arrObjects[0] = {
+            name: "Nikita Vonk",
             jid: "0x0feab3b11b087c9e6f1b861e265b78c693aa1045",
             state: Math.random() >= 0.5
         }
         arrObjects[1] = {
+            name: "Sdfucker Wertuhan",
             jid: "0x1111b3b11b087c9e6f1b861e265b78c693aa1045",
             state: Math.random() >= 0.5
         }
         arrObjects[2] = {
+            name: "Alex Dichovsky",
             jid: "0x0feab3b11b087c9e6f1b861e265b3478c693aa1045",
             state: Math.random() >= 0.5
         }
         arrObjects[3] = {
+            name: "Glamurny Podonok",
             jid: "343434",
             state: Math.random() >= 0.5
         }
@@ -75,14 +75,17 @@ window.onload = function() {
             // }
 
             // .resolve();
-            $('ul').append("<li><a href='#/user/" + value.jid + "' data-navigo>" + value.jid + "\n" + value.state + "</a></li>")
 
+            $('ul').append("<li><a id=" +value.jid+ " href='#/user/" + value.jid + "' data-navigo><img src='./src/components/chatsblock/chats/img/mat_61911.jpg' width='40' height='40' /><span class='stateLabel'></span>" + value.name + "\n" + "<div class='label'></div></a></li>")
+            if(!value.state) {
+                $('#' + value.jid ).find('.stateLabel').hide()
+            }
             $('.chats li a').click(function () {
                 console.log($(this).attr('href'))
                 $('.text').text($(this).attr('href'))
                 // console.log('#/user/' + value.jid + '')
                 // console.log(router.link())
-                router.navigate($(this).attr('href'))
+                // router.navigate($(this).attr('href'))
                 // alert('dsfdsf')
 
             })
@@ -95,6 +98,6 @@ window.onload = function() {
 
 
 
-    setTimeout(add, 1000);
-//
+    setInterval(add, 1000);
+
 }
