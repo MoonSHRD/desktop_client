@@ -46,3 +46,30 @@
     margin-left: 20px;
 
 }
+
+.messaging_history ul {
+    list-style: none;
+    padding: 0 20px;
+}
+
+.messaging_history li {
+    min-height: 50px;
+    width: 50%;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+.inMessage {
+    text-align: left;
+    background-color: #ffffff ;
+    padding: 10px;
+}
+
+.outMessage {
+    text-align: left;
+    background-color: #2BC2F9 ;
+    float: right;
+    padding: 10px;
+
+
+}
