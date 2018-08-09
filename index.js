@@ -1,7 +1,5 @@
 window.onload = function() {
 
-
-
     $('.menuBtn').click(function () {
         // var options = { to: { width: 200, direction: "right"} };
         $('.chats_block').toggleClass('resize1', 400);
