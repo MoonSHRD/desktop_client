@@ -2,23 +2,21 @@ const db = require('electron-db');
 
 class UserModel {
 
-    self=this;
-
-    static db="users";
-    fields={
-        address     :   undefined,
-        firstname   :   undefined,
-        lastname    :   undefined,
-        status      :   undefined,
-        state       :   undefined,
-    };
-
     constructor(options) {
         for (let field in this.fields) {
             if (options.field) {
                 this.fields.field=options.field;
             }
         }
+
+        this.db = "users";
+        this.fields={
+            address     :   undefined,
+            firstname   :   undefined,
+            lastname    :   undefined,
+            status      :   undefined,
+            state       :   undefined,
+        };
     }
 
     static find_one(address) {
@@ -30,7 +28,7 @@ class UserModel {
         });
     }
 
-    get_messages=(id)=>{
+    static get_messages(id) {
         return [
             {
                 text:"Hello world",
@@ -44,7 +42,7 @@ class UserModel {
                 text:"Hello world",
                 data:"13:53"
             },
-        ]
+        ];
     }
 }
 

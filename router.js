@@ -1,4 +1,4 @@
-const router = new Navigo(null, true, '#!');
+//const router = new Navigo(null, true, '#!');
 const UserController = require('./controllers/UserController');
 const pug = require('pug');
 
@@ -14,14 +14,23 @@ function $id(id) {
 // });
 
 router.on('user_messages/:id', function (params) {
-    // console.log(params.id);
-    // return UserController.get_messages(params.id);
-    console.log(UserController.get_messages(params.id));
+    console.log('got route');
+    const messages = UserController.get_messages(params.id);
+    const options = {
+        cache:true,
+    };
+    console.log(messages);
+
+    messages.forEach(function (msg) {
+        $('.messaging_history').append(pug.renderFile('src/components/messagingblock/inMessage.pug', {
+            text: msg.text
+        },options));
+    });
 });
 
 // set the 404 route
-router.notFound((query) => {
-    $id('messaging_block').innerHTML = '<h3>Couldn\'t find the page you\'re looking for...</h3>';
-});
+// router.notFound((query) => {
+//     $id('messaging_block').innerHTML = '<h3>Couldn\'t find the page you\'re looking for...</h3>';
+// });
 
 router.resolve();
