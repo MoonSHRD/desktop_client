@@ -1,17 +1,18 @@
 const db = require('electron-db');
 
 class AccountModel {
-    static exit_programm = (id)=>{
+    static exit_programm (id) {
         console.log('Goodbye!');
+        close();
         return true // если успешно вышел
     };
 
-    static get_contacts = (id)=>{
+    static get_contacts (id) {
         let list_contacts = [];
         return list_contacts
     };
 
-    static get_own_profile = (id)=>{
+    static get_own_profile (my_id) {
         return {
             first_name: 'Вася',
             second_name: 'Пупкин',
@@ -19,7 +20,7 @@ class AccountModel {
         }
     };
 
-    static get_groups = (id)=>{
+    static get_groups (id) {
         let list_group = [];
         list_group[0] = {
             id: '1',
@@ -35,6 +36,8 @@ class AccountModel {
         };
         return list_group;
     };
+
+
 }
 
 module.exports=AccountModel;

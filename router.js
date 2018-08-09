@@ -1,5 +1,6 @@
 //const router = new Navigo(null, true, '#!');
 const UserController = require('./controllers/UserController');
+const AccountController = require('./controllers/AccountController');
 const pug = require('pug');
 
 function $id(id) {
@@ -26,6 +27,11 @@ router.on('user_messages/:id', function (params) {
             text: msg.text
         },options));
     });
+});
+
+router.on('user_exit', function (){
+   console.log('Try exit');
+   AccountController.exit('0x1234567890987654321');
 });
 
 // set the 404 route

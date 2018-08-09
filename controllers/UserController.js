@@ -10,6 +10,13 @@ function UserController() {
     this.get_profile=(id)=>{
         return UserModel.get_profile(id)
     };
+
+
+    this.find_one = (address)=>{
+        return UserModel.find_one(address)
+    };
+
+
 }
 
 module.exports=new UserController();

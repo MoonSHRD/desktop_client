@@ -45,13 +45,6 @@ class UserModel {
         ];
     };
 
-    static get_profile = (id)=>{
-        return {
-            first_name: 'Вася',
-            second_name: 'Пупкин',
-            address: '0xertt54bw35y54by44w'
-        }
-    };
 
 }
 

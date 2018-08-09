@@ -1,4 +1,5 @@
 const router = new Navigo(null, true, '#!');
+// const AccountController = require('./controllers/AccountController');
 
 window.onload = function() {
 
@@ -7,6 +8,7 @@ window.onload = function() {
         $('.chats_block').toggleClass('resize1', 400);
 
         $('.icon-bar').toggleClass('resize', 400);
+
 
     });
 
@@ -24,7 +26,7 @@ window.onload = function() {
             state: Math.random() >= 0.5
         }
         arrObjects[2] = {
-            name: "Alex Dichovsky",
+            name: "Semen Dvachovsky",
             jid: "0x0feab3b11b087c9e6f1b861e265b3478c693aa1045",
             state: Math.random() >= 0.5
         }
@@ -45,9 +47,16 @@ window.onload = function() {
                 $('.text').text($(this).attr('href'));
                 router.navigate($(this).attr('href'))
             })
-        })
+        });
+        // $('.icon_bar exit a').bind('click', AccountController.exit('1231'));
 
     }
+
+    $('.exit').click(function () {
+        AccountController.exit('123');
+        alert('dsfdsf')
+
+    });
 
     setTimeout(add, 1000);
 };

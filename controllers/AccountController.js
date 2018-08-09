@@ -1,3 +1,4 @@
+//Включает в себя все действия, связанные непосредственно с аккаунтом (получение информации о себе, чатах и т.п.)
 const AccountModel=require('../models/AccountModel');
 
 function AccountController() {
@@ -13,7 +14,11 @@ function AccountController() {
         return AccountModel.get_groups(id)
     };
 
-    this.get_own_profile = (id)=>{
-        return AccountModel.get_own_profile(id)
+    this.get_own_profile = (my_id)=>{
+        return AccountModel.get_own_profile(my_id)
     };
+
+
 }
+
+module.exports = new AccountController();
