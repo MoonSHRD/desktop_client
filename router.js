@@ -19,6 +19,7 @@ router.on('user_messages/:id', function (params) {
     console.log(UserController.get_messages(params.id));
 });
 
+
 // set the 404 route
 router.notFound((query) => {
     $id('messaging_block').innerHTML = '<h3>Couldn\'t find the page you\'re looking for...</h3>';

@@ -38,7 +38,7 @@ window.onload = function() {
 
         arrObjects.map(function (value, index) {
 
-            $('.chats ul').append("<li><a id=" +value.jid+ " href='#/user/" + value.jid + "' data-navigo><img src='./src/components/chatsblock/chats/img/mat_61911.jpg' width='40' height='40' /><span class='stateLabel'></span>" + value.name + "\n" + "<div class='label'></div></a></li>")
+            $('.chats ul').append("<li><a id=" +value.jid+ " href='#/user_messages/:id" + value.jid + "' data-navigo><img src='./src/components/chatsblock/chats/img/mat_61911.jpg' width='40' height='40' /><span class='stateLabel'></span>" + value.name + "\n" + "<div class='label'></div></a></li>")
 
             $('.chats li a').click(function () {
                 console.log($(this).attr('href'));
