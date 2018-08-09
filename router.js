@@ -1,4 +1,4 @@
-//const router = new Navigo(null, true, '#!');
+const router = new Navigo(null, true, '#!');
 const UserController = require('./controllers/UserController');
 const pug = require('pug');
 
@@ -16,16 +16,17 @@ function $id(id) {
 router.on('user_messages/:id', function (params) {
     console.log('got route');
     const messages = UserController.get_messages(params.id);
-    const options = {
-        cache:true,
-    };
     console.log(messages);
 
     messages.forEach(function (msg) {
         $('.messaging_history').append(pug.renderFile('src/components/messagingblock/inMessage.pug', {
             text: msg.text
-        },options));
+        },PUG_OPTIONS));
     });
+});
+
+router.on('add_user/:id', function (params) {
+    UserController.add_user(params.id);
 });
 
 // set the 404 route

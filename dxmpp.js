@@ -1,8 +1,7 @@
-let {dxmpp} = require('moonshard_core');
+let {dxmpp,eth} = require('moonshard_core');
 const db = require('electron-db');
 
-//let addr="0x0feab3b11b087c9e6f1b861e265b78c693aa100b";
-let priv="0xe8662f419b434b3e17854f26eb37878fdcfd34adfa0c6c7990fa8e546efd1951";
+let priv=eth.generate_priv_key();
 
 dxmpp.on('online',function (data) {
     console.log(data);
@@ -10,6 +9,10 @@ dxmpp.on('online',function (data) {
 
 dxmpp.on('buddy', function(jid, state, statusText) {
 
+    $('.messaging_history').append(pug.renderFile('src/components/chatsblock/chats/imDialog.pug', {
+        address: jid,
+        full_name: jid,
+    },PUG_OPTIONS));
     console.log(`${jid} is ${state}` + ( statusText ? state : "" ));
 });
 
@@ -47,3 +50,4 @@ let config={
 
 dxmpp.connect(config);
 dxmpp.get_contacts();
+

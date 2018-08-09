@@ -13,23 +13,16 @@ html
             include src/components/chatsblock/chatsblock.pug
             include src/components/messagingblock/messagingblock.pug
 
-        //script(src='./node_modules/pilotjs/Pilot.js')
         script.
             window.$ = window.jQuery = require('./node_modules/jquery/dist/jquery.js');
 
         script.
+            require('./config')
+        script.
             require('jqueryui')
         script.
-            require('navigo')
-
-        script(src='./index.js')
-        script(src='./router.js')
-        //script(src='./renderer.js')
-
-        //script.
-        //    require('router_js')
-        //script(src="https://rawgit.com/flatiron/director/master/build/director.min.js")
-
-
+            require('./router')
+        script.
+            require('./index')
 
         script(async id="__bs_script__" src="http://localhost:3000/browser-sync/browser-sync-client.js?v=2.24.6")

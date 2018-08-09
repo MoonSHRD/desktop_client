@@ -10,6 +10,14 @@ function UserController() {
     this.get_profile=(id)=>{
 
     };
+
+    this.add_user=(user)=>{
+
+    };
+
+    this.user_online=(user)=>{
+
+    };
 }
 
 module.exports=new UserController();
