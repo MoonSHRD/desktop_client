@@ -1,7 +1,34 @@
-.infopanel {
-    /*margin-top: 40px;*/
-    width: 100%;
 
-    /*background-color: red;*/
-    /*height: 140px;*/
+
+.infopanel {
+    display: flex;
+    text-decoration: none;
+    padding: 20px;
+    transition: 0.5s;
+
+}
+
+.infopanel img {
+    border-radius:  50px;
+    border: 2px solid #2BC2F9;
+
+}
+
+.infopanel_title  {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    padding-left: 10px;
+    font-family: 'Open Sans', sans-serif;
+    color: black;
+}
+
+.infopanel_title b, span {
+    text-decoration: none;
+}
+
+.infopanel:hover {
+    /*background-color: white;*/
+    padding-left: 30px;
 }

@@ -1,3 +1,4 @@
+
 const Navigo = require('navigo')
 const router = new Navigo(null, true, '#!');
 const UserController = require('./controllers/UserController');
@@ -70,6 +71,7 @@ router.on('men/', function () {
     }
 
     setTimeout(add, 1000);
+
     $('.im_dialogs_col_wrap').empty()
     $('.im_dialogs_col_wrap').append(pug.renderFile('src/components/chatsblock/chats/men.pug'))
     console.log('got route');
