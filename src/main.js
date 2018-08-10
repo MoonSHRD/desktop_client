@@ -1,11 +1,11 @@
 'use strict';
-let Router = require('electron-routes');
+// let Router = require('electron-routes');
 
 const {app, BrowserWindow} = require('electron');
 const locals = {/* ...*/};
 const setupPug = require('electron-pug');
 
-require('./migration');
+// require('./migration');
 // Standard stuff
 
 app.on('ready', async () => {
@@ -20,7 +20,7 @@ app.on('ready', async () => {
             nodeIntegration: true   } });
 
     mainWindow.loadURL(`file://${__dirname}/index.pug`);
-    const router = require('./router');
+    const router = require(__dirname+'/router');
     router(mainWindow);
     //require('./dxmpp');
     // the rest...

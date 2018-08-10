@@ -3,6 +3,9 @@ const UserController = require('./controllers/UserController');
 const {ipcMain} = require('electron');
 let {dxmpp,eth} = require('moonshard_core');
 
+const PUG_OPTIONS = {
+    cache:true,
+};
 
 function router(renderer) {
 
@@ -15,26 +18,18 @@ function router(renderer) {
         ipcMain.send('msg', 'echo: '+arg)
     });
 
-
-}
-
-function start_dxmpp() {
-    const PUG_OPTIONS = {
-        cache:true,
-    };
-
-    let priv=eth.generate_priv_key();
-    console.log(priv);
-
     dxmpp.on('online',function (data) {
+        renderer.webContents.send('online', data);
         console.log(data);
     });
 
     dxmpp.on('buddy', function(jid, state, statusText) {
-        // $('#users_chats_box').append(pug.renderFile('src/components/chatsblock/chats/imDialog.pug', {
-        //     address: jid,
-        //     img: '.src/components/chatsblock/chats/img/mat_61911.jpg',
-        // },PUG_OPTIONS));
+        const html=pug.renderFile(__dirname+'/components/chatsblock/chats/imDialog.pug', {
+            address: jid,
+            img: __dirname+'/components/chatsblock/chats/img/mat_61911.jpg',
+        },PUG_OPTIONS);
+        renderer.webContents.send('buddy', html);
+        // ipcMain.send('buddy', html);
         console.log(`${jid} is ${state}` + ( statusText ? state : "" ));
     });
 
@@ -50,19 +45,25 @@ function start_dxmpp() {
         dxmpp.send(room_data.id+"@localhost", "fucka", true);
     });
 
-    $(document).on('click','#subscribe_user',function () {
-        const address = $('#input_subscribe_user').val();
-        console.log(`subscribe user ${address}`);
-        dxmpp.subscribe(address);
+    ipcMain.on('send_subscribe',(event, arg) => {
+        dxmpp.subscribe(arg);
+    });
+
+    ipcMain.on('send_message',(event, arg) => {
+        dxmpp.send(arg);
     });
 
     dxmpp.on('subscribe', function(from) {
         console.log(from);
         dxmpp.acceptSubscription(from);
-        dxmpp.send(from,"fuck you");
+        // dxmpp.send(from,"fuck you");
     });
 
     dxmpp.on('chat', function(from, message) {
+        const html=pug.renderFile(__dirname+'/components/messagingblock/inMessage.pug', {
+            text: message,
+        },PUG_OPTIONS);
+        renderer.webContents.send('received_message', html);
         console.log(`received msg: "${message}", from: "${from}"`);
     });
 
@@ -74,7 +75,10 @@ function start_dxmpp() {
         console.log(err);
     });
 
-    let config={
+    const priv=eth.generate_priv_key();
+    console.log(priv);
+
+    const config={
         jidhost				: 'localhost',
         privKey				: priv,
         host				: 'localhost',

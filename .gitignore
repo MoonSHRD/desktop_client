@@ -5,6 +5,7 @@ node_modules
 .idea
 .npmignore
 dist/
+release-builds/
 Makefile
 yarn.lock
 
