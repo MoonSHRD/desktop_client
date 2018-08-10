@@ -1,8 +1,9 @@
 style
     include chatsblock.css
-div(class ='chats_block')
-    div(class ='chats_block_header')
-    //include infopanel/infopanel.pug
-    include chats/chats.pug
+div(class="dialogs")
+    include infopanel/infopanel.pug
+    div(class ='im_dialogs_col_wrap')
+        include chats/men.pug
+        //include chats/groups.pug
 
 
