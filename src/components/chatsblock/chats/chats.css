@@ -145,3 +145,8 @@
     border-radius: 8px;
 
 }
+
+.settings {
+    display: flex;
+    justify-content: center;
+}
