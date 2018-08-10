@@ -4,6 +4,7 @@
 const {app, BrowserWindow} = require('electron');
 const locals = {/* ...*/};
 const setupPug = require('electron-pug');
+const router = require('./router');
 
 // require('./migration');
 // Standard stuff
@@ -16,12 +17,13 @@ app.on('ready', async () => {
         // Could not initiate 'electron-pug'
     }
 
-    let mainWindow = new BrowserWindow({ width: 900, height: 600, webPreferences: {
+    let mainWindow = new BrowserWindow({ width: 1200, height: 600, webPreferences: {
             nodeIntegration: true   } });
 
+    mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`file://${__dirname}/index.pug`);
-    const router = require(__dirname+'/router');
-    router(mainWindow);
+    mainWindow.webContents.send('online', 'online');
+    setTimeout(router(mainWindow), 100);
     //require('./dxmpp');
     // the rest...
 });

@@ -1,5 +1,5 @@
 .chats {
-    height: 100%;
+    height: calc( 100% - 160px);
     /*background-color: green;*/
     /*width: 100%;*/
     background: #F3F3F3;
@@ -12,12 +12,11 @@
     margin: 0;
     padding: 20px;
     /*margin-top: 45px;*/
+
+
 }
 
-.chats ul li{
 
-    /*background-color: blueviolet;*/
-}
 
 .chats a {
     height: 57px;
@@ -88,7 +87,7 @@
 }
 
 
-.chats:hover#style-11::-webkit-scrollbar-thumb {
+.chats ul:hover#style-11::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background: linear-gradient(left, #fff, #e4e4e4);
     border: 1px solid #aaa;
@@ -141,3 +140,13 @@
 /*.groups {*/
     /*display: none;*/
 /*}*/
+.active_dialog {
+    background-color: #2BC2F9;
+    border-radius: 8px;
+
+}
+
+.settings {
+    display: flex;
+    justify-content: center;
+}

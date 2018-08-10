@@ -1,22 +1,22 @@
-const UserController = require('./controllers/UserController');
-// const pug = require('pug');
+// const UserController = require('./controllers/UserController');
+const pug = require('pug');
 const {ipcMain} = require('electron');
 let {dxmpp,eth} = require('moonshard_core');
 
 const PUG_OPTIONS = {
-    cache:true,
+    cache:false,
 };
 
 function router(renderer) {
 
-    renderer.webContents.on('did-finish-load', () => {
-        renderer.webContents.send('ping', 'whoooooooh!')
-    });
+    // renderer.webContents.on('did-finish-load', () => {
+    //     renderer.webContents.send('ping', 'whoooooooh!')
+    // });
 
-    ipcMain.on('msg', (event, arg) => {
-        console.log(arg); // prints "ping"
-        ipcMain.send('msg', 'echo: '+arg)
-    });
+    // ipcMain.on('msg', (event, arg) => {
+    //     console.log(arg); // prints "ping"
+    //     ipcMain.send('msg', 'echo: '+arg)
+    // });
 
     dxmpp.on('online',function (data) {
         renderer.webContents.send('online', data);
@@ -26,7 +26,6 @@ function router(renderer) {
     dxmpp.on('buddy', function(jid, state, statusText) {
         const html=pug.renderFile(__dirname+'/components/chatsblock/chats/imDialog.pug', {
             address: jid,
-            img: __dirname+'/components/chatsblock/chats/img/mat_61911.jpg',
         },PUG_OPTIONS);
         renderer.webContents.send('buddy', html);
         // ipcMain.send('buddy', html);
@@ -50,7 +49,7 @@ function router(renderer) {
     });
 
     ipcMain.on('send_message',(event, arg) => {
-        dxmpp.send(arg);
+        dxmpp.send(arg.to,arg.message,arg.group);
     });
 
     dxmpp.on('subscribe', function(from) {
@@ -63,7 +62,12 @@ function router(renderer) {
         const html=pug.renderFile(__dirname+'/components/messagingblock/inMessage.pug', {
             text: message,
         },PUG_OPTIONS);
-        renderer.webContents.send('received_message', html);
+        const obj={
+            jid:from,
+            message:html,
+            group:false
+        };
+        renderer.webContents.send('received_message', obj);
         console.log(`received msg: "${message}", from: "${from}"`);
     });
 

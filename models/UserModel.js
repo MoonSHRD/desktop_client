@@ -1,4 +1,4 @@
-const db = require('electron-db');
+// const db = require('electron-db');
 
 class UserModel {
 
@@ -20,12 +20,12 @@ class UserModel {
     }
 
     static find_one(address) {
-        db.getRows(UserModel.db,{address:address},(succ, result) => {
-            // succ - boolean, tells if the call is successful
-            return result[0];
-            // console.log("Success: " + succ);
-            // console.log(result);
-        });
+        // db.getRows(UserModel.db,{address:address},(succ, result) => {
+        //     // succ - boolean, tells if the call is successful
+        //     return result[0];
+        //     // console.log("Success: " + succ);
+        //     // console.log(result);
+        // });
     }
 
     static get_messages(id) {
