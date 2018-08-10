@@ -1,7 +1,7 @@
 
 const Navigo = require('navigo')
 const router = new Navigo(null, true, '#!');
-const UserController = require('./controllers/UserController');
+const UserController = require('../controllers/UserController');
 const pug = require('pug');
 
 function $id(id) {
@@ -24,7 +24,7 @@ router.on('user_messages/:id', function (params) {
     console.log(messages);
 
     messages.forEach(function (msg) {
-        $('.messaging_history').append('<ul>' + pug.renderFile('src/components/messagingblock/inMessage.pug', {
+        $('.messaging_history').append('<ul>' + pug.renderFile(__dirname+'/components/messagingblock/inMessage.pug', {
             text: msg.text
         },options) + '</ul>');
     });
@@ -59,7 +59,7 @@ router.on('men/', function () {
 
         arrObjects.map(function (value, index) {
 
-            $('.chats ul').append("<li><a id=" +value.jid+ " href='#/user_messages/" + value.jid + "' data-navigo><img src='./src/components/chatsblock/chats/img/mat_61911.jpg' width='40' height='40' /><span class='stateLabel'></span>" + value.name + "\n" + "<div class='label'></div></a></li>")
+            $('.chats ul').append("<li><a id=" +value.jid+ " href='#/user_messages/" + value.jid + "' data-navigo><img src='./components/chatsblock/chats/img/mat_61911.jpg' width='40' height='40' /><span class='stateLabel'></span>" + value.name + "\n" + "<div class='label'></div></a></li>")
 
             $('.chats li a').click(function () {
                 console.log($(this).attr('href'));
@@ -73,7 +73,7 @@ router.on('men/', function () {
     setTimeout(add, 1000);
 
     $('.im_dialogs_col_wrap').empty()
-    $('.im_dialogs_col_wrap').append(pug.renderFile('src/components/chatsblock/chats/men.pug'))
+    $('.im_dialogs_col_wrap').append(pug.renderFile(__dirname+'/components/chatsblock/chats/men.pug'))
     console.log('got route');
 
 
@@ -81,7 +81,7 @@ router.on('men/', function () {
 
 router.on('groups/', function () {
     $('.im_dialogs_col_wrap').empty()
-    $('.im_dialogs_col_wrap').append(pug.renderFile('src/components/chatsblock/chats/groups.pug'))
+    $('.im_dialogs_col_wrap').append(pug.renderFile(__dirname+'/components/chatsblock/chats/groups.pug'))
     console.log('got route');
 
 
@@ -89,7 +89,7 @@ router.on('groups/', function () {
 
 router.on('settings/', function () {
     $('.im_dialogs_col_wrap').empty()
-    $('.im_dialogs_col_wrap').append(pug.renderFile('src/components/chatsblock/settigs/sittings.pug'))
+    $('.im_dialogs_col_wrap').append(pug.renderFile(__dirname+'/components/chatsblock/settigs/sittings.pug'))
     console.log('got route');
 
 

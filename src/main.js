@@ -17,8 +17,9 @@ app.on('ready', async () => {
     }
 
     let mainWindow = new BrowserWindow({ width: 900, height: 600, webPreferences: {
-            nodeIntegration: true   } });
+            nodeIntegration: true   }});
 
+    mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`file://${__dirname}/index.pug`)
     // the rest...
 });
