@@ -47,9 +47,16 @@
 
 }
 
+.messaging_history {
+
+    height: calc(100% - 100px);
+}
+
 .messaging_history ul {
     list-style: none;
     padding: 0 20px;
+    overflow-y: scroll ;
+    height: 100%;
 }
 
 .messaging_history li {
@@ -57,6 +64,7 @@
     width: 50%;
     border-radius: 20px;
     margin-bottom: 10px;
+    display: flex;
 }
 
 .inMessage {

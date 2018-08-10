@@ -29,6 +29,7 @@ window.onload = function() {
             message: $('.send_message_input').val(),
             group: false
         }
+        $('.messaging_history ul').append('<li>' + pug.renderFile(__dirname+'/components/messagingblock/outMessage.pug', {message: obj.message}) + '</li>');
         console.log(obj)
 
         ipcRenderer.send("send_message", obj)

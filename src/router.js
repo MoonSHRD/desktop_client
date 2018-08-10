@@ -24,9 +24,7 @@ router.on('user_messages/:id', function (params) {
     console.log(messages);
 
     messages.forEach(function (msg) {
-        $('.messaging_history').append('<ul>' + pug.renderFile(__dirname+'/components/messagingblock/inMessage.pug', {
-            text: msg.text
-        },options) + '</ul>');
+        $('.messaging_history ul').append('<li>' + pug.renderFile(__dirname+'/components/messagingblock/inMessage.pug', {text: msg.text},options) + '</li>');
     });
 });
 
