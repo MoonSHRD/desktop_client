@@ -19,6 +19,9 @@ app.on('ready', async () => {
     let mainWindow = new BrowserWindow({ width: 900, height: 600, webPreferences: {
             nodeIntegration: true   } });
 
-    mainWindow.loadURL(`file://${__dirname}/index.pug`)
+    mainWindow.loadURL(`file://${__dirname}/index.pug`);
+    const router = require('./router');
+    router(mainWindow);
+    //require('./dxmpp');
     // the rest...
 });

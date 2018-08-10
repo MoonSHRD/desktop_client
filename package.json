@@ -4,11 +4,21 @@
   "description": "A message desktop client",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "465465456",
+    "mac": {
+      "category": "your.app.category.type"
+    }
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",
     "babel-plugin-add-module-exports": "^0.2.1",
+    "electron-builder": "^20.27.1",
     "babel-plugin-transform-regenerator": "^6.9.0",
     "babel-preset-es2015": "^6.9.0",
     "bake-cli": "^0.1.6",
@@ -65,10 +75,11 @@
     "libp2p-spdy": "^0.12.1",
     "libp2p-tcp": "^0.12.0",
     "libp2p-websockets": "^0.12.0",
-    "moonshard_core": "0.0.1",
+    "moonshard_core": "0.0.6",
     "navigo": "^7.1.2",
     "nightmare": "^2.0.5",
     "node-blockly": "^1.0.35",
+    "node-ipc": "^9.1.1",
     "orbit-db": "^0.19.8",
     "peer-id": "^0.10.7",
     "peer-info": "^0.14.1",

@@ -4,6 +4,7 @@ node_modules
 .eslintignore
 .idea
 .npmignore
+dist/
 Makefile
 yarn.lock
 

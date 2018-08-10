@@ -1,5 +1,5 @@
 li
-    a(id=' +value.jid+ ', href='#/user_messages/'+#{address}+'" + value.jid + "', data-navigo)
-        img(src='./src/components/chatsblock/chats/img/mat_61911.jpg', width='40', height='40')
+    a(id='#{address}', href='#/user_messages/#{address}', data-navigo)
+        img(src='#{img}', width='40', height='40')
         span(class="stateLabel")
-        p #{full_name}
+        p #{address}
