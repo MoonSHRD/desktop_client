@@ -1,5 +1,14 @@
 // const router = new Navigo(null, true, '#!');
 
+const {ipcRenderer} = require('electron');
+
+
+ipcRenderer.on('buddy', (event, arg) => {
+    console.log(arg); // prints "ping"
+    alert(arg); // prints "ping"
+});
+
+
 window.onload = function() {
 
     $('.menuBtn').click(function () {
@@ -8,6 +17,50 @@ window.onload = function() {
 
         $('.icon-bar').toggleClass('resize', 400);
     });
+
+    $('.searchButton').click(function () {
+        let text = $('.subscribeInput').val()
+        ipcRenderer.send("send_subscribe", text)
+    });
+
+    $('.send_message_btn').click(function () {
+        const obj = {
+            to:$('.active_dialog').attr('id'),
+            message: $('.send_message_input').val(),
+            group: false
+        }
+        console.log(obj)
+
+        ipcRenderer.send("send_message", obj)
+    });
+
+    ipcRenderer.on('reseived_message', obj => {
+        console.log(obj);
+        // arg = {
+        //     from:jid,
+        //     message:
+        //     group:false
+        // }
+        if($('.active_dialog').attr('id') === obj.jid) {
+            $('.messaging_history').append(obj.message);
+        }
+    })
+
+    ipcRenderer.on('buddy', obj => {
+        console.log(obj);
+        // arg = {
+        //     jid:jid,
+        //     status:
+        //     state:false
+        // }
+        $('.chats ul').append("<li id=" +obj.jid+ "><a href='#/user_messages/" + obj.jid + "' data-navigo><img src='./components/chatsblock/chats/img/mat_61911.jpg' width='40' height='40' /><span class='stateLabel'></span>" + obj.status + "\n" + "</a></li>")
+
+    })
+
+    ipcRenderer.on('online', obj => {
+        console.log(obj);
+    })
+
 
 
     function add() {
@@ -58,7 +111,7 @@ window.onload = function() {
 
         arrObjects.map(function (value, index) {
 
-            $('.chats ul').append("<li><a id=" +value.jid+ " href='#/user_messages/" + value.jid + "' data-navigo><img src='./components/chatsblock/chats/img/mat_61911.jpg' width='40' height='40' /><span class='stateLabel'></span>" + value.name + "\n" + "</a></li>")
+            $('.chats ul').append("<li id=" +value.jid+ "><a href='#/user_messages/" + value.jid + "' data-navigo><img src='./components/chatsblock/chats/img/mat_61911.jpg' width='40' height='40' /><span class='stateLabel'></span>" + value.name + "\n" + "</a></li>")
 
             $('.chats li a').click(function () {
                 console.log($(this).attr('href'));
