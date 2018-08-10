@@ -1,6 +1,9 @@
 //const router = new Navigo(null, true, '#!');
 const UserController = require('./controllers/UserController');
 const AccountController = require('./controllers/AccountController');
+const ChatUserController = require('./controllers/ChatUserController');
+const ChatController = require('./controllers/ChatController');
+const UserMessagesController = require('./controllers/UserMessagesController');
 const pug = require('pug');
 
 function $id(id) {
