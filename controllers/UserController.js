@@ -8,16 +8,15 @@ function UserController() {
     };
 
     this.get_profile=(id)=>{
-
+        return UserModel.get_profile(id)
     };
 
-    this.add_user=(user)=>{
 
+    this.find_one = (address)=>{
+        return UserModel.find_one(address)
     };
 
-    this.user_online=(user)=>{
 
-    };
 }
 
 module.exports=new UserController();

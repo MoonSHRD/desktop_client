@@ -8,5 +8,6 @@ release-builds
 dist/
 release-builds/
 Makefile
+package-lock.json
 yarn.lock
 
