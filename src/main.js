@@ -17,13 +17,16 @@ app.on('ready', async () => {
         // Could not initiate 'electron-pug'
     }
 
-    let mainWindow = new BrowserWindow({ width: 1200, height: 600, webPreferences: {
+    let mainWindow = new BrowserWindow({ width: 1200, height: 600, show: false, webPreferences: {
             nodeIntegration: true   } });
 
     mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`file://${__dirname}/index.pug`);
-    mainWindow.webContents.send('online', 'online');
-    setTimeout(router(mainWindow), 100);
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show();
+    });
+    // mainWindow.webContents.send('online', 'online');
+    router(mainWindow)
     //require('./dxmpp');
     // the rest...
 });

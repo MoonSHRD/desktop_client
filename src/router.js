@@ -1,13 +1,27 @@
 // const UserController = require('./controllers/UserController');
 const pug = require('pug');
 const {ipcMain} = require('electron');
-let {dxmpp,eth} = require('moonshard_core');
+const {dxmpp,eth} = require('moonshard_core');
+const Account = require('../controllers/AccountController');
 
 const PUG_OPTIONS = {
     cache:false,
 };
 
+const states={
+    auth:'auth',
+    offline:'offline',
+    online:'online',
+};
+
+let app_status = states.auth;
+
 function router(renderer) {
+
+    switch (app_status) {
+        case states.auth:
+            Account.
+    }
 
     // renderer.webContents.on('did-finish-load', () => {
     //     renderer.webContents.send('ping', 'whoooooooh!')
@@ -54,6 +68,10 @@ function router(renderer) {
 
     dxmpp.on('subscribe', function(from) {
         console.log(from);
+        const html=pug.renderFile(__dirname+'/components/chatsblock/chats/imDialog.pug', {
+            address: from,
+        },PUG_OPTIONS);
+        renderer.webContents.send('buddy', html);
         dxmpp.acceptSubscription(from);
         // dxmpp.send(from,"fuck you");
     });

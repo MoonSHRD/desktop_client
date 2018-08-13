@@ -9,9 +9,14 @@ html
         style
             include App.css
         div(class='App' id=('view'))
-            include components/navbar/navbar.pug
-            include components/chatsblock/chatsblock.pug
-            include components/messagingblock/messagingblock.pug
+            div(class='app_loading_wrapper')
+                div(class='app_loading')
+            //<div id="loader-wrapper">
+            //<div id="loader"></div>
+            //</div>
+            //include components/navbar/navbar.pug
+            //include components/chatsblock/chatsblock.pug
+            //include components/messagingblock/messagingblock.pug
 
         //script(src='./node_modules/pilotjs/Pilot.js')
         script.
