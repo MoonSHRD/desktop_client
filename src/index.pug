@@ -4,13 +4,12 @@ html
         block head
             meta(charset = 'utf-8')
             meta(name='viewport', content="initial-scale=1.0, width=device-width")
-            title Webpack app
+            title Moonshard
     body
         style
             include App.css
         div(class='App' id=('view'))
-            div(class='app_loading_wrapper')
-                div(class='app_loading')
+            include components/loading/loading.pug
             //<div id="loader-wrapper">
             //<div id="loader"></div>
             //</div>

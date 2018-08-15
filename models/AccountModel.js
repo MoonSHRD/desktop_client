@@ -1,6 +1,7 @@
-let sql = require('sql.js');
-const file_buffer = fs.readFileSync('../databases/account.sqlite');
-let db = new sql.Database(file_buffer);
+// let sql = require('sql.js');
+// let fs = require('fs');
+// const file_buffer = fs.readFileSync('../databases/account.sqlite');
+// let db = new sql.Database(file_buffer);
 
 class AccountModel {
     static exit_programm () {
