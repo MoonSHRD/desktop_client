@@ -17,7 +17,7 @@ const states={
 let acc_data={
     jidhost				: 'localhost',
     privKey				: '',
-    host				: '192.168.1.9',
+    host				: 'localhost',
     port				: 5222,
     firstname		    : "",
     lastname		    : "",
@@ -156,6 +156,22 @@ function router(renderer) {
     // };
     //
     dxmpp.get_contacts();
+    dxmpp.on("find_groups", function(result) {
+        console.log('Here it is your damn groups!');
+        result.forEach(function (group) {
+            const html = pug.renderFile(__dirname+'/components/main/chatsblock/chats/imDialog.pug', {
+                address: group.name,
+            },PUG_OPTIONS);
+            // console.log(group);
+            renderer.webContents.send('buddy', html)
+        });
+    });
+
+    ipcMain.on('find_groups', (event, group_name) => {
+        console.log('Here I am');
+        console.log(group_name);
+        dxmpp.find_group(group_name);
+    })
 }
 
 module.exports = router;
