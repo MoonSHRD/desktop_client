@@ -94,4 +94,12 @@ window.onload = function () {
         //router.navigate($(this).attr('href'))
 
     });
+
+    $(document).on('keyup', '.search', function() {
+       let group = $('input').val();
+       console.log(group);
+       console.log('Start search');
+       ipcRenderer.send('find_groups', group);
+
+    });
 };
