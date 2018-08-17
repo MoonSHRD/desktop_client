@@ -111,6 +111,10 @@ function router(renderer) {
     //
     ipcMain.on('send_message',(event, arg) => {
         dxmpp.send(arg.to,arg.message,arg.group);
+        let html = pug.renderFile(__dirname+'/components/main/messagingblock/outMessage.pug', {
+            message: arg.message, time: arg.time
+            }, PUG_OPTIONS);
+        renderer.webContents.send('add_out_msg', html)
     });
     //
     dxmpp.on('subscribe', function(from) {
@@ -133,7 +137,7 @@ function router(renderer) {
             group:false
         };
         renderer.webContents.send('received_message', obj);
-        console.log(`received msg: "${message}", from: "${from}"`);
+        // console.log(`received msg: "${message}", from: "${from}"`);
     });
     //
     // dxmpp.on('groupchat', function(room_data, message, sender, stamp) {
@@ -167,6 +171,9 @@ function router(renderer) {
         });
     });
     ipcMain.on('find_groups', (event, group_name) => {
+        if (group_name === '') {
+            return
+        }
         dxmpp.find_group(group_name);
     });
 
