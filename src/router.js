@@ -71,6 +71,7 @@ function router(renderer) {
         acc_data.lastname=arg.lastname;
 
         dxmpp.connect(acc_data);
+        dxmpp.set_vcard(acc_data.firstname, acc_data.lastname, "Расскажите о себе");
     });
 
     //will be used later
@@ -156,21 +157,28 @@ function router(renderer) {
     // };
     //
     dxmpp.get_contacts();
+
     dxmpp.on("find_groups", function(result) {
-        console.log('Here it is your damn groups!');
         result.forEach(function (group) {
             const html = pug.renderFile(__dirname+'/components/main/chatsblock/chats/imDialog.pug', {
                 address: group.name,
             },PUG_OPTIONS);
-            // console.log(group);
             renderer.webContents.send('buddy', html)
         });
     });
-
     ipcMain.on('find_groups', (event, group_name) => {
-        console.log('Here I am');
-        console.log(group_name);
         dxmpp.find_group(group_name);
+    });
+
+    dxmpp.on('received_vcard', function (data) {
+        console.log(data);
+        // let a = window.confirm('Rly?');
+        // window.alert(data)
+        renderer.webContents.send('get_vcard', data)
+
+    });
+    ipcMain.on('received_vcard', (event) => {
+        dxmpp.get_vcard(acc_data.adrs)
     })
 }
 

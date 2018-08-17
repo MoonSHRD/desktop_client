@@ -97,9 +97,18 @@ window.onload = function () {
 
     $(document).on('keyup', '.search', function() {
        let group = $('input').val();
-       console.log(group);
-       console.log('Start search');
        ipcRenderer.send('find_groups', group);
 
     });
+
+    $(document).on('click', '.aboutMe', function () {
+        ipcRenderer.send('received_vcard');
+    });
+
+    ipcRenderer.on('get_vcard', (event, data) => {
+        window.alert(`full name: ${data.full_name}\n
+                      first name: ${data.firstname}\n
+                      last name: ${data.lastname}\n
+                      bio: ${data.bio}`)
+    })
 };
