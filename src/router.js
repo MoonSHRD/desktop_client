@@ -3,6 +3,7 @@ const pug = require('pug');
 const {ipcMain} = require('electron');
 const {dxmpp,eth} = require('moonshard_core');
 const Account = require('../controllers/AccountController');
+const fs = require('fs');
 
 const PUG_OPTIONS = {
     cache:false,
@@ -17,7 +18,7 @@ const states={
 let acc_data={
     jidhost				: 'localhost',
     privKey				: '',
-    host				: '192.168.1.9',
+    host				: 'localhost',
     port				: 5222,
     firstname		    : "",
     lastname		    : "",
@@ -26,28 +27,30 @@ let acc_data={
 
 let app_status = states.auth;
 
+fs.readFile('account.json', 'utf8', function (err, data) {
+    if (err) return;
+    const obj = JSON.parse(data);
+    if (obj.privKey){
+        app_status = states.offline;
+        acc_data.privKey = obj.privKey;
+    }
+});
+
 function router(renderer) {
 
     console.log(app_status);
     switch (app_status) {
         case states.auth:
             if (Account.account_exists()) {
-                console.log("html: "+html);
                 app_status=states.offline
             } else {
                 let html = Account.get_auth_html();
-                console.log("html: "+html);
                 renderer.webContents.send('change_app_state', html);
             }
-        case states.offline:
-            // if (Account.account_exists()) {
-            //     console.log("html: "+html);
-            //     app_status=states.offline
-            // } else {
-            //     let html = Account.get_auth_html();
-            //     console.log("html: "+html);
-            //     renderer.webContents.send('change_app_state', html);
-            // }
+            break;
+        default:
+            dxmpp.connect(acc_data);
+            break;
     }
 
     ipcMain.on('generate_mnemonic',() => {
@@ -69,6 +72,13 @@ function router(renderer) {
 
         acc_data.firstname=arg.firstname;
         acc_data.lastname=arg.lastname;
+
+
+        fs.writeFile("account.json", JSON.stringify({privKey:acc_data.privKey}), function(err) {
+            if (err) {
+                console.log(err);
+            }
+        });
 
         dxmpp.connect(acc_data);
     });

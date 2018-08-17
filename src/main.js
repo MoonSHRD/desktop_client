@@ -29,8 +29,8 @@ app.on('ready', async () => {
     mainWindow.webContents.on('dom-ready', function() {
         console.log('finished');
         mainWindow.show();
-        // setTimeout(()=>{router(mainWindow)},15000)
-        router(mainWindow);
+        setTimeout(()=>{router(mainWindow)},2000)
+        // router(mainWindow);
     });
     // mainWindow.once('ready-to-show', () => {
     //     mainWindow.show();
