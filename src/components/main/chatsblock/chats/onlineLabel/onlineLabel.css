@@ -10,6 +10,14 @@
     align-items: center;
 }
 
+/*.online {*/
+    /*background-color: #2BC2F9;*/
+/*}*/
+
+/*.offline {*/
+    /*background-color: #C70039;*/
+/*}*/
+
 .label span {
     margin: 0;
     font-size: 13px;

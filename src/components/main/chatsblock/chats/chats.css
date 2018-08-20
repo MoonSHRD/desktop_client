@@ -129,12 +129,20 @@
 .stateLabel {
     width: 10px;
     height: 10px;
-    background-color: #2BC2F9;
+    /*background-color: #2BC2F9;*/
     border-radius: 10px;
     position: absolute;
     left: 50px;
     bottom: 10px;
     border: 2px solid white;
+}
+
+.online {
+    background-color: #2BC2F9;
+}
+
+.offline {
+    background-color: #C70039;
 }
 
 /*.groups {*/

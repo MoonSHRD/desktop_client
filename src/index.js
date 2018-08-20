@@ -75,14 +75,17 @@ window.onload = function () {
 
     $(document).on('click','.send_message_btn', function () {
         let date = new Date();
+        let active_dialog=$('.active_dialog');
+        let msg_input=$('.send_message_input');
         const obj = {
-            to: $('.active_dialog').attr('id'),
-            message: $('.send_message_input').val().trim(),
+            address: active_dialog.attr('id'),
+            domain: active_dialog.attr('data-domain'),
+            message: msg_input.val().trim(),
             group: false,
             time: `${date.getHours()}:${date.getMinutes()}`
         };
         // $('.messaging_history ul').append(`<li class="outMessage">time\n${obj.message}</li>`);
-        $('.send_message_input').val('');
+        msg_input.val('');
         // console.log(obj.message);
 
         ipcRenderer.send("send_message", obj)
@@ -91,6 +94,10 @@ window.onload = function () {
     ipcRenderer.on('add_out_msg', (event, obj) => {
         $('.messaging_history ul').append(obj);
 
+    });
+
+    ipcRenderer.on('get_chat_msgs', (event, obj) => {
+        $('.messaging_history ul').append(obj);
     });
 
 
@@ -107,16 +114,27 @@ window.onload = function () {
     });
 
     ipcRenderer.on('buddy', (event,obj) => {
-        console.log(obj);
-        $('.chats ul').append(obj);
+        // console.log(obj);
+        const chat_box=$('.chats ul');
+        const user=chat_box.find('#'+obj.address);
+        if (user.length){
+            user.replaceWith(obj.html)
+        } else {
+            chat_box.prepend(obj.html);
+        }
 
+    });
+
+    ipcRenderer.on('get_chat_msgs', (event,obj) => {
+        $('.messaging_history ul').prepend(obj);
     });
 
     $(document).on('click','.chats li',function () {
         $('.messaging_history ul').empty();
         // console.log($(this).attr('href'));
         $(this).addClass('active_dialog').siblings().removeClass('active_dialog');
-        //router.navigate($(this).attr('href'))
+        //router.navigate($(this).attr('href'))  get_chat_msgs
+        ipcRenderer.send('get_chat_msgs', $(this).attr('id'));
 
     });
 

@@ -1,5 +1,5 @@
-li(id=address)
+li(id=address data-domain=domain)
     a(href='#/user/'+address)
         img(src=avatar, width='40', height='40')
-        span(class="stateLabel")
+        span(class="stateLabel "+online)
         p #{full_name}
