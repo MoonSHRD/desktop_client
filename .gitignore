@@ -11,3 +11,4 @@ Makefile
 package-lock.json
 yarn.lock
 
+account.json

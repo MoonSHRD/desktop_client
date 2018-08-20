@@ -32,12 +32,32 @@ window.onload = function () {
         e.preventDefault();
         let obj=$(this).serializeArray();
         let prof = {};
-        console.log(obj);
+
         obj.forEach(function (elem) {
             prof[elem.name]=elem.value;
         });
-        ipcRenderer.send('submit_profile',prof);
-        console.log(prof);
+
+        const file = $(this).find('[name=avatar]').prop('files')[0];
+        if (file) {
+            let reader = new FileReader();
+            reader.onloadend = function () {
+                prof.avatar = reader.result;
+                ipcRenderer.send('submit_profile',prof);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    $(document).on('change','[name=avatar]',function () {
+        const file = this.files[0];
+        if (file) {
+            let reader = new FileReader();
+            reader.onloadend = function () {
+                // console.log(reader.result);
+                $(document).find('#avatar_preview').attr('src',reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     });
 
     $(document).on('click', '.menuBtn', function () {
@@ -79,11 +99,6 @@ window.onload = function () {
 
     ipcRenderer.on('buddy', (event,obj) => {
         console.log(obj);
-        // arg = {
-        //     jid:jid,
-        //     status:
-        //     state:false
-        // }
         $('.chats ul').append(obj);
 
     });
@@ -93,5 +108,22 @@ window.onload = function () {
         $(this).addClass('active_dialog').siblings().removeClass('active_dialog');
         //router.navigate($(this).attr('href'))
 
+    });
+
+    $(document).on('keyup', '.search', function() {
+       let group = $('input').val();
+       ipcRenderer.send('find_groups', group);
+
+    });
+
+    $(document).on('click', '.aboutMe', function () {
+        ipcRenderer.send('get_my_vcard');
+    });
+
+    ipcRenderer.on('get_my_vcard', (event, data) => {
+        window.alert(`full name: ${data.full_name}\n
+                      first name: ${data.firstname}\n
+                      last name: ${data.lastname}\n
+                      bio: ${data.bio}`);
     });
 };

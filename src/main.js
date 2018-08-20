@@ -6,13 +6,6 @@ const locals = {/* ...*/};
 const setupPug = require('electron-pug');
 const router = require('./router');
 
-// require('./migration');
-// Standard stuff
-
-// function pr_root(){
-//     return __dirname;
-// }
-
 app.on('ready', async () => {
     try {
         let pug = await setupPug({pretty: true}, locals);
@@ -30,15 +23,14 @@ app.on('ready', async () => {
         console.log('finished');
         mainWindow.show();
         setTimeout(()=>{router(mainWindow)},2000)
-        // router(mainWindow);
     });
-    // mainWindow.once('ready-to-show', () => {
-    //     mainWindow.show();
-    //     // mainWindow.webContents.send('auth_mnem', 'fwafwa');
-    //     router(mainWindow);
-    // });
-    // mainWindow.webContents.send('online', 'online');
+});
 
-    //require('./dxmpp');
-    // the rest...
+
+app.on('window-all-closed', function () {
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
 });
