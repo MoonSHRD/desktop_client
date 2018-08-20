@@ -23,6 +23,7 @@ app.on('ready', async () => {
 
     let mainWindow = new BrowserWindow({ width: 1200, height: 600, show: false, webPreferences: {
             nodeIntegration: true   } });
+    let vcardWindow = new BrowserWindow({parent: mainWindow, show:false, modal: true, width: 300, height: 200});
 
     mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`file://${__dirname}/index.pug`);
@@ -30,7 +31,7 @@ app.on('ready', async () => {
         console.log('finished');
         mainWindow.show();
         // setTimeout(()=>{router(mainWindow)},15000)
-        router(mainWindow);
+        router(mainWindow, vcardWindow);
     });
     // mainWindow.once('ready-to-show', () => {
     //     mainWindow.show();

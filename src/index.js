@@ -68,11 +68,9 @@ window.onload = function () {
         ipcRenderer.send("send_message", obj)
     });
 
-    ipcRenderer.on('add_out_msg', (event, obj) => {
+    ipcRenderer.on('sent_message', (event, obj) => {
         $('.messaging_history ul').append(obj);
-
     });
-
 
     ipcRenderer.on('received_message', (event,obj) => {
         // console.log(obj);
@@ -117,9 +115,9 @@ window.onload = function () {
     });
 
     ipcRenderer.on('get_vcard', (event, data) => {
-        window.alert(`full name: ${data.full_name}\n
-                      first name: ${data.firstname}\n
-                      last name: ${data.lastname}\n
-                      bio: ${data.bio}`)
-    })
+        $('.fullname').text(`User: ${data.full_name}`);
+        $('.firstname').text(`First name: ${data.firstname}`);
+        $('.lastname').text(`Last name: ${data.lastname}`);
+        $('.bio').text(`Bio: ${data.bio}`);
+    });
 };

@@ -21,7 +21,8 @@ let acc_data={
     port				: 5222,
     firstname		    : "",
     lastname		    : "",
-    avatar		        : ""
+    avatar		        : "",
+    bio                 : "Расскажите о себе"
 };
 
 let app_status = states.auth;
@@ -71,7 +72,7 @@ function router(renderer) {
         acc_data.lastname=arg.lastname;
 
         dxmpp.connect(acc_data);
-        dxmpp.set_vcard(acc_data.firstname, acc_data.lastname, "Расскажите о себе");
+        dxmpp.set_vcard(acc_data.firstname, acc_data.lastname, acc_data.bio);
     });
 
     //will be used later
@@ -114,7 +115,7 @@ function router(renderer) {
         let html = pug.renderFile(__dirname+'/components/main/messagingblock/outMessage.pug', {
             message: arg.message, time: arg.time
             }, PUG_OPTIONS);
-        renderer.webContents.send('add_out_msg', html)
+        renderer.webContents.send('sent_message', html)
     });
     //
     dxmpp.on('subscribe', function(from) {
@@ -127,9 +128,10 @@ function router(renderer) {
         // dxmpp.send(from,"fuck you");
     });
     //
-    dxmpp.on('chat', function(from, message) {
+    dxmpp.on('chat', function(from, message, time) {
         const html=pug.renderFile(__dirname+'/components/main/messagingblock/inMessage.pug', {
             text: message,
+            time: time,
         },PUG_OPTIONS);
         const obj={
             jid:from,
@@ -179,14 +181,12 @@ function router(renderer) {
 
     dxmpp.on('received_vcard', function (data) {
         console.log(data);
-        // let a = window.confirm('Rly?');
-        // window.alert(data)
         renderer.webContents.send('get_vcard', data)
 
     });
     ipcMain.on('received_vcard', (event) => {
         dxmpp.get_vcard(acc_data.adrs)
-    })
+    });
 }
 
 module.exports = router;

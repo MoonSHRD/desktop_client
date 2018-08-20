@@ -8,8 +8,9 @@ html
     body
         style
             include App.css
+
         div(class='App' id=('view'))
-            include components/loading/loading.pug
+            include components/loading/loading
             //<div id="loader-wrapper">
             //<div id="loader"></div>
             //</div>
@@ -37,3 +38,13 @@ html
 
 
         script(async id="__bs_script__" src="http://localhost:3000/browser-sync/browser-sync-client.js?v=2.24.6")
+
+    <div id="zatemnenie">
+        <div id="okno">Информация о пользователе<br>
+            <div class='avatar'><br></div>
+            <div class='fullname'><br></div>
+            <div class='firstname'> name<br></div>
+            <div class='lastname'><br></div>
+            <div class='bio'><br></div>
+            <a href="#" class="close">Закрыть окно</a>
+        </div>
