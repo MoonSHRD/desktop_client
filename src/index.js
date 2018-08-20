@@ -74,19 +74,28 @@ window.onload = function () {
     });
 
     $(document).on('click','.send_message_btn', function () {
+        let date = new Date();
         const obj = {
             to: $('.active_dialog').attr('id'),
-            message: $('.send_message_input').val(),
-            group: false
+            message: $('.send_message_input').val().trim(),
+            group: false,
+            time: `${date.getHours()}:${date.getMinutes()}`
         };
-        $('.messaging_history ul').append('<li class="outMessage">send</li>');
-        console.log(obj)
+        // $('.messaging_history ul').append(`<li class="outMessage">time\n${obj.message}</li>`);
+        $('.send_message_input').val('');
+        // console.log(obj.message);
 
         ipcRenderer.send("send_message", obj)
     });
 
+    ipcRenderer.on('add_out_msg', (event, obj) => {
+        $('.messaging_history ul').append(obj);
+
+    });
+
+
     ipcRenderer.on('received_message', (event,obj) => {
-        console.log(obj);
+        // console.log(obj);
         // arg = {
         //     from:jid,
         //     message:
@@ -95,7 +104,7 @@ window.onload = function () {
         if ($('.active_dialog').attr('id') === obj.jid) {
             $('.messaging_history ul').append(obj.message);
         }
-    })
+    });
 
     ipcRenderer.on('buddy', (event,obj) => {
         console.log(obj);
@@ -104,6 +113,7 @@ window.onload = function () {
     });
 
     $(document).on('click','.chats li',function () {
+        $('.messaging_history ul').empty();
         // console.log($(this).attr('href'));
         $(this).addClass('active_dialog').siblings().removeClass('active_dialog');
         //router.navigate($(this).attr('href'))
@@ -111,7 +121,8 @@ window.onload = function () {
     });
 
     $(document).on('keyup', '.search', function() {
-       let group = $('input').val();
+        $('div.chats ul').empty();
+        let group = $('input').val();
        ipcRenderer.send('find_groups', group);
 
     });
