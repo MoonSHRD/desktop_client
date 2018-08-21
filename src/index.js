@@ -1,9 +1,52 @@
 // const router = new Navigo(null, true, '#!');
 
 const {ipcRenderer} = require('electron');
+const {events,chat_types} = require('./env_vars.js');
 
 
 window.onload = function () {
+
+
+
+    $(document).on('click','[data-id=menu_user_chats]',function () {
+        const type = $(this).attr('data-id');
+        ipcRenderer.send('change_state',type);
+    });
+
+    $(document).on('click','.menu a',function () {
+        const type = $(this).attr('data-id');
+        ipcRenderer.send('change_menu_state',type);
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ipcRenderer.on('change_menu_state', (event, arg) => {
+        $('#working_side').html(arg);
+    });
+
     ipcRenderer.on('online', (event, arg) => {
         console.log(arg); // prints "ping"
         // alert(arg); // prints "ping"
@@ -24,17 +67,17 @@ window.onload = function () {
         ipcRenderer.send('submit_mnemonic', mnem);
     });
 
-    ipcRenderer.on('generate_mnemonic',(event,arg)=>{
+    ipcRenderer.on('generate_mnemonic', (event, arg) => {
         $('#input_mnemonic').val(arg);
     });
 
-    $(document).on('submit','#profile_form', function (e) {
+    $(document).on('submit', '#profile_form', function (e) {
         e.preventDefault();
-        let obj=$(this).serializeArray();
+        let obj = $(this).serializeArray();
         let prof = {};
 
         obj.forEach(function (elem) {
-            prof[elem.name]=elem.value;
+            prof[elem.name] = elem.value;
         });
 
         const file = $(this).find('[name=avatar]').prop('files')[0];
@@ -42,19 +85,20 @@ window.onload = function () {
             let reader = new FileReader();
             reader.onloadend = function () {
                 prof.avatar = reader.result;
-                ipcRenderer.send('submit_profile',prof);
+                ipcRenderer.send('submit_profile', prof);
             };
             reader.readAsDataURL(file);
         }
     });
 
-    $(document).on('change','[name=avatar]',function () {
+    $(document).on('change', '[name=avatar]', function () {
         const file = this.files[0];
         if (file) {
             let reader = new FileReader();
             reader.onloadend = function () {
                 // console.log(reader.result);
-                $(document).find('#avatar_preview').attr('src',reader.result);
+                $('#avatar_preview').attr('src', reader.result);
+                $('#avatar_preview').show();
             };
             reader.readAsDataURL(file);
         }
@@ -67,16 +111,20 @@ window.onload = function () {
         $('.icon-bar').toggleClass('resize', 400);
     });
 
-    $(document).on('click','.searchButton', function () {
-        let text = $('.subscribeInput').val()+"@localhost";
+    $(document).on('click', 'a.infopanel', function () {
+        ipcRenderer.send('get_my_vcard');
+    });
+
+    $(document).on('click', '.submit_searchInput', function () {
+        let text = $('.searchInput').val() + "@localhost";
         ipcRenderer.send("send_subscribe", text);
         console.log(text)
     });
 
-    $(document).on('click','.send_message_btn', function () {
+    $(document).on('click', '.send_message_btn', function () {
         let date = new Date();
-        let active_dialog=$('.active_dialog');
-        let msg_input=$('.send_message_input');
+        let active_dialog = $('.active_dialog');
+        let msg_input = $('.send_message_input');
         const obj = {
             address: active_dialog.attr('id'),
             domain: active_dialog.attr('data-domain'),
@@ -100,8 +148,7 @@ window.onload = function () {
         $('.messaging_history ul').append(obj);
     });
 
-
-    ipcRenderer.on('received_message', (event,obj) => {
+    ipcRenderer.on('received_message', (event, obj) => {
         // console.log(obj);
         // arg = {
         //     from:jid,
@@ -113,11 +160,11 @@ window.onload = function () {
         }
     });
 
-    ipcRenderer.on('buddy', (event,obj) => {
+    ipcRenderer.on('buddy', (event, obj) => {
         // console.log(obj);
-        const chat_box=$('.chats ul');
-        const user=chat_box.find('#'+obj.address);
-        if (user.length){
+        const chat_box = $('.chats ul');
+        const user = chat_box.find('#' + obj.address);
+        if (user.length) {
             user.replaceWith(obj.html)
         } else {
             chat_box.prepend(obj.html);
@@ -125,34 +172,62 @@ window.onload = function () {
 
     });
 
-    ipcRenderer.on('get_chat_msgs', (event,obj) => {
+    ipcRenderer.on('reload_chat', (event, obj) => {
+        $('#messaging_block').html(obj);
+    });
+
+    ipcRenderer.on('get_chat_msgs', (event, obj) => {
         $('.messaging_history ul').prepend(obj);
     });
 
-    $(document).on('click','.chats li',function () {
+    ipcRenderer.on('join_channel_html', (event, obj) => {
+        $('.send_message_block').html(obj);
+    });
+
+    $(document).on('click', '[data-name=join_channel]', function () {
+        let active_dialog = $('.active_dialog');
+        // console.log({id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
+        ipcRenderer.send('join_channel', {id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
+    });
+
+    $(document).on('click', '.chats li', function () {
+        const $this=$(this);
+        $this.addClass('active_dialog').siblings().removeClass('active_dialog');
         $('.messaging_history ul').empty();
-        // console.log($(this).attr('href'));
-        $(this).addClass('active_dialog').siblings().removeClass('active_dialog');
-        //router.navigate($(this).attr('href'))  get_chat_msgs
-        ipcRenderer.send('get_chat_msgs', $(this).attr('id'));
-
+        switch ($this.attr('data-type')) {
+            case chat_types.join_channel:
+                ipcRenderer.send('join_channel_html', {id:$this.attr('id'),domain:$this.attr('domain')});
+                console.log('pre join');
+                break;
+            case chat_types.user:
+                ipcRenderer.send('get_chat_msgs',{id:$this.attr('id')});
+                break;
+            case chat_types.channel:
+                ipcRenderer.send('get_channel_msgs', {id:$this.attr('id')});
+                break;
+        }
     });
 
-    $(document).on('keyup', '.search', function() {
-        $('div.chats ul').empty();
+    $(document).on('keyup', '.search', function () {
         let group = $('input').val();
-       ipcRenderer.send('find_groups', group);
-
-    });
-
-    $(document).on('click', '.aboutMe', function () {
-        ipcRenderer.send('get_my_vcard');
+        if (!group){
+            ipcRenderer.send('get_chats');
+        }
+        if (group.length > 2) {
+            ipcRenderer.send('find_groups', group);
+        }
     });
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
-        window.alert(`full name: ${data.full_name}\n
-                      first name: ${data.firstname}\n
-                      last name: ${data.lastname}\n
-                      bio: ${data.bio}`);
+        $('img[data-name=avatar]').attr("src", data.avatar);
+        $('.address').text(`Username: ${data.address}`);
+        $('.fullname').text(`Fullname: ${data.full_name}`);
+        $('.firstname').text(`First name: ${data.firstname}`);
+        $('.lastname').text(`Last name: ${data.lastname}`);
+        $('.bio').text(`Bio: ${data.bio}`);
+    });
+
+    ipcRenderer.on('found_chats', (event, data) => {
+        $('.chats ul').html(data);
     });
 };

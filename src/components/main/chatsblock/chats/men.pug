@@ -2,12 +2,14 @@ style
     include chats.css
 div(class='men')
     div(class='search')
-        input(class='searchInput', placeholder='поиск групп')
-    style
-        //include settings.css
-    div(class='settings')
-        input(class='subscribeInput', placeholder='поиск людей')
-        button(class='searchButton') запрос
-    #style-11(class='chats scrollbar')
-        ul(class="")
-        //include ./imDialog
+        case state
+            when "menu_chats"
+                input(class='searchInput', placeholder='поиск групп' name="search_chat")
+            default
+                input(class='searchInput', placeholder='поиск людей' name="search_user")
+                input(type="button" class='submit_searchInput' value="add")
+    //div(class='settings')
+    //    input(class='subscribeInput', placeholder='поиск людей')
+    //    button(class='searchButton') запрос
+    div(class='chats scrollbar' id="style-11")
+        ul !{chats?chats:""}

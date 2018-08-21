@@ -1,5 +1,6 @@
-li(id=address data-domain=domain)
+li(id=address data-domain=domain data-type=type)
     a(href='#/user/'+address)
         img(src=avatar, width='40', height='40')
-        span(class="stateLabel "+online)
+        if type==='user_chat'
+            span(class="stateLabel "+online)
         p #{full_name}

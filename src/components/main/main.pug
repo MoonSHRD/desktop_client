@@ -1,3 +1,22 @@
 include navbar/navbar.pug
-include chatsblock/chatsblock.pug
-include messagingblock/messagingblock.pug
+div(id="working_side")
+    include file
+
+#zatemnenie
+    #okno
+        | Информация о пользователе
+        br
+        div
+            img(src='#', data-name='avatar')
+        br
+        .address
+        br
+        .fullname
+        br
+        .firstname
+        br
+        .lastname
+        br
+        .bio
+        br
+        a.close(href='#') Закрыть окно

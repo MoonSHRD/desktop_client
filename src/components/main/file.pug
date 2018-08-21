@@ -1,0 +1,10 @@
+//include coming_soon/coming soon
+case state
+    when "menu_chats"
+        include chatsblock/chatsblock.pug
+        include messagingblock/messagingblock.pug
+    when "menu_under_construction"
+        include coming_soon/coming_soon
+    default
+        include chatsblock/chatsblock.pug
+        include messagingblock/messagingblock.pug

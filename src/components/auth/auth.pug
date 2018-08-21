@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+style
+    include auth.css
+form.login#profile_form
+    h2 Register
+    .container
+        .row
+            .col-sm.align-bottom
+                input(name='firstname', placeholder='Firstname', type='text')
+                input(name='lastname', placeholder='Lastname', type='text')
+                textarea(rows='5', name='bio', placeholder='Enter bio')
+            .col-sm.align-bottom
+                textarea(rows='5', name='mnemonic', placeholder='Enter passphrase' id='input_mnemonic')
+            .col-sm.align-bottom
+                .avatar_preview
+                    img(id='avatar_preview')
+                .input-file-container
+                    input#my-file.input-file(type='file' name='avatar')
+                    label.input-file-trigger(tabindex='0', for='my-file') Select an avatar
+                //p.file-return
+    .down_block
+        //.agree
+        //    input#agree(name='agree', type='checkbox')
+        //    label(for='agree')
+        //    | Accept rules and conditions
+        input.animated(type='button', value='Generate passphrase' id='generate_mnemonic')
+        input.animated(type='submit', value='Register')
+        //a.forgot(href='#') Already have an account?
+script
+    include auth.js

@@ -1,6 +1,7 @@
 doctype html
 html
     head
+        link(rel='stylesheet' href='css/bootstrap.min.css')
         block head
             meta(charset = 'utf-8')
             meta(name='viewport', content="initial-scale=1.0, width=device-width")
@@ -8,8 +9,9 @@ html
     body
         style
             include App.css
+
         div(class='App' id=('view'))
-            include components/loading/loading.pug
+            include components/loading/loading
             //<div id="loader-wrapper">
             //<div id="loader"></div>
             //</div>

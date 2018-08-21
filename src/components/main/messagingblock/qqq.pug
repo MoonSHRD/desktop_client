@@ -1,3 +1,8 @@
 div(class="messaging_history" id="messaging_history")
-    ul
-
+    ul !{messages?messages:""}
+div(class="send_message_block")
+    if (type==="join_channel" || type==="join_group_chat")
+        include join_button
+    else if (type==="user_chat" || type==="group_chat" || (type==="channel" && role==="admin"))
+        textarea(class="send_message_input"  placeholder="текст сообщения")
+        button(class="send_message_btn") отправить
