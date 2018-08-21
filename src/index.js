@@ -110,7 +110,7 @@ window.onload = function () {
 
     });
 
-    $(document).on('click', '.aboutMe', function () {
+    $(document).on('click', '.infopanel', function () {
         ipcRenderer.send('received_vcard');
     });
 

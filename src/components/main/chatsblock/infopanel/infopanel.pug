@@ -1,6 +1,7 @@
 style
     include infopanel.css
-a(href="#" class="infopanel")
+
+a(href="#popup1" class="infopanel")
     div(class='infopanel_img')
 
         img(src="components/main/chatsblock/infopanel/header.png", width='50' height='50')
@@ -8,8 +9,33 @@ a(href="#" class="infopanel")
     div(class='infopanel_title')
         b Oleg losev
         span Кто рядом с вами?
+a(class="create channel" href="#popup2") Создание группы
 
-div(class='aboutMe' id = 'aboutMe')
-    <a href="#zatemnenie">Обо мне</a>
+div(id="popup1" class="overlay")
+    div(class="popup") Информация о пользователе
+        a(class="close" href="#") x
+        div(class="avatar") AVATAR HERE
+        div(class='fullname')
+        div(class='firstname')
+        div(class='lastname')
+        div(class='bio')
 
 
+div(id="popup2" class="overlay")
+    div(class="popupgroup") Создание нового канала
+        a(class="close" href="#") x
+        div(class="name_group") Название группы
+            input(type="text" placeholder="Введите название группы")
+        div(class='description') Описание группы
+            input(type="text" placeholder="Введите краткое описание группы" width='60', align='20')
+        div(class='grouptype') Тип группы
+            input(type="radio" name="gtype" )
+
+            input(type="radio" name="gtype")
+
+        div(class='substype') Тип подписки
+            input(type="radio" name="stype")
+
+            input(type="radio" name="stype")
+
+        button(class="accept_button") Создать

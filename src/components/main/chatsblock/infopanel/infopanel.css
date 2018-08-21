@@ -33,42 +33,81 @@
     padding-left: 30px;
 }
 
-#zatemnenie {
-    background: rgba(102, 102, 102, 0.5);
-    width: 100%;
-    height: 100%;
-    position: absolute;
+
+.overlay {
+    position: fixed;
     top: 0;
-    left: 0;
-    display: none;
-    z-index: 9999;
-}
-#okno {
-    width: 300px;
-    height: 300px;
-    text-align: center;
-    padding: 15px;
-    border: 3px solid #0000cc;
-    border-radius: 10px;
-    color: #0000cc;
-    position: absolute;
-    top: 0;
-    right: 0;
     bottom: 0;
     left: 0;
-    margin: auto;
+    right: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    visibility: hidden;
+    opacity: 0;
+}
+.overlay:target {
+    visibility: visible;
+    opacity: 1;
+}
+
+.popup {
+    margin: 70px auto;
+    padding: 20px;
     background: #fff;
+    border-radius: 5px;
+    width: 30%;
+    position: relative;
+    transition: all 5s ease-in-out;
 }
-#zatemnenie:target {display: block;}
-.close {
-    display: inline-block;
-    border: 1px solid #0000cc;
-    color: #0000cc;
-    padding: 0 12px;
-    margin: 10px;
+
+.popupgroup {
+    margin: 70px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    width: 60%;
+    position: relative;
+    transition: all 5s ease-in-out;
+}
+.popupgroup .close {
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
     text-decoration: none;
-    background: #f2f2f2;
-    font-size: 14pt;
-    cursor:pointer;
+    color: #333;
 }
-.close:hover {background: #e6e6ff;}
+.popup h2 {
+    margin-top: 0;
+    color: #333;
+    font-family: Tahoma, Arial, sans-serif;
+}
+.popup .close {
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+}
+.popup .close:hover {
+    color: #06D85F;
+}
+.popup .content {
+    max-height: 30%;
+    overflow: auto;
+}
+
+@media screen and (max-width: 700px){
+    .box{
+        width: 70%;
+    }
+    .popup{
+        width: 70%;
+    }
+}
