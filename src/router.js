@@ -187,6 +187,10 @@ function router(renderer) {
     ipcMain.on('received_vcard', (event) => {
         dxmpp.get_vcard(acc_data.adrs)
     });
+
+    ipcMain.on('create_group', (event, name) => {
+       dxmpp.register_channel(name+"@localhost")
+    });
 }
 
 module.exports = router;

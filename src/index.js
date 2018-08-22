@@ -105,7 +105,7 @@ window.onload = function () {
 
     $(document).on('keyup', '.search', function() {
         $('div.chats ul').empty();
-        let group = $('input').val();
+        let group = $('.searchInput').val();
        ipcRenderer.send('find_groups', group);
 
     });
@@ -119,5 +119,22 @@ window.onload = function () {
         $('.firstname').text(`First name: ${data.firstname}`);
         $('.lastname').text(`Last name: ${data.lastname}`);
         $('.bio').text(`Bio: ${data.bio}`);
+    });
+
+    $(document).on("click", '#substype', function () {
+        let change = document.getElementsByName("substype");
+        if (change[0]['1'].selected){
+            $(".token").hide();
+            return
+        }
+        $(".token").show();
+    });
+
+    $(document).on('click', '.acceptButton', function () {
+        let type = '0';
+        let token;
+        let name = $("#namegroup").val();
+        let descr = $("#description").val();
+       ipcRenderer.send('create_group', name)
     });
 };
