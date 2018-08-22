@@ -24,6 +24,7 @@ let acc_data = {
 };
 
 let vcard = {
+    username: undefined,
     firstname: undefined,
     lastname: undefined,
     bio: undefined,
@@ -113,6 +114,11 @@ function router(renderer) {
 
         acc_data.privKey = eth.generate_account(arg.mnemonic).privateKey;
         delete arg.mnemonic;
+
+        if (!arg.avatar){
+            arg.avatar='data:image/jpeg;base64,'+fs.readFileSync(__dirname+'/default-avatar1.jpg').toString("base64");
+        }
+
         const file_data = JSON.stringify({account: acc_data, vcard: arg});
 
         fs.writeFile("account.json", file_data, function (err) {
@@ -221,8 +227,10 @@ function router(renderer) {
     ipcMain.on('send_message', (event, arg) => {
         const jid = `${arg.address}@${arg.domain}`;
         dxmpp.send(jid, arg.message, arg.group);
-        let html = pug.renderFile(__dirname + '/components/main/messagingblock/outMessage.pug', {
-            message: arg.message, time: arg.time
+        if (!msgs[arg.address]) msgs[arg.address]=[];
+        msgs[arg.address].push({message:arg.message,mine:true});
+        let html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', {
+            message: arg.message, mine: true
         }, PUG_OPTIONS);
         renderer.webContents.send('add_out_msg', html)
     });
@@ -232,9 +240,7 @@ function router(renderer) {
         let html = "";
         if (msgs[arg.id]){
             msgs[arg.id].forEach(function (element) {
-                html += pug.renderFile(__dirname + '/components/main/messagingblock/outMessage.pug', {
-                    message: element,
-                }, PUG_OPTIONS);
+                html += pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', element, PUG_OPTIONS);
             });
         }
         html = pug.renderFile(__dirname + '/components/main/messagingblock/qqq.pug', {
@@ -249,9 +255,7 @@ function router(renderer) {
         let html = "";
         if (msgs[arg.id]){
             msgs[arg.id].forEach(function (element) {
-                html += pug.renderFile(__dirname + '/components/main/messagingblock/outMessage.pug', {
-                    message: element,
-                }, PUG_OPTIONS);
+                html += pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', element, PUG_OPTIONS);
             });
         }
         html = pug.renderFile(__dirname + '/components/main/messagingblock/qqq.pug', {
@@ -268,7 +272,8 @@ function router(renderer) {
     });
 
     dxmpp.on('chat', function (from, message) {
-        const html = pug.renderFile(__dirname + '/components/main/messagingblock/inMessage.pug', {
+        const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', {
+            mine: false,
             message: message,
         }, PUG_OPTIONS);
 
@@ -286,13 +291,14 @@ function router(renderer) {
             msgs[from] = [];
         }
         console.log(from);
-        msgs[from].push(message);
+        msgs[from].push({message:message,mine:false});
         renderer.webContents.send('received_message', obj);
     });
     //
-    // dxmpp.on('groupchat', function(room_data, message, sender, stamp) {
-    //     console.log(`${sender} says ${message} in ${room_data.name} chat on ${stamp}`);
-    // });
+    dxmpp.on('groupchat', function(room_data, message, sender, stamp) {
+        console.log(`${sender} says ${message} in ${room_data.name} chat on ${stamp}`);
+        msgs[room_data.id].push({message:message,mine:false});
+    });
     //
     dxmpp.on('error', function (err) {
         console.log(err);
@@ -326,7 +332,8 @@ function router(renderer) {
     dxmpp.on('received_vcard', function (data) {
 
         if (data.address === dxmpp.get_address()) {
-            renderer.webContents.send('get_my_vcard', data);
+            let html = pug.renderFile(__dirname + '/components/main/modal_popup/modal_content.pug', data, PUG_OPTIONS);
+            renderer.webContents.send('get_my_vcard', html);
         } else {
             const jid = `${data.address}@${data.domain}`;
             // buddies[jid].vcard = data;

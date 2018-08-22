@@ -32,7 +32,7 @@ html, body {
     display: flex;
     /*background-color: lavender;*/
     position: relative;
-    width: 100% !important;
+    width: 100%;
 }
 
 @keyframes App-logo-spin {

@@ -2,29 +2,36 @@
 style
     include auth.css
 form.login#profile_form
-    h2 Register
+    .row
+        .col-sm.align-bottom
+        .col-sm.align-bottom
+            .thr_block
+                h2 Register
+        .col-sm.align-bottom
     .container
         .row
-            .col-sm.align-bottom
-                input(name='firstname', placeholder='Firstname', type='text')
-                input(name='lastname', placeholder='Lastname', type='text')
-                textarea(rows='5', name='bio', placeholder='Enter bio')
-            .col-sm.align-bottom
-                textarea(rows='5', name='mnemonic', placeholder='Enter passphrase' id='input_mnemonic')
-            .col-sm.align-bottom
+            .col-sm.center-block
+                textarea(rows='4', name='mnemonic', placeholder='Enter passphrase' id='input_mnemonic')
+                div(class="center-block")
+                    input.animated(type='button', value='Generate passphrase' id='generate_mnemonic')
+            .col-sm.center-block
+                .thr_block
+                    input(name='firstname', placeholder='Firstname', type='text')
+                    input(name='lastname', placeholder='Lastname', type='text')
+                    textarea(rows='5', name='bio', placeholder='Enter bio')
+                    input.animated(type='submit', value='Register')
+            .col-sm.center-block
                 .avatar_preview
-                    img(id='avatar_preview')
+                    img(id='avatar_preview' src='components/auth/default-avatar.svg')
                 .input-file-container
                     input#my-file.input-file(type='file' name='avatar')
                     label.input-file-trigger(tabindex='0', for='my-file') Select an avatar
                 //p.file-return
-    .down_block
+    //.down_block
         //.agree
         //    input#agree(name='agree', type='checkbox')
         //    label(for='agree')
         //    | Accept rules and conditions
-        input.animated(type='button', value='Generate passphrase' id='generate_mnemonic')
-        input.animated(type='submit', value='Register')
         //a.forgot(href='#') Already have an account?
 script
     include auth.js

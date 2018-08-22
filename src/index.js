@@ -15,7 +15,8 @@ window.onload = function () {
 
     $(document).on('click','.menu a',function () {
         const type = $(this).attr('data-id');
-        ipcRenderer.send('change_menu_state',type);
+        if (type)
+            ipcRenderer.send('change_menu_state',type);
     });
 
 
@@ -88,6 +89,8 @@ window.onload = function () {
                 ipcRenderer.send('submit_profile', prof);
             };
             reader.readAsDataURL(file);
+        } else {
+            ipcRenderer.send('submit_profile', prof);
         }
     });
 
@@ -219,12 +222,9 @@ window.onload = function () {
     });
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
-        $('img[data-name=avatar]').attr("src", data.avatar);
-        $('.address').text(`Username: ${data.address}`);
-        $('.fullname').text(`Fullname: ${data.full_name}`);
-        $('.firstname').text(`First name: ${data.firstname}`);
-        $('.lastname').text(`Last name: ${data.lastname}`);
-        $('.bio').text(`Bio: ${data.bio}`);
+        $('.modal-content').html(data);
+        $('#AppModal').modal('toggle');
+
     });
 
     ipcRenderer.on('found_chats', (event, data) => {

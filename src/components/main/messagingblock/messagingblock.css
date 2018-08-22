@@ -49,35 +49,81 @@
 
 .messaging_history {
 
-    height: calc(100% - 100px);
+    height: auto;
+    min-height: calc(100% - 93px);
+    max-height: calc(100% - 93px);
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
-.messaging_history ul {
-    list-style: none;
-    padding: 0 20px;
-    overflow-y: scroll ;
-    height: 100%;
+@media screen and (max-width: 735px) {
+    .messaging_history {
+        max-height: calc(100% - 105px);
+    }
 }
 
-.messaging_history li {
-    min-height: 50px;
-    width: 50%;
+.messaging_history::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+}
+.messaging_history::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.messaging_history ul li {
+    display: inline-block;
+    clear: both;
+    float: left;
+    margin: 15px 15px 5px 15px;
+    width: calc(100% - 25px);
+    font-size: 0.9em;
+}
+
+
+.messaging_history ul li:nth-last-child(1) {
+    margin-bottom: 20px;
+}
+
+/*.messaging_history ul {*/
+    /*list-style: none;*/
+    /*padding: 0 20px;*/
+    /*overflow-y: scroll ;*/
+    /*height: 100%;*/
+/*}*/
+
+/*.messaging_history li {*/
+    /*min-height: 50px;*/
+    /*width: 50%;*/
+    /*border-radius: 20px;*/
+    /*margin-bottom: 10px;*/
+    /*display: flex;*/
+/*}*/
+
+/*.inMessage {*/
+    /*text-align: left;*/
+    /*background-color: #ffffff ;*/
+    /*padding: 10px;*/
+/*}*/
+
+/*.outMessage {*/
+    /*text-align: left;*/
+    /*background-color: #2BC2F9 ;*/
+    /*padding: 10px;*/
+    /*float: right;*/
+/*}*/
+.messaging_history ul li p {
+    display: inline-block;
+    padding: 10px 15px;
     border-radius: 20px;
-    margin-bottom: 10px;
-    display: flex;
+    max-width: 205px;
+    line-height: 130%;
+    word-wrap: break-word;
 }
 
-.inMessage {
-    text-align: left;
-    background-color: #ffffff ;
-    padding: 10px;
-}
-
-.outMessage {
-    text-align: left;
-    background-color: #2BC2F9 ;
+ul li.outMessage p {
     float: right;
-    padding: 10px;
-
-
+    background-color: #2BC2F9
+}
+ul li.inMessage p {
+    background-color: #ffffff
 }
