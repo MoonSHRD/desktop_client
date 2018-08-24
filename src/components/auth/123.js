@@ -185,11 +185,27 @@ function validate_mnemonic(mnem) {
 }
 
 
+$('input[name=firstname]').bind('input', function (e) {
+    console.log($(this).val());
+    if (!$(this).val()) $(this).addClass('invalid');
+    else $(this).removeClass('invalid');
+});
 
+$('textarea[name=mnemonic]').bind('input', function (e) {
+    console.log($(this).val());
+    if (!validate_mnemonic($(this).val())) $(this).addClass('invalid');
+    else $(this).removeClass('invalid');
+});
 
+$(document).on('click', '#generate_mnemonic', function () {
+    ipcRenderer.send('generate_mnemonic');
+});
 
-
-
+ipcRenderer.on('generate_mnemonic', (event, arg) => {
+    const mnemonic = $('#input_mnemonic');
+    mnemonic.val(arg);
+    mnemonic.removeClass('invalid');
+});
 
 
 

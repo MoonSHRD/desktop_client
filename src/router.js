@@ -116,8 +116,8 @@ function router(renderer) {
     ipcMain.on('submit_profile', (event, arg) => {
         const html = pug.renderFile(__dirname + '/components/loading/loading.pug');
         renderer.webContents.send('change_app_state', html);
-
-        acc_data.privKey = eth.generate_account(arg.mnemonic).privateKey;
+        // console.log(arg.mnemonic.replace(/\s{2,}/g," "));
+        acc_data.privKey = eth.generate_account(arg.mnemonic.replace(/\s{2,}/g," ")).privateKey;
         delete arg.mnemonic;
 
         if (!arg.avatar){
@@ -141,8 +141,8 @@ function router(renderer) {
 
     ipcMain.on('join_channel', (event, arg) => {
         // console.log(arg);
-        // const to = `${arg.id}@${arg.domain}`;
-        dxmpp.join(arg.id,arg.domain)
+        const to = `${arg.id}@${arg.domain}`;
+        dxmpp.join(to)
         // Account.add_account()
     });
 
@@ -196,7 +196,7 @@ function router(renderer) {
         // console.log(room_data);
         const obj = {
             address:room_data.id,
-            domain:"localhost",
+            domain:room_data.domain,
             avatar:room_data.avatar,
             full_name:room_data.name,
             type:room_data.channel==="1"?chat_types.channel:chat_types.group_chat,
@@ -236,6 +236,7 @@ function router(renderer) {
         dxmpp.send(jid, arg.message, arg.group);
         if (!msgs[arg.address]) msgs[arg.address]=[];
         msgs[arg.address].push({message:arg.message,mine:true});
+        if (arg.group) return;
         let html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', {
             message: arg.message, mine: true
         }, PUG_OPTIONS);
@@ -307,7 +308,7 @@ function router(renderer) {
         if (!msgs[room_data.id]) msgs[room_data.id]=[];
         msgs[room_data.id].push({message:message,mine:false});
         const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', {
-            mine: false,
+            mine: sender.address===dxmpp.get_address(),
             message: message,
         }, PUG_OPTIONS);
         const obj={
@@ -329,6 +330,7 @@ function router(renderer) {
         result.forEach(function (group) {
             const st = group.jid.split('@');
             group.id=st[0];
+            if (chats[group.id]) return;
             group.domain=st[1];
             html += pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', {
                 address: group.id,

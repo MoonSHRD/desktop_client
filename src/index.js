@@ -37,9 +37,9 @@ window.onload = function () {
         $('#view').html(arg);
     });
 
-    $(document).on('click', '#generate_mnemonic', function () {
-        ipcRenderer.send('generate_mnemonic');
-    });
+    // $(document).on('click', '#generate_mnemonic', function () {
+    //     ipcRenderer.send('generate_mnemonic');
+    // });
 
     $(document).on('click', '#submit_mnemonic', function () {
         const mnem = $('#input_mnemonic').val();
@@ -122,10 +122,6 @@ window.onload = function () {
     });
 
 
-    $('.searchInput').bind('input', function(){
-        console.log('this actually works');
-    });
-
     $(document).on('click', '.send_message_btn', function () {
         let date = new Date();
         let active_dialog = $('.active_dialog');
@@ -162,7 +158,7 @@ window.onload = function () {
         // console.log($(`[data-id=${obj.type}]`).hasClass('active_menu'));
         if (
             !$(`[data-id=${obj.type}]`).hasClass('active_menu') ||
-            (obj.type == "menu_chats" && $('.searchInput').val())
+            (obj.type === "menu_chats" && $('.searchInput').val())
         ){
             return;
         }
@@ -189,9 +185,11 @@ window.onload = function () {
     });
 
     $(document).on('click', '[data-name=join_channel]', function () {
+        $(this).attr('disabled','disabled');
         let active_dialog = $('.active_dialog');
         // console.log({id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
         ipcRenderer.send('join_channel', {id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
+        $(this).fadeOut();
     });
 
     $(document).on('click', '.chats li', function () {
@@ -212,24 +210,27 @@ window.onload = function () {
         }
     });
 
-    $(document).on('change', '.searchInput', function () {
-        if ($('.active_menu').attr('data-id')!=='menu_chats') return;
-        let group = $('input').val();
-        if (!group){
-            ipcRenderer.send('get_chats');
-        }
-        if (group.length > 2) {
-            ipcRenderer.send('find_groups', group);
-        }
-    });
 
-    $(document).on('click', '.submit_searchInput', function () {
-        if ($('.active_menu').attr('data-id')!=='menu_user_chats') return;
-        // (data-id="menu_user_chats" class='active_menu')
-        let text = $('.searchInput').val() + "@localhost";
-        ipcRenderer.send("send_subscribe", text);
-        console.log(text)
-    });
+    //
+    //
+    // $(document).on('change', '.searchInput', function () {
+    //     if ($('.active_menu').attr('data-id')!=='menu_chats') return;
+    //     let group = $('input').val();
+    //     if (!group){
+    //         ipcRenderer.send('get_chats');
+    //     }
+    //     if (group.length > 2) {
+    //         ipcRenderer.send('find_groups', group);
+    //     }
+    // });
+    //
+    // $(document).on('click', '.submit_searchInput', function () {
+    //     if ($('.active_menu').attr('data-id')!=='menu_user_chats') return;
+    //     // (data-id="menu_user_chats" class='active_menu')
+    //     let text = $('.searchInput').val() + "@localhost";
+    //     ipcRenderer.send("send_subscribe", text);
+    //     console.log(text)
+    // });
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
         $('.modal-content').html(data);
