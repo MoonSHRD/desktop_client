@@ -37,19 +37,19 @@ window.onload = function () {
         $('#view').html(arg);
     });
 
-    $(document).on('click', '#generate_mnemonic', function () {
-        ipcRenderer.send('generate_mnemonic');
-    });
-
-    $(document).on('click', '#submit_mnemonic', function () {
-        const mnem = $('#input_mnemonic').val();
-        //todo: validate >=12 words
-        ipcRenderer.send('submit_mnemonic', mnem);
-    });
-
-    ipcRenderer.on('generate_mnemonic', (event, arg) => {
-        $('#input_mnemonic').val(arg);
-    });
+    // $(document).on('click', '#generate_mnemonic', function () {
+    //     ipcRenderer.send('generate_mnemonic');
+    // });
+    //
+    // $(document).on('click', '#submit_mnemonic', function () {
+    //     const mnem = $('#input_mnemonic').val();
+    //     //todo: validate >=12 words
+    //     ipcRenderer.send('submit_mnemonic', mnem);
+    // });
+    //
+    // ipcRenderer.on('generate_mnemonic', (event, arg) => {
+    //     $('#input_mnemonic').val(arg);
+    // });
 
     // function validate_mnemonic(mnem){
     //     if (!mnem) return false;

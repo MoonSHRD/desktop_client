@@ -247,3 +247,33 @@ function validate_mnemonic(mnem) {
 //     }
 // });
 
+
+function validate_mnemonic(mnem) {
+    if (!mnem) return false;
+    const words_count=mnem.split(/\s+/).length;
+    const err=mnem.substr(-1,1)===" ";
+    return (words_count === 12 && !err);
+}
+
+
+$('input[name=firstname]').bind('input', function (e) {
+    console.log($(this).val());
+    if (!$(this).val()) $(this).addClass('invalid');
+    else $(this).removeClass('invalid');
+});
+
+$('textarea[name=mnemonic]').bind('input', function (e) {
+    console.log($(this).val());
+    if (!validate_mnemonic($(this).val())) $(this).addClass('invalid');
+    else $(this).removeClass('invalid');
+});
+
+$(document).on('click', '#generate_mnemonic', function () {
+    ipcRenderer.send('generate_mnemonic');
+});
+
+ipcRenderer.on('generate_mnemonic', (event, arg) => {
+    const mnemonic = $('#input_mnemonic');
+    mnemonic.val(arg);
+    mnemonic.removeClass('invalid');
+});

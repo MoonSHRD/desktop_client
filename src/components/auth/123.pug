@@ -1,30 +1,36 @@
 style
     include 123.css
 .allauth
+    .logo-auth
+    .moon-auth
+    .welcome-auth
+        .div1 Welcome
+        .div2 to Moonshard!
     form#profile_form
         // progressbar
         ul#progressbar
-            li.active Account Setup
-            li Social Profiles
-            li Personal Details
+            li.active
+            li
+            li
         // fieldsets
         fieldset
-            h2.fs-title Create your account
-            h3.fs-subtitle This is step 1
-            textarea(rows='4', name='mnemonic', placeholder='Enter passphrase' id='input_mnemonic' required=true)
+            h2.fs-title Step 1
+            h3.fs-subtitle Enter 12 words of backup phrase to restore your account or generate new one with a button below.
+            textarea.invalid(rows='4', name='mnemonic', placeholder='Enter any 12 words in a space, or click the "Generate" button' id='input_mnemonic' required=true)
+            h3.fs-warning !Do not forget to save the phrase on paper to avoid loss!
             input.action-button(type='button', value='Generate' id='generate_mnemonic')
-            input.next.action-button(type='button', name='next', value='Next')
+            input.next.action-button(type='button', name='next', value='Next' id='input_mnemonic_next')
         fieldset
-            h2.fs-title Social Profiles
-            h3.fs-subtitle Your presence on the social network
-            input(name='firstname', placeholder='Firstname', type='text' required=true)
+            h2.fs-title Step 2
+            h3.fs-subtitle How we can call you?
+            input.invalid(name='firstname', placeholder='Firstname', type='text' required=true)
             input(name='lastname', placeholder='Lastname', type='text')
             textarea(rows='5', name='bio', placeholder='Enter bio')
-            input.previous.action-button(type='button', name='previous', value='Previous')
+
             input.next.action-button(type='button', name='next', value='Next')
         fieldset
-            h2.fs-title Personal Details
-            h3.fs-subtitle We will never sell it
+            h2.fs-title Step 3
+            h3.fs-subtitle You can upload your photo
             .avatar_preview
                 img.rounded-circle(id='avatar_preview' src='components/auth/default-avatar.svg')
             .input-file-container
