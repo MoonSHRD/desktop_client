@@ -19,6 +19,7 @@ const states = {
 let acc_data = {
     jidhost: 'localhost',
     privKey: undefined,
+    // host: '142.93.226.135',
     host: '192.168.1.60',
     port: 5222,
 };
@@ -65,7 +66,7 @@ function router(renderer) {
                 app_status = states.offline
             } else {
                 // let html = Account.get_auth_html();
-                const html = pug.renderFile(__dirname + '/components/auth/auth.pug', PUG_OPTIONS);
+                const html = pug.renderFile(__dirname + '/components/auth/123.pug', PUG_OPTIONS);
                 renderer.webContents.send('change_app_state', html);
             }
             break;
@@ -92,6 +93,10 @@ function router(renderer) {
                 }
                 obj.chats=html;
                 break;
+            case "menu_create_chat":
+                html = pug.renderFile(__dirname + '/components/main/modal_popup/create_chat.pug', {}, PUG_OPTIONS);
+                renderer.webContents.send('get_my_vcard', html);
+                return;
         }
         html = pug.renderFile(__dirname + '/components/main/file.pug', obj, PUG_OPTIONS);
         renderer.webContents.send('change_menu_state', html);
@@ -136,8 +141,8 @@ function router(renderer) {
 
     ipcMain.on('join_channel', (event, arg) => {
         // console.log(arg);
-        const to = `${arg.id}@${arg.domain}`;
-        dxmpp.join(to)
+        // const to = `${arg.id}@${arg.domain}`;
+        dxmpp.join(arg.id,arg.domain)
         // Account.add_account()
     });
 
@@ -163,7 +168,7 @@ function router(renderer) {
         };
         html = pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', neo_data, PUG_OPTIONS);
         buddies[address]=neo_data;
-        renderer.webContents.send('buddy', {address: address, html: html});
+        renderer.webContents.send('buddy', {address: address, html: html, type:"menu_user_chats"});
     });
 
     dxmpp.on('buddy', function (jid, state, statusText) {
@@ -191,6 +196,7 @@ function router(renderer) {
         // console.log(room_data);
         const obj = {
             address:room_data.id,
+            domain:"localhost",
             avatar:room_data.avatar,
             full_name:room_data.name,
             type:room_data.channel==="1"?chat_types.channel:chat_types.group_chat,
@@ -198,7 +204,8 @@ function router(renderer) {
         };
         chats[room_data.id]=obj;
         const html = pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', obj, PUG_OPTIONS);
-        renderer.webContents.send('buddy', html);
+        console.log(html);
+        renderer.webContents.send('buddy', {address:room_data.id,html:html, type:"menu_chats"});
         console.log(`joined ${room_data.name} as ${room_data.role}`);
     });
 
@@ -297,7 +304,17 @@ function router(renderer) {
     //
     dxmpp.on('groupchat', function(room_data, message, sender, stamp) {
         console.log(`${sender} says ${message} in ${room_data.name} chat on ${stamp}`);
+        if (!msgs[room_data.id]) msgs[room_data.id]=[];
         msgs[room_data.id].push({message:message,mine:false});
+        const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', {
+            mine: false,
+            message: message,
+        }, PUG_OPTIONS);
+        const obj={
+            jid:room_data.id,
+            message:html,
+        };
+        renderer.webContents.send('received_message', obj);
     });
     //
     dxmpp.on('error', function (err) {
@@ -342,12 +359,16 @@ function router(renderer) {
             obj.type = chat_types.user;
             buddies[jid]=obj;
             const html = pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', obj, PUG_OPTIONS);
-            renderer.webContents.send('buddy', {address: data.address, domain: data.domain, html: html});
+            renderer.webContents.send('buddy', {address: data.address, domain: data.domain, html: html, type:"menu_user_chats"});
         }
 
     });
     ipcMain.on('get_my_vcard', () => {
         dxmpp.get_vcard(dxmpp.get_address() + '@localhost')
+    });
+
+    ipcMain.on('create_group', (event, name) => {
+       dxmpp.register_channel(name,"localhost")
     });
 }
 

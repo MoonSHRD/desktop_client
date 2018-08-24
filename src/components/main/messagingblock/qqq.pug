@@ -3,6 +3,6 @@ div(class="messaging_history" id="messaging_history")
 div(class="send_message_block")
     if (type==="join_channel" || type==="join_group_chat")
         include join_button
-    else if (type==="user_chat" || type==="group_chat" || (type==="channel" && role==="admin"))
+    else if (type==="user_chat" || type==="group_chat" || (type==="channel" && role==="moderator"))
         textarea(class="send_message_input"  placeholder="текст сообщения")
         button(class="send_message_btn") отправить

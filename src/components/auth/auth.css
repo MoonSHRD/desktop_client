@@ -84,6 +84,10 @@ input[type="text"] {
     font-size: 16px;
 }
 
+.invalid{
+    border-bottom: 1px solid #602220 !important;
+}
+
 textarea {
     width: 300px;
     resize: none;

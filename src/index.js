@@ -8,41 +8,20 @@ window.onload = function () {
 
 
 
+
     $(document).on('click','[data-id=menu_user_chats]',function () {
         const type = $(this).attr('data-id');
         ipcRenderer.send('change_state',type);
     });
 
     $(document).on('click','.menu a',function () {
-        const type = $(this).attr('data-id');
+        const $this=$(this);
+        if ($this.attr('data-id')!=='menu_create_chat')
+            $this.addClass('active_menu').siblings().removeClass('active_menu');
+        const type = $this.attr('data-id');
         if (type)
             ipcRenderer.send('change_menu_state',type);
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     ipcRenderer.on('change_menu_state', (event, arg) => {
         $('#working_side').html(arg);
@@ -72,45 +51,69 @@ window.onload = function () {
         $('#input_mnemonic').val(arg);
     });
 
-    $(document).on('submit', '#profile_form', function (e) {
-        e.preventDefault();
-        let obj = $(this).serializeArray();
-        let prof = {};
+    // function validate_mnemonic(mnem){
+    //     if (!mnem) return false;
+    //     const words_count=mnem.split(/\s+/).length;
+    //     const err=mnem.substr(-1,1)===" ";
+    //     return (words_count === 12 && !err);
+    // }
 
-        obj.forEach(function (elem) {
-            prof[elem.name] = elem.value;
-        });
+    // $(document).on('submit', '#profile_form', function (e) {
+    //     e.preventDefault();
+    //     const $this = $(this);
+    //     let obj = $(this).serializeArray();
+    //     let prof = {};
+    //     let err = {};
+    //
+    //     obj.forEach(function (elem) {
+    //         $this.find(`[name=${elem.name}]`).removeClass('invalid');
+    //         switch (elem.name) {
+    //             case "mnemonic":
+    //                 if (!validate_mnemonic(elem.value)) err[elem.name]=true;
+    //                 break;
+    //             case "firstname":
+    //                 if (!elem.value) err[elem.name]=true;
+    //                 break;
+    //         }
+    //         prof[elem.name] = elem.value;
+    //     });
+    //
+    //     if (Object.keys(err).length !== 0){
+    //         for (let el in err){
+    //             $this.find(`[name=${el}]`).addClass('invalid');
+    //         }
+    //         console.log(err);
+    //         return;
+    //     }
+    //
+    //     const file = $(this).find('[name=avatar]').prop('files')[0];
+    //     if (file) {
+    //         let reader = new FileReader();
+    //         reader.onloadend = function () {
+    //             prof.avatar = reader.result;
+    //             ipcRenderer.send('submit_profile', prof);
+    //         };
+    //         reader.readAsDataURL(file);
+    //     } else {
+    //         ipcRenderer.send('submit_profile', prof);
+    //     }
+    // });
 
-        const file = $(this).find('[name=avatar]').prop('files')[0];
-        if (file) {
-            let reader = new FileReader();
-            reader.onloadend = function () {
-                prof.avatar = reader.result;
-                ipcRenderer.send('submit_profile', prof);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            ipcRenderer.send('submit_profile', prof);
-        }
-    });
-
-    $(document).on('change', '[name=avatar]', function () {
-        const file = this.files[0];
-        if (file) {
-            let reader = new FileReader();
-            reader.onloadend = function () {
-                // console.log(reader.result);
-                $('#avatar_preview').attr('src', reader.result);
-                $('#avatar_preview').show();
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+    // $(document).on('change', '[name=avatar]', function () {
+    //     const file = this.files[0];
+    //     if (file) {
+    //         let reader = new FileReader();
+    //         reader.onloadend = function () {
+    //             // console.log(reader.result);
+    //             $('#avatar_preview').attr('src', reader.result);
+    //             $('#avatar_preview').show();
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // });
 
     $(document).on('click', '.menuBtn', function () {
-        // var options = { to: { width: 200, direction: "right"} };
         $('.dialogs').toggleClass('resize1', 400);
-
         $('.icon-bar').toggleClass('resize', 400);
     });
 
@@ -118,10 +121,9 @@ window.onload = function () {
         ipcRenderer.send('get_my_vcard');
     });
 
-    $(document).on('click', '.submit_searchInput', function () {
-        let text = $('.searchInput').val() + "@localhost";
-        ipcRenderer.send("send_subscribe", text);
-        console.log(text)
+
+    $('.searchInput').bind('input', function(){
+        console.log('this actually works');
     });
 
     $(document).on('click', '.send_message_btn', function () {
@@ -132,12 +134,10 @@ window.onload = function () {
             address: active_dialog.attr('id'),
             domain: active_dialog.attr('data-domain'),
             message: msg_input.val().trim(),
-            group: false,
+            group: $('.active_dialog').attr('data-type')==='channel',
             time: `${date.getHours()}:${date.getMinutes()}`
         };
-        // $('.messaging_history ul').append(`<li class="outMessage">time\n${obj.message}</li>`);
         msg_input.val('');
-        // console.log(obj.message);
 
         ipcRenderer.send("send_message", obj)
     });
@@ -152,12 +152,6 @@ window.onload = function () {
     });
 
     ipcRenderer.on('received_message', (event, obj) => {
-        // console.log(obj);
-        // arg = {
-        //     from:jid,
-        //     message:
-        //     group:false
-        // }
         if ($('.active_dialog').attr('id') === obj.jid) {
             $('.messaging_history ul').append(obj.message);
         }
@@ -165,6 +159,13 @@ window.onload = function () {
 
     ipcRenderer.on('buddy', (event, obj) => {
         // console.log(obj);
+        // console.log($(`[data-id=${obj.type}]`).hasClass('active_menu'));
+        if (
+            !$(`[data-id=${obj.type}]`).hasClass('active_menu') ||
+            (obj.type == "menu_chats" && $('.searchInput').val())
+        ){
+            return;
+        }
         const chat_box = $('.chats ul');
         const user = chat_box.find('#' + obj.address);
         if (user.length) {
@@ -211,7 +212,8 @@ window.onload = function () {
         }
     });
 
-    $(document).on('keyup', '.search', function () {
+    $(document).on('change', '.searchInput', function () {
+        if ($('.active_menu').attr('data-id')!=='menu_chats') return;
         let group = $('input').val();
         if (!group){
             ipcRenderer.send('get_chats');
@@ -219,6 +221,14 @@ window.onload = function () {
         if (group.length > 2) {
             ipcRenderer.send('find_groups', group);
         }
+    });
+
+    $(document).on('click', '.submit_searchInput', function () {
+        if ($('.active_menu').attr('data-id')!=='menu_user_chats') return;
+        // (data-id="menu_user_chats" class='active_menu')
+        let text = $('.searchInput').val() + "@localhost";
+        ipcRenderer.send("send_subscribe", text);
+        console.log(text)
     });
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
@@ -229,5 +239,32 @@ window.onload = function () {
 
     ipcRenderer.on('found_chats', (event, data) => {
         $('.chats ul').html(data);
+    });
+
+    $(document).on("change", '.modal-content select[name=substype]', function () {
+        // console.log($(this).find(":selected").val());
+        if ($(this).find(":selected").val()==='unfree') {
+            $("#token_row").show();
+        } else {
+            $("#token_row").hide();
+        }
+    });
+
+    $(document).on('submit', '.modal-content', function (e) {
+        e.preventDefault();
+        const data=$(this).serializeArray();
+        let obj = {};
+        data.forEach(function (elem) {
+            obj[elem.name] = elem.value;
+        });
+
+        switch (obj.substype) {
+            case 'free':
+                ipcRenderer.send('create_group', obj.name);
+                $('#AppModal').modal('toggle');
+                break;
+            case 'unfree':
+                break;
+        }
     });
 };

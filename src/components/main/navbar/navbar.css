@@ -6,6 +6,7 @@
     font-family: 'Open Sans', sans-serif;
     /*min-height: 100%;*/
     overflow: hidden;
+    transition: all .5s;
 
 }
 
@@ -25,7 +26,7 @@
     font-size: 25px; /* Increased font-size */
     text-decoration: none;
     box-sizing: border-box;
-    width: 220px;
+    width: 300px;
     align-items: center;
     position: relative;
 }
@@ -73,10 +74,11 @@
 }
 
 .resize {
-    width: 220px;
+    width: 300px;
     -moz-box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Для Firefox */
     -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Для Safari и Chrome */
     box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+    transition: all .5s;
 }
 
 
