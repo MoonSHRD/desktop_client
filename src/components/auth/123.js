@@ -182,6 +182,7 @@ function validate_mnemonic(mnem) {
     const words_count=mnem.split(/\s+/).length;
     const err=mnem.substr(-1,1)===" ";
     return (words_count === 12 && !err);
+
 }
 
 
@@ -253,6 +254,7 @@ function validate_mnemonic(mnem) {
     const words_count=mnem.split(/\s+/).length;
     const err=mnem.substr(-1,1)===" ";
     return (words_count === 12 && !err);
+
 }
 
 
