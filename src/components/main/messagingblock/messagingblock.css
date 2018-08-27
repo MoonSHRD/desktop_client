@@ -1,0 +1,130 @@
+.messaging_block {
+    flex: 1;
+    height: 100vh;
+    position: relative;
+    /*background-color: lightgoldenrodyellow;*/
+    /*display: none;*/
+    background: #F3F3F3;
+    overflow: hidden;
+
+}
+
+.send_message_block {
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    /*background: red;*/
+    bottom: 0;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    overflow: hidden;
+
+}
+
+.send_message_input {
+    width: 60%;
+    height: 45px;
+    /*display: none;*/
+    /*background: red;*/
+    border-radius: 10px;
+    border-style: none;
+    outline: none;
+    padding:  0 10px;
+    resize: none;
+
+}
+
+.send_message_btn {
+   width: 100px;
+    height: 50px;
+    background-color: #F3F3F3;
+    color: #2BC2F9;
+    border: 2px solid #2BC2F9; /* Green */
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+
+}
+
+.messaging_history {
+
+    height: auto;
+    min-height: calc(100% - 93px);
+    max-height: calc(100% - 93px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+@media screen and (max-width: 735px) {
+    .messaging_history {
+        max-height: calc(100% - 105px);
+    }
+}
+
+.messaging_history::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+}
+.messaging_history::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.messaging_history ul li {
+    display: inline-block;
+    clear: both;
+    float: left;
+    margin: 15px 15px 5px 15px;
+    width: calc(100% - 25px);
+    font-size: 0.9em;
+}
+
+
+.messaging_history ul li:nth-last-child(1) {
+    margin-bottom: 20px;
+}
+
+/*.messaging_history ul {*/
+    /*list-style: none;*/
+    /*padding: 0 20px;*/
+    /*overflow-y: scroll ;*/
+    /*height: 100%;*/
+/*}*/
+
+/*.messaging_history li {*/
+    /*min-height: 50px;*/
+    /*width: 50%;*/
+    /*border-radius: 20px;*/
+    /*margin-bottom: 10px;*/
+    /*display: flex;*/
+/*}*/
+
+/*.inMessage {*/
+    /*text-align: left;*/
+    /*background-color: #ffffff ;*/
+    /*padding: 10px;*/
+/*}*/
+
+/*.outMessage {*/
+    /*text-align: left;*/
+    /*background-color: #2BC2F9 ;*/
+    /*padding: 10px;*/
+    /*float: right;*/
+/*}*/
+.messaging_history ul li p {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 1.2em;
+    max-width: 400px;
+    line-height: 130%;
+    word-wrap: break-word;
+}
+
+ul li.outMessage p {
+    float: right;
+    background-color: #2BC2F9
+}
+ul li.inMessage p {
+    background-color: #ffffff
+}

@@ -1,0 +1,43 @@
+doctype html
+html
+    head
+        link(rel='stylesheet' href='css/bootstrap.min.css')
+        block head
+            meta(charset = 'utf-8')
+            meta(name='viewport', content="initial-scale=1.0, width=device-width")
+            title Moonshard
+    body
+        style
+            include App.css
+
+        div(class='App' id=('view'))
+            include components/loading/loading
+            //<div id="loader-wrapper">
+            //<div id="loader"></div>
+            //</div>
+            //include components/navbar/navbar.pug
+            //include components/chatsblock/chatsblock.pug
+            //include components/messagingblock/messagingblock.pug
+
+        //script(src='./node_modules/pilotjs/Pilot.js')
+        script.
+            window.$ = window.jQuery = require('../node_modules/jquery/dist/jquery.js');
+
+        script.
+            require('jqueryui')
+        script.
+            require('./js/bootstrap.min')
+        //script.
+        //    require('navigo')
+
+        script(src='./index.js')
+        //script(src='./router.js')
+        //script(src='./renderer.js')
+
+        //script.
+        //    require('router_js')
+        //script(src="https://rawgit.com/flatiron/director/master/build/director.min.js")
+
+
+
+        script(async id="__bs_script__" src="http://localhost:3000/browser-sync/browser-sync-client.js?v=2.24.6")

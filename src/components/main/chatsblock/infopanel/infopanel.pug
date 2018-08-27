@@ -1,0 +1,44 @@
+style
+    include infopanel.css
+a(href="#" class="infopanel")
+    div(class='infopanel_img')
+
+        img(src=avatar, width='50' height='50')
+        span(class="stateLabel")
+    div(class='infopanel_title')
+        b #{firstname} #{lastname}
+        span Кто рядом с вами?
+//a(class="create channel" href="#popup2") Создание группы
+
+
+//div(id="popup2" class="overlay")
+//    div(class="popupgroup") Создание нового канала
+//        a(class="close" href="#") x
+//        div()
+//            label
+//            | Название группы
+//            input(class="input-field" id="namegroup" type="text" placeholder="Введите название группы")
+//        div()
+//            label
+//            | Описание группы
+//            input(class="input-field" id="description" type="text" placeholder="Введите краткое описание группы" width='60', align='20')
+//        div()
+//            label
+//            | Тип группы
+//            select(class ="select-field" id="grouptype" name="grouptype")
+//                option(disabled="true") Выберите тип группы
+//                option(value="chat") чат
+//                option(value="channel") канал
+//        div()
+//            label
+//            | Тип подписки
+//            select(class="select-field" id="substype" name="substype")
+//                option(disabled="true") Выберите тип подписки
+//                option(value="free") бесплатный
+//                option(value="unfree") платный
+//            div(class="token" hidden="true")
+//                label
+//                | Токен:
+//                input(class ="input-field" type="text" placeholder="введите ")
+//
+//        button(class="acceptButton") Создать

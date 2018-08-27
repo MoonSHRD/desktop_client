@@ -1,9 +1,14 @@
 # Node.js package manager
 node_modules
+release-builds
 
 .eslintignore
-idea
+.idea
 .npmignore
+dist/
+release-builds/
 Makefile
+package-lock.json
 yarn.lock
 
+account.json

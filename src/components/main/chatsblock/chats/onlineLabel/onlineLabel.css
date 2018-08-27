@@ -1,0 +1,26 @@
+.label {
+    width: 20px;
+    height: 20px;
+    background-color: #2BC2F9;
+    border-radius: 10px;
+    right: 20px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*.online {*/
+    /*background-color: #2BC2F9;*/
+/*}*/
+
+/*.offline {*/
+    /*background-color: #C70039;*/
+/*}*/
+
+.label span {
+    margin: 0;
+    font-size: 13px;
+    padding: 0;
+    color: black;
+}

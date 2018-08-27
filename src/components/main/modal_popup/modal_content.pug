@@ -1,0 +1,28 @@
+.modal-header
+    h5.modal-title #{full_name}
+    button.close(type='button', data-dismiss='modal', aria-label='Close')
+        span(aria-hidden='true') ×
+.modal-body
+    .container
+        .row
+            .col-sm-3
+                img.rounded-circle(src=avatar)
+            .col-sm
+                table.table
+                    tbody
+                        tr
+                            th(scope='row') Username
+                            td #{address}
+                        tr
+                            th(scope='row') Firstname
+                            td #{firstname}
+                        tr
+                            th(scope='row') Lastname
+                            td #{lastname}
+if bio
+    .modal-footer
+        .container
+            .row
+                .col-sm-3
+                    strong Bio
+                .col-sm !{bio}
