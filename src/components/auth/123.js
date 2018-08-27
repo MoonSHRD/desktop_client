@@ -177,22 +177,25 @@ function validate_firstname(val) {
     return (val);
 }
 
-function validate_mnemonic(mnem) {
-    if (!mnem) return false;
-    const words_count=mnem.split(/\s+/).length;
-    const err=mnem.substr(-1,1)===" ";
-    return (words_count === 12 && !err);
-}
+// function validate_mnemonic(mnem) {
+//     if (!mnem) return false;
+//     // console.log(mnem.match( /[а-я]/i )!==null);
+//     // string.search(/[А-яЁё]/) === -1
+//     if (mnem.search(/[А-яЁё]/) !== -1) return false;
+//     const words_count=mnem.split(/\s+/).length;
+//     const err=mnem.substr(-1,1)===" ";
+//     return (words_count === 12 && !err);
+// }
 
 
 $('input[name=firstname]').bind('input', function (e) {
-    console.log($(this).val());
+    // console.log($(this).val());
     if (!$(this).val()) $(this).addClass('invalid');
     else $(this).removeClass('invalid');
 });
 
 $('textarea[name=mnemonic]').bind('input', function (e) {
-    console.log($(this).val());
+    // console.log($(this).val());
     if (!validate_mnemonic($(this).val())) $(this).addClass('invalid');
     else $(this).removeClass('invalid');
 });
@@ -263,3 +266,34 @@ ipcRenderer.on('generate_mnemonic', (event, arg) => {
 //     }
 // });
 
+
+function validate_mnemonic(mnem) {
+    if (!mnem) return false;
+    if (mnem.search(/[А-яЁё]/) !== -1) return false;
+    const words_count=mnem.split(/\s+/).length;
+    const err=mnem.substr(-1,1)===" ";
+    return (words_count === 12 && !err);
+}
+
+
+$('input[name=firstname]').bind('input', function (e) {
+    console.log($(this).val());
+    if (!$(this).val()) $(this).addClass('invalid');
+    else $(this).removeClass('invalid');
+});
+
+$('textarea[name=mnemonic]').bind('input', function (e) {
+    console.log($(this).val());
+    if (!validate_mnemonic($(this).val())) $(this).addClass('invalid');
+    else $(this).removeClass('invalid');
+});
+
+$(document).on('click', '#generate_mnemonic', function () {
+    ipcRenderer.send('generate_mnemonic');
+});
+
+ipcRenderer.on('generate_mnemonic', (event, arg) => {
+    const mnemonic = $('#input_mnemonic');
+    mnemonic.val(arg);
+    mnemonic.removeClass('invalid');
+});
