@@ -267,6 +267,7 @@ function router(renderer) {
         }
         html = pug.renderFile(__dirname + '/components/main/messagingblock/qqq.pug', {
             messages: html,
+            chat_name: buddies[arg.id].full_name,
             type: chat_types.user,
         }, PUG_OPTIONS);
         renderer.webContents.send('reload_chat', html)

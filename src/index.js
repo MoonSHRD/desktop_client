@@ -205,6 +205,7 @@ window.onload = function () {
                 break;
             case chat_types.user:
                 ipcRenderer.send('get_chat_msgs',{id:$this.attr('id')});
+
                 break;
             case chat_types.channel:
                 ipcRenderer.send('get_channel_msgs', {id:$this.attr('id')});

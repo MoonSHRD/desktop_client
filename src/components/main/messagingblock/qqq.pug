@@ -1,3 +1,31 @@
+if (type==="user_chat" || type==="group_chat" || (type==="channel" && role==="moderator"))
+    div(class="head_peer" id="head_peer")
+        h3(class="peer_name") #{chat_name}
+        div(class='dropDown_menu')
+
+            a(data-id="")
+                div(class='image')
+                    img(src="components/main/messagingblock/img/micr.png")
+
+
+            a(data-id="")
+                div(class='image')
+                    img(src="components/main/messagingblock/img/call.png")
+
+
+            a(data-id="")
+                div(class='image')
+                    img(src="components/main/messagingblock/img/videoCall.png")
+
+            a(data-id="")
+                div(class='image')
+                    img(src="components/main/messagingblock/img/files.png")
+
+            a(data-id="")
+                div(class='image')
+                    img(src="components/main/messagingblock/img/dropDown_menu.png")
+
+
 div(class="messaging_history" id="messaging_history")
     ul !{messages?messages:""}
 div(class="send_message_block")
