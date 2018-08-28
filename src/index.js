@@ -2,10 +2,21 @@
 
 const {ipcRenderer} = require('electron');
 const {events,chat_types} = require('./env_vars.js');
+const dict = require('./langs/lang');
+
 
 
 window.onload = function () {
 
+
+
+    $.html5Translate = function(dict, lang){
+
+        $('[data-translate-key]').each(function(){
+            $(this).html( dict[ lang ][ $(this).data('translateKey') ] );
+        });
+
+    };
 
 
 
@@ -35,6 +46,7 @@ window.onload = function () {
     ipcRenderer.on('change_app_state', (event, arg) => {
         // console.log('autyh');
         $('#view').html(arg);
+        $.html5Translate(dict, 'en');
     });
 
     // $(document).on('click', '#generate_mnemonic', function () {
@@ -195,6 +207,7 @@ window.onload = function () {
     });
 
     $(document).on('click', '.chats li', function () {
+
         const $this=$(this);
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
         $('.messaging_history ul').empty();

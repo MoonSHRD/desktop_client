@@ -1,13 +1,12 @@
 doctype html
 html
     head
-
         link(rel='stylesheet' href='../node_modules/bootstrap/dist/css/bootstrap.css')
         block head
             meta(charset = 'utf-8')
             meta(name='viewport', content="initial-scale=1.0, width=device-width")
             title Moonshard
-    body
+    body(lang="en")
         style
             include App.css
 
@@ -28,6 +27,8 @@ html
             require('jqueryui')
         script.
             require('bootstrap')
+        //script.
+        //    require('./langs/lang')
         //script.
         //    require('navigo')
 

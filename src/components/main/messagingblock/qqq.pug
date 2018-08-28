@@ -33,4 +33,4 @@ div(class="send_message_block")
         include join_button
     else if (type==="user_chat" || type==="group_chat" || (type==="channel" && role==="moderator"))
         textarea(class="send_message_input"  placeholder="текст сообщения")
-        button(class="send_message_btn") отправить
+        button(class="send_message_btn" data-translate-key="SEND_MESSAGE") отправить
