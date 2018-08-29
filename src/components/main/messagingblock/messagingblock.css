@@ -128,3 +128,48 @@ ul li.outMessage p {
 ul li.inMessage p {
     background-color: #ffffff
 }
+
+
+.head_peer {
+    height: 70px;
+    width: 100%;
+    /*background: red;*/
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #c3c3c3;
+}
+
+.dropDown_menu {
+    align-items: center;
+    display: flex;
+}
+
+.dropDown_menu a {
+    display: flex;
+    cursor: pointer;
+    padding: 9px;
+    width: 60px;
+    height: 60px;
+    zoom: 0.8;
+    transition: 0.5s;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropDown_menu .image{
+    display: flex;
+    justify-content: center;
+
+}
+
+
+.dropDown_menu a:hover {
+    background: #eeeeee;
+}
+
+.peer_name {
+    margin: 0;
+    margin-left: 20px;
+}
