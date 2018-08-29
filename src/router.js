@@ -19,7 +19,7 @@ const states = {
 let acc_data = {
     jidhost: 'localhost',
     privKey: undefined,
-    host: '192.168.1.60',
+    host: 'localhost',
     port: 5222,
 };
 
@@ -118,7 +118,9 @@ function router(renderer) {
         if (!arg.avatar){
             arg.avatar='data:image/jpeg;base64,'+fs.readFileSync(__dirname+'/default-avatar1.jpg').toString("base64");
         }
+        else {
 
+        }
         const file_data = JSON.stringify({account: acc_data, vcard: arg});
 
         fs.writeFile("account.json", file_data, function (err) {
@@ -131,6 +133,7 @@ function router(renderer) {
 
         dxmpp.connect(acc_data);
         // console.log(arg);
+        // console.log(`Avatar epta: ${arg.avatar}`);
         dxmpp.set_vcard(arg.firstname, arg.lastname, arg.bio, arg.avatar);
     });
 

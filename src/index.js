@@ -98,9 +98,90 @@ window.onload = function () {
         const file = this.files[0];
         if (file) {
             let reader = new FileReader();
-            reader.onloadend = function () {
-                // console.log(reader.result);
-                $('#avatar_preview').attr('src', reader.result);
+            // let fileinput = document.getElementById('avatar_preview');
+            // let max_width = fileinput.getAttribute('data-maxwidth');
+            // let max_height = fileinput.getAttribute('data-maxheight');
+            // console.log(max_width, max_height);
+            //
+            reader.onload = function () {
+                //     var blob = new Blob([event.target.result]);
+                //     window.URL = window.URL || window.webkitURL;
+                //     var blobURL = window.URL.createObjectURL(blob);
+                //     // console.log(reader.result);
+                //     // Create and initialize two canvas
+                //     var canvas = document.createElement("canvas");
+                //     var ctx = canvas.getContext("2d");
+                //     let img = new Image();
+                //     img.src = blobURL;
+                //
+                //
+                //     // var canvasCopy = document.createElement("canvas");
+                //     // var copyContext = canvasCopy.getContext("2d");
+                //
+                //
+                //     // let image = document.getElementById('avatar_preview').innerHTML = reader.result;
+                //     // let file = document.getElementById('avatar_preview');
+                //     // file = file.files[0];
+                //     // Create original image
+                //
+                //     let width = img.width;
+                //     let height = img.height;
+                //     console.log(width, height);
+                //     // console.log('old img', img);
+                //     // let max_height = 128;
+                //     // let max_width = 128;
+                //
+                //     // Determine new ratio based on max size
+                //     // var ratio = 1;
+                //     if (width > height) {
+                //         if (width > max_width) {
+                //             //height *= max_width / width;
+                //             height = Math.round(height *= max_width / width);
+                //             width = max_width;
+                //         }
+                //     } else {
+                //         if (height > max_height) {
+                //             //width *= max_height / height;
+                //             width = Math.round(width *= max_height / height);
+                //             height = max_height;
+                //         }
+                //     }
+                //
+                //     // Copy and resize second canvas to first canvas
+                //     canvas.width = width;
+                //     canvas.height = height;
+                //     ctx.drawImage(img, 0, 0, width, height);
+                //     console.log('Code:', canvas.toDataURL());
+                //     $('#avatar_preview').attr('src', canvas.toDataURL("image/jpeg", 0.3));
+                //     $('#avatar_preview').show();
+
+                let imageType = "image/jpg";
+                let imageArguments = 0.7;
+                let newWidth = 128;
+
+                // Create a temporary image so that we can compute the height of the downscaled image.
+                let image = new Image();
+                image.src = reader.result;
+                // console.log(image.src);
+
+                let oldWidth = image.width;
+                let oldHeight = image.height;
+                // let oldWidth = 640;
+                // let oldHeight = 480;
+                console.log('Old size:', oldHeight, oldWidth);
+                let newHeight = Math.floor(oldHeight / oldWidth * newWidth);
+
+                // Create a temporary canvas to draw the downscaled image on.
+                let canvas = document.createElement("canvas");
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+                console.log(newHeight, newWidth);
+                // Draw the downscaled image on the canvas and return the new data URL.
+                let ctx = canvas.getContext("2d");
+                ctx.drawImage(image, 0, 0, newWidth, newHeight);
+                let newDataUrl = canvas.toDataURL();
+                console.log('new', newDataUrl);
+                $('#avatar_preview').attr('src', newDataUrl);
                 $('#avatar_preview').show();
             };
             reader.readAsDataURL(file);
@@ -211,7 +292,7 @@ window.onload = function () {
         }
     });
 
-    $(document).on('keyup', '.search', function () {
+    $(document).on('change', '.search', function () {
         let group = $('input').val();
         if (!group){
             ipcRenderer.send('get_chats');
