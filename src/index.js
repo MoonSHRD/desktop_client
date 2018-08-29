@@ -127,9 +127,9 @@ window.onload = function () {
         let active_dialog = $('.active_dialog');
         let msg_input = $('.send_message_input');
         const obj = {
-            address: active_dialog.attr('id'),
+            id: active_dialog.attr('id'),
             domain: active_dialog.attr('data-domain'),
-            message: msg_input.val().trim(),
+            text: msg_input.val().trim(),
             group: $('.active_dialog').attr('data-type')==='channel',
             time: `${date.getHours()}:${date.getMinutes()}`
         };
@@ -163,7 +163,7 @@ window.onload = function () {
             return;
         }
         const chat_box = $('.chats ul');
-        const user = chat_box.find('#' + obj.address);
+        const user = chat_box.find('#' + obj.id);
         if (user.length) {
             user.replaceWith(obj.html)
         } else {
@@ -240,6 +240,10 @@ window.onload = function () {
 
     ipcRenderer.on('found_chats', (event, data) => {
         $('.chats ul').html(data);
+    });
+
+    ipcRenderer.on('load_chat', (event, data) => {
+        $('.chats ul').append(data);
     });
 
     $(document).on("change", '.modal-content select[name=substype]', function () {

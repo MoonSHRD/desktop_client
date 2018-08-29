@@ -1,7 +1,7 @@
 {
-  "name": "message_desktop_client",
+  "name": "messanger_desktop_client",
   "version": "1.0.0",
-  "description": "A message desktop client",
+  "description": "Messanger desktop client",
   "main": "./src/main.js",
   "scripts": {
     "pack": "electron-builder --dir",
@@ -13,7 +13,8 @@
   },
   "includeSources": true,
   "devDependencies": {
-    "electron": "^2.0.7"
+    "electron": "^2.0.7",
+    "electron-rebuild": "^1.8.2"
   },
   "bake": {
     "description": "Scaffold a basic ES6 setup",
@@ -34,17 +35,19 @@
     "moonshard",
     "decentralized"
   ],
-  "author": "lexnnov",
+  "author": "MoonSHRD team",
   "license": "CC0-1.0",
   "dependencies": {
     "electron-packager": "^12.1.0",
     "electron-pug": "^2.0.0",
     "jquery": "^3.3.1",
     "jqueryui": "^1.11.1",
-    "moonshard_core": "^0.1.10",
+    "moonshard_core": "^0.1.11",
     "peer-id": "^0.11.0",
     "popper.js": "^1.14.4",
     "pug": "^2.0.3",
-    "react": "^16.4.2"
+    "qbox": "^0.1.7",
+    "react": "^16.4.2",
+    "sqlite3": "^4.0.2"
   }
 }
