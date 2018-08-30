@@ -1,41 +1,42 @@
 style
     include chatsblock.css
 div(class="dialogs")
-    include infopanel/infopanel.pug
-    .wrapperNearby
-        a.left(href='#')
-        .sliderWrapper
-            .slider
-                a.element.activeNearby(href='#')
-                    img.sliderImage(src='https://png.icons8.com/color/1600/avatar.png', alt='', width='60' height='60')
-                    | Maxim89
-                a.element(href='#')
-                    img.sliderImage(src='https://avatarko.ru/img/kartinka/1/multfilm_gomer.png', alt='', width='60' height='60')
-                    | Maxim89
-                a.element(href='#')
-                    img.sliderImage(src='https://banner2.kisspng.com/20180525/qu/kisspng-clip-art-5b08be927cb923.3927898615272997305109.jpg', alt='', width='60' height='60')
-                    | Maxim89
-                a.element(href='#')
-                    img.sliderImage(src='https://pp.userapi.com/c850132/v850132715/d406/XTbYNnmo3r4.jpg', alt='', width='60' height='60')
-                    | Maxim89
-                a.element(href='#')
-                    img.sliderImage(src='https://vignette.wikia.nocookie.net/detroit-become-human/images/c/c8/Hostess_Chloe.jpg/revision/latest?cb=20180720215251', alt='', width='60' height='60')
-                    | Maxim89
-                a.element(href='#')
-                    img.sliderImage(src='https://cdn2.hexlet.io/attachments/ff5eaf72306e796c53a8d6e43125babb05a466ec/store/fill/185/185/1a5baba85ab3caf9805859538b2e4416cf4c147d5741159903795bdfb2dd/avatar.png', alt='', width='60' height='60')
-                    | Ketty Blue
-                a.element(href='#')
-                    img.sliderImage(src='https://53news.ru/images/images/2017/4/2ZXOgeKHM394Wceyb7XJCyIfCG2Txf9Q.jpg', alt='', width='60' height='60')
-                    | Miriam Rоhdfdfdf
-                a.element(href='#')
-                    img.sliderImage(src='https://st.navalny.com/media/cache/63/48/63485ff83e403731f699323134a4b9ef.jpg', alt='', width='60' height='60')
-                    | Miriam Rоhdfdfdf
-                a.element(href='#')
-                    img.sliderImage(src='https://s5.cdn.teleprogramma.pro/wp-content/uploads/2018/06/371fda9f92c68e4845d4fb92a8b4cff0.jpg', alt='', width='60' height='60')
-                    | Miriam Rоhdfdfdf
-        a.right(href='#')
-    div(style="padding: 0 20px 0 27px;")
-        input(style='width: 100% !important; background: #BDBDBD !important' type="button" class='submit_searchInput' value="Show On a Map")
+    div(class='dialogsHeader')
+        include infopanel/infopanel.pug
+        .wrapperNearby
+            a.left(href='#')
+            .sliderWrapper
+                .slider
+                    a.element.activeNearby(href='#')
+                        img.sliderImage(src='https://png.icons8.com/color/1600/avatar.png', alt='', width='60' height='60')
+                        | Maxim89
+                    a.element(href='#')
+                        img.sliderImage(src='https://avatarko.ru/img/kartinka/1/multfilm_gomer.png', alt='', width='60' height='60')
+                        | Maxim89
+                    a.element(href='#')
+                        img.sliderImage(src='https://banner2.kisspng.com/20180525/qu/kisspng-clip-art-5b08be927cb923.3927898615272997305109.jpg', alt='', width='60' height='60')
+                        | Maxim89
+                    a.element(href='#')
+                        img.sliderImage(src='https://pp.userapi.com/c850132/v850132715/d406/XTbYNnmo3r4.jpg', alt='', width='60' height='60')
+                        | Maxim89
+                    a.element(href='#')
+                        img.sliderImage(src='https://vignette.wikia.nocookie.net/detroit-become-human/images/c/c8/Hostess_Chloe.jpg/revision/latest?cb=20180720215251', alt='', width='60' height='60')
+                        | Maxim89
+                    a.element(href='#')
+                        img.sliderImage(src='https://cdn2.hexlet.io/attachments/ff5eaf72306e796c53a8d6e43125babb05a466ec/store/fill/185/185/1a5baba85ab3caf9805859538b2e4416cf4c147d5741159903795bdfb2dd/avatar.png', alt='', width='60' height='60')
+                        | Ketty Blue
+                    a.element(href='#')
+                        img.sliderImage(src='https://53news.ru/images/images/2017/4/2ZXOgeKHM394Wceyb7XJCyIfCG2Txf9Q.jpg', alt='', width='60' height='60')
+                        | Miriam Rоhdfdfdf
+                    a.element(href='#')
+                        img.sliderImage(src='https://st.navalny.com/media/cache/63/48/63485ff83e403731f699323134a4b9ef.jpg', alt='', width='60' height='60')
+                        | Miriam Rоhdfdfdf
+                    a.element(href='#')
+                        img.sliderImage(src='https://s5.cdn.teleprogramma.pro/wp-content/uploads/2018/06/371fda9f92c68e4845d4fb92a8b4cff0.jpg', alt='', width='60' height='60')
+                        | Miriam Rоhdfdfdf
+            a.right(href='#')
+        div(style="padding: 0 0 0 7px;")
+            input(type="button" class='showOnMap' value="Show On a Map")
 
     div(class ='im_dialogs_col_wrap')
         include chats/men.pug

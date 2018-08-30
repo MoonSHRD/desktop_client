@@ -53,7 +53,7 @@ window.onload = function () {
 
         $('.sliderWrapper').css('height', height + 60)
 
-        $('.left').click(function(){
+        $('.right').click(function(){
             if(offset > -((items * 100) - 300)){
                 offset = offset - 80;
                 $('.activeNearby').next('.element').addClass('activeNearby');
@@ -64,7 +64,7 @@ window.onload = function () {
             $('.slider').css('left', offset+'px')
         })
 
-        $('.right').click(function(){
+        $('.left').click(function(){
             if(offset < 0){
                 offset = offset + 80;
 

@@ -3,7 +3,7 @@
 .infopanel {
     display: flex;
     text-decoration: none;
-    padding: 20px;
+    padding: 20px 0;
     transition: 0.5s;
 
 }
@@ -182,27 +182,41 @@ label > span{
     justify-content: center;
     align-items: center;
     /*height: 100vh;*/
-    padding: 0 20px;
+
 }
 .left, .right {
-    background: url(https://bumper-stickers.ru/25839-thickbox_default/strelka-vpravo.jpg) no-repeat;
-    background-size: contain;
+    background: url(./components/main/chatsblock/img/toRight.png) no-repeat;
+    background-size: auto;
     height: 50px;
-    width: 20px;
+    width: 35px;
     /*   background: red; */
     position: relative;
-    transition: 1s;
+    transition: 0.2s;
     z-index: 110;
-    margin-top: -40px;
+    margin-top: -30px;
     background-position: center;
+
+
+}
+
+.left:hover {
+    right: 2px;
+}
+
+.right:hover {
+    left: 2px;
 }
 
 .left {
     transform: rotate(180deg);
+    right: 0;
+}
+.right{
+    left: 0;
 }
 
 .sliderWrapper {
-    width: 300px;
+    /*width: 300px;*/
     position: relative;
 
     /*   border: 2px solid red; */

@@ -10,6 +10,10 @@
 
 }
 
+.dialogsHeader {
+    padding: 0 20px;
+}
+
 .men {
     position: relative;
     height: 100vh;
@@ -44,4 +48,20 @@
 
 .resize1 {
     width: 300px;
+}
+
+.showOnMap{
+    background-image: url(./components/main/chatsblock/img/mapPoint.png);
+    background-color: #BDBDBD;
+    background-repeat: no-repeat;
+    background-position: 55px center;
+    border: 0;
+    height: 33px;
+    background-size: 18px;
+    width: 100%;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 12px;
+    outline: none;
+    /*cursor: pointer;*/
 }
