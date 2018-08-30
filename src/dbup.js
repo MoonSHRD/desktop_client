@@ -1,4 +1,10 @@
 const sqlite3 = require('sqlite3');
+const fs = require('fs');
+var dir = './sqlite';
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
 let db = new sqlite3.Database('./sqlite/data.db');
 let qbox = require('qbox');
 

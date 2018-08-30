@@ -59,7 +59,8 @@ let acc_data = {
     jidhost: 'localhost',
     privKey: undefined,
     // host: '142.93.226.135',
-    host: '192.168.1.60',
+    // host: '192.168.1.60',
+    host: 'localhost',
     port: 5222,
 };
 
@@ -335,7 +336,7 @@ function router(renderer) {
             chat:arg.id,
             sender:dxmpp.get_address(),
             text:arg.text,
-            time:"",
+            time:dxmpp.take_time(),
             group: (arg.group),
             mine: true,
         };
@@ -346,6 +347,7 @@ function router(renderer) {
         // sqlite.insert(obj,sqlite.tables.msgs);
         // if (arg.group) return;
         const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', obj, PUG_OPTIONS);
+        sqlite.insert(obj, sqlite.tables.msgs);
         renderer.webContents.send('add_out_msg', html)
     });
 
@@ -427,7 +429,8 @@ function router(renderer) {
     dxmpp.on('chat', function (from, message) {
         const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', {
             mine: false,
-            message: message,
+            text: message,
+            time: dxmpp.take_time()
         }, PUG_OPTIONS);
 
         from = get_adr_from_jid(from);
@@ -438,7 +441,7 @@ function router(renderer) {
             sender:from,
             text:message,
             message:html,
-            time:"",
+            time:dxmpp.take_time(),
             group: false
         };
 
