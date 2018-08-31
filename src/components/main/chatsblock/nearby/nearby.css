@@ -1,0 +1,95 @@
+.wrapperNearby {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    /*height: 100vh;*/
+
+}
+.left, .right {
+    background: url(./components/main/chatsblock/img/toRight.png) no-repeat;
+    background-size: auto;
+    height: 50px;
+    width: 35px;
+    /*   background: red; */
+    position: relative;
+    transition: 0.2s;
+    z-index: 110;
+    margin-top: -30px;
+    background-position: center;
+
+
+}
+
+.left:hover {
+    right: 2px;
+}
+
+.right:hover {
+    left: 2px;
+}
+
+.left {
+    transform: rotate(180deg);
+    right: 0;
+}
+.right{
+    left: 0;
+}
+
+.sliderWrapper {
+    /*width: 300px;*/
+    position: relative;
+
+    /*   border: 2px solid red; */
+
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.slider{
+    display: flex;
+    top:10px;
+    justify-content: start;
+    transition: 1s;
+    position: relative;
+    z-index: 0;
+    margin-left: calc(50% - 40px);
+    left:0;
+    /*   background:red; */
+
+
+}
+
+.slider a {
+    font-size: 13px;
+    line-height: 1;
+    width: 80px;
+    min-width: 80px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    color: black;
+    flex-direction: column;
+    overflow:hidden;
+    text-align: center;
+    text-decoration: none;
+    transition:0.5s;
+}
+
+.slider img {
+    margin-bottom: 5px;
+    border-radius: 70%;
+    object-fit: cover;
+    border: 2px solid rgba(0, 123, 255, 1);
+    box-shadow: 0 0 13px rgba(0, 123, 255,0.5);
+}
+
+.activeNearby:hover {
+    background: #e7e7e7;
+}
+
+.activeNearby {
+    transform: scale(1.1);
+    /*   background-color:red; */
+    transition:0.5s;
+}
