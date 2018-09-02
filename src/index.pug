@@ -1,7 +1,7 @@
 doctype html
 html
     head
-        link(rel='stylesheet' href='../node_modules/bootstrap/dist/css/bootstrap.css')
+        link(rel='stylesheet' href='./css/bootstrap.min.css')
         block head
             meta(charset = 'utf-8')
             meta(name='viewport', content="initial-scale=1.0, width=device-width")
@@ -25,8 +25,12 @@ html
 
         script.
             require('jqueryui')
+        //script.
+        //    require('bootstrap')
         script.
-            require('bootstrap')
+            require('./js/bootstrap.min.js')
+        //script.
+        //    require('bootstrap')
         //script.
         //    require('./langs/lang')
         //script.
