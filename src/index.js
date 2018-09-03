@@ -265,7 +265,7 @@ window.onload = function () {
                 console.log('pre join');
                 break;
             case chat_types.user:
-                ipcRenderer.send('get_chat_msgs',{id:$this.attr('id')});
+                ipcRenderer.send('get_chat_msgs', {id:$this.attr('id'), full_name:$this.text()});
                 console.log("1");
 
                 break;
@@ -341,4 +341,18 @@ window.onload = function () {
                 break;
         }
     });
+
+    $(document).on('click', '.peer_name', function () {
+        const $this=$(this);
+        let data = $this.attr('href');
+        ipcRenderer.send('show_popup', data.split('/'));
+    });
+
+    $(document).on('click', '.btn-primary', function () {
+        let text = $('.form-control');
+        if (text.val().trim() === "") return;
+        console.log(`Suggest: ${text.val()}`);
+        text.val('');
+        $(".send").removeAttr("hidden");
+    })
 };

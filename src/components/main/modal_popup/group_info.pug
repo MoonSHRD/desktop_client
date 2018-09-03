@@ -15,14 +15,13 @@
                             td #{address}
                         tr
                             th(scope='row') Group name
-                            td #{firstname}
-                        tr
-                            th(scope='row') Lastname
-                            td #{lastname}
+                            td #{name}
         .row
             .col-sm-3
                 strong Group information
             .col-sm !{bio}
+
+            .col-sm(class = "send" hidden=true) Your suggest has been sent
 .modal-footer
     .container
 

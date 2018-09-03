@@ -191,7 +191,6 @@ class Sqlite {
             let query = `UPDATE ${table} SET `;
             // Object.keys(this.tables_data[table])
             delete table_columns[0];
-            console.log(table_columns);
             table_columns.forEach(function (table_column) {
                 if (obj[table_column]) {
                     query+=`${table_column} = ?,`;

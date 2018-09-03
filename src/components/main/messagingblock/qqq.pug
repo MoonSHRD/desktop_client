@@ -1,6 +1,7 @@
-if (type==="user_chat" || type==="group_chat" || (type==="channel" && role==="moderator"))
-    div(class="head_peer" id="head_peer")
-        h3(class="peer_name") #{chat_name}
+div(class="head_peer" id="head_peer")
+    h3
+        a(class="peer_name" href='#'+ '/' + type + '/' + id) #{chat_name}
+    if (type==="user_chat" || type==="group_chat" || (type==="channel" && role==="moderator"))
         div(class='dropDown_menu')
 
             a(data-id="")

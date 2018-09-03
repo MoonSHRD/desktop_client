@@ -272,6 +272,7 @@ function router(renderer) {
             name:room_data.name,
             type:room_data.channel==="1"?chat_types.channel:chat_types.group_chat,
             role:room_data.role,
+            bio: room_data.bio
         };
         sqlite.insert(obj,sqlite.tables.chat);
         chats[room_data.id]=obj;
@@ -351,8 +352,10 @@ function router(renderer) {
 
         sqlite.get_chat((row)=>{
             const html = pug.renderFile(__dirname + '/components/main/messagingblock/qqq.pug', {
+                id: row.id,
                 type: row.type,
                 role: row.role,
+                chat_name: row.name
             }, PUG_OPTIONS);
             renderer.webContents.send('reload_chat', html);
         },arg.id);
@@ -386,7 +389,9 @@ function router(renderer) {
 
         sqlite.get_chat((row)=>{
             const html = pug.renderFile(__dirname + '/components/main/messagingblock/qqq.pug', {
-                type: chat_types.user,
+                id:         arg.id,
+                type:       chat_types.user,
+                chat_name:  arg.full_name
             }, PUG_OPTIONS);
             renderer.webContents.send('reload_chat', html);
             console.log("chat");
@@ -539,6 +544,38 @@ function router(renderer) {
 
     ipcMain.on('create_group', (event, name) => {
        dxmpp.register_channel(name,"localhost")
+    });
+
+    ipcMain.on("show_popup", (event, data) => {
+       switch(data[1]) {
+           case "user_chat":
+           {
+                // dxmpp.get_vcard(data[2] + "@localhost");
+               sqlite.get_buddy((row) => {
+                   row.address = row.id;
+                   row.full_name = row.name ;
+                   let html = pug.renderFile(__dirname + '/components/main/modal_popup/modal_content.pug', row, PUG_OPTIONS);
+                   renderer.webContents.send('get_my_vcard', html);
+               }, data[2]);
+
+               console.log(data[2]);
+                break;
+           }
+           case "channel":
+           {
+               sqlite.get_chat((row) => {
+                   console.log(row);
+                   let html = pug.renderFile(__dirname + '/components/main/modal_popup/group_info.pug', row, PUG_OPTIONS);
+                   renderer.webContents.send('get_my_vcard', html);
+               }, data[2]);
+               break;
+           }
+           case "group_chat":
+           {
+               console.log(data[2]);
+               break;
+           }
+       }
     });
 }
 

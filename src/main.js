@@ -17,12 +17,12 @@ app.on('ready', async () => {
     let mainWindow = new BrowserWindow({ width: 1200, height: 800, show: false, webPreferences: {
             nodeIntegration: true   } });
 
-    // mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`file://${__dirname}/index.pug`);
     mainWindow.webContents.on('dom-ready', function() {
         console.log('finished');
         mainWindow.show();
-        setTimeout(()=>{router(mainWindow)},10000)
+        setTimeout(()=>{router(mainWindow)}, 2000)
     });
 });
 
