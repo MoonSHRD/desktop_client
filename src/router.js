@@ -72,9 +72,9 @@ let vcard = {
     avatar: undefined
 };
 
-let buddies = {};
 let chats = {};
 let msgs = {};
+let chat = false;
 
 function get_adr_from_jid(from) {
     const arr = from.split('/');
@@ -221,6 +221,17 @@ function router(renderer) {
         renderer.webContents.send('online', data);
         let html = pug.renderFile(__dirname + '/components/main/main.pug', vcard);
         renderer.webContents.send('change_app_state', html);
+        sqlite.fetch((room_data) => {
+            const obj = {
+                id:room_data.id,
+                domain:room_data.domain,
+                avatar:room_data.avatar,
+                name:room_data.name,
+                type:room_data.channel==="1"?chat_types.channel:chat_types.group_chat,
+                role:room_data.role,
+            };
+            chats[room_data.id]=obj;
+        }, "chat");
         // const address = "fwafwafwafawfwafawfwafwafwafawf";
         // const neo_data={
         //     address: address,
@@ -259,12 +270,12 @@ function router(renderer) {
         // if (!buddies[jid]) {
         //     buddies[jid] = {};
         // }
-        // console.log(jid);
         const jid1=jid.split('@');
         let obj = {
             id:jid1[0],
             domain:jid1[1],
         };
+        console.log(`State of ${obj.id}: ${state}`);
         if (state === 'online') {
             obj.online = 'online';
         } else {
@@ -347,15 +358,18 @@ function router(renderer) {
         // sqlite.insert(obj,sqlite.tables.msgs);
         // if (arg.group) return;
         const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', obj, PUG_OPTIONS);
+        renderer.webContents.send('add_out_msg', html);
+        if (obj.group === true){
+            return
+        }
         sqlite.insert(obj, sqlite.tables.msgs);
-        renderer.webContents.send('add_out_msg', html)
     });
 
     ipcMain.on('get_channel_msgs', (event, arg) => {
 
         sqlite.get_chat((row)=>{
             const html = pug.renderFile(__dirname + '/components/main/messagingblock/qqq.pug', {
-                type: chat_types.user,
+                type: row.type,
                 role: row.role,
             }, PUG_OPTIONS);
             renderer.webContents.send('reload_chat', html);
@@ -472,7 +486,7 @@ function router(renderer) {
             sender:sender.address,
             text:message,
             message:html,
-            time:stamp,
+            time:dxmpp.take_time(),
             mine:mine,
             group: false
         };
@@ -497,9 +511,9 @@ function router(renderer) {
             if (chats[group.id]) return;
             group.domain=st[1];
             html += pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', {
-                address: group.id,
+                id: group.id,
                 domain: group.domain,
-                full_name: group.name,
+                name: group.name,
                 avatar: group.avatar,
                 type: group.channel==='1'?chat_types.join_channel:chat_types.join_group_chat,
             }, PUG_OPTIONS);
@@ -514,7 +528,7 @@ function router(renderer) {
 
     dxmpp.on('received_vcard', function (data) {
         console.log('received_vcard');
-        console.log(data);
+        // console.log(data);
         if (data.address === dxmpp.get_address()) {
             let html = pug.renderFile(__dirname + '/components/main/modal_popup/modal_content.pug', data, PUG_OPTIONS);
             renderer.webContents.send('get_my_vcard', html);
@@ -528,7 +542,7 @@ function router(renderer) {
             },data.id);
             // const jid = `${data.address}@${data.domain}`;
             // // buddies[jid].vcard = data;
-            // const obj = data;
+            const obj = data;
             //
             // obj.online = buddies[jid].online;
             // obj.type = chat_types.user;
