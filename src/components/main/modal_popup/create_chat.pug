@@ -7,19 +7,19 @@
         .row
             .col-sm-3
                 label Название группы
-            .col-sm
-                input(class="input-field" name="name" type="text" placeholder="Введите название группы")
+            .col-sm-5
+                input(class="form-control" name="name" type="text" placeholder="Введите название группы")
         br
         .row
             .col-sm-3
                 label Описание группы
-            .col-sm
-                input(class="input-field" name="description" type="text" placeholder="Введите краткое описание группы" width='60', align='20')
+            .col-sm-5
+                textarea(class="form-control" style="resize: none" name="description" type="text" placeholder="Введите краткое описание группы" width='60', align='20')
         br
         .row
             .col-sm-3
                 label Тип группы
-            .col-sm
+            .col-sm-4
                 select(class ="select-field" name="grouptype")
                     //option(disabled="true") Выберите тип группы
                     //option(value="chat") чат
@@ -28,7 +28,7 @@
         .row
             .col-sm-3
                 label Описание группы
-            .col-sm
+            .col-sm-4
                 select(class="select-field" name="substype")
                     //option(disabled="true") Выберите тип подписки
                     option(value="free") бесплатный
