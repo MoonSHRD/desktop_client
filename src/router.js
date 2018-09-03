@@ -24,8 +24,8 @@ let acc_data = {
     jidhost: 'localhost',
     privKey: undefined,
     // host: '142.93.226.135',
-    host: '192.168.1.60',
-    // host: 'localhost',
+    // host: '192.168.1.60',
+    host: 'localhost',
     port: 5222,
 };
 
@@ -251,6 +251,7 @@ function router(renderer) {
             obj.online = 'offline';
         }
         sqlite.insert(obj,sqlite.tables.buddy);
+        sqlite.update(obj, sqlite.tables.buddy);
         dxmpp.get_vcard(jid);
     });
 
@@ -519,7 +520,6 @@ function router(renderer) {
                 row.html = pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', row, PUG_OPTIONS);
                 row.type = "menu_user_chats";
                 renderer.webContents.send('buddy', row);
-                console.log(row);
             },data.id);
             // const jid = `${data.address}@${data.domain}`;
             // // buddies[jid].vcard = data;
