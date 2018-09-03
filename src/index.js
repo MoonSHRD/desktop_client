@@ -47,7 +47,11 @@ window.onload = function () {
         // console.log('autyh');
         $('#view').html(arg);
         $.html5Translate(dict, 'en');
-
+        setTimeout(()=>{
+            console.log('click');
+            console.log($('#0x0000000000000000000000000000000000000000').attr('data-domain'));
+            $('#0x0000000000000000000000000000000000000000').trigger("click");
+        },100);
     });
 
     // $(document).on('click', '#generate_mnemonic', function () {
@@ -125,6 +129,49 @@ window.onload = function () {
     //     }
     // });
 
+    $(document).on('change', '[name=avatar]', function () {
+        const file = this.files[0];
+        let fileType = file.type;
+        if (file) {
+            let reader = new FileReader();
+             reader.onloadend = function () {
+                var image = new Image();
+                image.src = reader.result;
+                image.onload = function() {
+                    var maxWidth = 100,
+                        maxHeight = 100,
+                        imageWidth = image.width,
+                        imageHeight = image.height;
+
+                    if (imageWidth > imageHeight) {
+                        if (imageWidth > maxWidth) {
+                            imageHeight *= maxWidth / imageWidth;
+                            imageWidth = maxWidth;
+                        }
+                    }
+                    else {
+                        if (imageHeight > maxHeight) {
+                            imageWidth *= maxHeight / imageHeight;
+                            imageHeight = maxHeight;
+                        }
+                    }
+                    var canvas = document.createElement('canvas');
+                    canvas.width = imageWidth;
+                    canvas.height = imageHeight;
+
+                    var ctx = canvas.getContext("2d");
+                    ctx.drawImage(this, 0, 0, imageWidth, imageHeight);
+                    // The resized file ready for upload
+                    var finalFile = canvas.toDataURL(fileType);
+                    $('#avatar_preview').attr('src', finalFile);
+                    // console.log($("#avatar_preview").);
+                    $('#avatar_preview').show();
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
     $(document).on('click', '.menuBtn', function () {
         $('.dialogs').toggleClass('resize1', 400);
         $('.icon-bar').toggleClass('resize', 400);
@@ -135,18 +182,14 @@ window.onload = function () {
     });
 
 
-    $('.searchInput').bind('input', function(){
-        console.log('this actually works');
-    });
-
     $(document).on('click', '.send_message_btn', function () {
         let date = new Date();
         let active_dialog = $('.active_dialog');
         let msg_input = $('.send_message_input');
         const obj = {
-            address: active_dialog.attr('id'),
+            id: active_dialog.attr('id'),
             domain: active_dialog.attr('data-domain'),
-            message: msg_input.val().trim(),
+            text: msg_input.val().trim(),
             group: $('.active_dialog').attr('data-type')==='channel',
             time: `${date.getHours()}:${date.getMinutes()}`
         };
@@ -173,14 +216,15 @@ window.onload = function () {
     ipcRenderer.on('buddy', (event, obj) => {
         // console.log(obj);
         // console.log($(`[data-id=${obj.type}]`).hasClass('active_menu'));
+        // console.log(obj);
         if (
             !$(`[data-id=${obj.type}]`).hasClass('active_menu') ||
-            (obj.type == "menu_chats" && $('.searchInput').val())
+            (obj.type === "menu_chats" && $('.searchInput').val())
         ){
             return;
         }
         const chat_box = $('.chats ul');
-        const user = chat_box.find('#' + obj.address);
+        const user = chat_box.find('#' + obj.id);
         if (user.length) {
             user.replaceWith(obj.html)
         } else {
@@ -202,9 +246,11 @@ window.onload = function () {
     });
 
     $(document).on('click', '[data-name=join_channel]', function () {
+        $(this).attr('disabled','disabled');
         let active_dialog = $('.active_dialog');
         // console.log({id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
         ipcRenderer.send('join_channel', {id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
+        $(this).fadeOut();
     });
 
     $(document).on('click', '.chats li', function () {
@@ -227,24 +273,27 @@ window.onload = function () {
         }
     });
 
-    $(document).on('change', '.searchInput', function () {
-        if ($('.active_menu').attr('data-id')!=='menu_chats') return;
-        let group = $('input').val();
-        if (!group){
-            ipcRenderer.send('get_chats');
-        }
-        if (group.length > 2) {
-            ipcRenderer.send('find_groups', group);
-        }
-    });
 
-    $(document).on('click', '.submit_searchInput', function () {
-        if ($('.active_menu').attr('data-id')!=='menu_user_chats') return;
-        // (data-id="menu_user_chats" class='active_menu')
-        let text = $('.searchInput').val() + "@localhost";
-        ipcRenderer.send("send_subscribe", text);
-        console.log(text)
-    });
+    //
+    //
+    // $(document).on('change', '.searchInput', function () {
+    //     if ($('.active_menu').attr('data-id')!=='menu_chats') return;
+    //     let group = $('input').val();
+    //     if (!group){
+    //         ipcRenderer.send('get_chats');
+    //     }
+    //     if (group.length > 2) {
+    //         ipcRenderer.send('find_groups', group);
+    //     }
+    // });
+    //
+    // $(document).on('click', '.submit_searchInput', function () {
+    //     if ($('.active_menu').attr('data-id')!=='menu_user_chats') return;
+    //     // (data-id="menu_user_chats" class='active_menu')
+    //     let text = $('.searchInput').val() + "@localhost";
+    //     ipcRenderer.send("send_subscribe", text);
+    //     console.log(text)
+    // });
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
         $('.modal-content').html(data);
@@ -254,6 +303,10 @@ window.onload = function () {
 
     ipcRenderer.on('found_chats', (event, data) => {
         $('.chats ul').html(data);
+    });
+
+    ipcRenderer.on('load_chat', (event, data) => {
+        $('.chats ul').append(data);
     });
 
     $(document).on("change", '.modal-content select[name=substype]', function () {
@@ -267,6 +320,9 @@ window.onload = function () {
 
     $(document).on('submit', '.modal-content', function (e) {
         e.preventDefault();
+        $('#popup_error').html("Can't connect to&nbsp;<a href='#'>node1.moonshrd.io</a>, please try again later.");
+        $('#popup_error').show();
+        return;
         const data=$(this).serializeArray();
         let obj = {};
         data.forEach(function (elem) {

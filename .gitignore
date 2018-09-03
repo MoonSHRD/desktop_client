@@ -1,4 +1,4 @@
-# Node.js package manager
+git comm# Node.js package manager
 node_modules
 release-builds
 
@@ -12,3 +12,4 @@ package-lock.json
 yarn.lock
 
 account.json
+sqlite/data.db

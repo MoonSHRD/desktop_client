@@ -80,30 +80,57 @@ $(".previous").click(function(){
     });
 });
 
-$(document).on('submit', '#profile_form', function(e){
+$(document).on('submit', '#profile_form', function (e) {
     e.preventDefault();
-    // console.log(data);
-    const file = $(document).find('[name=avatar]').prop('files')[0];
-    if (file) {
-        let reader = new FileReader();
-        reader.onloadend = function () {
-            data.avatar = reader.result;
-            ipcRenderer.send('submit_profile', data);
-        };
-        reader.readAsDataURL(file);
-    } else {
-        ipcRenderer.send('submit_profile', data);
-    }
+    let obj = $(this).serializeArray();
+    let prof = {};
+
+    obj.forEach(function (elem) {
+        prof[elem.name] = elem.value;
+    });
+    prof.avatar = $("#avatar_preview").attr("src");
+    console.log("Msg1", prof);
+    ipcRenderer.send('submit_profile', prof);
 });
 
 $(document).on('change', '[name=avatar]', function () {
     const file = this.files[0];
+    let fileType = file.type;
     if (file) {
         let reader = new FileReader();
         reader.onloadend = function () {
-            // console.log(reader.result);
-            $('#avatar_preview').attr('src', reader.result);
-            $('#avatar_preview').show();
+            var image = new Image();
+            image.src = reader.result;
+            image.onload = function() {
+                var maxWidth = 100,
+                    maxHeight = 100,
+                    imageWidth = image.width,
+                    imageHeight = image.height;
+
+                if (imageWidth > imageHeight) {
+                    if (imageWidth > maxWidth) {
+                        imageHeight *= maxWidth / imageWidth;
+                        imageWidth = maxWidth;
+                    }
+                }
+                else {
+                    if (imageHeight > maxHeight) {
+                        imageWidth *= maxHeight / imageHeight;
+                        imageHeight = maxHeight;
+                    }
+                }
+                var canvas = document.createElement('canvas');
+                canvas.width = imageWidth;
+                canvas.height = imageHeight;
+
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(this, 0, 0, imageWidth, imageHeight);
+                // The resized file ready for upload
+                var finalFile = canvas.toDataURL(fileType);
+                $('#avatar_preview').attr('src', finalFile);
+                // console.log($("#avatar_preview").);
+                $('#avatar_preview').show();
+            }
         };
         reader.readAsDataURL(file);
     }
@@ -177,20 +204,38 @@ function validate_firstname(val) {
     return (val);
 }
 
-function validate_mnemonic(mnem) {
-    if (!mnem) return false;
-    const words_count=mnem.split(/\s+/).length;
-    const err=mnem.substr(-1,1)===" ";
-    return (words_count === 12 && !err);
-
-}
-
-
-
-
+// function validate_mnemonic(mnem) {
+//     if (!mnem) return false;
+//     // console.log(mnem.match( /[а-я]/i )!==null);
+//     // string.search(/[А-яЁё]/) === -1
+//     if (mnem.search(/[А-яЁё]/) !== -1) return false;
+//     const words_count=mnem.split(/\s+/).length;
+//     const err=mnem.substr(-1,1)===" ";
+//     return (words_count === 12 && !err);
+// }
 
 
+$('input[name=firstname]').bind('input', function (e) {
+    // console.log($(this).val());
+    if (!$(this).val()) $(this).addClass('invalid');
+    else $(this).removeClass('invalid');
+});
 
+$('textarea[name=mnemonic]').bind('input', function (e) {
+    // console.log($(this).val());
+    if (!validate_mnemonic($(this).val())) $(this).addClass('invalid');
+    else $(this).removeClass('invalid');
+});
+
+$(document).on('click', '#generate_mnemonic', function () {
+    ipcRenderer.send('generate_mnemonic');
+});
+
+ipcRenderer.on('generate_mnemonic', (event, arg) => {
+    const mnemonic = $('#input_mnemonic');
+    mnemonic.val(arg);
+    mnemonic.removeClass('invalid');
+});
 
 
 
@@ -251,10 +296,10 @@ function validate_mnemonic(mnem) {
 
 function validate_mnemonic(mnem) {
     if (!mnem) return false;
+    if (mnem.search(/[А-яЁё]/) !== -1) return false;
     const words_count=mnem.split(/\s+/).length;
     const err=mnem.substr(-1,1)===" ";
     return (words_count === 12 && !err);
-
 }
 
 

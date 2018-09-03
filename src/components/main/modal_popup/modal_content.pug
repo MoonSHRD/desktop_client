@@ -1,3 +1,5 @@
+style
+    include modal-content.css
 .modal-header
     h5.modal-title #{full_name}
     button.close(type='button', data-dismiss='modal', aria-label='Close')
@@ -6,7 +8,7 @@
     .container
         .row
             .col-sm-3
-                img.rounded-circle(src=avatar)
+                img.rounded-circle(src=avatar width = 128 height = 128)
             .col-sm
                 table.table
                     tbody

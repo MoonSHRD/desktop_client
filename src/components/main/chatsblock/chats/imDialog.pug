@@ -1,6 +1,8 @@
-li(id=address data-domain=domain data-type=type)
-    a(href='#/user/'+address)
+style
+    include chats.css
+li(id=id data-domain=domain data-type=type)
+    a(href='#/user/'+id)
         img(src=avatar, width='40', height='40')
         if type==='user_chat'
             span(class="stateLabel "+online)
-        p #{full_name}
+        p #{name}
