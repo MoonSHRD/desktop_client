@@ -1,0 +1,34 @@
+.modal-header
+    h5.modal-title #{full_name}
+    button.close(type='button', data-dismiss='modal', aria-label='Close')
+        span(aria-hidden='true') ×
+.modal-body
+    .container
+        .row
+            .col-sm-3
+                img.rounded-circle(src=avatar)
+            .col-sm
+                table.table
+                    tbody
+                        tr
+                            th(scope='row') Token name
+                            td #{address}
+                        tr
+                            th(scope='row') Group name
+                            td #{firstname}
+                        tr
+                            th(scope='row') Lastname
+                            td #{lastname}
+        .row
+            .col-sm-3
+                strong Group information
+            .col-sm !{bio}
+.modal-footer
+    .container
+
+        .row.align-items-center
+            .col-sm-8
+                textarea.form-control.noresize(rows="2")
+
+            .col-sm-4
+                button(class='btn btn-primary') Suggest publication
