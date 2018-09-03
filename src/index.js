@@ -250,6 +250,7 @@ window.onload = function () {
         let active_dialog = $('.active_dialog');
         // console.log({id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
         ipcRenderer.send('join_channel', {id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
+        $('#style-11').empty();
         $(this).fadeOut();
     });
 
@@ -265,9 +266,11 @@ window.onload = function () {
                 break;
             case chat_types.user:
                 ipcRenderer.send('get_chat_msgs',{id:$this.attr('id')});
+                console.log("1");
 
                 break;
             case chat_types.channel:
+                console.log("2");
                 ipcRenderer.send('get_channel_msgs', {id:$this.attr('id')});
                 break;
         }
@@ -320,9 +323,9 @@ window.onload = function () {
 
     $(document).on('submit', '.modal-content', function (e) {
         e.preventDefault();
-        $('#popup_error').html("Can't connect to&nbsp;<a href='#'>node1.moonshrd.io</a>, please try again later.");
-        $('#popup_error').show();
-        return;
+        // $('#popup_error').html("Can't connect to&nbsp;<a href='#'>node1.moonshrd.io</a>, please try again later.");
+        // $('#popup_error').show();
+        // return;
         const data=$(this).serializeArray();
         let obj = {};
         data.forEach(function (elem) {

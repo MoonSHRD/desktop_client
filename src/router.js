@@ -23,9 +23,9 @@ const states = {
 let acc_data = {
     jidhost: 'localhost',
     privKey: undefined,
-    host: '142.93.226.135',
+    // host: '142.93.226.135',
     // host: '192.168.1.60',
-    // host: 'localhost',
+    host: 'localhost',
     port: 5222,
 };
 
@@ -37,7 +37,6 @@ let vcard = {
     avatar: undefined
 };
 
-let buddies = {};
 let chats = {};
 let msgs = {};
 
@@ -191,6 +190,17 @@ function router(renderer) {
         renderer.webContents.send('online', data);
         let html = pug.renderFile(__dirname + '/components/main/main.pug', vcard);
         renderer.webContents.send('change_app_state', html);
+        sqlite.fetch((room_data) => {
+            const obj = {
+                id:room_data.id,
+                domain:room_data.domain,
+                avatar:room_data.avatar,
+                name:room_data.name,
+                type:room_data.channel==="1"?chat_types.channel:chat_types.group_chat,
+                role:room_data.role,
+            };
+            chats[room_data.id]=obj;
+        }, "chat");
         get_buddies();
         // const address = "fwafwafwafawfwafawfwafwafwafawf";
         // const neo_data={
@@ -230,7 +240,6 @@ function router(renderer) {
         // if (!buddies[jid]) {
         //     buddies[jid] = {};
         // }
-        // console.log(jid);
         const jid1=jid.split('@');
         let obj = {
             id:jid1[0],
@@ -330,15 +339,18 @@ function router(renderer) {
         // sqlite.insert(obj,sqlite.tables.msgs);
         // if (arg.group) return;
         const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', obj, PUG_OPTIONS);
+        renderer.webContents.send('add_out_msg', html);
+        // if (obj.group === true){
+        //     return
+        // }
         sqlite.insert(obj, sqlite.tables.msgs);
-        renderer.webContents.send('add_out_msg', html)
     });
 
     ipcMain.on('get_channel_msgs', (event, arg) => {
 
         sqlite.get_chat((row)=>{
             const html = pug.renderFile(__dirname + '/components/main/messagingblock/qqq.pug', {
-                type: chat_types.channel,
+                type: row.type,
                 role: row.role,
             }, PUG_OPTIONS);
             renderer.webContents.send('reload_chat', html);
@@ -457,14 +469,14 @@ function router(renderer) {
             sender:sender.address,
             text:message,
             message:html,
-            time:stamp,
+            time:dxmpp.take_time(),
             mine:mine,
             group: false
         };
 
         sqlite.insert(obj,sqlite.tables.msgs);
-        // if (!mine)
-        renderer.webContents.send('received_message', obj);
+        if (!mine)
+            renderer.webContents.send('received_message', obj);
     });
     //
     dxmpp.on('error', function (err) {
@@ -494,12 +506,11 @@ function router(renderer) {
 
     dxmpp.on('received_vcard', function (data) {
         console.log('received_vcard');
-        console.log(data);
+        // console.log(data);
         if (data.address === dxmpp.get_address()) {
             let html = pug.renderFile(__dirname + '/components/main/modal_popup/modal_content.pug', data, PUG_OPTIONS);
             renderer.webContents.send('get_my_vcard', html);
         } else {
-            console.log(data);
             data.id=data.address;
             data.name=data.full_name;
             sqlite.update(data,sqlite.tables.buddy);
