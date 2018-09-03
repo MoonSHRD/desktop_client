@@ -550,15 +550,12 @@ function router(renderer) {
        switch(data[1]) {
            case "user_chat":
            {
-                // dxmpp.get_vcard(data[2] + "@localhost");
                sqlite.get_buddy((row) => {
                    row.address = row.id;
                    row.full_name = row.name ;
                    let html = pug.renderFile(__dirname + '/components/main/modal_popup/modal_content.pug', row, PUG_OPTIONS);
                    renderer.webContents.send('get_my_vcard', html);
                }, data[2]);
-
-               console.log(data[2]);
                 break;
            }
            case "channel":
