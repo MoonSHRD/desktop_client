@@ -199,8 +199,6 @@ class Sqlite {
                 }
             });
             query=query.slice(0, -1)+" WHERE id = ?";
-            console.log(query);
-            console.log(args);
             args.push(obj.id);
             db.run(query, args);
         });
