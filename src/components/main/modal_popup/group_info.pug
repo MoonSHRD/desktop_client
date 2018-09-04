@@ -1,3 +1,5 @@
+style
+    include modal-content.css
 .modal-header
     h5.modal-title #{full_name}
     button.close(type='button', data-dismiss='modal', aria-label='Close')
@@ -16,10 +18,13 @@
                         tr
                             th(scope='row') Group name
                             td #{name}
-        .row
-            .col-sm-3
-                strong Group information
-            .col-sm !{bio}
+                        tr
+                            th(scope='row') Group information
+                            td !{bio}
+        //.row.mt-3
+        //    .col-sm-3
+        //        strong
+        //    .col-sm
 
 .modal-footer
     .container
@@ -27,7 +32,13 @@
             .row.align-items-center
                 .col-sm-8
                     textarea.form-control.noresize(rows="2")
-                    .col-sm(class = "send" hidden=true) Your suggest has been sent
+            .row
+                .col-sm-12
+                    label Offer publication:
+            .row.align-items-center
+                .col-sm-8
+                    textarea.form-control.noresize(rows="2")
 
                 .col-sm-4
-                    button(class='btn btn-suggest') Suggest publication
+                    button(class='btn btn-primary col-sm-12' ) Suggest publication
+

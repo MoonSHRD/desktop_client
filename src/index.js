@@ -348,11 +348,13 @@ window.onload = function () {
         ipcRenderer.send('show_popup', data.split('/'));
     });
 
-    $(document).on('click', '.btn-suggest', function () {
+    $(document).on('click', '.btn-primary.col-sm-12', function () {
         let text = $('.form-control');
         if (text.val().trim() === "") return;
         console.log(`Suggest: ${text.val()}`);
         text.val('');
         $(".send").removeAttr("hidden");
+        $(".alert").fadeIn(200).show();
+        $(".alert").delay(2000).fadeOut(200);
     })
 };

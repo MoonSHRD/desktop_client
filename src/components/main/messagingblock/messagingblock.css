@@ -50,8 +50,8 @@
 .messaging_history {
 
     height: auto;
-    min-height: calc(100% - 93px);
-    max-height: calc(100% - 93px);
+    min-height: calc(100% - 150px);
+    max-height: calc(100% - 150px);
     overflow-y: scroll;
     overflow-x: hidden;
 }
