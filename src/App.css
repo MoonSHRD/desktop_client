@@ -45,3 +45,13 @@ html, body {
     position: relative;
     width: 450px;
 }
+
+
+.alert{
+    display: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 10000;
+    width: 50%;
+}

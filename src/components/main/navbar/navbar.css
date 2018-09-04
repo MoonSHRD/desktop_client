@@ -1,5 +1,6 @@
 .icon-bar {
     width: 70px; /* Set a specific width */
+    min-width: 70px; /* Set a specific width */
     background-color: #363C64; /* Dark-grey background */
     /*height: 100%;*/
     z-index: 100;

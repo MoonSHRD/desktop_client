@@ -16,18 +16,21 @@
                         tr
                             th(scope='row') Group name
                             td #{name}
-        .row
+        .row.mt-3
             .col-sm-3
                 strong Group information
             .col-sm !{bio}
 
-            .col-sm(class = "send" hidden=true) Your suggest has been sent
+            //.col-sm(class = "send" hidden=true) Your suggest has been sent
 .modal-footer
     .container
-
+        .row
+            .col-sm-12
+                label Offer publication:
         .row.align-items-center
             .col-sm-8
                 textarea.form-control.noresize(rows="2")
 
             .col-sm-4
-                button(class='btn btn-primary') Suggest publication
+                button(class='btn btn-primary col-sm-12' ) Suggest publication
+
