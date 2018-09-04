@@ -1,5 +1,7 @@
+style
+    include modal-content.css
 .modal-header
-    h5.modal-title #{full_name}
+    h5.modal-title #{full_name} #{name}
     button.close(type='button', data-dismiss='modal', aria-label='Close')
         span(aria-hidden='true') ×
 .modal-body
@@ -16,10 +18,13 @@
                         tr
                             th(scope='row') Group name
                             td #{name}
-        .row.mt-3
-            .col-sm-3
-                strong Group information
-            .col-sm !{bio}
+                        tr
+                            th(scope='row') Group information
+                            td !{bio}
+        //.row.mt-3
+        //    .col-sm-3
+        //        strong
+        //    .col-sm
 
             //.col-sm(class = "send" hidden=true) Your suggest has been sent
 .modal-footer

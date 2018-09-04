@@ -51,7 +51,8 @@ html, body {
     display: none;
     position: absolute;
     bottom: 0;
-    right: 0;
+    right: 15px;
     z-index: 10000;
-    width: 50%;
+    /*width: 25%;*/
 }
+
