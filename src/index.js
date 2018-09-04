@@ -348,7 +348,7 @@ window.onload = function () {
         ipcRenderer.send('show_popup', data.split('/'));
     });
 
-    $(document).on('click', '.btn-primary', function () {
+    $(document).on('click', '.btn-suggest', function () {
         let text = $('.form-control');
         if (text.val().trim() === "") return;
         console.log(`Suggest: ${text.val()}`);

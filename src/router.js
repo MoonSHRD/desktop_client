@@ -283,6 +283,7 @@ function router(renderer) {
     });
 
     ipcMain.on('send_subscribe', (event, arg) => {
+        if (dxmpp.get_address() === arg.split('@')[0]) return;
         console.log('sub to '+arg);
         dxmpp.subscribe(arg);
     });

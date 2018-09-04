@@ -21,13 +21,13 @@
                 strong Group information
             .col-sm !{bio}
 
-            .col-sm(class = "send" hidden=true) Your suggest has been sent
 .modal-footer
     .container
         if (role !== "moderator")
             .row.align-items-center
                 .col-sm-8
                     textarea.form-control.noresize(rows="2")
+                    .col-sm(class = "send" hidden=true) Your suggest has been sent
 
                 .col-sm-4
-                    button(class='btn btn-primary') Suggest publication
+                    button(class='btn btn-suggest') Suggest publication
