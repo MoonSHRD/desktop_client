@@ -1,33 +1,47 @@
+style
+    include modal-content.css
 .modal-header
-    h5.modal-title #{full_name}
+    h5.modal-title #{name}
     button.close(type='button', data-dismiss='modal', aria-label='Close')
         span(aria-hidden='true') ×
 .modal-body
     .container
         .row
             .col-sm-3
-                img.rounded-circle(src=avatar)
+                img.rounded-circle(src=avatar width=128 height=128)
             .col-sm
                 table.table
                     tbody
                         tr
-                            th(scope='row') Token name
-                            td #{address}
-                        tr
-                            th(scope='row') Group name
+                            th(scope='row') Channel name
                             td #{name}
-        .row
-            .col-sm-3
-                strong Group information
-            .col-sm !{bio}
+                        tr
+                            th(scope='row') Token name
+                            td #{name}_token
+                        tr
+                            th(scope='row') Total supply
+                            td 100000
+                        //tr
+                        //    th(scope='row') Channel information
+                        //    td !{bio}
+                        //tr
+                        //    th(scope='row') Channel address
+                        //    td !{contract_address}
+        //.row.mt-3
+        //    .col-sm-3
+        //        strong
+        //    .col-sm
 
-            .col-sm(class = "send" hidden=true) Your suggest has been sent
 .modal-footer
     .container
+        if (role !== "moderator")
+            .row
+                .col-sm-12
+                    label Offer publication:
+            .row.align-items-center
+                .col-sm-8
+                    textarea.form-control.noresize(rows="2")
 
-        .row.align-items-center
-            .col-sm-8
-                textarea.form-control.noresize(rows="2")
+                .col-sm-4
+                    button(class='btn btn-primary col-sm-12' ) Suggest publication
 
-            .col-sm-4
-                button(class='btn btn-primary') Suggest publication

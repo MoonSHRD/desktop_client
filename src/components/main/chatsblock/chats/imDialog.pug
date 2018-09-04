@@ -1,6 +1,6 @@
 style
     include chats.css
-li(id=id data-domain=domain data-type=type)
+li(id=id data-domain=domain data-type=type data-contract_address=contract_address)
     a(href='#/user/'+id)
         img(src=avatar, width='40', height='40')
         if type==='user_chat'

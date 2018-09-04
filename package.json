@@ -44,13 +44,17 @@
     "ipfs-api": "^24.0.1",
     "jquery": "^3.3.1",
     "jqueryui": "^1.11.1",
+    "js-x25519": "https://github.com/CryptoEsel/js-x25519",
     "l20n": "^5.0.0",
-    "moonshard_core": "^0.1.12",
+    "loom-js": "^1.4.3",
+    "loom-truffle-provider": "^0.5.0",
+    "moonshard_core": "^0.1.13",
     "peer-id": "^0.11.0",
     "popper.js": "^1.14.4",
     "pug": "^2.0.3",
     "qbox": "^0.1.7",
     "react": "^16.4.2",
-    "sqlite3": "^4.0.2"
+    "sqlite3": "^4.0.2",
+    "web3": "^1.0.0-beta.36"
   }
 }

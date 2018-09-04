@@ -14,7 +14,7 @@ app.on('ready', async () => {
         // Could not initiate 'electron-pug'
     }
 
-    let mainWindow = new BrowserWindow({ width: 1600, height: 800, show: false, webPreferences: {
+    let mainWindow = new BrowserWindow({ width: 1600, height: 800, resizable: false, show: false, webPreferences: {
             nodeIntegration: true   } });
 
     mainWindow.webContents.openDevTools();

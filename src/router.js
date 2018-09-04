@@ -5,8 +5,16 @@ const {dxmpp, eth} = require('moonshard_core');
 const Account = require('../controllers/AccountController');
 const fs = require('fs');
 const {events,chat_types} = require('./env_vars.js');
+const {ChannelWorker,ChannelWorkerEVM} = require('./cipher/cither');
 const ipfsAPI = require('ipfs-api');
-const ipfs = ipfsAPI('localhost', '5001');
+const ipfs = ipfsAPI('142.93.226.135', '5001');
+// const {}=require("./cipher/helpers/helpers.js");
+const {CryptoUtils} = require('loom-js');
+const LoomTruffleProvider = require('loom-truffle-provider')
+const Web3 = require('web3')
+const contractAddress="0x4Dd841b5B4F69507C7E93ca23D2A72c7f28217a8"
+
+// const ABI = require('./abi');
 
 ipfs.id((err, res) => {
     if (err) throw err;
@@ -22,23 +30,21 @@ const obj = {
     Links: []
 };
 
-
-
-ipfs.object.put(obj, (err, node) => {
-    if (err) {
-        throw err
-    }
-    // console.log(node.toJSON().multihash)
-    const multihash=node.toJSON().multihash;
-
-
-    ipfs.object.data(multihash, (err, data) => {
-        if (err) {
-            throw err
-        }
-        console.log(data.toString())
-    })
-});
+// ipfs.object.put(obj, (err, node) => {
+//     if (err) {
+//         throw err
+//     }
+//     // console.log(node.toJSON().multihash)
+//     const multihash=node.toJSON().multihash;
+//
+//
+//     ipfs.object.data(multihash, (err, data) => {
+//         if (err) {
+//             throw err
+//         }
+//         console.log(data.toString())
+//     })
+// });
 
 const sqlite = require('./dbup');
 
@@ -55,6 +61,7 @@ const states = {
 let acc_data = {
     jidhost: 'localhost',
     privKey: undefined,
+    privKeyLoom: undefined,
     // host: '142.93.226.135',
     // host: '192.168.1.60',
     host: 'localhost',
@@ -88,6 +95,7 @@ fs.readFile('account.json', 'utf8', function (err, data) {
     if (obj.account) {
         app_status = states.offline;
         acc_data.privKey = obj.account.privKey;
+        acc_data.privKeyLoom = CryptoUtils.B64ToUint8Array(obj.account.privKeyLoom);
     }
 
     if (obj.vcard) {
@@ -107,7 +115,12 @@ function router(renderer) {
             }
             break;
         default:
-            // console.log(acc_data);
+            console.log(acc_data);
+            console.log(typeof acc_data.privKeyLoom)
+            //@todo:important
+            // ChannelWorker.set_privkey(acc_data.privKeyLoom)
+
+            // ChannelWorkerEVM.set_privkey(acc_data.privKey)
             dxmpp.connect(acc_data);
             break;
     }
@@ -188,6 +201,8 @@ function router(renderer) {
             arg.avatar='data:image/jpeg;base64,'+fs.readFileSync(__dirname+'/default-avatar1.jpg').toString("base64");
         }
 
+        const loomkey=CryptoUtils.generatePrivateKey();
+        acc_data.privKeyLoom=CryptoUtils.Uint8ArrayToB64(loomkey);
         const file_data = JSON.stringify({account: acc_data, vcard: arg});
 
         fs.writeFile("account.json", file_data, function (err) {
@@ -198,6 +213,12 @@ function router(renderer) {
 
         vcard = arg;
 
+        acc_data.privKeyLoom=loomkey;
+
+        //@todo:important
+        // ChannelWorker.set_privkey(acc_data.privKeyLoom)
+
+        // ChannelWorkerEVM.set_privkey(acc_data.privKey)
         dxmpp.connect(acc_data);
         // console.log(arg);
         dxmpp.set_vcard(arg.firstname, arg.lastname, arg.bio, arg.avatar);
@@ -205,6 +226,13 @@ function router(renderer) {
 
     ipcMain.on('join_channel', (event, arg) => {
         // console.log(arg);
+
+        //@todo:important
+        // try {
+        //     ChannelWorkerEVM.join_channel(arg.contract_address)
+        // } catch (e) {
+        //     throw e;
+        // }
         const to = `${arg.id}@${arg.domain}`;
         dxmpp.join(to)
         // Account.add_account()
@@ -296,12 +324,13 @@ function router(renderer) {
 
     dxmpp.on('joined_room', function(room_data) {
         // console.log(role);
-        // console.log(room_data);
+        console.log(room_data);
         const obj = {
             id:room_data.id,
             domain:room_data.domain,
             avatar:room_data.avatar,
             name:room_data.name,
+            contract_address:room_data.contractaddress,
             type:room_data.channel==="1"?chat_types.channel:chat_types.group_chat,
             role:room_data.role,
             bio: room_data.bio
@@ -309,12 +338,13 @@ function router(renderer) {
         sqlite.insert(obj,sqlite.tables.chat);
         chats[room_data.id]=obj;
         const html = pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', obj, PUG_OPTIONS);
-        console.log(html);
+        // console.log(html);
         renderer.webContents.send('buddy', {address:room_data.id,html:html, type:"menu_chats"});
         console.log(`joined ${room_data.name} as ${room_data.role}`);
     });
 
     ipcMain.on('send_subscribe', (event, arg) => {
+        if (dxmpp.get_address() === arg.split('@')[0]) return;
         console.log('sub to '+arg);
         dxmpp.subscribe(arg);
     });
@@ -531,6 +561,7 @@ function router(renderer) {
             group.id=st[0];
             if (chats[group.id]) return;
             group.domain=st[1];
+            group.contract_address=group.contractaddress;
             group.type=group.channel==='1'?chat_types.join_channel:chat_types.join_group_chat;
             html += pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', group, PUG_OPTIONS);
         });
@@ -540,6 +571,37 @@ function router(renderer) {
     });
     ipcMain.on('find_groups', (event, group_name) => {
         dxmpp.find_group(group_name);
+    });
+
+    ipcMain.on('channel_suggestion', (event, data) => {
+        console.log(data);
+        const obj = {
+            Data: new Buffer(JSON.stringify({user:dxmpp.get_address(),text:data.text})),
+            Links: []
+        };
+        ipfs.object.put(obj, (err, node) => {
+            if (err) {
+                throw err
+            }
+            // console.log(node.toJSON().multihash)
+            const multihash = node.toJSON().multihash;
+
+            try {
+                console.log("suggesting");
+                ChannelWorkerEVM.suggest_publication(acc_data.privKeyLoom,data.contract_address,multihash,(data)=>{
+                    renderer.webContents.send('suggestion_answer', data);
+                })
+            } catch (e) {
+                throw e;
+            }
+        });
+    });
+
+    dxmpp.on('user_joined_room', function (user, room_data) {
+        sqlite.get_chat((row)=>{
+            room_data.name=row.name;
+            renderer.webContents.send('user_joined_room', {user:user,room_data:room_data})
+        },room_data.id)
     });
 
     dxmpp.on('received_vcard', function (data) {
@@ -575,7 +637,10 @@ function router(renderer) {
     });
 
     ipcMain.on('create_group', (event, name) => {
-       dxmpp.register_channel(name,"localhost")
+        // ChannelWorker.create_channel(name,(address)=>{
+        //     dxmpp.register_channel(name,"localhost",address)
+        // });
+        dxmpp.register_channel(name,"localhost",contractAddress)
     });
 
     ipcMain.on("show_popup", (event, data) => {

@@ -249,7 +249,11 @@ window.onload = function () {
         $(this).attr('disabled','disabled');
         let active_dialog = $('.active_dialog');
         // console.log({id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
-        ipcRenderer.send('join_channel', {id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
+        ipcRenderer.send('join_channel', {
+            id:active_dialog.attr('id'),
+            domain:active_dialog.attr('data-domain'),
+            contract_address:active_dialog.attr('data-contract_address')
+        });
         $('#style-11').empty();
         $(this).fadeOut();
     });
@@ -348,11 +352,37 @@ window.onload = function () {
         ipcRenderer.send('show_popup', data.split('/'));
     });
 
-    $(document).on('click', '.btn-primary', function () {
+    $(document).on('click', '.btn-primary.col-sm-12', function () {
         let text = $('.form-control');
         if (text.val().trim() === "") return;
-        console.log(`Suggest: ${text.val()}`);
+        // console.log(`Suggest: ${text.val()}`);
         text.val('');
-        $(".send").removeAttr("hidden");
-    })
+        const alert = $(".alert");
+        alert.fadeIn(200).show();
+        alert.delay(2000).fadeOut(200);
+        return;
+        let active_dialog = $('.active_dialog');
+        // console.log({id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
+        ipcRenderer.send('channel_suggestion', {
+            id:active_dialog.attr('id'),
+            domain:active_dialog.attr('data-domain'),
+            contract_address:active_dialog.attr('data-contract_address'),
+            text: text.val()
+        });
+        // $(".send").removeAttr("hidden");
+    });
+
+    ipcRenderer.on('suggestion_answer', (event, data) => {
+        const alert = $(".alert");
+        alert.text("Your suggest has been sent.");
+        alert.fadeIn(200).show();
+        alert.delay(2000).fadeOut(200);
+    });
+
+    ipcRenderer.on('user_joined_room', (event, data) => {
+        const alert = $(".alert");
+        alert.text(`user ${data.user.username} joined ${data.room_data.name} channel`);
+        alert.fadeIn(200).show();
+        alert.delay(2000).fadeOut(200);
+    });
 };
