@@ -354,8 +354,8 @@ window.onload = function () {
         console.log(`Suggest: ${text.val()}`);
         text.val('');
         $(".send").removeAttr("hidden");
-        $(".alert").fadeIn(200).show();
-        $(".alert").delay(2000).fadeOut(200);
+        // $(".alert").fadeIn(200).show();
+        // $(".alert").delay(2000).fadeOut(200);
 
         $.notify("Success! Your suggest has been sent", {
 
