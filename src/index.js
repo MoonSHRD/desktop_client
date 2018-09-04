@@ -355,5 +355,19 @@ window.onload = function () {
         text.val('');
         $(".alert").fadeIn(200).show();
         $(".alert").delay(2000).fadeOut(200);
+        $(".send").removeAttr("hidden");
+
+        $.notify("Success! Your suggest has been sent", {
+
+            placement: {
+                from: "bottom",
+                align: "right"
+            },
+            animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+            },
+            z_index: 10031,
+        });
     })
 };
