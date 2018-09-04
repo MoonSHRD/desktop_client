@@ -5,8 +5,40 @@ const {dxmpp, eth} = require('moonshard_core');
 const Account = require('../controllers/AccountController');
 const fs = require('fs');
 const {events,chat_types} = require('./env_vars.js');
-// const sqlite3 = require('sqlite3');
-// let db = new sqlite3.Database('./sqlite/data.db');
+const ipfsAPI = require('ipfs-api');
+const ipfs = ipfsAPI('localhost', '5001');
+
+ipfs.id((err, res) => {
+    if (err) throw err;
+    console.log({
+        id: res.id,
+        version: res.agentVersion,
+        protocol_version: res.protocolVersion
+    })
+});
+
+const obj = {
+    Data: new Buffer(JSON.stringify({text:"sobaka"})),
+    Links: []
+};
+
+
+
+ipfs.object.put(obj, (err, node) => {
+    if (err) {
+        throw err
+    }
+    // console.log(node.toJSON().multihash)
+    const multihash=node.toJSON().multihash;
+
+
+    ipfs.object.data(multihash, (err, data) => {
+        if (err) {
+            throw err
+        }
+        console.log(data.toString())
+    })
+});
 
 const sqlite = require('./dbup');
 
