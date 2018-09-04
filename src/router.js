@@ -268,6 +268,7 @@ function router(renderer) {
         const obj = {
             id:room_data.id,
             domain:room_data.domain,
+            contractaddress: room_data.contractaddress,
             avatar:room_data.avatar,
             name:room_data.name,
             type:room_data.channel==="1"?chat_types.channel:chat_types.group_chat,
@@ -494,7 +495,7 @@ function router(renderer) {
 
     dxmpp.on("find_groups", function (result) {
         let html = "";
-        // console.log(result);
+        console.log(result);
         result.forEach(function (group) {
             const st = group.jid.split('@');
             group.id=st[0];
@@ -544,7 +545,8 @@ function router(renderer) {
     });
 
     ipcMain.on('create_group', (event, name) => {
-       dxmpp.register_channel(name,"localhost")
+        let contractaddress = "ahahahahaha";
+       dxmpp.register_channel(name,"localhost", contractaddress)
     });
 
     ipcMain.on("show_popup", (event, data) => {
