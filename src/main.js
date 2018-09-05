@@ -14,15 +14,15 @@ app.on('ready', async () => {
         // Could not initiate 'electron-pug'
     }
 
-    let mainWindow = new BrowserWindow({ width: 1600, height: 800, resizable: false, show: false, webPreferences: {
+    let mainWindow = new BrowserWindow({ width: 1200, height: 800, resizable: false, show: false, webPreferences: {
             nodeIntegration: true   } });
 
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`file://${__dirname}/index.pug`);
     mainWindow.webContents.on('dom-ready', function() {
         console.log('finished');
         mainWindow.show();
-        setTimeout(()=>{router(mainWindow)}, 2000)
+        setTimeout(()=>{router(mainWindow)}, 10000)
     });
 });
 

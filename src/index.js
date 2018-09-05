@@ -208,6 +208,7 @@ window.onload = function () {
     });
 
     ipcRenderer.on('received_message', (event, obj) => {
+        console.log(obj)
         if ($('.active_dialog').attr('id') === obj.jid) {
             $('.messaging_history ul').append(obj.message);
         }

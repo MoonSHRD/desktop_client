@@ -62,9 +62,9 @@ let acc_data = {
     jidhost: 'localhost',
     privKey: undefined,
     privKeyLoom: undefined,
-    // host: '142.93.226.135',
+    host: '142.93.226.135',
     // host: '192.168.1.60',
-    host: 'localhost',
+    // host: 'localhost',
     port: 5222,
 };
 
@@ -522,14 +522,14 @@ function router(renderer) {
         // console.log(`${sender.address} says ${message} in ${room_data.name} chat on ${stamp}`);
         // if (!msgs[room_data.id]) msgs[room_data.id]=[];
         // msgs[room_data.id].push({message:message,mine:false});
+        const mine = sender.address===dxmpp.get_address();
+        const time=dxmpp.take_time();
         const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', {
-            mine: sender.address===dxmpp.get_address(),
-            message: message,
+            mine: mine,
+            text: message,
+            time: time,
         }, PUG_OPTIONS);
 
-        const mine = sender.address===dxmpp.get_address();
-
-        if (mine) return;
 
         const obj = {
             jid:sender.address,
@@ -537,10 +537,16 @@ function router(renderer) {
             sender:sender.address,
             text:message,
             message:html,
-            time:dxmpp.take_time(),
+            time:time,
             mine:mine,
-            group: false
+            group: true
         };
+
+        console.log(obj)
+        if (mine) return;
+
+        obj.sender=obj.jid
+        obj.jid=obj.chat
 
         sqlite.insert(obj,sqlite.tables.msgs);
         if (!mine)
