@@ -4,13 +4,14 @@ div(class="head_peer" id="head_peer")
 
 
     if (type === "channel")
-        ul.nav.nav-tabs(role='tablist')
+        ul.nav.nav-tabs.nav-justified(role='tablist')
             li.nav-item
-                a.nav-link.active(href='#chat', role='tab', data-toggle='tab') chat
+                a.nav-link.active(href='#chat', role='tab', data-toggle='tab') Chat
             li.nav-item
-                a.nav-link(href='#buzz', role='tab', data-toggle='tab') else
+                a.nav-link(href='#references', role='tab', data-toggle='tab') Channel info
             li.nav-item
-                a.nav-link(href='#references', role='tab', data-toggle='tab') else
+                a.nav-link(href='#buzz', role='tab', data-toggle='tab') Notifications
+
 
 
     if (type==="user_chat" || type==="group_chat" || (type==="channel" && role==="moderator"))
@@ -52,5 +53,59 @@ div(class="messaging_history" id="messaging_history")
                     textarea(class="send_message_input"  placeholder="текст сообщения")
                     button(class="send_message_btn" data-translate-key="SEND_MESSAGE") отправить
         #buzz.tab-pane.fade(role='tabpanel')
+            .notifyBlock
+                .alert.alertBg.notice-success
+                    strong Success!
+                    |  This alert box could indicate a successful or positive action.
+                .alert.alertBg.notice-info
+                    strong Info!
+                    |  This alert box could indicate a neutral informative change or action.
+                .alert.alertBg.notice-warning
+                    strong Warning!
+                    |  This alert box could indicate a warning that might need attention.
+                .alert.alertBg.notice-danger
+                    strong Danger!
+                    |  This alert box could indicate a dangerous or potentially negative action.
+                .alert.alertBg.notice-primary
+                    strong Primary!
+                    |  Indicates an important action.
+
+
         #references.tab-pane.fade(role='tabpanel')
+            style
+                include modal-content.css
+
+            h5.modal-title.mt-4 #{name}
+            .modal-body
+                .container
+                    .row
+                        .col-sm-3
+                            img.rounded-circle(src=avatar width=128 height=128)
+                        .col-sm
+                            table.table
+                                tbody
+                                    tr
+                                        th(scope='row') Channel name
+                                        td #{name}
+                                    tr
+                                        th(scope='row') Token name
+                                        td #{name}_token
+                                    tr
+                                        th(scope='row') Total supply
+                                        td 100000
+
+            .modal-footer
+                .container
+                    if (role !== "moderator")
+                        .row
+                            .col-sm-12
+                                label Offer publication:
+                        .row.align-items-center
+                            .col-sm-8
+                                textarea.form-control.noresize(rows="2")
+
+                            .col-sm-4
+                                button(class='btn btn-primary col-sm-12' ) Suggest publication
+
+
 

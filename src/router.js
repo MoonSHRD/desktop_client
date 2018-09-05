@@ -62,8 +62,8 @@ let acc_data = {
     jidhost: 'localhost',
     privKey: undefined,
     privKeyLoom: undefined,
-    host: '142.93.226.135',
-    // host: '192.168.1.60',
+    // host: '142.93.226.135',
+    host: '192.168.1.5',
     // host: 'localhost',
     port: 5222,
 };

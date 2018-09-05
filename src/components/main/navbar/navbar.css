@@ -60,9 +60,9 @@
     background-color: #000; /* Add a hover color */
 }
 
-.active {
-    background-color: #4CAF50; /* Add an active/current color */
-}
+/*.active {*/
+    /*background-color: #4CAF50; !* Add an active/current color *!*/
+/*}*/
 
 .menuFull {
     background-color: #363C64;
