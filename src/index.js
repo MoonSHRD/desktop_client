@@ -362,9 +362,18 @@ window.onload = function () {
         if (text.val().trim() === "") return;
         // console.log(`Suggest: ${text.val()}`);
         text.val('');
-        const alert = $(".alert");
-        alert.fadeIn(200).show();
-        alert.delay(2000).fadeOut(200);
+        $.notify("Success! Your suggest has been sent", {
+
+            placement: {
+                from: "bottom",
+                align: "right"
+            },
+            animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+            },
+            z_index: 10031,
+        });
         return;
         let active_dialog = $('.active_dialog');
         // console.log({id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
@@ -383,24 +392,17 @@ window.onload = function () {
         // alert.fadeIn(200).show();
         // alert.delay(2000).fadeOut(200);
 
-        $.notify("Success! Your suggest has been sent", {
 
-            placement: {
-                from: "bottom",
-                align: "right"
-            },
-            animate: {
-                enter: 'animated fadeInRight',
-                exit: 'animated fadeOutRight'
-            },
-            z_index: 10031,
-        });
     });
 
     ipcRenderer.on('user_joined_room', (event, data) => {
         const alert = $(".alert");
-        alert.text(`user ${data.user.username} joined ${data.room_data.name} channel`);
+        console.log("heeeeer");
+        let text = `user ${data.user.username} joined ${data.room_data.name} channel`;
+        alert.text(text);
         alert.fadeIn(200).show();
         alert.delay(2000).fadeOut(200);
+        console.log(data);
+        // ipcRenderer.send("add_notification")
     });
 };

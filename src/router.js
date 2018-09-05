@@ -62,9 +62,9 @@ let acc_data = {
     jidhost: 'localhost',
     privKey: undefined,
     privKeyLoom: undefined,
-    host: '142.93.226.135',
+    // host: '142.93.226.135',
     // host: '192.168.1.60',
-    // host: 'localhost',
+    host: 'localhost',
     port: 5222,
 };
 
@@ -605,8 +605,9 @@ function router(renderer) {
 
     dxmpp.on('user_joined_room', function (user, room_data) {
         sqlite.get_chat((row)=>{
+            console.log(row);
             room_data.name=row.name;
-            renderer.webContents.send('user_joined_room', {user:user,room_data:room_data})
+            renderer.webContents.send('user_joined_room', {user:user, room_data:room_data})
         },room_data.id)
     });
 

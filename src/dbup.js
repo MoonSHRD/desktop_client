@@ -57,6 +57,10 @@ class Sqlite {
                 chat_id:[],
                 buddy_id:[],
             },
+            notifications: {
+                chat_id:[],
+                notification:[],
+            }
         };
 
         this.tables = {
@@ -66,6 +70,7 @@ class Sqlite {
             // buddy_msgs : "buddy_msgs",
             chat : "chat",
             chat_users : "chat_users",
+            notifications: "notifications"
         };
 
         let i = 0;
@@ -179,6 +184,14 @@ class Sqlite {
     get_chat(func,id){
         this.$.ready(() => {
             db.get(`SELECT * FROM chat WHERE id = ?`, [id] ,function (err, row) {
+                func(row);
+            });
+        });
+    }
+
+    get_notifications(func, id) {
+        this.$.ready(() => {
+            db.get(`SELECT * FROM notifications WHERE chat_id = ?`, [id] ,function (err, row) {
                 func(row);
             });
         });
