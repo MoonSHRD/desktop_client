@@ -183,9 +183,13 @@ window.onload = function () {
 
 
     $(document).on('click', '.send_message_btn', function () {
+        let msg_input = $('.send_message_input');
+        if (msg_input.val().trim() === ''){
+            msg_input.val('');
+            return;
+        }
         let date = new Date();
         let active_dialog = $('.active_dialog');
-        let msg_input = $('.send_message_input');
         const obj = {
             id: active_dialog.attr('id'),
             domain: active_dialog.attr('data-domain'),
@@ -385,4 +389,17 @@ window.onload = function () {
         alert.fadeIn(200).show();
         alert.delay(2000).fadeOut(200);
     });
+
+        $.notify("Success! Your suggest has been sent", {
+
+            placement: {
+                from: "bottom",
+                align: "right"
+            },
+            animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+            },
+            z_index: 10031,
+        });
 };

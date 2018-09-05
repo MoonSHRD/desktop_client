@@ -50,10 +50,11 @@
 .messaging_history {
 
     height: auto;
-    min-height: calc(100% - 150px);
-    max-height: calc(100% - 150px);
+    /* min-height: calc(100% - 165px); */
+    max-height: calc(100% - 195px);
     overflow-y: scroll;
     overflow-x: hidden;
+    margin-top: 40px;
 }
 
 @media screen and (max-width: 735px) {
@@ -74,7 +75,7 @@
     display: inline-block;
     clear: both;
     float: left;
-    margin: 15px 15px 5px 15px;
+    margin: 15px 15px 5px 0;
     width: calc(100% - 25px);
     font-size: 0.9em;
 }
@@ -114,7 +115,7 @@
 .messaging_history ul li p {
     display: inline-block;
     padding: 10px 15px;
-    border-radius: 20px;
+    border-radius: 10px;
     font-size: 1.2em;
     max-width: 400px;
     line-height: 130%;
@@ -123,10 +124,53 @@
 
 ul li.outMessage p {
     float: right;
-    background-color: #2BC2F9
+    background-color: #2BC2F9;
+    color: white;
+    position: relative;
+    box-shadow: 0 0 13px rgba(0, 123, 255,0.5);
 }
+
+ul li.outMessage p::after {
+    content: '';
+    position: absolute;
+    right: -12px;
+    top: 12px;
+    border: 5px solid transparent;
+    border-left: 7px solid #2BC2F9;
+}
+
+ul li.outMessage p span{
+    text-decoration: none;
+    font-size: 11px;
+    padding-left: 10px;
+    float: right;
+    color: white;
+}
+
+
+
 ul li.inMessage p {
-    background-color: #ffffff
+    background-color: #ffffff;
+    color: black;
+    position: relative;
+    box-shadow: 0 0 13px rgba(214, 214, 214, 0.5)
+}
+
+ul li.inMessage p span{
+    text-decoration: none;
+    font-size: 11px;
+    padding-left: 10px;
+    float: right;
+    color: black;
+}
+
+ul li.inMessage p::after {
+    content: '';
+    position: absolute;
+    left: -12px;
+    top: 12px;
+    border: 5px solid transparent;
+    border-right: 7px solid #ffffff;
 }
 
 
@@ -139,6 +183,10 @@ ul li.inMessage p {
     align-items: center;
     padding: 20px;
     border-bottom: 1px solid #c3c3c3;
+}
+
+.head_peer h3 {
+    margin: 0;
 }
 
 .dropDown_menu {
@@ -172,4 +220,23 @@ ul li.inMessage p {
 .peer_name {
     margin: 0;
     margin-left: 20px;
+    color: black;
 }
+
+.nav-tabs {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    border: none!important;
+    border-radius: 0 !important;
+}
+
+.nav-link {
+    border: none !important;
+    border-radius: 0 !important;
+
+}
+
+/*.tab-content > .active {*/
+    /*display: initial;*/
+/*}*/

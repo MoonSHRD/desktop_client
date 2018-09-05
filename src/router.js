@@ -115,8 +115,8 @@ function router(renderer) {
             }
             break;
         default:
-            console.log(acc_data);
-            console.log(typeof acc_data.privKeyLoom)
+            // console.log(acc_data);
+            // console.log(typeof acc_data.privKeyLoom);
             //@todo:important
             // ChannelWorker.set_privkey(acc_data.privKeyLoom)
 
@@ -324,7 +324,7 @@ function router(renderer) {
 
     dxmpp.on('joined_room', function(room_data) {
         // console.log(role);
-        console.log(room_data);
+        // console.log(room_data);
         const obj = {
             id:room_data.id,
             domain:room_data.domain,
