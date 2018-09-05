@@ -495,7 +495,7 @@ function router(renderer) {
 
     dxmpp.on("find_groups", function (result) {
         let html = "";
-        console.log(result);
+        // console.log(result);
         result.forEach(function (group) {
             const st = group.jid.split('@');
             group.id=st[0];
