@@ -380,16 +380,8 @@ window.onload = function () {
     ipcRenderer.on('suggestion_answer', (event, data) => {
         const alert = $(".alert");
         alert.text("Your suggest has been sent.");
-        alert.fadeIn(200).show();
-        alert.delay(2000).fadeOut(200);
-    });
-
-    ipcRenderer.on('user_joined_room', (event, data) => {
-        const alert = $(".alert");
-        alert.text(`user ${data.user.username} joined ${data.room_data.name} channel`);
-        alert.fadeIn(200).show();
-        alert.delay(2000).fadeOut(200);
-    });
+        // alert.fadeIn(200).show();
+        // alert.delay(2000).fadeOut(200);
 
         $.notify("Success! Your suggest has been sent", {
 
@@ -403,4 +395,12 @@ window.onload = function () {
             },
             z_index: 10031,
         });
+    });
+
+    ipcRenderer.on('user_joined_room', (event, data) => {
+        const alert = $(".alert");
+        alert.text(`user ${data.user.username} joined ${data.room_data.name} channel`);
+        alert.fadeIn(200).show();
+        alert.delay(2000).fadeOut(200);
+    });
 };
