@@ -134,14 +134,15 @@ ul li.outMessage p::after {
     content: '';
     position: absolute;
     right: -12px;
-    top: 20px;
+    top: 12px;
     border: 5px solid transparent;
     border-left: 7px solid #2BC2F9;
 }
 
 ul li.outMessage p span{
     text-decoration: none;
-    font-size: 13px;
+    font-size: 11px;
+    padding-left: 10px;
     float: right;
     color: white;
 }
@@ -157,7 +158,8 @@ ul li.inMessage p {
 
 ul li.inMessage p span{
     text-decoration: none;
-    font-size: 13px;
+    font-size: 11px;
+    padding-left: 10px;
     float: right;
     color: black;
 }
@@ -166,7 +168,7 @@ ul li.inMessage p::after {
     content: '';
     position: absolute;
     left: -12px;
-    top: 20px;
+    top: 12px;
     border: 5px solid transparent;
     border-right: 7px solid #ffffff;
 }
