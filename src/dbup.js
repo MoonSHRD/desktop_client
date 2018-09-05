@@ -60,6 +60,7 @@ class Sqlite {
             notifications: {
                 chat_id:[],
                 notification:[],
+                type:[],
             }
         };
 
@@ -191,7 +192,7 @@ class Sqlite {
 
     get_notifications(func, id) {
         this.$.ready(() => {
-            db.get(`SELECT * FROM notifications WHERE chat_id = ?`, [id] ,function (err, row) {
+            db.each(`SELECT * FROM notifications WHERE chat_id = ?`, [id] ,function (err, row) {
                 func(row);
             });
         });

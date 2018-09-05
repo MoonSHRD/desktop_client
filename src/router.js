@@ -605,10 +605,19 @@ function router(renderer) {
 
     dxmpp.on('user_joined_room', function (user, room_data) {
         sqlite.get_chat((row)=>{
-            console.log(row);
             room_data.name=row.name;
-            renderer.webContents.send('user_joined_room', {user:user, room_data:room_data})
-        },room_data.id)
+            let text = `user ${user.username} joined ${room_data.name} channel`;
+            renderer.webContents.send('user_joined_room', text);
+            sqlite.insert({chat_id: room_data.id, notification: text, type: "notice-info"}, sqlite.tables.notifications);
+        },room_data.id);
+        sqlite.get_notifications((row) => {
+            const html = pug.renderFile(__dirname + '/components/main/messagingblock/notice.pug', {
+                type:         row.type,
+                text:       row.text,
+            }, PUG_OPTIONS);
+            renderer.webContents.send('get_notice', html);
+        }, room_data.id);
+
     });
 
     dxmpp.on('received_vcard', function (data) {
@@ -677,6 +686,10 @@ function router(renderer) {
                break;
            }
        }
+    });
+    ipcMain.on("add_notification", (event, data) => {
+        console.log("DATA", data);
+        sqlite.insert(data, sqlite.tables.notifications);
     });
 }
 

@@ -362,6 +362,7 @@ window.onload = function () {
         if (text.val().trim() === "") return;
         // console.log(`Suggest: ${text.val()}`);
         text.val('');
+
         $.notify("Success! Your suggest has been sent", {
 
             placement: {
@@ -373,6 +374,10 @@ window.onload = function () {
                 exit: 'animated fadeOutRight'
             },
             z_index: 10031,
+            offset: 20,
+            spacing: 10
+            // timer: 10000,
+
         });
         return;
         let active_dialog = $('.active_dialog');
@@ -388,21 +393,33 @@ window.onload = function () {
 
     ipcRenderer.on('suggestion_answer', (event, data) => {
         const alert = $(".alert");
-        alert.text("Your suggest has been sent.");
+        // alert.text("Your suggest has been sent.");
         // alert.fadeIn(200).show();
         // alert.delay(2000).fadeOut(200);
 
-
     });
 
-    ipcRenderer.on('user_joined_room', (event, data) => {
-        const alert = $(".alert");
-        console.log("heeeeer");
-        let text = `user ${data.user.username} joined ${data.room_data.name} channel`;
-        alert.text(text);
-        alert.fadeIn(200).show();
-        alert.delay(2000).fadeOut(200);
-        console.log(data);
-        // ipcRenderer.send("add_notification")
+    ipcRenderer.on('user_joined_room', (event, text) => {
+
+        $.notify(text, {
+
+            placement: {
+                from: "bottom",
+                align: "right"
+            },
+            animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+            },
+            z_index: 10031,
+            offset: 20,
+            spacing: 10
+            // timer: 10000,
+
+        });
     });
+
+    ipcRenderer.on("get_notice", (event, html) => {
+
+    })
 };
