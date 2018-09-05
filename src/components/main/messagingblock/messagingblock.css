@@ -183,6 +183,10 @@ ul li.inMessage p::after {
     border-bottom: 1px solid #c3c3c3;
 }
 
+.head_peer h3 {
+    margin: 0;
+}
+
 .dropDown_menu {
     align-items: center;
     display: flex;
@@ -214,6 +218,7 @@ ul li.inMessage p::after {
 .peer_name {
     margin: 0;
     margin-left: 20px;
+    color: black;
 }
 
 .nav-tabs {
