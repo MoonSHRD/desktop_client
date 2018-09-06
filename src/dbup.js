@@ -15,7 +15,7 @@ class Sqlite {
 
         this.tables_data = {
             account : {
-                id:["primary key","on conflict ignore","not null"],
+                id:["integer","primary key","autoincrement"],
                 privKey:[],
                 passphrase:[],
                 domain:["not null"],
@@ -161,7 +161,7 @@ class Sqlite {
     fetch(func,table){
         this.$.ready(() => {
             db.each(`SELECT * FROM ${table}`, function (err, row) {
-                func(row);
+                func(row, err);
             });
         });
     }

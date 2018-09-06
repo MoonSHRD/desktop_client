@@ -10,9 +10,9 @@ const ipfsAPI = require('ipfs-api');
 const ipfs = ipfsAPI('142.93.226.135', '5001');
 // const {}=require("./cipher/helpers/helpers.js");
 const {CryptoUtils} = require('loom-js');
-const LoomTruffleProvider = require('loom-truffle-provider')
-const Web3 = require('web3')
-const contractAddress="0x4Dd841b5B4F69507C7E93ca23D2A72c7f28217a8"
+const LoomTruffleProvider = require('loom-truffle-provider');
+const Web3 = require('web3');
+const contractAddress="0x4Dd841b5B4F69507C7E93ca23D2A72c7f28217a8";
 
 // const ABI = require('./abi');
 
@@ -89,8 +89,13 @@ function get_adr_from_jid(from) {
 }
 
 let app_status = states.auth;
-fs.readFile('account.json', 'utf8', function (err, data) {
-    if (err) return;
+// fs.readFile('account.json', 'utf8', function (err, data) {
+//     if (err) return;
+sqlite.fetch((row, err) => {
+    console.log(err);
+    return;
+}, sqlite.tables.account);
+return;
     sqlite.fetch((row) => {
         let obj = {id: row.id, online: "offline"};
         sqlite.update(obj, sqlite.tables.buddy);
@@ -105,7 +110,6 @@ fs.readFile('account.json', 'utf8', function (err, data) {
     if (obj.vcard) {
         vcard = obj.vcard;
     }
-});
 
 function router(renderer) {
     switch (app_status) {
@@ -209,11 +213,16 @@ function router(renderer) {
         acc_data.privKeyLoom=CryptoUtils.Uint8ArrayToB64(loomkey);
         const file_data = JSON.stringify({account: acc_data, vcard: arg});
 
-        fs.writeFile("account.json", file_data, function (err) {
-            if (err) {
-                console.log(err);
-            }
-        });
+        // fs.writeFile("account.json", file_data, function (err) {
+        //     if (err) {
+        //         console.log(err);
+        //     }
+        // });
+        arg.privKey = acc_data.privKey;
+        arg.domain = acc_data.host;
+        arg.name = dxmpp.get_address();
+        arg.name = eth.generate_address(arg.privKey);
+        sqlite.insert(arg, sqlite.tables.account);
 
         vcard = arg;
 
@@ -427,15 +436,20 @@ function router(renderer) {
             renderer.webContents.send('reload_chat', html);
         },arg.id);
 
-        sqlite.get_msgs_with((row)=>{
-            row.mine=row.sender===dxmpp.get_address();
-            const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', row, PUG_OPTIONS);
-            const obj={
-                jid:row.chat,
-                message:html,
-            };
-            renderer.webContents.send('received_message', obj);
-            // renderer.webContents.send('received_message', row);
+        sqlite.get_msgs_with((row1)=>{
+            row1.mine=row1.sender===dxmpp.get_address();
+            sqlite.get_chat((row2) => {
+                row1.avatar = row2.avatar;
+                // row1.myavatar = dxmpp.
+                const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', row1, PUG_OPTIONS);
+                const obj={
+                    jid:row.chat,
+                    message:html,
+                };
+                renderer.webContents.send('received_message', obj);
+                // renderer.webContents.send('received_message', row);
+            });
+
         },arg.id);
 
         sqlite.get_notifications((row) => {
@@ -462,7 +476,6 @@ function router(renderer) {
     });
 
     ipcMain.on('get_chat_msgs', (event, arg) => {
-        console.log("arg", arg);
         sqlite.get_chat((row)=>{
             let obj = {
                 id:         arg.id,
@@ -476,19 +489,22 @@ function router(renderer) {
                 console.log("chat");
             }, arg.id);
 
+            sqlite.get_msgs_with((row)=>{
+                row.mine=row.sender===dxmpp.get_address();
+                row.avatar = obj.avatar;
+                const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', row, PUG_OPTIONS);
+                const data={
+                    jid:row.chat,
+                    message:html,
+                };
+                renderer.webContents.send('received_message', data);
+                console.log("message");
+                // renderer.webContents.send('received_message', row);
+            },arg.id);
+
         },arg.id);
 
-        sqlite.get_msgs_with((row)=>{
-            row.mine=row.sender===dxmpp.get_address();
-            const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', row, PUG_OPTIONS);
-            const obj={
-                jid:row.chat,
-                message:html,
-            };
-            renderer.webContents.send('received_message', obj);
-            console.log("message");
-            // renderer.webContents.send('received_message', row);
-        },arg.id);
+
         // let html = "";
         // if (msgs[arg.id]){
         //     msgs[arg.id].forEach(function (element) {
@@ -534,7 +550,10 @@ function router(renderer) {
         // }
         // console.log(from);
         // msgs[from].push({message:message,mine:false});
-        renderer.webContents.send('received_message', obj);
+        sqlite.get_chat((row) => {
+            obj.avatar = row.avatar;
+            renderer.webContents.send('received_message', obj);
+        });
     });
     //
     dxmpp.on('groupchat', function(room_data, message, sender, stamp) {
