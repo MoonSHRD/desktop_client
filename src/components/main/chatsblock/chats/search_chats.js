@@ -8,4 +8,7 @@ $('.searchInput').bind('input', function (e) {
     if (group.length > 2) {
         ipcRenderer.send('find_groups', group);
     }
+    if (group.length === 0) {
+        $('.chats ul').empty();
+    }
 });
