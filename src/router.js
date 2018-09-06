@@ -460,13 +460,18 @@ function router(renderer) {
     ipcMain.on('get_chat_msgs', (event, arg) => {
 
         sqlite.get_chat((row)=>{
-            const html = pug.renderFile(__dirname + '/components/main/messagingblock/qqq.pug', {
+            let obj = {
                 id:         arg.id,
                 type:       chat_types.user,
-                chat_name:  arg.full_name
-            }, PUG_OPTIONS);
-            renderer.webContents.send('reload_chat', html);
-            console.log("chat");
+                chat_name:  arg.full_name,
+            };
+            sqlite.get_buddy((row) => {
+                obj.avatar = row.avatar;
+                const html = pug.renderFile(__dirname + '/components/main/messagingblock/qqq.pug', obj, PUG_OPTIONS);
+                renderer.webContents.send('reload_chat', html);
+                console.log("chat");
+            }, arg.id);
+
         },arg.id);
 
         sqlite.get_msgs_with((row)=>{

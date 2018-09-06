@@ -1,6 +1,9 @@
 div(class="head_peer" id="head_peer")
     h3
-        a(class="peer_name" href='#'+ '/' + type + '/' + id) #{chat_name}
+        a(class="peer_name" href='#'+ '/' + type + '/' + id)
+            if (id)
+                img(src=avatar width=44 height=44)
+                |       #{chat_name}
 
 
     if (type === "channel")

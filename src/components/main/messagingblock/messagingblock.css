@@ -223,6 +223,18 @@ ul li.inMessage p::after {
     color: black;
 }
 
+.peer_name {
+    text-decoration: none !important;
+}
+
+.peer_name:hover {
+    text-decoration: none !important;
+}
+
+.peer_name img {
+    border-radius: 50px;
+}
+
 .nav-tabs {
     position: absolute;
     top: 70px;
