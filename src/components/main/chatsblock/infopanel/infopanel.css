@@ -183,3 +183,7 @@ label > span{
 }
 
 
+.alert .close {
+    top: 12px !important;
+}
+

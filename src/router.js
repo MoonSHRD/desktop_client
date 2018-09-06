@@ -417,7 +417,8 @@ function router(renderer) {
                 id: row.id,
                 type: row.type,
                 role: row.role,
-                chat_name: row.name
+                chat_name: row.name,
+                avatar: row.avatar
             }, PUG_OPTIONS);
             renderer.webContents.send('reload_chat', html);
         },arg.id);
@@ -432,6 +433,15 @@ function router(renderer) {
             renderer.webContents.send('received_message', obj);
             // renderer.webContents.send('received_message', row);
         },arg.id);
+
+        sqlite.get_notifications((row) => {
+            const html = pug.renderFile(__dirname + '/components/main/messagingblock/notice.pug', {
+                type:         row.type,
+                text:       row.text,
+            }, PUG_OPTIONS);
+            // renderer.webContents.send('user_joined_room', html);
+            renderer.webContents.send('get_notice', {id:arg.id,html:html});
+        }, arg.id);
         // console.log(arg);
         // let html = "";
         // if (msgs[arg.id]){
@@ -580,34 +590,69 @@ function router(renderer) {
     });
 
     ipcMain.on('channel_suggestion', (event, data) => {
-        console.log(data);
-        const obj = {
-            Data: new Buffer(JSON.stringify({user:dxmpp.get_address(),text:data.text})),
-            Links: []
-        };
-        ipfs.object.put(obj, (err, node) => {
-            if (err) {
-                throw err
-            }
-            // console.log(node.toJSON().multihash)
-            const multihash = node.toJSON().multihash;
-
-            try {
-                console.log("suggesting");
-                ChannelWorkerEVM.suggest_publication(acc_data.privKeyLoom,data.contract_address,multihash,(data)=>{
-                    renderer.webContents.send('suggestion_answer', data);
-                })
-            } catch (e) {
-                throw e;
-            }
-        });
+        console.log(data.text);
+        dxmpp.send_suggesstion(data.id+"@"+data.domain,data.text)
+        // console.log(data);
+        // const obj = {
+        //     Data: new Buffer(JSON.stringify({user:dxmpp.get_address(),text:data.text})),
+        //     Links: []
+        // };
+        // ipfs.object.put(obj, (err, node) => {
+        //     if (err) {
+        //         throw err
+        //     }
+        //     // console.log(node.toJSON().multihash)
+        //     const multihash = node.toJSON().multihash;
+        //
+        //     try {
+        //         console.log("suggesting");
+        //         ChannelWorkerEVM.suggest_publication(acc_data.privKeyLoom,data.contract_address,multihash,(data)=>{
+        //             renderer.webContents.send('suggestion_answer', data);
+        //         })
+        //     } catch (e) {
+        //         throw e;
+        //     }
+        // });
     });
 
     dxmpp.on('user_joined_room', function (user, room_data) {
         sqlite.get_chat((row)=>{
-            room_data.name=row.name;
-            renderer.webContents.send('user_joined_room', {user:user,room_data:room_data})
-        },room_data.id)
+            // room_data.name=row.name;
+            let text = `user ${user.username} joined`;
+            sqlite.insert({chat_id: room_data.id, text: text, type: "notice-info"}, sqlite.tables.notifications);
+
+            const html = pug.renderFile(__dirname + '/components/main/messagingblock/notice.pug', {
+                type:       "notice-info",
+                text:       text,
+            }, PUG_OPTIONS);
+            renderer.webContents.send('get_notice', {id:room_data.id,html:html});
+            text+=` ${row.name} channel`;
+            renderer.webContents.send('user_joined_room', text);
+        },room_data.id);
+    });
+
+    dxmpp.on('post_suggested', function (data) {
+        sqlite.get_chat((row)=>{
+            // room_data.name=row.name;
+            let text = `user ${data.user.id} suggested ${data.text}`;
+            // let text = `user ${user.username} joined ${row.name} channel`;
+            sqlite.insert({chat_id: data.group.id, text: text, type: "notice-info"}, sqlite.tables.notifications);
+            const html = pug.renderFile(__dirname + '/components/main/messagingblock/notice.pug', {
+                type:       "notice-info",
+                text:       text,
+            }, PUG_OPTIONS);
+            renderer.webContents.send('get_notice', {id:data.group.id,html:html});
+            text+=` in channel ${row.name}`;
+            renderer.webContents.send('user_joined_room', text);
+        },data.group.id);
+
+        // sqlite.insert({chat_id: data.group.id, text: text, type: "notice-info"}, sqlite.tables.notifications);
+        // const html = pug.renderFile(__dirname + '/components/main/messagingblock/notice.pug', {
+        //     type:         "notice-info",
+        //     text:       text,
+        // }, PUG_OPTIONS);
+        // renderer.webContents.send('get_notice', {id:data.group.id,html:html});
+        // console.log(`user ${data.user.id} suggested ${data.text} on ${data.group.id}`)
     });
 
     dxmpp.on('received_vcard', function (data) {
