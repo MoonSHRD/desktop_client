@@ -85,3 +85,23 @@
 .resize1 {
 transition: opacity .5s;
 }
+
+.context-menu {
+    position: absolute; /* Задаем абсолютное позиционирование для нашего меню */
+    display: none; /* Изначально не показываем его */
+    background-color: #fff; /* Цвет фона меню */
+    border: 1px solid #333; /* Граница */
+    width: 165px;
+
+
+}
+
+/* Добавляем стили для списка которые будет находиться внутри меню и, собственно, содержать его пункты: */
+.context-menu ul { list-style: none; margin: 0; padding: 0; }
+
+.context-menu ul li { margin: 0; padding: 0; background-color: #fff; display: block; }
+
+/* Стили для ссылок пунктов меню: */
+.context-menu ul li a { color: #333; text-decoration: none; font-size: 16px; display: block; padding: 5px; font-family: 'Open Sans', sans-serif; }
+
+.context-menu ul li a:hover { background-color: #eee; }
