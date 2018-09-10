@@ -1,7 +1,7 @@
 // const router = new Navigo(null, true, '#!');
 
 const {ipcRenderer} = require('electron');
-const {events,chat_types} = require('./env_vars.js');
+const {events,chat_types} = require('./events&types.js');
 const dict = require('./langs/lang');
 
 
@@ -44,7 +44,7 @@ window.onload = function () {
     });
 
     ipcRenderer.on('change_app_state', (event, arg) => {
-        // console.log('autyh');
+        console.log('autyh');
         $('#view').html(arg);
         $.html5Translate(dict, 'en');
         setTimeout(()=>{

@@ -1,8 +1,15 @@
 const paths = {
-    project:__dirname+'/..',
-    components:__dirname+'/components',
-    controllers:__dirname+'/../controllers',
-    models:__dirname+'/../models',
+    root:__dirname+'/../',
+    src:__dirname,
+    components:__dirname+'/components/',
+    controllers:__dirname+'/../controllers/',
+    models:__dirname+'/../models/',
+    storage:__dirname+'/../storage/',
+    db:__dirname+'/../storage/data.db',
+};
+
+const pug_options = {
+    cache: true,
 };
 
 const chat_types = {
@@ -35,4 +42,5 @@ module.exports = {
     paths,
     chat_types,
     events,
+    pug_options
 };

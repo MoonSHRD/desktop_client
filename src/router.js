@@ -4,31 +4,31 @@ const {ipcMain} = require('electron');
 const {dxmpp, eth} = require('moonshard_core');
 const Account = require('../controllers/AccountController');
 const fs = require('fs');
-const {events,chat_types} = require('./env_vars.js');
-const {ChannelWorker,ChannelWorkerEVM} = require('./cipher/cither');
-const ipfsAPI = require('ipfs-api');
-const ipfs = ipfsAPI('142.93.226.135', '5001');
+const {events, chat_types} = require('./env_vars.js');
+const {ChannelWorker, ChannelWorkerEVM} = require('./cipher/cither');
+// const ipfsAPI = require('ipfs-api');
+// const ipfs = ipfsAPI('142.93.226.135', '5001');
 // const {}=require("./cipher/helpers/helpers.js");
 const {CryptoUtils} = require('loom-js');
 const LoomTruffleProvider = require('loom-truffle-provider');
 const Web3 = require('web3');
-const contractAddress="0x4Dd841b5B4F69507C7E93ca23D2A72c7f28217a8";
+const contractAddress = "0x4Dd841b5B4F69507C7E93ca23D2A72c7f28217a8";
 
 // const ABI = require('./abi');
 
-ipfs.id((err, res) => {
-    if (err) throw err;
-    console.log({
-        id: res.id,
-        version: res.agentVersion,
-        protocol_version: res.protocolVersion
-    })
-});
+// ipfs.id((err, res) => {
+//     if (err) throw err;
+//     console.log({
+//         id: res.id,
+//         version: res.agentVersion,
+//         protocol_version: res.protocolVersion
+//     })
+// });
 
-const obj = {
-    Data: new Buffer(JSON.stringify({text:"sobaka"})),
-    Links: []
-};
+// const obj = {
+//     Data: new Buffer(JSON.stringify({text: "sobaka"})),
+//     Links: []
+// };
 
 // ipfs.object.put(obj, (err, node) => {
 //     if (err) {
@@ -63,12 +63,9 @@ let acc_data = {
     privKey: undefined,
     privKeyLoom: undefined,
     // host: '142.93.226.135',
-    // host: '192.168.1.60',
-    host: 'localhost',
+    host: '192.168.1.60',
+    // host: 'localhost',
     port: 5222,
-};
-
-let vcard = {
     username: undefined,
     firstname: undefined,
     lastname: undefined,
@@ -76,42 +73,55 @@ let vcard = {
     avatar: undefined
 };
 
-let chats = {};
-let msgs = {};
+// let vcard = {
+// };
+
+// let chats = {};
+// let msgs = {};
 
 function get_adr_from_jid(from) {
     const arr = from.split('/');
     if (arr) {
-        from=arr[0];
+        from = arr[0];
     }
-    from=from.split("@");
+    from = from.split("@");
     return from[0]
 }
 
 let app_status = states.auth;
 // fs.readFile('account.json', 'utf8', function (err, data) {
 //     if (err) return;
-sqlite.fetch((row, err) => {
-    console.log(err);
-    return;
+let obj;
+
+sqlite.get_first((row, err) => {
+    if (err) {
+        console.log(err);
+        return
+    }
+    console.log(row);
+
 }, sqlite.tables.account);
-return;
-    sqlite.fetch((row) => {
-        let obj = {id: row.id, online: "offline"};
-        sqlite.update(obj, sqlite.tables.buddy);
-    }, sqlite.tables.buddy);
-    let obj = JSON.parse(data);
-    if (obj.account) {
-        app_status = states.offline;
-        acc_data.privKey = obj.account.privKey;
-        acc_data.privKeyLoom = CryptoUtils.B64ToUint8Array(obj.account.privKeyLoom);
-    }
+// return;
 
-    if (obj.vcard) {
-        vcard = obj.vcard;
-    }
+// sqlite.fetch((row) => {
+//     let obj = {id: row.id, online: "offline"};
+//     sqlite.update(obj, sqlite.tables.buddy);
+// }, sqlite.tables.buddy);
 
-function router(renderer) {
+// let obj = JSON.parse(data);
+if (obj.account) {
+    app_status = states.offline;
+    acc_data.privKey = obj.account.privKey;
+    acc_data.privKeyLoom = CryptoUtils.B64ToUint8Array(obj.account.privKeyLoom);
+}
+
+if (obj.vcard) {
+    vcard = obj.vcard;
+}
+
+async function router(renderer) {
+    let acc_data=await get_acc_data();
+
     switch (app_status) {
         case states.auth:
             if (Account.account_exists()) {
@@ -134,22 +144,22 @@ function router(renderer) {
     }
 
     ipcMain.on('change_menu_state', (event, arg) => {
-        let obj=vcard;
-        obj.state=arg;
+        let obj = vcard;
+        obj.state = arg;
         let html = "";
         switch (arg) {
             case "menu_user_chats":
                 html = pug.renderFile(__dirname + '/components/main/file.pug', obj, PUG_OPTIONS);
                 renderer.webContents.send('change_menu_state', html);
-                sqlite.fetch((row)=>{
+                sqlite.fetch((row) => {
                     console.log('buddy');
-                    row.type=chat_types.user;
+                    row.type = chat_types.user;
                     const html = pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', row, PUG_OPTIONS);
-                    row.html=html;
+                    row.html = html;
                     // console.log(row);
-                    row.type="menu_user_chats";
+                    row.type = "menu_user_chats";
                     renderer.webContents.send('buddy', row);
-                },sqlite.tables.buddy);
+                }, sqlite.tables.buddy);
                 // for (let buddy in buddies) {
                 //     html += pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', buddies[buddy], PUG_OPTIONS);
                 // }
@@ -158,15 +168,15 @@ function router(renderer) {
             case "menu_chats":
                 html = pug.renderFile(__dirname + '/components/main/file.pug', obj, PUG_OPTIONS);
                 renderer.webContents.send('change_menu_state', html);
-                sqlite.fetch((row)=>{
+                sqlite.fetch((row) => {
                     console.log('buddy');
-                    row.type=chat_types.channel;
+                    row.type = chat_types.channel;
                     const html = pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', row, PUG_OPTIONS);
-                    row.html=html;
+                    row.html = html;
                     // console.log(row);
-                    row.type="menu_chats";
+                    row.type = "menu_chats";
                     renderer.webContents.send('buddy', row);
-                },sqlite.tables.chat);
+                }, sqlite.tables.chat);
                 // console.log(sqlite.fetch_buddies());
                 // for (let chat in chats) {
                 //     html += pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', chats[chat], PUG_OPTIONS);
@@ -205,12 +215,12 @@ function router(renderer) {
         acc_data.privKey = eth.generate_account(eth.generate_mnemonic()).privateKey;
         delete arg.mnemonic;
 
-        if (!arg.avatar){
-            arg.avatar='data:image/jpeg;base64,'+fs.readFileSync(__dirname+'/default-avatar1.jpg').toString("base64");
+        if (!arg.avatar) {
+            arg.avatar = 'data:image/jpeg;base64,' + fs.readFileSync(__dirname + '/default-avatar1.jpg').toString("base64");
         }
 
-        const loomkey=CryptoUtils.generatePrivateKey();
-        acc_data.privKeyLoom=CryptoUtils.Uint8ArrayToB64(loomkey);
+        const loomkey = CryptoUtils.generatePrivateKey();
+        acc_data.privKeyLoom = CryptoUtils.Uint8ArrayToB64(loomkey);
         const file_data = JSON.stringify({account: acc_data, vcard: arg});
 
         // fs.writeFile("account.json", file_data, function (err) {
@@ -226,7 +236,7 @@ function router(renderer) {
 
         vcard = arg;
 
-        acc_data.privKeyLoom=loomkey;
+        acc_data.privKeyLoom = loomkey;
 
         //@todo:important
         // ChannelWorker.set_privkey(acc_data.privKeyLoom)
@@ -265,14 +275,14 @@ function router(renderer) {
         renderer.webContents.send('change_app_state', html);
         sqlite.fetch((room_data) => {
             const obj = {
-                id:room_data.id,
-                domain:room_data.domain,
-                avatar:room_data.avatar,
-                name:room_data.name,
-                type:room_data.channel==="1"?chat_types.channel:chat_types.group_chat,
-                role:room_data.role,
+                id: room_data.id,
+                domain: room_data.domain,
+                avatar: room_data.avatar,
+                name: room_data.name,
+                type: room_data.channel === "1" ? chat_types.channel : chat_types.group_chat,
+                role: room_data.role,
             };
-            chats[room_data.id]=obj;
+            chats[room_data.id] = obj;
         }, "chat");
         get_buddies();
         // const address = "fwafwafwafawfwafawfwafwafwafawf";
@@ -313,17 +323,17 @@ function router(renderer) {
         // if (!buddies[jid]) {
         //     buddies[jid] = {};
         // }
-        const jid1=jid.split('@');
+        const jid1 = jid.split('@');
         let obj = {
-            id:jid1[0],
-            domain:jid1[1],
+            id: jid1[0],
+            domain: jid1[1],
         };
         if (state === 'online') {
             obj.online = 'online';
         } else {
             obj.online = 'offline';
         }
-        sqlite.insert(obj,sqlite.tables.buddy);
+        sqlite.insert(obj, sqlite.tables.buddy);
         sqlite.update(obj, sqlite.tables.buddy);
         dxmpp.get_vcard(jid);
     });
@@ -335,51 +345,51 @@ function router(renderer) {
     //     console.log(statusText);
     // });
 
-    dxmpp.on('joined_room', function(room_data) {
+    dxmpp.on('joined_room', function (room_data) {
         // console.log(role);
         // console.log(room_data);
         const obj = {
-            id:room_data.id,
-            domain:room_data.domain,
-            avatar:room_data.avatar,
-            name:room_data.name,
-            contract_address:room_data.contractaddress,
-            type:room_data.channel==="1"?chat_types.channel:chat_types.group_chat,
-            role:room_data.role,
+            id: room_data.id,
+            domain: room_data.domain,
+            avatar: room_data.avatar,
+            name: room_data.name,
+            contract_address: room_data.contractaddress,
+            type: room_data.channel === "1" ? chat_types.channel : chat_types.group_chat,
+            role: room_data.role,
             bio: room_data.bio
         };
-        sqlite.insert(obj,sqlite.tables.chat);
-        chats[room_data.id]=obj;
+        sqlite.insert(obj, sqlite.tables.chat);
+        chats[room_data.id] = obj;
         const html = pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', obj, PUG_OPTIONS);
         // console.log(html);
-        renderer.webContents.send('buddy', {address:room_data.id,html:html, type:"menu_chats"});
+        renderer.webContents.send('buddy', {address: room_data.id, html: html, type: "menu_chats"});
         console.log(`joined ${room_data.name} as ${room_data.role}`);
     });
 
     ipcMain.on('send_subscribe', (event, arg) => {
         if (dxmpp.get_address() === arg.split('@')[0]) return;
-        console.log('sub to '+arg);
+        console.log('sub to ' + arg);
         dxmpp.subscribe(arg);
     });
 
-    function get_buddies(){
-        sqlite.fetch((row)=>{
+    function get_buddies() {
+        sqlite.fetch((row) => {
             console.log('buddy');
-            row.type=chat_types.user;
+            row.type = chat_types.user;
             const html = pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', row, PUG_OPTIONS);
-            row.html=html;
+            row.html = html;
             // console.log(row);
-            row.type="menu_user_chats";
+            row.type = "menu_user_chats";
             renderer.webContents.send('buddy', row);
-        },sqlite.tables.buddy);
+        }, sqlite.tables.buddy);
     }
 
     ipcMain.on('get_buddies', () => {
         // console.log(buddies);
-        sqlite.fetch((row)=>{
+        sqlite.fetch((row) => {
             const html = pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', row, PUG_OPTIONS);
             renderer.webContents.send('load_chat', html)
-        },sqlite.tables.buddy);
+        }, sqlite.tables.buddy);
         // let html = "";
         // for (let buddy in buddies) {
         //     html += pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', buddies[buddy], PUG_OPTIONS);
@@ -389,10 +399,10 @@ function router(renderer) {
 
     ipcMain.on('get_chats', () => {
         // console.log(buddies);
-        sqlite.fetch((row)=>{
+        sqlite.fetch((row) => {
             const html = pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', row, PUG_OPTIONS);
             renderer.webContents.send('load_chat', html)
-        },sqlite.tables.buddy);
+        }, sqlite.tables.buddy);
         // let html = "";
         // for (let chat in chats) {
         //     html += pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', chats[chat], PUG_OPTIONS);
@@ -402,10 +412,10 @@ function router(renderer) {
 
     ipcMain.on('send_message', (event, arg) => {
         const obj = {
-            chat:arg.id,
-            sender:dxmpp.get_address(),
-            text:arg.text,
-            time:dxmpp.take_time(),
+            chat: arg.id,
+            sender: dxmpp.get_address(),
+            text: arg.text,
+            time: dxmpp.take_time(),
             group: (arg.group),
             mine: true,
         };
@@ -425,7 +435,7 @@ function router(renderer) {
 
     ipcMain.on('get_channel_msgs', (event, arg) => {
 
-        sqlite.get_chat((row)=>{
+        sqlite.get_chat((row) => {
             const html = pug.renderFile(__dirname + '/components/main/messagingblock/qqq.pug', {
                 id: row.id,
                 type: row.type,
@@ -434,31 +444,31 @@ function router(renderer) {
                 avatar: row.avatar
             }, PUG_OPTIONS);
             renderer.webContents.send('reload_chat', html);
-        },arg.id);
+        }, arg.id);
 
-        sqlite.get_msgs_with((row1)=>{
-            row1.mine=row1.sender===dxmpp.get_address();
+        sqlite.get_msgs_with((row1) => {
+            row1.mine = row1.sender === dxmpp.get_address();
             sqlite.get_chat((row2) => {
                 row1.avatar = row2.avatar;
                 // row1.myavatar = dxmpp.
                 const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', row1, PUG_OPTIONS);
-                const obj={
-                    jid:row.chat,
-                    message:html,
+                const obj = {
+                    jid: row.chat,
+                    message: html,
                 };
                 renderer.webContents.send('received_message', obj);
                 // renderer.webContents.send('received_message', row);
             });
 
-        },arg.id);
+        }, arg.id);
 
         sqlite.get_notifications((row) => {
             const html = pug.renderFile(__dirname + '/components/main/messagingblock/notice.pug', {
-                type:         row.type,
-                text:       row.text,
+                type: row.type,
+                text: row.text,
             }, PUG_OPTIONS);
             // renderer.webContents.send('user_joined_room', html);
-            renderer.webContents.send('get_notice', {id:arg.id,html:html});
+            renderer.webContents.send('get_notice', {id: arg.id, html: html});
         }, arg.id);
         // console.log(arg);
         // let html = "";
@@ -476,11 +486,11 @@ function router(renderer) {
     });
 
     ipcMain.on('get_chat_msgs', (event, arg) => {
-        sqlite.get_chat((row)=>{
+        sqlite.get_chat((row) => {
             let obj = {
-                id:         arg.id,
-                type:       chat_types.user,
-                chat_name:  arg.full_name,
+                id: arg.id,
+                type: chat_types.user,
+                chat_name: arg.full_name,
             };
             sqlite.get_buddy((row) => {
                 obj.avatar = row.avatar;
@@ -489,20 +499,20 @@ function router(renderer) {
                 console.log("chat");
             }, arg.id);
 
-            sqlite.get_msgs_with((row)=>{
-                row.mine=row.sender===dxmpp.get_address();
+            sqlite.get_msgs_with((row) => {
+                row.mine = row.sender === dxmpp.get_address();
                 row.avatar = obj.avatar;
                 const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', row, PUG_OPTIONS);
-                const data={
-                    jid:row.chat,
-                    message:html,
+                const data = {
+                    jid: row.chat,
+                    message: html,
                 };
                 renderer.webContents.send('received_message', data);
                 console.log("message");
                 // renderer.webContents.send('received_message', row);
-            },arg.id);
+            }, arg.id);
 
-        },arg.id);
+        }, arg.id);
 
 
         // let html = "";
@@ -534,16 +544,16 @@ function router(renderer) {
         from = get_adr_from_jid(from);
 
         const obj = {
-            jid:from,
-            chat:from,
-            sender:from,
-            text:message,
-            message:html,
-            time:dxmpp.take_time(),
+            jid: from,
+            chat: from,
+            sender: from,
+            text: message,
+            message: html,
+            time: dxmpp.take_time(),
             group: false
         };
 
-        sqlite.insert(obj,sqlite.tables.msgs);
+        sqlite.insert(obj, sqlite.tables.msgs);
 
         // if (!msgs[from]) {
         //     msgs[from] = [];
@@ -556,12 +566,12 @@ function router(renderer) {
         });
     });
     //
-    dxmpp.on('groupchat', function(room_data, message, sender, stamp) {
+    dxmpp.on('groupchat', function (room_data, message, sender, stamp) {
         // console.log(`${sender.address} says ${message} in ${room_data.name} chat on ${stamp}`);
         // if (!msgs[room_data.id]) msgs[room_data.id]=[];
         // msgs[room_data.id].push({message:message,mine:false});
-        const mine = sender.address===dxmpp.get_address();
-        const time=dxmpp.take_time();
+        const mine = sender.address === dxmpp.get_address();
+        const time = dxmpp.take_time();
         const html = pug.renderFile(__dirname + '/components/main/messagingblock/message.pug', {
             mine: mine,
             text: message,
@@ -570,23 +580,23 @@ function router(renderer) {
 
 
         const obj = {
-            jid:sender.address,
-            chat:room_data.id,
-            sender:sender.address,
-            text:message,
-            message:html,
-            time:time,
-            mine:mine,
+            jid: sender.address,
+            chat: room_data.id,
+            sender: sender.address,
+            text: message,
+            message: html,
+            time: time,
+            mine: mine,
             group: true
         };
 
         console.log(obj)
         if (mine) return;
 
-        obj.sender=obj.jid
-        obj.jid=obj.chat
+        obj.sender = obj.jid
+        obj.jid = obj.chat
 
-        sqlite.insert(obj,sqlite.tables.msgs);
+        sqlite.insert(obj, sqlite.tables.msgs);
         if (!mine)
             renderer.webContents.send('received_message', obj);
     });
@@ -602,14 +612,14 @@ function router(renderer) {
         // console.log(result);
         result.forEach(function (group) {
             const st = group.jid.split('@');
-            group.id=st[0];
+            group.id = st[0];
             if (chats[group.id]) return;
-            group.domain=st[1];
-            group.contract_address=group.contractaddress;
-            group.type=group.channel==='1'?chat_types.join_channel:chat_types.join_group_chat;
+            group.domain = st[1];
+            group.contract_address = group.contractaddress;
+            group.type = group.channel === '1' ? chat_types.join_channel : chat_types.join_group_chat;
             html += pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', group, PUG_OPTIONS);
         });
-        if (html){
+        if (html) {
             renderer.webContents.send('found_chats', html)
         }
     });
@@ -619,7 +629,7 @@ function router(renderer) {
 
     ipcMain.on('channel_suggestion', (event, data) => {
         console.log(data.text);
-        dxmpp.send_suggesstion(data.id+"@"+data.domain,data.text)
+        dxmpp.send_suggesstion(data.id + "@" + data.domain, data.text)
         // console.log(data);
         // const obj = {
         //     Data: new Buffer(JSON.stringify({user:dxmpp.get_address(),text:data.text})),
@@ -644,35 +654,35 @@ function router(renderer) {
     });
 
     dxmpp.on('user_joined_room', function (user, room_data) {
-        sqlite.get_chat((row)=>{
+        sqlite.get_chat((row) => {
             // room_data.name=row.name;
             let text = `user ${user.username} joined`;
             sqlite.insert({chat_id: room_data.id, text: text, type: "notice-info"}, sqlite.tables.notifications);
 
             const html = pug.renderFile(__dirname + '/components/main/messagingblock/notice.pug', {
-                type:       "notice-info",
-                text:       text,
+                type: "notice-info",
+                text: text,
             }, PUG_OPTIONS);
-            renderer.webContents.send('get_notice', {id:room_data.id,html:html});
-            text+=` ${row.name} channel`;
+            renderer.webContents.send('get_notice', {id: room_data.id, html: html});
+            text += ` ${row.name} channel`;
             renderer.webContents.send('user_joined_room', text);
-        },room_data.id);
+        }, room_data.id);
     });
 
     dxmpp.on('post_suggested', function (data) {
-        sqlite.get_chat((row)=>{
+        sqlite.get_chat((row) => {
             // room_data.name=row.name;
             let text = `user ${data.user.id} suggested ${data.text}`;
             // let text = `user ${user.username} joined ${row.name} channel`;
             sqlite.insert({chat_id: data.group.id, text: text, type: "notice-info"}, sqlite.tables.notifications);
             const html = pug.renderFile(__dirname + '/components/main/messagingblock/notice.pug', {
-                type:       "notice-info",
-                text:       text,
+                type: "notice-info",
+                text: text,
             }, PUG_OPTIONS);
-            renderer.webContents.send('get_notice', {id:data.group.id,html:html});
-            text+=` in channel ${row.name}`;
+            renderer.webContents.send('get_notice', {id: data.group.id, html: html});
+            text += ` in channel ${row.name}`;
             renderer.webContents.send('user_joined_room', text);
-        },data.group.id);
+        }, data.group.id);
 
         // sqlite.insert({chat_id: data.group.id, text: text, type: "notice-info"}, sqlite.tables.notifications);
         // const html = pug.renderFile(__dirname + '/components/main/messagingblock/notice.pug', {
@@ -690,15 +700,15 @@ function router(renderer) {
             let html = pug.renderFile(__dirname + '/components/main/modal_popup/modal_content.pug', data, PUG_OPTIONS);
             renderer.webContents.send('get_my_vcard', html);
         } else {
-            data.id=data.address;
-            data.name=data.full_name;
-            sqlite.update(data,sqlite.tables.buddy);
-            sqlite.get_buddy((row)=>{
-                row.type=chat_types.user;
+            data.id = data.address;
+            data.name = data.full_name;
+            sqlite.update(data, sqlite.tables.buddy);
+            sqlite.get_buddy((row) => {
+                row.type = chat_types.user;
                 row.html = pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', row, PUG_OPTIONS);
                 row.type = "menu_user_chats";
                 renderer.webContents.send('buddy', row);
-            },data.id);
+            }, data.id);
             // const jid = `${data.address}@${data.domain}`;
             // // buddies[jid].vcard = data;
             // const obj = data;
@@ -719,36 +729,33 @@ function router(renderer) {
         // ChannelWorker.create_channel(name,(address)=>{
         //     dxmpp.register_channel(name,"localhost",address)
         // });
-        dxmpp.register_channel(name,"localhost",contractAddress)
+        dxmpp.register_channel(name, "localhost", contractAddress)
     });
 
     ipcMain.on("show_popup", (event, data) => {
-       switch(data[1]) {
-           case "user_chat":
-           {
-               sqlite.get_buddy((row) => {
-                   row.address = row.id;
-                   row.full_name = row.name ;
-                   let html = pug.renderFile(__dirname + '/components/main/modal_popup/modal_content.pug', row, PUG_OPTIONS);
-                   renderer.webContents.send('get_my_vcard', html);
-               }, data[2]);
+        switch (data[1]) {
+            case "user_chat": {
+                sqlite.get_buddy((row) => {
+                    row.address = row.id;
+                    row.full_name = row.name;
+                    let html = pug.renderFile(__dirname + '/components/main/modal_popup/modal_content.pug', row, PUG_OPTIONS);
+                    renderer.webContents.send('get_my_vcard', html);
+                }, data[2]);
                 break;
-           }
-           case "channel":
-           {
-               sqlite.get_chat((row) => {
-                   console.log(row);
-                   let html = pug.renderFile(__dirname + '/components/main/modal_popup/group_info.pug', row, PUG_OPTIONS);
-                   renderer.webContents.send('get_my_vcard', html);
-               }, data[2]);
-               break;
-           }
-           case "group_chat":
-           {
-               console.log(data[2]);
-               break;
-           }
-       }
+            }
+            case "channel": {
+                sqlite.get_chat((row) => {
+                    console.log(row);
+                    let html = pug.renderFile(__dirname + '/components/main/modal_popup/group_info.pug', row, PUG_OPTIONS);
+                    renderer.webContents.send('get_my_vcard', html);
+                }, data[2]);
+                break;
+            }
+            case "group_chat": {
+                console.log(data[2]);
+                break;
+            }
+        }
     });
 }
 

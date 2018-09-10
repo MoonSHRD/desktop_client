@@ -5,20 +5,12 @@ let dir = './sqlite';
 if (!fs.existsSync(dir)){
     fs.mkdirSync(dir);
 }
-
 let db = new sqlite3.Database('./sqlite/data.db');
 let qbox = require('qbox');
-let instance = null;
 
 class Sqlite {
 
     constructor(){
-        if (!instance) {
-            instance = this;
-        } else {
-            return instance;
-        }
-
         this.$ = qbox.create();
 
         this.tables_data = {
@@ -147,10 +139,7 @@ class Sqlite {
                 }, this.tables.msgs);
                 }
             },'0x0000000000000000000000000000000000000000');
-
-            console.log('inserting')
         });
-        return instance;
     }
 
     insert(obj, table){
