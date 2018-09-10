@@ -24,15 +24,15 @@ class Sqlite {
         this.tables_data = {
             account : {
                 id:["integer","primary key","autoincrement"],
-                privKey:["not null"],
-                privKeyLoom:["not null"],
+                privKey:[],
+                privKeyLoom:[],
                 passphrase:[],
                 domain:[],
                 name:[],
-                firstname:["not null"],
+                firstname:[],
                 lastname:[],
                 bio:[],
-                avatar:["not null"],
+                avatar:[],
             },
             buddy : {
                 id:["primary key","on conflict ignore","not null"],

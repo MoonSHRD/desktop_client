@@ -82,7 +82,7 @@ $(".previous").click(function(){
 
 $(document).on('submit', '#profile_form', function (e) {
     e.preventDefault();
-    if ($('fieldset.active')!==$('fieldset').pop()) $(".next").toggle('click');
+    if ($('fieldset.active')!==$('fieldset').last()) $(".next").toggle('click');
     let obj = $(this).serializeArray();
     let prof = {};
 

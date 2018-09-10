@@ -14,9 +14,9 @@ class AuthController extends Controller {
     save_acc(data){
         console.log(data);
         let acc=this.get_model('AccountModel');
-        let new_acc=new acc(data);
-        acc.save();
-        acc.get_one('1',(row)=>{
+        let new_acc=acc.create(data);
+        new_acc.save();
+        new_acc.get_one('1',(row)=>{
             console.log(row)
         });
     };

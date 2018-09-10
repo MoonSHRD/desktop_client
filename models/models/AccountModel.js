@@ -18,12 +18,21 @@ var __extends = (this && this.__extends) || (function () {
 var Model = require(__dirname + '/../Model');
 var AccountModel = /** @class */ (function (_super) {
     __extends(AccountModel, _super);
-    function AccountModel(data) {
+    function AccountModel() {
         var _this = _super.call(this) || this;
         _this.table = "account";
-        for (var row in _this.rows) {
-            _this.rows_data[row] = data[row];
-        }
+        _this.primary_key = "id";
+        _this.rows = [
+            "privKey",
+            "privKeyLoom",
+            "passphrase",
+            "name",
+            "firstname",
+            "lastname",
+            "bio",
+            "avatar"
+        ];
+        console.log(_this.rows);
         return _this;
     }
     return AccountModel;

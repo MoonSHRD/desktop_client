@@ -5,9 +5,9 @@
 let Model=require(__dirname+'/../Model');
 
 class AccountModel extends Model{
-    table:"account";
-    primary_key:"id";
-    rows:[
+    table="account";
+    primary_key="id";
+    rows=[
         "privKey",
         "privKeyLoom",
         "passphrase",
@@ -18,13 +18,9 @@ class AccountModel extends Model{
         "avatar"
     ];
 
-    constructor(data){
+    private constructor(){
         super();
-        this.table="account";
-
-        for (let row in this.rows) {
-            this.rows_data[row]=data[row];
-        }
+        console.log(this.rows);
     }
 }
 
