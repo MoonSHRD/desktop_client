@@ -17,6 +17,7 @@ class Sqlite {
             account : {
                 id:["integer","primary key","autoincrement"],
                 privKey:[],
+                privKeyLoom: [],
                 passphrase:[],
                 domain:["not null"],
                 avatar:["not null"],

@@ -1,5 +1,11 @@
 li(class=mine?"outMessage":"inMessage")
-    img(src = avatar width = 44 height = 44)
-    p  #{text}
-        //br
-        span #{time}
+    if (!mine || role === "moderator")
+        img(src = avatar width = 44 height = 44)
+        p  #{text}
+            //br
+            span #{time}
+    else
+        img(src = myavatar width = 44 height = 44)
+        p  #{text}
+            //br
+            span #{time}
