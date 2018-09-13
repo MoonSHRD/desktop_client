@@ -3,7 +3,7 @@
 const {ipcRenderer} = require('electron');
 const {events,chat_types} = require('./env_vars.js');
 const dict = require('./langs/lang');
-
+const slick = require('slick-carousel');
 
 
 window.onload = function () {
@@ -47,6 +47,7 @@ window.onload = function () {
         // console.log('autyh');
         $('#view').html(arg);
         $.html5Translate(dict, 'en');
+
         setTimeout(()=>{
             console.log('click');
             console.log($('#0x0000000000000000000000000000000000000000').attr('data-domain'));
@@ -456,5 +457,8 @@ window.onload = function () {
     $(document).on('mousedown','.dropDown_menu ul li ',function(event) {
         $(this).find('ul').toggleClass('d-block')
     })
+
+
+
 
 };

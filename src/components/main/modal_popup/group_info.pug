@@ -1,26 +1,97 @@
 style
     include modal-content.css
-.modal-header
-    h5.modal-title #{name}
-    button.close(type='button', data-dismiss='modal', aria-label='Close')
-        span(aria-hidden='true') ×
+//.modal-header
+//    //h5.modal-title #{name}
+//    button.close(type='button', data-dismiss='modal', aria-label='Close')
+//        span(aria-hidden='true') ×
 .modal-body
     .container
-        .row
-            .col-sm-3
-                img.rounded-circle(src=avatar width=128 height=128)
-            .col-sm
-                table.table
-                    tbody
-                        tr
-                            th(scope='row') Channel name
-                            td #{name}
-                        tr
-                            th(scope='row') Token name
-                            td #{name}_token
-                        tr
-                            th(scope='row') Total supply
-                            td 100000
+        .row.m-0
+            .col-sm-3.text-left
+                img.mr-3(src='components/main/modal_popup/img/portfol.png')
+                p.m-0(style='line-height: 1') Share Your News
+            .col-sm-4.offset-sm-1.text-center(style='margin-top: -60px')
+                img.rounded-circle(src=avatar width=80 height=80)
+                h5.modal-title #{name}
+            .col-sm-3.offset-sm-1.text-left
+                img.mr-3(src='components/main/modal_popup/img/bell.png')
+                p.m-0(style='line-height: 1') Switch on notifications
+
+        .row.m-4
+            .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                img(src='components/main/modal_popup/img/leave.png')
+                p.m-0 Leave a group
+
+        .row.m-0.justify-content-around
+            .col-sm-5
+                .row.cardInfo
+                    .col-sm-6
+                        p
+                            b Token name
+                        p
+                            b Total supply
+                    .col-sm-6
+                        p gordon_token
+                        p 100 000
+            .col-sm-5
+                .row.cardInfo
+                    .col-sm-6
+                        p
+                            b Section
+                        p
+                            b Category
+                    .col-sm-6
+                        p Celebrities
+                        p Culture
+
+        .row.mx-0.my-5.justify-content-around
+            .col-sm-5.p-0
+                button.btn.btn-dark.col-sm-12 Show On a Map
+
+            .col-sm-5.p-0
+                button.btn.btn-dark.col-sm-12 Сalendar of events
+
+
+
+        .row.m-0
+            .col-sm-12.text-left
+                p Channel Gallery
+                div.slick
+                    div
+                        h3 1
+                    div
+                        h3 2
+                    div
+                        h3 3
+                    div
+                        h3 4
+                    div
+                        h3 5
+                    div
+                        h3 6
+
+            //    .row.shadow
+            //        .col-sm-6
+            //            p Section
+            //            p Category
+            //        .col-sm-6
+            //            p Celebrities
+            //            p Culture
+            //.col-sm-6
+
+
+            //.col-sm
+            //    table.table
+            //        tbody
+            //            tr
+            //                th(scope='row') Channel name
+            //                td #{name}
+            //            tr
+            //                th(scope='row') Token name
+            //                td #{name}_token
+            //            tr
+            //                th(scope='row') Total supply
+            //                td 100000
 
 //.modal-footer
 //    .container
@@ -35,3 +106,5 @@ style
 //                .col-sm-4
 //                    button(class='btn btn-primary col-sm-12' ) Suggest publication
 
+script
+    include script.js
