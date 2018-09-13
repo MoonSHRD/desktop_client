@@ -20,28 +20,33 @@ div(class="head_peer" id="head_peer")
     if (type==="user_chat" || type==="group_chat" || (type==="channel" && role==="moderator"))
 
         div(class='dropDown_menu')
+            ul
+                li
+                    a(data-id="")
+                        div(class='image')
+                            img(src="components/main/messagingblock/img/micr.png")
+                li
+                    a(data-id="")
+                        div(class='image')
+                            img(src="components/main/messagingblock/img/call.png")
 
-            a(data-id="")
-                div(class='image')
-                    img(src="components/main/messagingblock/img/micr.png")
-
-
-            a(data-id="")
-                div(class='image')
-                    img(src="components/main/messagingblock/img/call.png")
-
-
-            a(data-id="")
-                div(class='image')
-                    img(src="components/main/messagingblock/img/videoCall.png")
-
-            a(data-id="")
-                div(class='image')
-                    img(src="components/main/messagingblock/img/files.png")
-
-            a(data-id="")
-                div(class='image')
-                    img(src="components/main/messagingblock/img/dropDown_menu.png")
+                li
+                    a(data-id="")
+                        div(class='image')
+                            img(src="components/main/messagingblock/img/videoCall.png")
+                li
+                    a(data-id="")
+                        div(class='image')
+                            img(src="components/main/messagingblock/img/files.png")
+                li
+                    a(data-id="")
+                        div(class='image')
+                            img(src="components/main/messagingblock/img/dropDown_menu.png")
+                    ul.dropdownDoth
+                        li Info
+                        li Leave a channel
+                        li Switch off notifications
+                        li Write a message to administrator
 
 
 div(class="messaging_history" id="messaging_history")

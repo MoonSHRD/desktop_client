@@ -413,6 +413,8 @@ window.onload = function () {
 
         }
     })
+
+
     $(document).on('mousedown','.chats li',function(event) {
 
 
@@ -450,5 +452,9 @@ window.onload = function () {
                 .fadeIn(300); // Показываем меню с небольшим стандартным эффектом jQuery. Как раз очень хорошо подходит для меню
         }
     });
+
+    $(document).on('mousedown','.dropDown_menu ul li ',function(event) {
+        $(this).find('ul').toggleClass('d-block')
+    })
 
 };
