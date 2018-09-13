@@ -5,7 +5,7 @@
     /*height: 100vh;*/
 
 }
-.left, .right {
+.leftButton, .rightButton {
     background: url(./components/main/chatsblock/img/toRight.png) no-repeat;
     background-size: auto;
     height: 50px;
@@ -20,19 +20,19 @@
 
 }
 
-.left:hover {
+.leftButton:hover {
     right: 2px;
 }
 
-.right:hover {
+.rightButton:hover {
     left: 2px;
 }
 
-.left {
+.leftButton {
     transform: rotate(180deg);
     right: 0;
 }
-.right{
+.rightButton{
     left: 0;
 }
 
@@ -97,21 +97,21 @@
 }
 
 .activeNearby img {
-    border: 1px solid rgba(26, 255, 124, 1);
-    box-shadow: 0 0 13px rgb(24, 220, 110);
+    border: 1px solid rgb(24, 244, 119);
+    box-shadow: 0 0 18px rgba(24, 220, 110, 0.6);
     transition: 0.5s;
 
 }
 
 .orange {
     border: 1px solid rgba(242, 153, 74, 1);
-    box-shadow: 0 0 13px rgba(242, 153, 74, 1);
+    box-shadow: 0 0 18px rgba(242, 153, 74, 0.6);
     transition: 0.5s;
 }
 
 .purple {
     border: 1px solid rgba(187, 107, 217, 1);
-    box-shadow: 0 0 13px rgba(187, 107, 217, 1);
+    box-shadow: 0 0 18px rgba(187, 107, 217, 0.6);
     transition: 0.5s;
 
 }

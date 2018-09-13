@@ -1,16 +1,17 @@
 var offset = 0;
-var height = parseInt($('.sliderImage').attr('width'));
-var items = $('.element').length
-var right =false
-var left = false
-
+// var height = parseInt($('.sliderImage').attr('width'));
+var items = $('.element').length;
+var rightFlag =false;
+var leftFlag = false;
+var leftButton = $('.leftButton');
+var rightButton = $('.rightButton');
 
 
 
 if(items < 4) {
     $( ".element:eq( 1 )" ).addClass("activeNearby")
-    $('.left').hide()
-    $('.right').hide()
+    leftButton.hide()
+    rightButton.hide()
 }else if(items > 4){
     // $('.element').last().clone().prependTo('.slider')
     // // $('.element').last().remove()
@@ -26,7 +27,7 @@ var height = $('.sliderWrapper').height(),
     $slider = $('.slider');
 
 
-$('.left').click(prevSlide);
+leftButton.click(prevSlide);
 
 function prevSlide(){
     $( ".element:eq( 2 )" ).removeClass("activeNearby")
@@ -41,12 +42,12 @@ function prevSlide(){
     // $('.active').next('.element').addClass('active');
     $slider.css('transform','translate(80px, 0)');
 // right = true;
-    left = true;
+    leftFlag = true;
 
 
 }
 
-$('.right').click(nextSlide);
+rightButton.click(nextSlide);
 
 function nextSlide(){
     $( ".element:eq( 2 )" ).removeClass("activeNearby")
@@ -61,28 +62,28 @@ function nextSlide(){
     $slider.css('transform','translate(-80px, 0)');
     // $('.element').last().remove()
 
-    right = true;
+    rightFlag = true;
 
 
 }
 
 
 $slider.on('transitionend webkitTransitionEnd oTransitionEnd', function () {
-    if(right === true)
+    if(rightFlag === true)
     {
         var $last = $('.element').get(0);
         $last.remove();
         $slider.append($last);
-        right = false;
+        rightFlag = false;
 
 
     }
-    if(left === true){
+    if(leftFlag === true){
 
         var $first = $('.element').get(items-1);
         $first.remove();
         $slider.prepend($first);
-        left = false;
+        leftFlag = false;
 
 
     }
