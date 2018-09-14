@@ -5,8 +5,9 @@ style
 //    button.close(type='button', data-dismiss='modal', aria-label='Close')
 //        span(aria-hidden='true') ×
 .modal-body
-    .container
-        .row.m-0
+    .container.scrollbar#style-10(style='overflow-y: scroll; height: 630px')
+        .row.m-0.groupInfoHeader
+            .gradient
             .col-sm-3.text-left
                 img.mr-3(src='components/main/modal_popup/img/portfol.png')
                 p.m-0(style='line-height: 1') Share Your News
@@ -17,59 +18,116 @@ style
                 img.mr-3(src='components/main/modal_popup/img/bell.png')
                 p.m-0(style='line-height: 1') Switch on notifications
 
-        .row.m-4
+        .row.m-4(style='margin-top: 70px !important')
             .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
                 img(src='components/main/modal_popup/img/leave.png')
-                p.m-0 Leave a group
+                p.m-0.ml-3(style="color: #2BC2F9") Leave a group
 
         .row.m-0.justify-content-around
             .col-sm-5
                 .row.cardInfo
                     .col-sm-6
-                        p
+                        p.my-3
                             b Token name
-                        p
+                        p.my-3
                             b Total supply
                     .col-sm-6
-                        p gordon_token
-                        p 100 000
+                        p.my-3 gordon_token
+                        p.my-3 100 000
             .col-sm-5
                 .row.cardInfo
                     .col-sm-6
-                        p
+                        p.my-3
                             b Section
-                        p
-                            b Category
+                        p.my-3
+                            b.mt-0 Category
                     .col-sm-6
-                        p Celebrities
-                        p Culture
+                        p.my-3 Celebrities
+                        p.my-3 Culture
 
         .row.mx-0.my-5.justify-content-around
             .col-sm-5.p-0
-                button.btn.btn-dark.col-sm-12 Show On a Map
+                button.showOnMapChannel.col-sm-12 Show On a Map
 
             .col-sm-5.p-0
-                button.btn.btn-dark.col-sm-12 Сalendar of events
+                button.calendarChannel.col-sm-12 Сalendar of events
 
 
 
         .row.m-0
             .col-sm-12.text-left
-                p Channel Gallery
+                p
+                    b Gallery
                 div.slick
                     div
-                        h3 1
+                        //h1 1
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
                     div
-                        h3 2
+                        //h1 2
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
                     div
-                        h3 3
-                    div
-                        h3 4
-                    div
-                        h3 5
-                    div
-                        h3 6
+                        //h1 3
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
 
+                    div
+                        //h1 4
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+                    div
+                        //h1 5
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+                    div
+                        //h1 6
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+        .row.m-4
+            .col-sm-5.p-0
+                input.serchInChannel.col-sm-12(placeholder="search")
+
+        .row.m-4
+            .col-sm-5.p-0
+                p
+                    b Participants
+                .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
+                    img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
+                    p.m-0 Alexandr Gordon
+                    img(src='components/main/modal_popup/img/chats.png')
+
+                .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
+                    img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
+                    p.m-0 Gordon
+                    img(src='components/main/modal_popup/img/chats.png')
+
+                .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
+                    img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
+                    p.m-0 Alexandr
+                    img(src='components/main/modal_popup/img/chats.png' style='visibility: hidden')
+
+
+
+            .col-sm-5.p-0.offset-2
+                p
+                    b Goals
+                .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                    | #administrator
+
+                .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                    p.m-0(style="color: #2BC2F9") #fan #journalist #getanautograph
+
+                .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                    p.m-0(style="color: #2BC2F9") #blogger
+            //    .col-sm-6.p-0
+            //
+            //        p Alexandr Gordon
+            //        p Alexandr Gordon
+            //    .col-sm-2.p-0
+            //        img(src='components/main/modal_popup/img/chats.png')
+            //        img(src='components/main/modal_popup/img/chats.png')
+            //        img(src='components/main/modal_popup/img/chats.png')
+            //.col-sm-5.p-0
+            //    p Goals
+            //    input.serchInChannel.col-sm-12(placeholder="search")
             //    .row.shadow
             //        .col-sm-6
             //            p Section

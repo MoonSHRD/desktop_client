@@ -1,12 +1,16 @@
-window.jQuery = window.$ = require('jquery');
-var slick = require('slick-carousel');
+// window.jQuery = window.$ = require('jquery');
+// var slick = require('slick-carousel');
 
 //DOM Ready
 $(function(){
     $('.slick').slick({
-        slidesToShow: 1,
-        speed: 300,
-        autoplay: true,
-        dots: true
+        prevArrow: false,
+        nextArrow: false,
+        infinite: true,
+        // speed: 300,
+        slidesToShow: 3,
+        // centerMode: true,
+        variableWidth: true,
+
     });
 });
