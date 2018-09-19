@@ -50,7 +50,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 var AccountModel_1 = require("../../models/AccountModel");
-var MessageModel_1 = require("../../models/MessageModel");
+// import {MessageModel} from "../../models/MessageModel";
 var Controller = require('../Controller');
 var MessagesController = /** @class */ (function (_super) {
     __extends(MessagesController, _super);
@@ -59,9 +59,7 @@ var MessagesController = /** @class */ (function (_super) {
     }
     MessagesController.prototype.get_user_messages = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var messages;
             return __generator(this, function (_a) {
-                messages = MessageModel_1.MessageModel.find({ where: { user: id } });
                 return [2 /*return*/];
             });
         });
