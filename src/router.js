@@ -62,8 +62,8 @@ let acc_data = {
     jidhost: 'localhost',
     privKey: undefined,
     privKeyLoom: undefined,
-    // host: '142.93.226.135',
-    host: '192.168.1.60',
+    host: '142.93.226.135',
+    // host: '192.168.1.60',
     // host: 'localhost',
     port: 5222,
     username: undefined,
@@ -73,8 +73,7 @@ let acc_data = {
     avatar: undefined
 };
 
-// let vcard = {
-// };
+let vcard = {};
 
 // let chats = {};
 // let msgs = {};

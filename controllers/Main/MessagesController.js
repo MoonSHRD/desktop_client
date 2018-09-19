@@ -50,13 +50,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 var AccountModel_1 = require("../../models/AccountModel");
+var MessageModel_1 = require("../../models/MessageModel");
 var Controller = require('../Controller');
-var AuthController = /** @class */ (function (_super) {
-    __extends(AuthController, _super);
-    function AuthController() {
+var MessagesController = /** @class */ (function (_super) {
+    __extends(MessagesController, _super);
+    function MessagesController() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    AuthController.prototype.init_auth = function () {
+    MessagesController.prototype.get_user_messages = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var messages;
+            return __generator(this, function (_a) {
+                messages = MessageModel_1.MessageModel.find({ where: { user: id } });
+                return [2 /*return*/];
+            });
+        });
+    };
+    ;
+    MessagesController.prototype.send_message = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var account;
             return __generator(this, function (_a) {
@@ -64,54 +75,45 @@ var AuthController = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, AccountModel_1.AccountModel.findOne(1)];
                     case 1:
                         account = _a.sent();
-                        if (account)
-                            this.auth(account);
-                        else
-                            this.send_data(this.events.change_app_state, this.render('auth/123.pug'));
+                        console.log(account);
+                        if (!!account.address) return [3 /*break*/, 3];
+                        account.address = this.dxmpp.get_address();
+                        return [4 /*yield*/, account.save()];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3:
+                        this.send_data(this.events.change_app_state, this.render('main/main.pug', account));
                         return [2 /*return*/];
                 }
             });
         });
     };
     ;
-    AuthController.prototype.generate_mnemonic = function () {
-        this.send_data(this.events.generate_mnemonic, this.eth.generate_mnemonic());
-    };
-    ;
-    AuthController.prototype.auth = function (account) {
-        account.host = this.dxmpp_config.host;
-        account.jidhost = this.dxmpp_config.jidhost;
-        account.port = this.dxmpp_config.port;
-        this.dxmpp.connect(account);
-    };
-    AuthController.prototype.save_acc = function (data) {
+    MessagesController.prototype.received_message = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var account;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        account = new AccountModel_1.AccountModel();
-                        account.privKey = this.eth.generate_priv_key();
-                        account.privKeyLoom = "fwafawfawfwa";
-                        account.passphrase = data.mnemonic;
-                        account.domain = 'localhost';
-                        account.name = data.firstname + (data.lastname ? " " + data.lastname : "");
-                        account.firstname = data.firstname;
-                        account.lastname = data.lastname;
-                        account.bio = data.bio;
-                        account.avatar = data.avatar;
-                        return [4 /*yield*/, account.save()];
+                    case 0: return [4 /*yield*/, AccountModel_1.AccountModel.findOne(1)];
                     case 1:
+                        account = _a.sent();
+                        console.log(account);
+                        if (!!account.address) return [3 /*break*/, 3];
+                        account.address = this.dxmpp.get_address();
+                        return [4 /*yield*/, account.save()];
+                    case 2:
                         _a.sent();
-                        this.dxmpp.set_vcard(account.firstname, account.lastname, account.bio, account.avatar);
-                        this.auth(account);
+                        _a.label = 3;
+                    case 3:
+                        this.send_data(this.events.change_app_state, this.render('main/main.pug', account));
                         return [2 /*return*/];
                 }
             });
         });
     };
     ;
-    return AuthController;
+    return MessagesController;
 }(Controller));
-module.exports = AuthController;
-//# sourceMappingURL=AuthController.js.map
+module.exports = MessagesController;
+//# sourceMappingURL=MessagesController.js.map

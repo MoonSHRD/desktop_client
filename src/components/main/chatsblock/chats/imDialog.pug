@@ -4,5 +4,5 @@ li(id=id data-domain=domain data-type=type data-contract_address=contract_addres
     a(href='#/user/'+id)
         img(src=avatar, width='40', height='40')
         if type==='user_chat'
-            span(class="stateLabel "+online)
+            span(class="stateLabel "+(online?"online":"offline"))
         p #{name}

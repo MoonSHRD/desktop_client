@@ -1,38 +1,30 @@
-const {eth} = require('moonshard_core');
-const config=require(__dirname+'/../src/' + 'events&types');
-const models=require(config.paths.models+'models_list');
-const pug=require('pug');
-
-class Controller {
-    constructor(window) {
-        if (new.target === Controller) {
-            throw new TypeError("Cannot construct Abstract instances directly");
-        }
-        this._pug=pug;
-        this._window = window;
-        this._pug_options = config.pug_options;
+var _a = require('moonshard_core'), eth = _a.eth, dxmpp = _a.dxmpp;
+var config = require(__dirname + '/../src/events&types');
+var env = require(__dirname + '/../src/config');
+// const models=require(config.paths.models+'models_list');
+var pug = require('pug');
+var Controller = /** @class */ (function () {
+    function Controller(window) {
+        this.pug = pug;
+        this.window = window;
+        this.dxmpp = dxmpp.getInstance();
+        this.dxmpp_config = env;
+        this.pug_options = config.pug_options;
         this.paths = config.paths;
         this.events = config.events;
-        this.types = config.paths;
-        // this.sqlite = require(this.paths.storage+'dbup');
+        this.chat_types = config.chat_types;
+        this.general_chat_types = config.general_chat_types;
         this.eth = eth;
-        this._models = models;
-        // this._dxmpp = dxmpp;
-        // this._messaging = messaging;
     }
-
-    get_model(model){
-        // console.log(this.Controllers);
-        return this._models[model];
+    Controller.prototype.render = function (path, data) {
+        return this.pug.renderFile(this.paths.components + path, data, this.pug_options);
     };
-
-    render(path, data){
-        return this._pug.renderFile(this.paths.components + path, data, this._pug_options);
+    ;
+    Controller.prototype.send_data = function (event, data) {
+        this.window.webContents.send(event, data);
     };
-
-    send_data(event,data){
-        this._window.webContents.send(event, data);
-    };
-}
-
+    ;
+    return Controller;
+}());
 module.exports = Controller;
+//# sourceMappingURL=Controller.js.map

@@ -219,7 +219,8 @@ window.onload = function () {
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
-        // console.log(obj);
+        console.log(obj);
+        console.log('got user');
         // console.log($(`[data-id=${obj.type}]`).hasClass('active_menu'));
         // console.log(obj);
         if (

@@ -20,6 +20,14 @@ const chat_types = {
     join_group_chat: 'join_group_chat',
 };
 
+const general_chat_types = {
+    user: 'menu_user_chats',
+    group_chat: 'group_chat',
+    channel: 'channel',
+    join_channel: 'join_channel',
+    join_group_chat: 'join_group_chat',
+};
+
 const events = {
     change_app_state:"change_app_state",
     generate_mnemonic:"generate_mnemonic",
@@ -41,6 +49,7 @@ const events = {
 module.exports = {
     paths,
     chat_types,
+    general_chat_types,
     events,
     pug_options
 };

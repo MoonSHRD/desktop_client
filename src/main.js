@@ -4,7 +4,7 @@
 const {app, BrowserWindow} = require('electron');
 const locals = {/* ...*/};
 const setupPug = require('electron-pug');
-const Router = require('./router_new');
+const Router = require('./router_new1');
 
 app.on('ready', async () => {
     try {

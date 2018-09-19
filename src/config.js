@@ -5,4 +5,4 @@ const config={
     port				: 5222,
 };
 
-module.exports={config};
+module.exports=config;
