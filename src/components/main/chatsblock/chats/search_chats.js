@@ -1,7 +1,7 @@
 $('.searchInput').bind('input', function (e) {
     let group = $(this).val();
     if (!group) {
-        ipcRenderer.send('get_chats');
+        ipcRenderer.send('load_chats');
     } else {
         $('.chats ul').empty();
     }

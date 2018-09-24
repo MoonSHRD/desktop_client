@@ -1,10 +1,15 @@
 import "reflect-metadata";
 import {AccountModel} from "../../models/AccountModel";
-const Controller = require('../Controller');
+import {Controller} from "../Controller";
+import {UserModel} from "../../models/UserModel";
+// import {UserMessageModel} from "../../models/UserMessageModel";
+import {ChatModel} from "../../models/ChatModel";
+import {MessageModel} from "../../models/MessageModel";
 
 class AuthController extends Controller {
 
     async init_auth(){
+        // await this.generate_initial_chats();
         let account = await AccountModel.findOne(1);
         if (account)
             this.auth(account);
@@ -24,18 +29,44 @@ class AuthController extends Controller {
     }
 
     async save_acc(data){
+        const privKey=this.eth.generate_priv_key();
+        const address=this.eth.generate_address(privKey);
+
+        // let user_chat=new ChatModel();
+        // user_chat.type=this.chat_types.user;
+        // user_chat.id=address;
+        // await user_chat.save();
+
+        let user=new UserModel();
+        user.id=address;
+        user.domain='localhost';
+        user.self=true;
+        user.name=data.firstname+(data.lastname?" "+data.lastname:"");
+        user.firstname=data.firstname;
+        user.lastname=data.lastname;
+        user.bio=data.bio;
+        user.avatar=data.avatar;
+        // user.user_chat=user_chat;
+        await user.save();
+
         let account = new AccountModel();
-        account.privKey=this.eth.generate_priv_key();
+        account.privKey=privKey;
         account.privKeyLoom="fwafawfawfwa";
         account.passphrase=data.mnemonic;
-        account.domain='localhost';
-        account.name=data.firstname+(data.lastname?" "+data.lastname:"");
-        account.firstname=data.firstname;
-        account.lastname=data.lastname;
-        account.bio=data.bio;
-        account.avatar=data.avatar;
+        // account.domain='localhost';
+        // account.name=data.firstname+(data.lastname?" "+data.lastname:"");
+        // account.firstname=data.firstname;
+        // account.lastname=data.lastname;
+        // account.bio=data.bio;
+        // account.avatar=data.avatar;
+        account.user=user;
         await account.save();
-        this.dxmpp.set_vcard(account.firstname,account.lastname,account.bio,account.avatar);
+
+
+        // user_chat.
+        // user_chat.=
+
+        this.dxmpp.set_vcard(user.firstname,user.lastname,user.bio,user.avatar);
         this.auth(account);
     };
 }

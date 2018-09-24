@@ -1,9 +1,9 @@
 div(class="head_peer" id="head_peer")
     h3
-        a(class="peer_name" href='#'+ '/' + type + '/' + id)
+        a(class="peer_name" href='#')
             if (id)
                 img(src=avatar width=44 height=44)
-                |       #{chat_name}
+                |       #{name}
 
 
     if (type === "channel")
@@ -17,7 +17,7 @@ div(class="head_peer" id="head_peer")
 
 
 
-    if (type==="user_chat" || type==="group_chat" || (type==="channel" && role==="moderator"))
+    if (type==="user_chat" || type==="group" || (type==="channel" && role==="moderator"))
 
         div(class='dropDown_menu')
 
@@ -49,10 +49,11 @@ div(class="messaging_history" id="messaging_history")
     .tab-content
         #chat.tab-pane.fade.in.active.show(role='tabpanel')
             ul !{messages?messages:""}
+            //ul
             div(class="send_message_block")
                 if (type === "join_channel" || type === "join_group_chat")
                     include join_button
-                else if (type === "user_chat" || type === "group_chat" || (type === "channel" && role === "moderator"))
+                else if (type === "user_chat" || type === "group" || (type === "channel" && role === "moderator"))
                     textarea(class="send_message_input"  placeholder="текст сообщения")
                     button(class="send_message_btn" data-translate-key="SEND_MESSAGE") отправить
         #buzz.tab-pane.fade(role='tabpanel')
@@ -89,10 +90,10 @@ div(class="messaging_history" id="messaging_history")
                                 tbody
                                     tr
                                         th(scope='row') Channel name
-                                        td #{chat_name}
+                                        td #{name}
                                     tr
                                         th(scope='row') Token name
-                                        td #{chat_name}_token
+                                        td #{name}_token
                                     tr
                                         th(scope='row') Total supply
                                         td 100000

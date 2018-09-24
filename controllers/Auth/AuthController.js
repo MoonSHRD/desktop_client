@@ -50,7 +50,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 var AccountModel_1 = require("../../models/AccountModel");
-var Controller = require('../Controller');
+var Controller_1 = require("../Controller");
+var UserModel_1 = require("../../models/UserModel");
 var AuthController = /** @class */ (function (_super) {
     __extends(AuthController, _super);
     function AuthController() {
@@ -86,24 +87,43 @@ var AuthController = /** @class */ (function (_super) {
     };
     AuthController.prototype.save_acc = function (data) {
         return __awaiter(this, void 0, void 0, function () {
-            var account;
+            var privKey, address, user, account;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        privKey = this.eth.generate_priv_key();
+                        address = this.eth.generate_address(privKey);
+                        user = new UserModel_1.UserModel();
+                        user.id = address;
+                        user.domain = 'localhost';
+                        user.self = true;
+                        user.name = data.firstname + (data.lastname ? " " + data.lastname : "");
+                        user.firstname = data.firstname;
+                        user.lastname = data.lastname;
+                        user.bio = data.bio;
+                        user.avatar = data.avatar;
+                        // user.user_chat=user_chat;
+                        return [4 /*yield*/, user.save()];
+                    case 1:
+                        // user.user_chat=user_chat;
+                        _a.sent();
                         account = new AccountModel_1.AccountModel();
-                        account.privKey = this.eth.generate_priv_key();
+                        account.privKey = privKey;
                         account.privKeyLoom = "fwafawfawfwa";
                         account.passphrase = data.mnemonic;
-                        account.domain = 'localhost';
-                        account.name = data.firstname + (data.lastname ? " " + data.lastname : "");
-                        account.firstname = data.firstname;
-                        account.lastname = data.lastname;
-                        account.bio = data.bio;
-                        account.avatar = data.avatar;
+                        // account.domain='localhost';
+                        // account.name=data.firstname+(data.lastname?" "+data.lastname:"");
+                        // account.firstname=data.firstname;
+                        // account.lastname=data.lastname;
+                        // account.bio=data.bio;
+                        // account.avatar=data.avatar;
+                        account.user = user;
                         return [4 /*yield*/, account.save()];
-                    case 1:
+                    case 2:
                         _a.sent();
-                        this.dxmpp.set_vcard(account.firstname, account.lastname, account.bio, account.avatar);
+                        // user_chat.
+                        // user_chat.=
+                        this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
                         this.auth(account);
                         return [2 /*return*/];
                 }
@@ -112,6 +132,6 @@ var AuthController = /** @class */ (function (_super) {
     };
     ;
     return AuthController;
-}(Controller));
+}(Controller_1.Controller));
 module.exports = AuthController;
 //# sourceMappingURL=AuthController.js.map

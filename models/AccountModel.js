@@ -23,15 +23,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
+var UserModel_1 = require("./UserModel");
 var AccountModel = /** @class */ (function (_super) {
     __extends(AccountModel, _super);
     function AccountModel() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.privKeyLoom = "";
-        _this.address = "";
-        _this.lastname = "";
-        _this.bio = "";
-        _this.avatar = "";
         return _this;
     }
     __decorate([
@@ -51,33 +48,10 @@ var AccountModel = /** @class */ (function (_super) {
         __metadata("design:type", String)
     ], AccountModel.prototype, "passphrase", void 0);
     __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], AccountModel.prototype, "address", void 0);
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], AccountModel.prototype, "domain", void 0);
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], AccountModel.prototype, "name", void 0);
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], AccountModel.prototype, "firstname", void 0);
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], AccountModel.prototype, "lastname", void 0);
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], AccountModel.prototype, "bio", void 0);
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], AccountModel.prototype, "avatar", void 0);
+        typeorm_1.OneToOne(function (type) { return UserModel_1.UserModel; }, function (user) { return user.account; }),
+        typeorm_1.JoinColumn(),
+        __metadata("design:type", UserModel_1.UserModel)
+    ], AccountModel.prototype, "user", void 0);
     AccountModel = __decorate([
         typeorm_1.Entity()
     ], AccountModel);

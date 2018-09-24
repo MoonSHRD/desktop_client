@@ -49,62 +49,175 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
-var AccountModel_1 = require("../../models/AccountModel");
-// import {MessageModel} from "../../models/MessageModel";
-var Controller = require('../Controller');
+var UserModel_1 = require("../../models/UserModel");
+var Controller_1 = require("../Controller");
+var MessageModel_1 = require("../../models/MessageModel");
+var ChatModel_1 = require("../../models/ChatModel");
 var MessagesController = /** @class */ (function (_super) {
     __extends(MessagesController, _super);
     function MessagesController() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    MessagesController.prototype.get_user_messages = function (id) {
+    // private static async get_user_and_acc(id) {
+    //     let account = await AccountModel.findOne(1);
+    //     let userModel = await UserModel.findOne(id);
+    //     return {account, userModel}
+    // }
+    // async get_user_chat_messages(user) {
+    //     console.log("user id: "+user.id);
+    //     let self_info=await this.get_self_info();
+    //     let userModel = await UserModel.findOne(user.id);
+    //     let chat=await ChatModel.get_user_chat_with_messages(self_info.id,user.id);
+    //     // let messages = await ChatModel.get_user_chat_messages(self_info.id,userModel.id);
+    //
+    //     // console.log(userModel);
+    //     // userModel.type=this.chat_types.user;
+    //     let html = this.render('main/messagingblock/qqq.pug', chat);
+    //     this.send_data('reload_chat', html);
+    //
+    //     chat.messages.forEach((message) => {
+    //         this.render_message(message, self_info, userModel);
+    //     });
+    // };
+    MessagesController.prototype.get_chat_messages = function (chat_id) {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
-            });
-        });
-    };
-    ;
-    MessagesController.prototype.send_message = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var account;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, AccountModel_1.AccountModel.findOne(1)];
+            var chat, _a, html;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        console.log('get_chat_messages');
+                        return [4 /*yield*/, ChatModel_1.ChatModel.findOne(chat_id)];
                     case 1:
-                        account = _a.sent();
-                        console.log(account);
-                        if (!!account.address) return [3 /*break*/, 3];
-                        account.address = this.dxmpp.get_address();
-                        return [4 /*yield*/, account.save()];
-                    case 2:
-                        _a.sent();
-                        _a.label = 3;
+                        chat = _b.sent();
+                        _a = chat.type;
+                        switch (_a) {
+                            case this.chat_types.user: return [3 /*break*/, 2];
+                        }
+                        return [3 /*break*/, 4];
+                    case 2: return [4 /*yield*/, chat.get_user_chat_meta()];
                     case 3:
-                        this.send_data(this.events.change_app_state, this.render('main/main.pug', account));
+                        _b.sent();
+                        return [3 /*break*/, 4];
+                    case 4:
+                        html = this.render('main/messagingblock/qqq.pug', chat);
+                        // console.log(html);
+                        this.send_data('reload_chat', html);
+                        return [4 /*yield*/, this.render_chat_messages(chat_id)];
+                    case 5:
+                        _b.sent();
                         return [2 /*return*/];
                 }
             });
         });
     };
     ;
-    MessagesController.prototype.received_message = function (id) {
+    MessagesController.prototype.render_message = function (message, chat_id) {
         return __awaiter(this, void 0, void 0, function () {
-            var account;
+            var self_info, html, data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, AccountModel_1.AccountModel.findOne(1)];
+                    case 0: return [4 /*yield*/, this.get_self_info()];
                     case 1:
-                        account = _a.sent();
-                        console.log(account);
-                        if (!!account.address) return [3 /*break*/, 3];
-                        account.address = this.dxmpp.get_address();
-                        return [4 /*yield*/, account.save()];
-                    case 2:
-                        _a.sent();
-                        _a.label = 3;
+                        self_info = _a.sent();
+                        message.sender_avatar = message.sender.avatar;
+                        message.mine = (self_info.id === message.sender.id);
+                        html = this.render('main/messagingblock/message.pug', message);
+                        data = {
+                            id: chat_id,
+                            message: html,
+                        };
+                        this.send_data('received_message', data);
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    MessagesController.prototype.render_chat_messages = function (chat_id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var messages;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, MessageModel_1.MessageModel.get_chat_messages_with_sender(chat_id)];
+                    case 1:
+                        messages = _a.sent();
+                        messages.forEach(function (message) {
+                            // message.sender_avatar=message.sender.avatar;
+                            // message.mine=(self_info.id===message.sender.id);
+                            _this.render_message(message, chat_id);
+                        });
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    MessagesController.prototype.send_message = function (_a) {
+        var user = _a.user, text = _a.text, group = _a.group;
+        return __awaiter(this, void 0, void 0, function () {
+            var self_info, _b, chat, userModel, date, message;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0: return [4 /*yield*/, this.get_self_info()];
+                    case 1:
+                        self_info = _c.sent();
+                        _b = group;
+                        switch (_b) {
+                            case false: return [3 /*break*/, 2];
+                        }
+                        return [3 /*break*/, 7];
+                    case 2: return [4 /*yield*/, ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id)];
                     case 3:
-                        this.send_data(this.events.change_app_state, this.render('main/main.pug', account));
+                        chat = _c.sent();
+                        return [4 /*yield*/, UserModel_1.UserModel.findOne(user.id)];
+                    case 4:
+                        userModel = _c.sent();
+                        date = new Date();
+                        message = new MessageModel_1.MessageModel();
+                        message.sender = self_info;
+                        message.text = text;
+                        // message.time = this.dxmpp.take_time();
+                        message.time = date.getHours() + ":" + date.getMinutes();
+                        message.chat = chat;
+                        return [4 /*yield*/, message.save()];
+                    case 5:
+                        _c.sent();
+                        // todo: check if it's nessesary.
+                        // user.messages.push(message);
+                        // await user.save();
+                        this.dxmpp.send(userModel, text, false);
+                        return [4 /*yield*/, this.render_message(message, chat.id)];
+                    case 6:
+                        _c.sent();
+                        return [3 /*break*/, 7];
+                    case 7: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ;
+    MessagesController.prototype.received_message = function (user, text) {
+        return __awaiter(this, void 0, void 0, function () {
+            var self_info, userModel, chat, message;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.get_self_info()];
+                    case 1:
+                        self_info = _a.sent();
+                        return [4 /*yield*/, UserModel_1.UserModel.findOne(user.id)];
+                    case 2:
+                        userModel = _a.sent();
+                        return [4 /*yield*/, ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id)];
+                    case 3:
+                        chat = _a.sent();
+                        message = new MessageModel_1.MessageModel();
+                        message.text = text;
+                        message.sender = userModel;
+                        message.chat = chat;
+                        message.time = this.dxmpp.take_time();
+                        return [4 /*yield*/, message.save()];
+                    case 4:
+                        _a.sent();
+                        this.render_message(message, chat.id);
                         return [2 /*return*/];
                 }
             });
@@ -112,6 +225,6 @@ var MessagesController = /** @class */ (function (_super) {
     };
     ;
     return MessagesController;
-}(Controller));
+}(Controller_1.Controller));
 module.exports = MessagesController;
 //# sourceMappingURL=MessagesController.js.map

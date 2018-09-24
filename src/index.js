@@ -47,11 +47,11 @@ window.onload = function () {
         console.log('autyh');
         $('#view').html(arg);
         $.html5Translate(dict, 'en');
-        setTimeout(()=>{
-            console.log('click');
-            console.log($('#0x0000000000000000000000000000000000000000').attr('data-domain'));
-            $('#0x0000000000000000000000000000000000000000').trigger("click");
-        },100);
+        // setTimeout(()=>{
+        //     console.log('click');
+        //     console.log($('#0x0000000000000000000000000000000000000000').attr('data-domain'));
+        //     $('#0x0000000000000000000000000000000000000000').trigger("click");
+        // },100);
     });
 
     // $(document).on('click', '#generate_mnemonic', function () {
@@ -188,14 +188,14 @@ window.onload = function () {
             msg_input.val('');
             return;
         }
-        let date = new Date();
         let active_dialog = $('.active_dialog');
         const obj = {
-            id: active_dialog.attr('id'),
-            domain: active_dialog.attr('data-domain'),
+            user:{
+                id: active_dialog.attr('id'),
+                domain: active_dialog.attr('data-domain'),
+            },
             text: msg_input.val().trim(),
             group: $('.active_dialog').attr('data-type')==='channel',
-            time: `${date.getHours()}:${date.getMinutes()}`
         };
         msg_input.val('');
 
@@ -213,7 +213,7 @@ window.onload = function () {
 
     ipcRenderer.on('received_message', (event, obj) => {
         console.log(obj)
-        if ($('.active_dialog').attr('id') === obj.jid) {
+        if ($('.active_dialog').attr('id') === obj.id) {
             $('.messaging_history ul').append(obj.message);
         }
     });
@@ -269,19 +269,21 @@ window.onload = function () {
         const $this=$(this);
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
         $('.messaging_history ul').empty();
+        // let chat = {id:$this.attr('id'),domain:$this.attr('domain')};
+        let chat = $this.attr('id');
         switch ($this.attr('data-type')) {
             case chat_types.join_channel:
-                ipcRenderer.send('join_channel_html', {id:$this.attr('id'),domain:$this.attr('domain')});
+                ipcRenderer.send('join_channel_html', chat);
                 console.log('pre join');
                 break;
             case chat_types.user:
-                ipcRenderer.send('get_chat_msgs', {id:$this.attr('id'), full_name:$this.text()});
+                ipcRenderer.send('get_chat_msgs', chat);
                 console.log("1");
 
                 break;
             case chat_types.channel:
                 console.log("2");
-                ipcRenderer.send('get_channel_msgs', {id:$this.attr('id')});
+                ipcRenderer.send('get_channel_msgs', chat);
                 break;
         }
     });
@@ -293,7 +295,7 @@ window.onload = function () {
     //     if ($('.active_menu').attr('data-id')!=='menu_chats') return;
     //     let group = $('input').val();
     //     if (!group){
-    //         ipcRenderer.send('get_chats');
+    //         ipcRenderer.send('load_chats');
     //     }
     //     if (group.length > 2) {
     //         ipcRenderer.send('find_groups', group);
@@ -353,9 +355,11 @@ window.onload = function () {
     });
 
     $(document).on('click', '.peer_name', function () {
-        const $this=$(this);
-        let data = $this.attr('href');
-        ipcRenderer.send('show_popup', data.split('/'));
+        const active_dialog = $('.active_dialog');
+        const id = active_dialog.attr('id');
+        const type=active_dialog.attr('data-type');
+        // let data = $this.attr('href');
+        ipcRenderer.send('show_popup', {id,type});
     });
 
     $(document).on('click', '[data-name=submit_suggest_to_channel]', function () {

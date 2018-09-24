@@ -23,7 +23,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
-var UserMessageModel_1 = require("./UserMessageModel");
+var ChatModel_1 = require("./ChatModel");
+var MessageModel_1 = require("./MessageModel");
 var UserModel = /** @class */ (function (_super) {
     __extends(UserModel, _super);
     function UserModel() {
@@ -33,10 +34,9 @@ var UserModel = /** @class */ (function (_super) {
         _this.lastname = '';
         _this.bio = '';
         _this.avatar = '';
+        _this.online = false;
+        _this.self = false;
         return _this;
-        // @ManyToMany(type => ChatModel)
-        // @JoinTable()
-        // chats: ChatModel[];
     }
     __decorate([
         typeorm_1.PrimaryColumn(),
@@ -71,9 +71,18 @@ var UserModel = /** @class */ (function (_super) {
         __metadata("design:type", Boolean)
     ], UserModel.prototype, "online", void 0);
     __decorate([
-        typeorm_1.OneToMany(function (type) { return UserMessageModel_1.UserMessageModel; }, function (message) { return message.sender; }),
+        typeorm_1.Column(),
+        __metadata("design:type", Boolean)
+    ], UserModel.prototype, "self", void 0);
+    __decorate([
+        typeorm_1.OneToMany(function (type) { return MessageModel_1.MessageModel; }, function (message) { return message.chat; }),
         __metadata("design:type", Array)
     ], UserModel.prototype, "messages", void 0);
+    __decorate([
+        typeorm_1.ManyToMany(function (type) { return ChatModel_1.ChatModel; }),
+        typeorm_1.JoinTable(),
+        __metadata("design:type", Array)
+    ], UserModel.prototype, "chats", void 0);
     UserModel = __decorate([
         typeorm_1.Entity()
     ], UserModel);

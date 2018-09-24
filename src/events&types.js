@@ -14,7 +14,7 @@ const pug_options = {
 
 const chat_types = {
     user: 'user_chat',
-    group_chat: 'group_chat',
+    group_chat: 'group',
     channel: 'channel',
     join_channel: 'join_channel',
     join_group_chat: 'join_group_chat',
@@ -22,7 +22,7 @@ const chat_types = {
 
 const general_chat_types = {
     user: 'menu_user_chats',
-    group_chat: 'group_chat',
+    group_chat: 'group',
     channel: 'channel',
     join_channel: 'join_channel',
     join_group_chat: 'join_group_chat',
