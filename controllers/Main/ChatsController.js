@@ -312,21 +312,23 @@ var ChatsController = /** @class */ (function (_super) {
         });
     };
     ChatsController.prototype.subscribe = function (user) {
-        console.log("subscribing to user " + user.id);
-        this.dxmpp.subscribe(user);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                console.log("subscribing to user " + user.id);
+                this.dxmpp.subscribe(user);
+                return [2 /*return*/];
+            });
+        });
     };
     ChatsController.prototype.user_subscribed = function (user) {
         return __awaiter(this, void 0, void 0, function () {
-            var check;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, UserModel_1.UserModel.findOne(user.id)];
-                    case 1:
-                        check = _a.sent();
-                        if (!check)
-                            this.subscribe(user);
-                        return [2 /*return*/];
-                }
+                // console.log(user);
+                // await setTimeout(null,500);
+                // let check = await UserModel.findOne(user.id);
+                // if (!check)
+                this.dxmpp.acceptSubscription(user);
+                return [2 /*return*/];
             });
         });
     };

@@ -120,7 +120,7 @@ class Router {
         });
 
         this.listen_event(this.ipcMain, 'send_subscribe', async (event, data) => {
-            await this.controller_register.run_controller('ChatsController', `subscribe`, data);
+            await this.controller_register.run_controller('ChatsController', 'subscribe', data);
         });
 
         this.listen_event(this.ipcMain, 'get_my_vcard', async () => {

@@ -223,7 +223,7 @@ var Router = /** @class */ (function () {
         this.listen_event(this.ipcMain, 'send_subscribe', function (event, data) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.run_controller('ChatsController', "subscribe", data)];
+                    case 0: return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'subscribe', data)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];

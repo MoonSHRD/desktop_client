@@ -149,7 +149,7 @@ class ChatsController extends Controller {
         await this.load_chat(chat, this.chat_to_menu.user);
     }
 
-    subscribe(user) {
+    async subscribe(user) {
         console.log(`subscribing to user ${user.id}`);
         this.dxmpp.subscribe(user);
     }
@@ -157,9 +157,9 @@ class ChatsController extends Controller {
     async user_subscribed(user) {
         // console.log(user);
         // await setTimeout(null,500);
-        let check = await UserModel.findOne(user.id);
-        if (!check)
-            this.subscribe(user)
+        // let check = await UserModel.findOne(user.id);
+        // if (!check)
+        this.dxmpp.acceptSubscription(user);
     }
 }
 
