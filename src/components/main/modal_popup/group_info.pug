@@ -1,26 +1,155 @@
 style
     include modal-content.css
-.modal-header
-    h5.modal-title #{name}
-    button.close(type='button', data-dismiss='modal', aria-label='Close')
-        span(aria-hidden='true') ×
+//.modal-header
+//    //h5.modal-title #{name}
+//    button.close(type='button', data-dismiss='modal', aria-label='Close')
+//        span(aria-hidden='true') ×
 .modal-body
-    .container
-        .row
-            .col-sm-3
-                img.rounded-circle(src=avatar width=128 height=128)
-            .col-sm
-                table.table
-                    tbody
-                        tr
-                            th(scope='row') Channel name
-                            td #{name}
-                        tr
-                            th(scope='row') Token name
-                            td #{name}_token
-                        tr
-                            th(scope='row') Total supply
-                            td 100000
+    .container.scrollbar#style-10(style='overflow-y: scroll; height: 630px')
+        .row.m-0.groupInfoHeader
+            .gradient
+            .col-sm-3.text-left
+                img.mr-3(src='components/main/modal_popup/img/portfol.png')
+                p.m-0(style='line-height: 1') Share Your News
+            .col-sm-4.offset-sm-1.text-center(style='margin-top: -60px')
+                img.rounded-circle(src=avatar width=80 height=80)
+                h5.modal-title #{name}
+            .col-sm-3.offset-sm-1.text-left
+                img.mr-3(src='components/main/modal_popup/img/bell.png')
+                p.m-0(style='line-height: 1') Switch on notifications
+
+        .row.m-4(style='margin-top: 70px !important')
+            .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                img(src='components/main/modal_popup/img/leave.png')
+                p.m-0.ml-3(style="color: #2BC2F9") Leave a group
+
+        .row.m-0.justify-content-around
+            .col-sm-5
+                .row.cardInfo
+                    .col-sm-6
+                        p.my-3
+                            b Token name
+                        p.my-3
+                            b Total supply
+                    .col-sm-6
+                        p.my-3 gordon_token
+                        p.my-3 100 000
+            .col-sm-5
+                .row.cardInfo
+                    .col-sm-6
+                        p.my-3
+                            b Section
+                        p.my-3
+                            b.mt-0 Category
+                    .col-sm-6
+                        p.my-3 Celebrities
+                        p.my-3 Culture
+
+        .row.mx-0.my-5.justify-content-around
+            .col-sm-5.p-0
+                button.showOnMapChannel.col-sm-12 Show On a Map
+
+            .col-sm-5.p-0
+                button.calendarChannel.col-sm-12 Сalendar of events
+
+
+
+        .row.m-0
+            .col-sm-12.text-left
+                p
+                    b Gallery
+                div.slick
+                    div
+                        //h1 1
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                    div
+                        //h1 2
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                    div
+                        //h1 3
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+                    div
+                        //h1 4
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+                    div
+                        //h1 5
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+                    div
+                        //h1 6
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+        .row.m-4
+            .col-sm-5.p-0
+                input.serchInChannel.col-sm-12(placeholder="search")
+
+        .row.m-4
+            .col-sm-5.p-0
+                p
+                    b Participants
+                .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
+                    img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
+                    p.m-0 Alexandr Gordon
+                    img(src='components/main/modal_popup/img/chats.png')
+
+                .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
+                    img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
+                    p.m-0 Gordon
+                    img(src='components/main/modal_popup/img/chats.png')
+
+                .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
+                    img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
+                    p.m-0 Alexandr
+                    img(src='components/main/modal_popup/img/chats.png' style='visibility: hidden')
+
+
+
+            .col-sm-5.p-0.offset-2
+                p
+                    b Goals
+                .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                    | #administrator
+
+                .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                    p.m-0(style="color: #2BC2F9") #fan #journalist #getanautograph
+
+                .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                    p.m-0(style="color: #2BC2F9") #blogger
+            //    .col-sm-6.p-0
+            //
+            //        p Alexandr Gordon
+            //        p Alexandr Gordon
+            //    .col-sm-2.p-0
+            //        img(src='components/main/modal_popup/img/chats.png')
+            //        img(src='components/main/modal_popup/img/chats.png')
+            //        img(src='components/main/modal_popup/img/chats.png')
+            //.col-sm-5.p-0
+            //    p Goals
+            //    input.serchInChannel.col-sm-12(placeholder="search")
+            //    .row.shadow
+            //        .col-sm-6
+            //            p Section
+            //            p Category
+            //        .col-sm-6
+            //            p Celebrities
+            //            p Culture
+            //.col-sm-6
+
+
+            //.col-sm
+            //    table.table
+            //        tbody
+            //            tr
+            //                th(scope='row') Channel name
+            //                td #{name}
+            //            tr
+            //                th(scope='row') Token name
+            //                td #{name}_token
+            //            tr
+            //                th(scope='row') Total supply
+            //                td 100000
 
 //.modal-footer
 //    .container
@@ -35,3 +164,5 @@ style
 //                .col-sm-4
 //                    button(class='btn btn-primary col-sm-12' ) Suggest publication
 
+script
+    include script.js

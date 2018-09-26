@@ -1,8 +1,5 @@
 //include coming_soon/coming soon
 case state
-    default
-        include chatsblock/chatsblock.pug
-        include messagingblock/messagingblock.pug
     when "menu_chats"
         //.alert.alert-success.alert-dismissable
         //    button.close.pl-2(type='button', data-dismiss='alert', aria-hidden='true') ×
@@ -11,4 +8,7 @@ case state
         include messagingblock/messagingblock.pug
     when "menu_under_construction"
         include coming_soon/come_soon1
+    default
+        include chatsblock/chatsblock.pug
+        include messagingblock/messagingblock.pug
 

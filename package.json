@@ -7,6 +7,7 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "start": "electron .",
+    "start_up": "npm install | ./node_modules/.bin/electron-rebuild  -f -w sqlite3",
     "package-linux": "electron-packager . Moonshard --overwrite --asar=true --platform=linux --arch=x64 --prune=true --out=release-builds --version-string.ProductName=\"Moonshard\"",
     "package-win32": "electron-packager . Moonshard --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Moonshard\"",
     "package-win64": "electron-packager . Moonshard --overwrite --asar=true --platform=win32 --arch=x64 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Moonshard\""
@@ -57,6 +58,7 @@
     "pug": "^2.0.3",
     "qbox": "^0.1.7",
     "react": "^16.4.2",
+    "slick-carousel": "^1.8.1",
     "sqlite3": "^4.0.2",
     "typeorm": "^0.2.7",
     "web3": "^1.0.0-beta.36"
