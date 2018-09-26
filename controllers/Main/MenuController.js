@@ -130,7 +130,7 @@ var MenuController = /** @class */ (function (_super) {
                         //     include chatsblock/chatsblock.pug
                         // include messagingblock/messagingblock.pug
                         this.send_data('change_menu_state', html);
-                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user)];
+                        return [4 /*yield*/, this.controller_register.run_controller_synchronously('ChatsController', 'load_chats', this.chat_types.user)];
                     case 2:
                         _a.sent();
                         return [2 /*return*/];
@@ -149,12 +149,13 @@ var MenuController = /** @class */ (function (_super) {
                         fafa = new UserModel_1.UserModel();
                         fafa.avatar = self_info.avatar;
                         fafa.name = self_info.name;
+                        fafa.state = this.chat_to_menu.group;
                         html = this.render('main/chatsblock/chatsblock.pug', fafa) +
                             this.render('main/messagingblock/messagingblock.pug');
                         //     include chatsblock/chatsblock.pug
                         // include messagingblock/messagingblock.pug
                         this.send_data('change_menu_state', html);
-                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.group)];
+                        return [4 /*yield*/, this.controller_register.run_controller_synchronously('ChatsController', 'load_chats', this.chat_types.group)];
                     case 2:
                         _a.sent();
                         return [2 /*return*/];
@@ -272,11 +273,11 @@ var MenuController = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.get_self_info()];
                     case 1:
                         self_info = _a.sent();
-                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user, first)];
+                        return [4 /*yield*/, this.controller_register.run_controller_synchronously('ChatsController', 'load_chats', this.chat_types.user, first)];
                     case 2:
                         _a.sent();
                         if (!first) return [3 /*break*/, 4];
-                        return [4 /*yield*/, this.controller_register.run_controller('MessagesController', 'get_chat_messages', '0x0000000000000000000000000000000000000000_' + self_info.id)];
+                        return [4 /*yield*/, this.controller_register.run_controller_synchronously('MessagesController', 'get_chat_messages', '0x0000000000000000000000000000000000000000_' + self_info.id)];
                     case 3:
                         _a.sent();
                         _a.label = 4;

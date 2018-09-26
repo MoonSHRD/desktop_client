@@ -48,8 +48,8 @@ class MenuController extends Controller {
         //     include chatsblock/chatsblock.pug
         // include messagingblock/messagingblock.pug
         this.send_data('change_menu_state', html);
-        await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
-        // this.init_controller('MessagesController', 'get_chat_messages', this.chat_types.user);
+        await this.controller_register.run_controller_synchronously('ChatsController', 'load_chats', this.chat_types.user);
+        // this.controller_register.run_controller_synchronously('MessagesController', 'get_chat_messages', this.chat_types.user);
     }
 
     private async load_menu_chats(account) {
@@ -57,6 +57,7 @@ class MenuController extends Controller {
         let fafa = new UserModel();
         fafa.avatar = self_info.avatar;
         fafa.name = self_info.name;
+        fafa.state = this.chat_to_menu.group;
         // self_info.state="menu_user_chats";
         // console.log(self_info);
         let html = this.render('main/chatsblock/chatsblock.pug', fafa) +
@@ -64,8 +65,8 @@ class MenuController extends Controller {
         //     include chatsblock/chatsblock.pug
         // include messagingblock/messagingblock.pug
         this.send_data('change_menu_state', html);
-        await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.group);
-        // this.init_controller('MessagesController', 'get_chat_messages', this.chat_types.user);
+        await this.controller_register.run_controller_synchronously('ChatsController', 'load_chats', this.chat_types.group);
+        // this.controller_register.run_controller_synchronously('MessagesController', 'get_chat_messages', this.chat_types.user);
     }
 
 
@@ -158,9 +159,9 @@ class MenuController extends Controller {
     private async load_menu_initial(first: boolean = false) {
         console.log('load_menu_default');
         let self_info = await this.get_self_info();
-        await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user, first);
+        await this.controller_register.run_controller_synchronously('ChatsController', 'load_chats', this.chat_types.user, first);
         if (first) {
-            await this.controller_register.run_controller('MessagesController', 'get_chat_messages', '0x0000000000000000000000000000000000000000_' + self_info.id);
+            await this.controller_register.run_controller_synchronously('MessagesController', 'get_chat_messages', '0x0000000000000000000000000000000000000000_' + self_info.id);
         }
     }
 

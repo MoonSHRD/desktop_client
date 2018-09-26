@@ -18,6 +18,7 @@ class Router {
     readonly ipcMain: any;
     readonly dxmpp: any;
     private events: any;
+    private connecting: boolean=false;
     private types: any;
     readonly Controllers: any;
 
@@ -90,6 +91,7 @@ class Router {
 
         this.listen_event(this.dxmpp, 'online', async (data) => {
             console.log('jackal connected');
+            console.log(data);
             this.online = true;
             await this.controller_register.run_controller('MenuController', 'init_main');
         });
@@ -97,10 +99,20 @@ class Router {
         this.listen_event(this.dxmpp, 'close', async () => {
             console.log('jackal disconnected');
             this.online = false;
-            while (!this.online) {
-                setTimeout(async () => {
-                    await this.controller_register.run_controller('AuthController', 'init_auth');
-                }, 2000);
+
+            function sleep(ms){
+                return new Promise(resolve=>{
+                    setTimeout(resolve,ms)
+                });
+            }
+
+            while (!this.online){
+                if (this.connecting) return;
+                this.connecting=true;
+
+                await this.controller_register.run_controller('AuthController', 'init_auth');
+                await sleep(5000);
+                this.connecting=false;
             }
         });
 
@@ -140,8 +152,33 @@ class Router {
         });
 
         this.listen_event(this.ipcMain, 'show_popup', async (event, arg) => {
-            console.log(arg);
+            // console.log(arg);
             await this.controller_register.run_controller('ChatsController', 'show_chat_info', arg);
+        });
+
+        this.listen_event(this.ipcMain, 'find_groups', async (event, group_name) => {
+            console.log('finding groups');
+            await this.controller_register.run_controller('ChatsController', 'find_groups', group_name);
+        });
+
+        this.listen_event(this.ipcMain, 'create_group', async (event, group_name) => {
+            console.log('creating group');
+            await this.controller_register.run_controller('ChatsController', 'create_group', group_name);
+        });
+
+        this.listen_event(this.ipcMain, 'join_channel', async (event, chat) => {
+            console.log('creating group');
+            await this.controller_register.run_controller('ChatsController', 'join_chat', chat);
+        });
+
+        this.listen_event(this.dxmpp, 'find_groups', async (result) => {
+            console.log('groups found');
+            await this.controller_register.run_controller('ChatsController', 'found_groups', result);
+        });
+
+        this.listen_event(this.dxmpp, 'joined_room', async (room_data) => {
+            console.log(`joined ${room_data.name} as ${room_data.role}`);
+            await this.controller_register.run_controller('ChatsController', 'joined_room', room_data);
         });
 
         this.listen_event(this.dxmpp, 'subscribe', async (user) => {
@@ -152,6 +189,16 @@ class Router {
         this.listen_event(this.dxmpp, 'chat', async (user, message) => {
             console.log(`user ${user.id} subscribed`);
             await this.controller_register.run_controller('MessagesController', 'received_message', user, message);
+        });
+
+        this.listen_event(this.dxmpp, 'user_joined_room', async (user, room_data) => {
+            console.log(`user ${user.id} joined room ${room_data.id}`);
+            await this.controller_register.run_controller('ChatsController', 'user_joined_room', user, room_data);
+        });
+
+        this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, stamp) => {
+            console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
+            await this.controller_register.run_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
         });
     }
 }

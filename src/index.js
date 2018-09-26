@@ -8,8 +8,6 @@ const dict = require('./langs/lang');
 
 window.onload = function () {
 
-
-
     $.html5Translate = function(dict, lang){
 
         $('[data-translate-key]').each(function(){
@@ -17,8 +15,6 @@ window.onload = function () {
         });
 
     };
-
-
 
     $(document).on('click','[data-id=menu_user_chats]',function () {
         const type = $(this).attr('data-id');
@@ -189,7 +185,7 @@ window.onload = function () {
             return;
         }
         let active_dialog = $('.active_dialog');
-        const obj = {
+        let obj = {
             user:{
                 id: active_dialog.attr('id'),
                 domain: active_dialog.attr('data-domain'),
@@ -197,9 +193,11 @@ window.onload = function () {
             text: msg_input.val().trim(),
             group: $('.active_dialog').attr('data-type')==='channel',
         };
-        msg_input.val('');
 
-        ipcRenderer.send("send_message", obj)
+        obj={id: active_dialog.attr('id'),text: msg_input.val().trim()};
+        // console.log(obj);
+        ipcRenderer.send("send_message", obj);
+        msg_input.val('');
     });
 
     ipcRenderer.on('add_out_msg', (event, obj) => {
@@ -219,8 +217,8 @@ window.onload = function () {
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
-        console.log(obj);
-        console.log('got user');
+        // console.log(obj);
+        // console.log('got user');
         // console.log($(`[data-id=${obj.type}]`).hasClass('active_menu'));
         // console.log(obj);
         if (
@@ -271,21 +269,22 @@ window.onload = function () {
         $('.messaging_history ul').empty();
         // let chat = {id:$this.attr('id'),domain:$this.attr('domain')};
         let chat = $this.attr('id');
-        switch ($this.attr('data-type')) {
-            case chat_types.join_channel:
-                ipcRenderer.send('join_channel_html', chat);
-                console.log('pre join');
-                break;
-            case chat_types.user:
-                ipcRenderer.send('get_chat_msgs', chat);
-                console.log("1");
-
-                break;
-            case chat_types.channel:
-                console.log("2");
-                ipcRenderer.send('get_channel_msgs', chat);
-                break;
-        }
+        ipcRenderer.send('get_chat_msgs', chat);
+        // switch ($this.attr('data-type')) {
+        //     case chat_types.join_channel:
+        //         ipcRenderer.send('join_channel_html', chat);
+        //         console.log('pre join');
+        //         break;
+        //     case chat_types.user:
+        //         ipcRenderer.send('get_chat_msgs', chat);
+        //         console.log("1");
+        //
+        //         break;
+        //     case chat_types.channel:
+        //         console.log("2");
+        //         ipcRenderer.send('get_channel_msgs', chat);
+        //         break;
+        // }
     });
 
 
@@ -317,7 +316,8 @@ window.onload = function () {
     });
 
     ipcRenderer.on('found_chats', (event, data) => {
-        $('.chats ul').html(data);
+        // console.log(data);
+        $('.chats ul').append(data);
     });
 
     ipcRenderer.on('load_chat', (event, data) => {

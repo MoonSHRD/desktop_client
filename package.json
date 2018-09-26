@@ -39,6 +39,7 @@
   "license": "CC0-1.0",
   "dependencies": {
     "animate.css": "^3.7.0",
+    "better-queue": "^3.8.10",
     "bootstrap": "^4.1.3",
     "bootstrap-notify": "^3.1.3",
     "electron-packager": "^12.1.0",
@@ -50,7 +51,7 @@
     "l20n": "^5.0.0",
     "loom-js": "^1.4.3",
     "loom-truffle-provider": "^0.5.0",
-    "moonshard_core": "^0.1.24",
+    "moonshard_core": "^0.1.25",
     "peer-id": "^0.11.0",
     "popper.js": "^1.14.4",
     "pug": "^2.0.3",

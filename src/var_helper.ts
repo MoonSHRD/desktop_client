@@ -17,8 +17,6 @@ const chat_types = {
     group: 'group_chat',
     // group_chat: 'group',
     // channel: 'channel',
-    // join_channel: 'join_channel',
-    // join_group_chat: 'join_group_chat',
 };
 
 const chat_to_menu = {
@@ -32,6 +30,8 @@ const chat_to_menu = {
 const group_chat_types = {
     group: 'group',
     channel: 'channel',
+    join_group: 'join_group',
+    join_channel: 'join_channel',
 };
 
 // const menues
@@ -53,6 +53,7 @@ const events = {
     find_groups: "find_groups",
     received_vcard: "received_vcard",
     get_my_vcard: "get_my_vcard",
+    reload_chat: "reload_chat",
 };
 
 export const helper = {

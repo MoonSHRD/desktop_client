@@ -23,6 +23,8 @@ var chat_to_menu = {
 var group_chat_types = {
     group: 'group',
     channel: 'channel',
+    join_group: 'join_group',
+    join_channel: 'join_channel',
 };
 // const menues
 var events = {
@@ -42,6 +44,7 @@ var events = {
     find_groups: "find_groups",
     received_vcard: "received_vcard",
     get_my_vcard: "get_my_vcard",
+    reload_chat: "reload_chat",
 };
 exports.helper = {
     paths: paths,

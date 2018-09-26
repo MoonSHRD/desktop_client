@@ -79,6 +79,18 @@ var MessagesController = /** @class */ (function (_super) {
     //         this.render_message(message, self_info, userModel);
     //     });
     // };
+    MessagesController.prototype.load_join_chat = function (chat_id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var q_chats, chat;
+            return __generator(this, function (_a) {
+                q_chats = this.controller_register.get_controller_parameter('ChatsController', 'queried_chats');
+                chat = q_chats[chat_id];
+                chat.type = this.group_chat_types.join_channel;
+                this.send_data(this.events.reload_chat, this.render('main/messagingblock/qqq.pug', chat));
+                return [2 /*return*/];
+            });
+        });
+    };
     MessagesController.prototype.get_chat_messages = function (chat_id) {
         return __awaiter(this, void 0, void 0, function () {
             var chat, _a, html;
@@ -89,6 +101,9 @@ var MessagesController = /** @class */ (function (_super) {
                         return [4 /*yield*/, ChatModel_1.ChatModel.findOne(chat_id)];
                     case 1:
                         chat = _b.sent();
+                        // ChatModel.
+                        if (!chat)
+                            return [2 /*return*/, this.load_join_chat(chat_id)];
                         _a = chat.type;
                         switch (_a) {
                             case this.chat_types.user: return [3 /*break*/, 2];
@@ -152,44 +167,44 @@ var MessagesController = /** @class */ (function (_super) {
         });
     };
     MessagesController.prototype.send_message = function (_a) {
-        var user = _a.user, text = _a.text, group = _a.group;
+        var id = _a.id, text = _a.text;
         return __awaiter(this, void 0, void 0, function () {
-            var self_info, _b, chat, userModel, date, message;
+            var self_info, chat, date, message, group, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0: return [4 /*yield*/, this.get_self_info()];
                     case 1:
                         self_info = _c.sent();
-                        _b = group;
-                        switch (_b) {
-                            case false: return [3 /*break*/, 2];
-                        }
-                        return [3 /*break*/, 7];
-                    case 2: return [4 /*yield*/, ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id)];
-                    case 3:
+                        return [4 /*yield*/, ChatModel_1.ChatModel.findOne(id)];
+                    case 2:
                         chat = _c.sent();
-                        return [4 /*yield*/, UserModel_1.UserModel.findOne(user.id)];
-                    case 4:
-                        userModel = _c.sent();
                         date = new Date();
                         message = new MessageModel_1.MessageModel();
                         message.sender = self_info;
                         message.text = text;
-                        // message.time = this.dxmpp.take_time();
                         message.time = date.getHours() + ":" + date.getMinutes();
                         message.chat = chat;
                         return [4 /*yield*/, message.save()];
+                    case 3:
+                        _c.sent();
+                        if (!(chat.type === this.chat_types.user)) return [3 /*break*/, 5];
+                        _b = chat;
+                        return [4 /*yield*/, chat.get_user_chat_meta()];
+                    case 4:
+                        _b.id = _c.sent();
+                        group = false;
+                        return [3 /*break*/, 6];
                     case 5:
-                        _c.sent();
-                        // todo: check if it's nessesary.
-                        // user.messages.push(message);
-                        // await user.save();
-                        this.dxmpp.send(userModel, text, false);
-                        return [4 /*yield*/, this.render_message(message, chat.id)];
+                        if (Object.values(this.group_chat_types).includes(chat.type)) {
+                            group = true;
+                        }
+                        _c.label = 6;
                     case 6:
+                        this.dxmpp.send(chat, text, group);
+                        return [4 /*yield*/, this.render_message(message, id)];
+                    case 7:
                         _c.sent();
-                        return [3 /*break*/, 7];
-                    case 7: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });
@@ -217,7 +232,44 @@ var MessagesController = /** @class */ (function (_super) {
                         return [4 /*yield*/, message.save()];
                     case 4:
                         _a.sent();
-                        this.render_message(message, chat.id);
+                        return [4 /*yield*/, this.render_message(message, chat.id)];
+                    case 5:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ;
+    MessagesController.prototype.received_group_message = function (room_data, message, sender, stamp) {
+        return __awaiter(this, void 0, void 0, function () {
+            var self_info, userModel, chat, messageModel;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.get_self_info()];
+                    case 1:
+                        self_info = _a.sent();
+                        if (self_info.id === sender.address)
+                            return [2 /*return*/];
+                        if (!sender) return [3 /*break*/, 3];
+                        return [4 /*yield*/, UserModel_1.UserModel.findOne(sender.address)];
+                    case 2:
+                        userModel = _a.sent();
+                        _a.label = 3;
+                    case 3: return [4 /*yield*/, ChatModel_1.ChatModel.findOne(room_data.id)];
+                    case 4:
+                        chat = _a.sent();
+                        messageModel = new MessageModel_1.MessageModel();
+                        messageModel.text = message;
+                        messageModel.sender = userModel;
+                        messageModel.chat = chat;
+                        messageModel.time = stamp ? stamp : this.dxmpp.take_time();
+                        return [4 /*yield*/, messageModel.save()];
+                    case 5:
+                        _a.sent();
+                        return [4 /*yield*/, this.render_message(messageModel, chat.id)];
+                    case 6:
+                        _a.sent();
                         return [2 /*return*/];
                 }
             });

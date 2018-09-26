@@ -73,7 +73,7 @@ export abstract class Controller {
         this.window.webContents.send(event, data);
     };
 
-    // protected async init_controller(controller, func, data: any = null) {
-    //     return await this.controller_register.run_controller(controller, func, data);
+    // protected async init_controller(controller, func, ...args) {
+    //     return await this.controller_register.run_controller_synchronously(controller, func, ...args);
     // };
 }

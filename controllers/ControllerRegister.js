@@ -35,6 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var Queue = require("better-queue");
 var Controllers = {
     AuthController: require(__dirname + '/Auth/AuthController'),
     ChatsController: require(__dirname + '/Main/ChatsController'),
@@ -45,17 +46,80 @@ var ControllerRegister = /** @class */ (function () {
     function ControllerRegister(window) {
         this.Controllers = [];
         this.window = window;
+        this.queue = new Queue(function (fn, cb) {
+            return __awaiter(this, void 0, void 0, function () {
+                var e_1;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            _a.trys.push([0, 2, , 3]);
+                            return [4 /*yield*/, fn()];
+                        case 1:
+                            _a.sent();
+                            return [3 /*break*/, 3];
+                        case 2:
+                            e_1 = _a.sent();
+                            console.log(e_1);
+                            return [3 /*break*/, 3];
+                        case 3:
+                            cb();
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        });
     }
+    // private async sync_controller_initianizer(){
+    //     while (true){
+    //         console.log(this.func_query);
+    //         let func=this.func_query.shift();
+    //         if (func) {
+    //             try {
+    //                 await func();
+    //             } catch (e) {
+    //                 console.log(e);
+    //             }
+    //         }
+    //     }
+    // }
     ControllerRegister.getInstance = function (window) {
         if (window === void 0) { window = null; }
         if (!ControllerRegister.instance) {
             if (!window)
                 throw new Error('must pass window parameter');
             ControllerRegister.instance = new ControllerRegister(window);
+            // ControllerRegister.instance.sync_controller_initianizer();
         }
         return ControllerRegister.instance;
     };
+    ControllerRegister.prototype.get_controller = function (controller) {
+        if (!this.Controllers[controller]) {
+            this.Controllers[controller] = new Controllers[controller](this.window);
+        }
+        return this.Controllers[controller];
+    };
     ControllerRegister.prototype.run_controller = function (controller, func) {
+        var args = [];
+        for (var _i = 2; _i < arguments.length; _i++) {
+            args[_i - 2] = arguments[_i];
+        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                this.queue.push(function () { return __awaiter(_this, void 0, void 0, function () {
+                    var _a;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0: return [4 /*yield*/, (_a = this.get_controller(controller))[func].apply(_a, args)];
+                            case 1: return [2 /*return*/, _b.sent()];
+                        }
+                    });
+                }); });
+                return [2 /*return*/];
+            });
+        });
+    };
+    ControllerRegister.prototype.run_controller_synchronously = function (controller, func) {
         var args = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             args[_i - 2] = arguments[_i];
@@ -64,15 +128,17 @@ var ControllerRegister = /** @class */ (function () {
             var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0:
-                        if (!this.Controllers[controller]) {
-                            this.Controllers[controller] = new Controllers[controller](this.window);
-                        }
-                        return [4 /*yield*/, (_a = this.Controllers[controller])[func].apply(_a, args)];
+                    case 0: return [4 /*yield*/, (_a = this.get_controller(controller))[func].apply(_a, args)];
                     case 1: return [2 /*return*/, _b.sent()];
                 }
             });
         });
+    };
+    ControllerRegister.prototype.get_controller_parameter = function (controller, parameter) {
+        if (!this.Controllers[controller]) {
+            this.Controllers[controller] = new Controllers[controller](this.window);
+        }
+        return this.Controllers[controller][parameter];
     };
     return ControllerRegister;
 }());

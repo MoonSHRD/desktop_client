@@ -2,8 +2,9 @@ import {Entity, In, PrimaryColumn, Column, BaseEntity, OneToMany, ManyToMany, Jo
 import {MessageModel} from "./MessageModel";
 import {UserModel} from "./UserModel";
 import {helper} from "../src/var_helper";
+import {AccountModel} from "./AccountModel";
 
-helper
+// helper
 
 @Entity()
 export class ChatModel extends BaseEntity {
@@ -82,30 +83,18 @@ export class ChatModel extends BaseEntity {
     }
 
     static async get_chat_opponent(chat_id:string):Promise<UserModel>{
-        return (await ChatModel.get_chat_users(chat_id))[0];
+        let opps = await ChatModel.get_chat_users(chat_id);
+        let account_id = 1;
+        let account = (await AccountModel.find({relations: ["user"], where: {id: account_id}, take: 1}))[0].user;
+        return opps.find(x => x.id !== account.id);
     }
 
     async get_user_chat_meta():Promise<string>{
-        let data:UserModel=(await ChatModel.get_chat_users(this.id))[0];
+        let data:UserModel=(await ChatModel.get_chat_opponent(this.id));
         // this.id=data.id;
         this.avatar=data.avatar;
         this.name=data.name;
         this.domain=data.domain;
         return data.id
     }
-
-    // static async get_chat_users(chat_id:string){
-    //     return await ChatModel.find({relations:['users']});
-    // }
-
-    // static async create_user_chat(self:UserModel,user:UserModel){
-    //     let chat = new ChatModel();
-    //     chat.id=ChatModel.get_user_chat_id(self.id,user.id);
-    //     // chat.name=user.name;
-    //     chat.type='user_chat';
-    //     // chat.avatar=user.avatar;
-    // }
-    // get_users_chats(){
-    //     ChatModel.find({where:{users:Between(1, 10)}})
-    // }
 }

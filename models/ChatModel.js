@@ -61,7 +61,8 @@ var typeorm_1 = require("typeorm");
 var MessageModel_1 = require("./MessageModel");
 var UserModel_1 = require("./UserModel");
 var var_helper_1 = require("../src/var_helper");
-var_helper_1.helper;
+var AccountModel_1 = require("./AccountModel");
+// helper
 var ChatModel = /** @class */ (function (_super) {
     __extends(ChatModel, _super);
     function ChatModel() {
@@ -77,19 +78,6 @@ var ChatModel = /** @class */ (function (_super) {
         //
         _this.active = false;
         return _this;
-        // static async get_chat_users(chat_id:string){
-        //     return await ChatModel.find({relations:['users']});
-        // }
-        // static async create_user_chat(self:UserModel,user:UserModel){
-        //     let chat = new ChatModel();
-        //     chat.id=ChatModel.get_user_chat_id(self.id,user.id);
-        //     // chat.name=user.name;
-        //     chat.type='user_chat';
-        //     // chat.avatar=user.avatar;
-        // }
-        // get_users_chats(){
-        //     ChatModel.find({where:{users:Between(1, 10)}})
-        // }
     }
     ChatModel_1 = ChatModel;
     ChatModel.get_user_chat_id = function (self_id, user_id) {
@@ -194,10 +182,17 @@ var ChatModel = /** @class */ (function (_super) {
     };
     ChatModel.get_chat_opponent = function (chat_id) {
         return __awaiter(this, void 0, void 0, function () {
+            var opps, account_id, account;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, ChatModel_1.get_chat_users(chat_id)];
-                    case 1: return [2 /*return*/, (_a.sent())[0]];
+                    case 1:
+                        opps = _a.sent();
+                        account_id = 1;
+                        return [4 /*yield*/, AccountModel_1.AccountModel.find({ relations: ["user"], where: { id: account_id }, take: 1 })];
+                    case 2:
+                        account = (_a.sent())[0].user;
+                        return [2 /*return*/, opps.find(function (x) { return x.id !== account.id; })];
                 }
             });
         });
@@ -207,9 +202,9 @@ var ChatModel = /** @class */ (function (_super) {
             var data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, ChatModel_1.get_chat_users(this.id)];
+                    case 0: return [4 /*yield*/, ChatModel_1.get_chat_opponent(this.id)];
                     case 1:
-                        data = (_a.sent())[0];
+                        data = (_a.sent());
                         // this.id=data.id;
                         this.avatar = data.avatar;
                         this.name = data.name;

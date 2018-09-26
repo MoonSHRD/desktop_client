@@ -6,6 +6,8 @@ import {ChatModel} from "../../models/ChatModel";
 
 class ChatsController extends Controller {
 
+    public queried_chats:object;
+
     async init_chats() {
         let self_info=await this.get_self_info();
         // let account = await AccountModel.findOne(1);
@@ -46,12 +48,13 @@ class ChatsController extends Controller {
             userModel.online = true;
             console.log('saving new user '+ userModel.id);
             console.log(userModel);
-            try {
-                await userModel.save();
-            } catch (e) {
-                console.log(e);
-                return;
-            }
+            await userModel.save();
+            // try {
+            //     await userModel.save();
+            // } catch (e) {
+            //     console.log(e);
+            //     return;
+            // }
             // console.log(e);
 
             let user_chat=new ChatModel();
@@ -138,12 +141,13 @@ class ChatsController extends Controller {
         user.firstname = vcard.firstname;
         user.lastname = vcard.lastname;
         // console.log(user);
-        try {
-            await user.save();
-        } catch (e) {
-            console.log(e);
-            return;
-        }
+        await user.save();
+        // try {
+        //     await user.save();
+        // } catch (e) {
+        //     console.log(e);
+        //     return;
+        // }
         user.type = this.chat_types.user;
         let chat=await ChatModel.get_user_chat(self_info.id,user.id);
         await this.load_chat(chat, this.chat_to_menu.user);
@@ -155,11 +159,83 @@ class ChatsController extends Controller {
     }
 
     async user_subscribed(user) {
-        // console.log(user);
-        // await setTimeout(null,500);
-        // let check = await UserModel.findOne(user.id);
-        // if (!check)
         this.dxmpp.acceptSubscription(user);
+        let check = await UserModel.findOne(user.id);
+        if (!check)
+            await this.subscribe(user);
+    }
+
+    async joined_room(room_data) {
+        // console.log(room_data);
+        let chat=new ChatModel();
+
+        chat.id=room_data.id;
+        chat.domain=room_data.domain;
+        chat.avatar=room_data.avatar;
+        chat.name=room_data.name;
+        chat.type=room_data.channel === "1" ? this.group_chat_types.channel : this.group_chat_types.group;
+        chat.role=room_data.role;
+        if (room_data.bio)
+            chat.bio=room_data.bio;
+        if (room_data.contractaddress)
+            chat.contract_address=room_data.contractaddress;
+
+        await chat.save();
+
+        await this.load_chat(chat,this.chat_to_menu.group)
+    }
+
+    async create_group(group_name:string) {
+        let group={name:group_name,domain:"localhost"};
+        this.dxmpp.register_channel(group, '');
+    }
+
+    async find_groups(group_name:string) {
+        this.dxmpp.find_group(group_name);
+    }
+
+    async join_chat(chat) {
+        this.dxmpp.join(chat)
+    }
+
+    async user_joined_room(user, room_data) {
+        console.log(room_data);
+        let chat = await ChatModel.findOne(room_data.id);
+        console.log(chat);
+        this.send_data('user_joined_room',`user ${user.id} joined ${chat.name}`);
+    }
+
+    async found_groups(result:any) {
+        this.queried_chats={};
+        // let html = "";
+        console.log(result);
+
+        result.forEach(async (group) => {
+            console.log(group);
+
+            const st = group.jid.split('@');
+            group.id = st[0];
+            group.domain = st[1];
+
+            let chat = await ChatModel.findOne(group.id);
+
+            if (chat)
+                group.type = chat.type;
+            else
+                group.type = group.channel === '1' ? this.group_chat_types.join_channel : this.group_chat_types.join_group;
+            // if (chats[group.id]) return;
+            // group.contract_address = group.contractaddress;
+            // let html = this.render('main/chatsblock/chats/imDialog.pug', chat);
+            // console.log({id: chat.id, type: general_chat_type, html: html});
+            this.queried_chats[group.id]=group;
+
+            this.send_data('found_chats', this.render('main/chatsblock/chats/imDialog.pug', group));
+            // this.load_chat(group,this.chat_to_menu.group);
+            // html += this.render('main/chatsblock/chats/imDialog.pug',group);
+        });
+        // if (html) {
+        //     this.send_data('found_chats', html)
+        // }
     }
 }
 
