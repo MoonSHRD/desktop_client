@@ -12,55 +12,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
-var typeorm_1 = require("typeorm");
-var moonshard_core_1 = require("moonshard_core");
-var electron_1 = require("electron");
-var ControllerRegister_1 = require("../controllers/ControllerRegister");
-var Router = /** @class */ (function () {
-    function Router(window) {
+const typeorm_1 = require("typeorm");
+const moonshard_core_1 = require("moonshard_core");
+const electron_1 = require("electron");
+const ControllerRegister_1 = require("../controllers/ControllerRegister");
+const var_helper_1 = require("./var_helper");
+class Router {
+    constructor(window) {
         this.connecting = false;
-        var config = require(__dirname + '/events&types');
         this.window = window;
         this.controller_register = ControllerRegister_1.ControllerRegister.getInstance(window);
         this.online = false;
-        this.paths = config.paths;
+        this.paths = var_helper_1.helper.paths;
         this.ipcMain = electron_1.ipcMain;
         this.dxmpp = moonshard_core_1.dxmpp.getInstance();
-        this.events = config.events;
-        this.types = config.paths;
+        this.events = var_helper_1.helper.events;
+        this.types = var_helper_1.helper.paths;
     }
     ;
-    Router.prototype.init_sqlite = function () {
-        var _this = this;
+    init_sqlite() {
         typeorm_1.createConnection({
             type: "sqlite",
             database: "sqlite/data.db",
@@ -69,332 +41,133 @@ var Router = /** @class */ (function () {
             ],
             synchronize: true,
             logging: false
-        }).then(function (connection) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.init_app()];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); }).catch(function (error) { return console.log(error); });
-    };
-    Router.prototype.listen_event = function (from, event_name, callback) {
-        var _this = this;
-        from.on(event_name, function () {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
+        }).then((connection) => __awaiter(this, void 0, void 0, function* () {
+            yield this.init_app();
+        })).catch(error => console.log(error));
+    }
+    listen_event(from, event_name, callback) {
+        from.on(event_name, (...args) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield callback(...args);
             }
-            return __awaiter(_this, void 0, void 0, function () {
-                var e_1;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            _a.trys.push([0, 2, , 3]);
-                            return [4 /*yield*/, callback.apply(void 0, args)];
-                        case 1:
-                            _a.sent();
-                            return [3 /*break*/, 3];
-                        case 2:
-                            e_1 = _a.sent();
-                            console.log(e_1);
-                            return [3 /*break*/, 3];
-                        case 3: return [2 /*return*/];
-                    }
-                });
-            });
-        });
-    };
-    Router.prototype.start_loading = function () {
-        var _this = this;
-        setTimeout(function () {
-            _this.init_sqlite();
+            catch (e) {
+                console.log(e);
+                // throw e;
+            }
+        }));
+    }
+    start_loading() {
+        setTimeout(() => {
+            this.init_sqlite();
         }, 2000);
-    };
-    Router.prototype.init_app = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('AuthController', 'init_auth')];
-                    case 1:
-                        _a.sent();
-                        this.start_listening();
-                        return [2 /*return*/];
-                }
-            });
+    }
+    init_app() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('AuthController', 'init_auth');
+            this.start_listening();
         });
-    };
-    Router.prototype.start_listening = function () {
+    }
+    start_listening() {
         /**
          * ipcMain is for listening frontend
          * dxmpp is for listening jackal
          **/
-        var _this = this;
-        this.listen_event(this.ipcMain, 'submit_profile', function (event, arg) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('AuthController', 'save_acc', arg)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.ipcMain, 'generate_mnemonic', function (event, arg) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('AuthController', 'generate_mnemonic', (arg))];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.dxmpp, 'online', function (data) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log('jackal connected');
-                        console.log(data);
-                        this.online = true;
-                        return [4 /*yield*/, this.controller_register.queue_controller('MenuController', 'init_main')];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.dxmpp, 'close', function () { return __awaiter(_this, void 0, void 0, function () {
+        this.listen_event(this.ipcMain, 'submit_profile', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('AuthController', 'save_acc', arg);
+        }));
+        this.listen_event(this.ipcMain, 'generate_mnemonic', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('AuthController', 'generate_mnemonic', (arg));
+        }));
+        this.listen_event(this.dxmpp, 'online', (data) => __awaiter(this, void 0, void 0, function* () {
+            console.log('jackal connected');
+            console.log(data);
+            this.online = true;
+            yield this.controller_register.queue_controller('MenuController', 'init_main');
+        }));
+        this.listen_event(this.dxmpp, 'close', () => __awaiter(this, void 0, void 0, function* () {
+            console.log('jackal disconnected');
+            this.online = false;
             function sleep(ms) {
-                return new Promise(function (resolve) {
+                return new Promise(resolve => {
                     setTimeout(resolve, ms);
                 });
             }
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log('jackal disconnected');
-                        this.online = false;
-                        _a.label = 1;
-                    case 1:
-                        if (!!this.online) return [3 /*break*/, 4];
-                        if (this.connecting)
-                            return [2 /*return*/];
-                        this.connecting = true;
-                        return [4 /*yield*/, this.controller_register.queue_controller('AuthController', 'init_auth')];
-                    case 2:
-                        _a.sent();
-                        return [4 /*yield*/, sleep(5000)];
-                    case 3:
-                        _a.sent();
-                        this.connecting = false;
-                        return [3 /*break*/, 1];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.dxmpp, 'buddy', function (user, state, statusText, resource) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log("user " + user.id + " is " + state);
-                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'user_change_state', user, state, statusText, resource)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.dxmpp, 'received_vcard', function (vcard) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log("got user " + vcard.id + " vcard");
-                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'user_vcard', vcard)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.dxmpp, 'error', function (err) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                console.log(err);
-                return [2 /*return*/];
-            });
-        }); });
-        this.listen_event(this.ipcMain, 'send_subscribe', function (event, data) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'subscribe', data)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.ipcMain, 'get_my_vcard', function () { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'get_my_vcard')];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.ipcMain, 'get_chat_msgs', function (event, arg) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('MessagesController', 'get_chat_messages', arg)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.ipcMain, 'send_message', function (event, arg) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('MessagesController', 'send_message', arg)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.ipcMain, 'change_menu_state', function (event, arg) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('MenuController', 'load_menu', arg)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.ipcMain, 'show_popup', function (event, arg) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'show_chat_info', arg)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.ipcMain, 'find_groups', function (event, group_name) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log('finding groups');
-                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'find_groups', group_name)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.ipcMain, 'create_group', function (event, group_name) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log('creating group');
-                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'create_group', group_name)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.ipcMain, 'join_channel', function (event, chat) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log('creating group');
-                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'join_chat', chat)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.dxmpp, 'find_groups', function (result) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log('groups found');
-                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'found_groups', result)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.dxmpp, 'joined_room', function (room_data) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log("joined " + room_data.name + " as " + room_data.role);
-                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'joined_room', room_data)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.dxmpp, 'subscribe', function (user) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log("user " + user.id + " subscribed");
-                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'user_subscribed', user)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.dxmpp, 'chat', function (user, message) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log("user " + user.id + " subscribed");
-                        return [4 /*yield*/, this.controller_register.queue_controller('MessagesController', 'received_message', user, message)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.dxmpp, 'user_joined_room', function (user, room_data) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log("user " + user.id + " joined room " + room_data.id);
-                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'user_joined_room', user, room_data)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.listen_event(this.dxmpp, 'groupchat', function (room_data, message, sender, stamp) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log(sender.address + " says " + message + " in " + room_data.id + " chat on " + stamp);
-                        return [4 /*yield*/, this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-    };
-    return Router;
-}());
-module.exports = Router;
+            while (!this.online) {
+                if (this.connecting)
+                    return;
+                this.connecting = true;
+                yield this.controller_register.queue_controller('AuthController', 'init_auth');
+                yield sleep(5000);
+                this.connecting = false;
+            }
+        }));
+        this.listen_event(this.dxmpp, 'buddy', (user, state, statusText, resource) => __awaiter(this, void 0, void 0, function* () {
+            console.log(`user ${user.id} is ${state}`);
+            yield this.controller_register.queue_controller('ChatsController', 'user_change_state', user, state, statusText, resource);
+        }));
+        this.listen_event(this.dxmpp, 'received_vcard', (vcard) => __awaiter(this, void 0, void 0, function* () {
+            console.log(`got user ${vcard.id} vcard`);
+            yield this.controller_register.queue_controller('ChatsController', 'user_vcard', vcard);
+        }));
+        this.listen_event(this.dxmpp, 'error', (err) => __awaiter(this, void 0, void 0, function* () {
+            console.log(err);
+        }));
+        this.listen_event(this.ipcMain, 'send_subscribe', (event, data) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('ChatsController', 'subscribe', data);
+        }));
+        this.listen_event(this.ipcMain, 'get_my_vcard', () => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('ChatsController', 'get_my_vcard');
+        }));
+        this.listen_event(this.ipcMain, 'get_chat_msgs', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('MessagesController', 'get_chat_messages', arg);
+        }));
+        this.listen_event(this.ipcMain, 'send_message', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('MessagesController', 'send_message', arg);
+        }));
+        this.listen_event(this.ipcMain, 'change_menu_state', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('MenuController', 'load_menu', arg);
+        }));
+        this.listen_event(this.ipcMain, 'show_popup', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('ChatsController', 'show_chat_info', arg);
+        }));
+        this.listen_event(this.ipcMain, 'find_groups', (event, group_name) => __awaiter(this, void 0, void 0, function* () {
+            console.log('finding groups');
+            yield this.controller_register.queue_controller('ChatsController', 'find_groups', group_name);
+        }));
+        this.listen_event(this.ipcMain, 'create_group', (event, group_name) => __awaiter(this, void 0, void 0, function* () {
+            console.log('creating group');
+            yield this.controller_register.queue_controller('ChatsController', 'create_group', group_name);
+        }));
+        this.listen_event(this.ipcMain, 'join_channel', (event, chat) => __awaiter(this, void 0, void 0, function* () {
+            console.log('creating group');
+            yield this.controller_register.queue_controller('ChatsController', 'join_chat', chat);
+        }));
+        this.listen_event(this.dxmpp, 'find_groups', (result) => __awaiter(this, void 0, void 0, function* () {
+            console.log('groups found');
+            yield this.controller_register.queue_controller('ChatsController', 'found_groups', result);
+        }));
+        this.listen_event(this.dxmpp, 'joined_room', (room_data) => __awaiter(this, void 0, void 0, function* () {
+            console.log(`joined ${room_data.name} as ${room_data.role}`);
+            yield this.controller_register.queue_controller('ChatsController', 'joined_room', room_data);
+        }));
+        this.listen_event(this.dxmpp, 'subscribe', (user) => __awaiter(this, void 0, void 0, function* () {
+            console.log(`user ${user.id} subscribed`);
+            yield this.controller_register.queue_controller('ChatsController', 'user_subscribed', user);
+        }));
+        this.listen_event(this.dxmpp, 'chat', (user, message) => __awaiter(this, void 0, void 0, function* () {
+            console.log(`user ${user.id} subscribed`);
+            yield this.controller_register.queue_controller('MessagesController', 'received_message', user, message);
+        }));
+        this.listen_event(this.dxmpp, 'user_joined_room', (user, room_data) => __awaiter(this, void 0, void 0, function* () {
+            console.log(`user ${user.id} joined room ${room_data.id}`);
+            yield this.controller_register.queue_controller('ChatsController', 'user_joined_room', user, room_data);
+        }));
+        this.listen_event(this.dxmpp, 'groupchat', (room_data, message, sender, stamp) => __awaiter(this, void 0, void 0, function* () {
+            console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
+            yield this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
+        }));
+    }
+}
+exports.Router = Router;
+// module.exports = Router;
 //# sourceMappingURL=router.js.map

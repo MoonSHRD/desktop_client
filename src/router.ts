@@ -9,8 +9,9 @@ import {createConnection} from "typeorm";
 import {dxmpp} from "moonshard_core";
 import {ipcMain} from "electron";
 import {ControllerRegister} from "../controllers/ControllerRegister";
+import {helper} from "./var_helper";
 
-class Router {
+export class Router {
     readonly window: any;
     private paths: any;
     private controller_register: ControllerRegister;
@@ -22,15 +23,14 @@ class Router {
     private types: any;
 
     constructor(window) {
-        const config = require(__dirname + '/events&types');
         this.window = window;
         this.controller_register = ControllerRegister.getInstance(window);
         this.online = false;
-        this.paths = config.paths;
+        this.paths = helper.paths;
         this.ipcMain = ipcMain;
         this.dxmpp = dxmpp.getInstance();
-        this.events = config.events;
-        this.types = config.paths;
+        this.events = helper.events;
+        this.types = helper.paths;
     };
 
     private init_sqlite() {
@@ -196,4 +196,4 @@ class Router {
     }
 }
 
-module.exports = Router;
+// module.exports = Router;

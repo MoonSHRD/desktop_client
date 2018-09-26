@@ -1,7 +1,7 @@
 // const router = new Navigo(null, true, '#!');
 
 const {ipcRenderer} = require('electron');
-const {events,chat_types} = require('./events&types.js');
+// const {events,chat_types} = require('./events&types.js');
 const dict = require('./langs/lang');
 const slick = require('slick-carousel');
 

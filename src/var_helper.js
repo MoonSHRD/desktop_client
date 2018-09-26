@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var paths = {
+const paths = {
     root: __dirname + '/../',
     src: __dirname,
     components: __dirname + '/components/',
@@ -9,25 +9,25 @@ var paths = {
     storage: __dirname + '/../storage/',
     db: __dirname + '/../storage/data.db',
 };
-var pug_options = {
+const pug_options = {
     cache: true,
 };
-var chat_types = {
+const chat_types = {
     user: 'user_chat',
     group: 'group_chat',
 };
-var chat_to_menu = {
+const chat_to_menu = {
     user: 'menu_user_chats',
     group: 'menu_chats',
 };
-var group_chat_types = {
+const group_chat_types = {
     group: 'group',
     channel: 'channel',
     join_group: 'join_group',
     join_channel: 'join_channel',
 };
 // const menues
-var events = {
+const events = {
     change_app_state: "change_app_state",
     change_menu_state: "change_menu_state",
     generate_mnemonic: "generate_mnemonic",
@@ -47,11 +47,11 @@ var events = {
     reload_chat: "reload_chat",
 };
 exports.helper = {
-    paths: paths,
-    chat_types: chat_types,
-    group_chat_types: group_chat_types,
-    chat_to_menu: chat_to_menu,
-    events: events,
-    pug_options: pug_options
+    paths,
+    chat_types,
+    group_chat_types,
+    chat_to_menu,
+    events,
+    pug_options
 };
 //# sourceMappingURL=var_helper.js.map
