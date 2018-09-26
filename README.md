@@ -25,10 +25,11 @@ To clone and run this repository you'll need [Git](https://git-scm.com) and [Nod
 git clone https://github.com/MoonSHRD/desktop_client
 # Go into the repository
 cd desktop_client
-# Install dependencies
-npm install
-# Rebuild sqlite3 
-./node_modules/.bin/electron-rebuild  -f -w sqlite3
+# Install dependencies and rebuild sqlite3 
+npm install; ./node_modules/.bin/electron-rebuild  -f -w sqlite3
+# Or use npm scripts *_install
+# Create src/env_config.ts, adjust and compile it
+cp src/example.env_config.ts src/env_config.ts 
 # Run the app
 npm start
 ```
