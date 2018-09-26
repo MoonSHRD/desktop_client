@@ -1,6 +1,9 @@
 git comm# Node.js package manager
 node_modules
 release-builds
+src/env_config.ts
+src/env_config.js
+src/env_config.js.map
 
 .eslintignore
 .idea

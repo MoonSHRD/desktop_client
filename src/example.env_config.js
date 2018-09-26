@@ -6,4 +6,4 @@ exports.config = {
     host: '192.168.1.60',
     port: 5222,
 };
-//# sourceMappingURL=env_config.js.map
+//# sourceMappingURL=example.env_config.js.map

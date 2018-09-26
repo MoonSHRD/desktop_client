@@ -28,6 +28,7 @@ class MenuController extends Controller {
 
     private async load_menu_user_chats(account) {
         let self_info = await this.get_self_info();
+        self_info.state=this.chat_to_menu.user;
         let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
             this.render('main/messagingblock/messagingblock.pug');
         this.send_data('change_menu_state', html);
@@ -36,6 +37,7 @@ class MenuController extends Controller {
 
     private async load_menu_chats(account) {
         let self_info = await this.get_self_info();
+        self_info.state=this.chat_to_menu.group;
         let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
             this.render('main/messagingblock/messagingblock.pug');
         this.send_data('change_menu_state', html);
