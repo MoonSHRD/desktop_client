@@ -44,51 +44,36 @@ var Controllers = {
 };
 var ControllerRegister = /** @class */ (function () {
     function ControllerRegister(window) {
+        var _this = this;
         this.Controllers = [];
         this.window = window;
-        this.queue = new Queue(function (fn, cb) {
-            return __awaiter(this, void 0, void 0, function () {
-                var e_1;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            _a.trys.push([0, 2, , 3]);
-                            return [4 /*yield*/, fn()];
-                        case 1:
-                            _a.sent();
-                            return [3 /*break*/, 3];
-                        case 2:
-                            e_1 = _a.sent();
-                            console.log(e_1);
-                            return [3 /*break*/, 3];
-                        case 3:
-                            cb();
-                            return [2 /*return*/];
-                    }
-                });
+        this.queue = new Queue(function (fn, cb) { return __awaiter(_this, void 0, void 0, function () {
+            var e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, fn()];
+                    case 1:
+                        _a.sent();
+                        return [3 /*break*/, 3];
+                    case 2:
+                        e_1 = _a.sent();
+                        console.log(e_1);
+                        return [3 /*break*/, 3];
+                    case 3:
+                        cb();
+                        return [2 /*return*/];
+                }
             });
-        });
+        }); });
     }
-    // private async sync_controller_initianizer(){
-    //     while (true){
-    //         console.log(this.func_query);
-    //         let func=this.func_query.shift();
-    //         if (func) {
-    //             try {
-    //                 await func();
-    //             } catch (e) {
-    //                 console.log(e);
-    //             }
-    //         }
-    //     }
-    // }
     ControllerRegister.getInstance = function (window) {
         if (window === void 0) { window = null; }
         if (!ControllerRegister.instance) {
             if (!window)
                 throw new Error('must pass window parameter');
             ControllerRegister.instance = new ControllerRegister(window);
-            // ControllerRegister.instance.sync_controller_initianizer();
         }
         return ControllerRegister.instance;
     };
@@ -98,7 +83,7 @@ var ControllerRegister = /** @class */ (function () {
         }
         return this.Controllers[controller];
     };
-    ControllerRegister.prototype.run_controller = function (controller, func) {
+    ControllerRegister.prototype.queue_controller = function (controller, func) {
         var args = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             args[_i - 2] = arguments[_i];
@@ -119,7 +104,7 @@ var ControllerRegister = /** @class */ (function () {
             });
         });
     };
-    ControllerRegister.prototype.run_controller_synchronously = function (controller, func) {
+    ControllerRegister.prototype.run_controller = function (controller, func) {
         var args = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             args[_i - 2] = arguments[_i];

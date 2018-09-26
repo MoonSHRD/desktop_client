@@ -41,15 +41,8 @@ var env_config_1 = require("../src/env_config");
 var Pug = require("pug");
 var AccountModel_1 = require("../models/AccountModel");
 var ControllerRegister_1 = require("./ControllerRegister");
-// import Pug from 'pug';
-// const {eth,dxmpp} = require('moonshard_core');
-// const config=require(__dirname+'/../src/events&types');
-// const env=require(__dirname+'/../src/config');
-// // const models=require(config.paths.models+'models_list');
-// const pug=require('pug');
 var Controller = /** @class */ (function () {
-    function Controller(window, account_id) {
-        if (account_id === void 0) { account_id = 1; }
+    function Controller(window) {
         this.pug = Pug;
         this.controller_register = ControllerRegister_1.ControllerRegister.getInstance();
         this.dxmpp = moonshard_core_1.dxmpp.getInstance();
@@ -62,14 +55,7 @@ var Controller = /** @class */ (function () {
         this.chat_to_menu = var_helper_1.helper.chat_to_menu;
         this.eth = moonshard_core_1.eth;
         this.self_info = null;
-        // let account = AccountModel.find({relations: ["user"], where: {id: account_id}, take: 1});
-        // if (account) {
-        //     this.self_info =account[0].user
-        // }
-        // console.log(account);
-        // this.self_info = Account.user;
         this.window = window;
-        this.Controllers = require(var_helper_1.helper.paths.controllers + 'controllers_list');
     }
     Controller.prototype.render = function (path, data) {
         if (data === void 0) { data = null; }

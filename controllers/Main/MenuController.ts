@@ -10,18 +10,8 @@ class MenuController extends Controller {
     async init_main() {
         console.log('init_main');
         await this.generate_initial_chats();
-        // let data={id:first?'0x0000000000000000000000000000000000000000':null};
         let self_info = await this.get_self_info();
-        self_info.online = false;
-        let fafa = new UserModel();
-        fafa.avatar = self_info.avatar;
-        fafa.name = self_info.name;
-        // fafa.
-        // console.log(fafa);
-        // console.log(self_info);
-        // let html=this.render('main/main.pug',fafa);
-        // this.send_data('change_menu_state', html);
-        this.send_data(this.events.change_app_state, this.render('main/main.pug', fafa));
+        this.send_data(this.events.change_app_state, this.render('main/main.pug', self_info));
         await this.load_menu_initial(true);
     };
 
@@ -37,36 +27,19 @@ class MenuController extends Controller {
     };
 
     private async load_menu_user_chats(account) {
-        let self_info=await this.get_self_info();
-        let fafa = new UserModel();
-        fafa.avatar = self_info.avatar;
-        fafa.name = self_info.name;
-        // self_info.state="menu_user_chats";
-        // console.log(self_info);
-        let html = this.render('main/chatsblock/chatsblock.pug', fafa) +
+        let self_info = await this.get_self_info();
+        let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
             this.render('main/messagingblock/messagingblock.pug');
-        //     include chatsblock/chatsblock.pug
-        // include messagingblock/messagingblock.pug
         this.send_data('change_menu_state', html);
-        await this.controller_register.run_controller_synchronously('ChatsController', 'load_chats', this.chat_types.user);
-        // this.controller_register.run_controller_synchronously('MessagesController', 'get_chat_messages', this.chat_types.user);
+        await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
     }
 
     private async load_menu_chats(account) {
-        let self_info=await this.get_self_info();
-        let fafa = new UserModel();
-        fafa.avatar = self_info.avatar;
-        fafa.name = self_info.name;
-        fafa.state = this.chat_to_menu.group;
-        // self_info.state="menu_user_chats";
-        // console.log(self_info);
-        let html = this.render('main/chatsblock/chatsblock.pug', fafa) +
+        let self_info = await this.get_self_info();
+        let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
             this.render('main/messagingblock/messagingblock.pug');
-        //     include chatsblock/chatsblock.pug
-        // include messagingblock/messagingblock.pug
         this.send_data('change_menu_state', html);
-        await this.controller_register.run_controller_synchronously('ChatsController', 'load_chats', this.chat_types.group);
-        // this.controller_register.run_controller_synchronously('MessagesController', 'get_chat_messages', this.chat_types.user);
+        await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.group);
     }
 
 
@@ -74,8 +47,7 @@ class MenuController extends Controller {
         let initial_user;
         let initial_user_chat;
         let initial_user_message;
-        let self_info:UserModel = await this.get_self_info();
-        // console.log(self_info);
+        let self_info: UserModel = await this.get_self_info();
         if (!(await UserModel.findOne('0x0000000000000000000000000000000000000000'))) {
 
             initial_user = new UserModel();
@@ -138,20 +110,6 @@ class MenuController extends Controller {
         }
     }
 
-    // private load_menu_chats(){
-    //     html = pug.renderFile(__dirname + '/components/main/file.pug', obj, PUG_OPTIONS);
-    //     renderer.webContents.send('change_menu_state', html);
-    //     sqlite.fetch((row) => {
-    //         console.log('buddy');
-    //         row.type = chat_types.channel;
-    //         const html = pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', row, PUG_OPTIONS);
-    //         row.html = html;
-    //         // console.log(row);
-    //         row.type = "menu_chats";
-    //         renderer.webContents.send('buddy', row);
-    //     }, sqlite.tables.chat);
-    // }
-
     private load_menu_create_chat() {
         this.send_data('get_my_vcard', this.render('main/modal_popup/create_chat.pug'));
     }
@@ -159,14 +117,14 @@ class MenuController extends Controller {
     private async load_menu_initial(first: boolean = false) {
         console.log('load_menu_default');
         let self_info = await this.get_self_info();
-        await this.controller_register.run_controller_synchronously('ChatsController', 'load_chats', this.chat_types.user, first);
+        await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user, first);
         if (first) {
-            await this.controller_register.run_controller_synchronously('MessagesController', 'get_chat_messages', '0x0000000000000000000000000000000000000000_' + self_info.id);
+            await this.controller_register.run_controller('MessagesController', 'get_chat_messages', '0x0000000000000000000000000000000000000000_' + self_info.id);
         }
     }
 
     private async load_menu_default() {
-        this.send_data(this.events.change_menu_state, this.render('main/file.pug',{state:"menu_under_construction"}));
+        this.send_data(this.events.change_menu_state, this.render('main/file.pug', {state: "menu_under_construction"}));
     }
 }
 

@@ -102,27 +102,17 @@ var AuthController = /** @class */ (function (_super) {
                         user.lastname = data.lastname;
                         user.bio = data.bio;
                         user.avatar = data.avatar;
-                        // user.user_chat=user_chat;
                         return [4 /*yield*/, user.save()];
                     case 1:
-                        // user.user_chat=user_chat;
                         _a.sent();
                         account = new AccountModel_1.AccountModel();
                         account.privKey = privKey;
                         account.privKeyLoom = "fwafawfawfwa";
                         account.passphrase = data.mnemonic;
-                        // account.domain='localhost';
-                        // account.name=data.firstname+(data.lastname?" "+data.lastname:"");
-                        // account.firstname=data.firstname;
-                        // account.lastname=data.lastname;
-                        // account.bio=data.bio;
-                        // account.avatar=data.avatar;
                         account.user = user;
                         return [4 /*yield*/, account.save()];
                     case 2:
                         _a.sent();
-                        // user_chat.
-                        // user_chat.=
                         this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
                         this.auth(account);
                         return [2 /*return*/];

@@ -58,27 +58,6 @@ var MessagesController = /** @class */ (function (_super) {
     function MessagesController() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    // private static async get_user_and_acc(id) {
-    //     let account = await AccountModel.findOne(1);
-    //     let userModel = await UserModel.findOne(id);
-    //     return {account, userModel}
-    // }
-    // async get_user_chat_messages(user) {
-    //     console.log("user id: "+user.id);
-    //     let self_info=await this.get_self_info();
-    //     let userModel = await UserModel.findOne(user.id);
-    //     let chat=await ChatModel.get_user_chat_with_messages(self_info.id,user.id);
-    //     // let messages = await ChatModel.get_user_chat_messages(self_info.id,userModel.id);
-    //
-    //     // console.log(userModel);
-    //     // userModel.type=this.chat_types.user;
-    //     let html = this.render('main/messagingblock/qqq.pug', chat);
-    //     this.send_data('reload_chat', html);
-    //
-    //     chat.messages.forEach((message) => {
-    //         this.render_message(message, self_info, userModel);
-    //     });
-    // };
     MessagesController.prototype.load_join_chat = function (chat_id) {
         return __awaiter(this, void 0, void 0, function () {
             var q_chats, chat;
@@ -101,7 +80,6 @@ var MessagesController = /** @class */ (function (_super) {
                         return [4 /*yield*/, ChatModel_1.ChatModel.findOne(chat_id)];
                     case 1:
                         chat = _b.sent();
-                        // ChatModel.
                         if (!chat)
                             return [2 /*return*/, this.load_join_chat(chat_id)];
                         _a = chat.type;
@@ -115,7 +93,6 @@ var MessagesController = /** @class */ (function (_super) {
                         return [3 /*break*/, 4];
                     case 4:
                         html = this.render('main/messagingblock/qqq.pug', chat);
-                        // console.log(html);
                         this.send_data('reload_chat', html);
                         return [4 /*yield*/, this.render_chat_messages(chat_id)];
                     case 5:
@@ -156,11 +133,16 @@ var MessagesController = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, MessageModel_1.MessageModel.get_chat_messages_with_sender(chat_id)];
                     case 1:
                         messages = _a.sent();
-                        messages.forEach(function (message) {
-                            // message.sender_avatar=message.sender.avatar;
-                            // message.mine=(self_info.id===message.sender.id);
-                            _this.render_message(message, chat_id);
-                        });
+                        messages.forEach(function (message) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, this.render_message(message, chat_id)];
+                                    case 1:
+                                        _a.sent();
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); });
                         return [2 /*return*/];
                 }
             });

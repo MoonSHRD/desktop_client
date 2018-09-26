@@ -61,7 +61,7 @@ var MenuController = /** @class */ (function (_super) {
     }
     MenuController.prototype.init_main = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var self_info, fafa;
+            var self_info;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -72,16 +72,7 @@ var MenuController = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.get_self_info()];
                     case 2:
                         self_info = _a.sent();
-                        self_info.online = false;
-                        fafa = new UserModel_1.UserModel();
-                        fafa.avatar = self_info.avatar;
-                        fafa.name = self_info.name;
-                        // fafa.
-                        // console.log(fafa);
-                        // console.log(self_info);
-                        // let html=this.render('main/main.pug',fafa);
-                        // this.send_data('change_menu_state', html);
-                        this.send_data(this.events.change_app_state, this.render('main/main.pug', fafa));
+                        this.send_data(this.events.change_app_state, this.render('main/main.pug', self_info));
                         return [4 /*yield*/, this.load_menu_initial(true)];
                     case 3:
                         _a.sent();
@@ -116,21 +107,16 @@ var MenuController = /** @class */ (function (_super) {
     ;
     MenuController.prototype.load_menu_user_chats = function (account) {
         return __awaiter(this, void 0, void 0, function () {
-            var self_info, fafa, html;
+            var self_info, html;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.get_self_info()];
                     case 1:
                         self_info = _a.sent();
-                        fafa = new UserModel_1.UserModel();
-                        fafa.avatar = self_info.avatar;
-                        fafa.name = self_info.name;
-                        html = this.render('main/chatsblock/chatsblock.pug', fafa) +
+                        html = this.render('main/chatsblock/chatsblock.pug', self_info) +
                             this.render('main/messagingblock/messagingblock.pug');
-                        //     include chatsblock/chatsblock.pug
-                        // include messagingblock/messagingblock.pug
                         this.send_data('change_menu_state', html);
-                        return [4 /*yield*/, this.controller_register.run_controller_synchronously('ChatsController', 'load_chats', this.chat_types.user)];
+                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user)];
                     case 2:
                         _a.sent();
                         return [2 /*return*/];
@@ -140,22 +126,16 @@ var MenuController = /** @class */ (function (_super) {
     };
     MenuController.prototype.load_menu_chats = function (account) {
         return __awaiter(this, void 0, void 0, function () {
-            var self_info, fafa, html;
+            var self_info, html;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.get_self_info()];
                     case 1:
                         self_info = _a.sent();
-                        fafa = new UserModel_1.UserModel();
-                        fafa.avatar = self_info.avatar;
-                        fafa.name = self_info.name;
-                        fafa.state = this.chat_to_menu.group;
-                        html = this.render('main/chatsblock/chatsblock.pug', fafa) +
+                        html = this.render('main/chatsblock/chatsblock.pug', self_info) +
                             this.render('main/messagingblock/messagingblock.pug');
-                        //     include chatsblock/chatsblock.pug
-                        // include messagingblock/messagingblock.pug
                         this.send_data('change_menu_state', html);
-                        return [4 /*yield*/, this.controller_register.run_controller_synchronously('ChatsController', 'load_chats', this.chat_types.group)];
+                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.group)];
                     case 2:
                         _a.sent();
                         return [2 /*return*/];
@@ -246,19 +226,6 @@ var MenuController = /** @class */ (function (_super) {
             });
         });
     };
-    // private load_menu_chats(){
-    //     html = pug.renderFile(__dirname + '/components/main/file.pug', obj, PUG_OPTIONS);
-    //     renderer.webContents.send('change_menu_state', html);
-    //     sqlite.fetch((row) => {
-    //         console.log('buddy');
-    //         row.type = chat_types.channel;
-    //         const html = pug.renderFile(__dirname + '/components/main/chatsblock/chats/imDialog.pug', row, PUG_OPTIONS);
-    //         row.html = html;
-    //         // console.log(row);
-    //         row.type = "menu_chats";
-    //         renderer.webContents.send('buddy', row);
-    //     }, sqlite.tables.chat);
-    // }
     MenuController.prototype.load_menu_create_chat = function () {
         this.send_data('get_my_vcard', this.render('main/modal_popup/create_chat.pug'));
     };
@@ -273,11 +240,11 @@ var MenuController = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.get_self_info()];
                     case 1:
                         self_info = _a.sent();
-                        return [4 /*yield*/, this.controller_register.run_controller_synchronously('ChatsController', 'load_chats', this.chat_types.user, first)];
+                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user, first)];
                     case 2:
                         _a.sent();
                         if (!first) return [3 /*break*/, 4];
-                        return [4 /*yield*/, this.controller_register.run_controller_synchronously('MessagesController', 'get_chat_messages', '0x0000000000000000000000000000000000000000_' + self_info.id)];
+                        return [4 /*yield*/, this.controller_register.run_controller('MessagesController', 'get_chat_messages', '0x0000000000000000000000000000000000000000_' + self_info.id)];
                     case 3:
                         _a.sent();
                         _a.label = 4;

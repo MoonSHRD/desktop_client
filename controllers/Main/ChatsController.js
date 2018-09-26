@@ -49,7 +49,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
-// import {AccountModel} from "../../models/AccountModel";
 var UserModel_1 = require("../../models/UserModel");
 var Controller_1 = require("../Controller");
 var ChatModel_1 = require("../../models/ChatModel");
@@ -66,12 +65,6 @@ var ChatsController = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, this.get_self_info()];
                     case 1:
                         self_info = _a.sent();
-                        // let account = await AccountModel.findOne(1);
-                        // console.log(account);
-                        // if (!account.address) {
-                        //     account.address = this.dxmpp.get_address();
-                        //     await account.save();
-                        // }
                         self_info.state = 'menu_chats';
                         this.send_data(this.events.change_app_state, this.render('main/main.pug', { state: '' }));
                         // todo: load all chats.
@@ -98,7 +91,6 @@ var ChatsController = /** @class */ (function (_super) {
                         _a.label = 2;
                     case 2:
                         html = this.render('main/chatsblock/chats/imDialog.pug', chat);
-                        // console.log({id: chat.id, type: general_chat_type, html: html});
                         this.send_data('buddy', { id: chat.id, type: general_chat_type, html: html });
                         return [2 /*return*/];
                 }
@@ -124,10 +116,8 @@ var ChatsController = /** @class */ (function (_super) {
                         return [4 /*yield*/, ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id)];
                     case 4:
                         chat = _a.sent();
-                        // user.type = this.chat_types.user;
                         return [4 /*yield*/, this.load_chat(chat, this.chat_to_menu.user)];
                     case 5:
-                        // user.type = this.chat_types.user;
                         _a.sent();
                         return [3 /*break*/, 9];
                     case 6:
@@ -147,7 +137,6 @@ var ChatsController = /** @class */ (function (_super) {
                         return [4 /*yield*/, user_chat.save()];
                     case 8:
                         _a.sent();
-                        // console.log(e);
                         this.dxmpp.get_vcard(user);
                         _a.label = 9;
                     case 9: return [2 /*return*/];
@@ -176,17 +165,6 @@ var ChatsController = /** @class */ (function (_super) {
                         else if (type === this.chat_types.group) {
                             menu_chat = this.chat_to_menu.group;
                         }
-                        // console.log(chats);
-                        // switch (type) {
-                        //     case this.chat_types.user:
-                        //         chats=await UserModel.find({take:20});
-                        //         break;
-                        //     case this.chat_types.channel:
-                        //         chats=await ChatModel.find({take:20});
-                        //         break;
-                        //     default:
-                        //         break;
-                        // }
                         if (!chats.length)
                             return [2 /*return*/];
                         return [4 /*yield*/, chats.forEach(function (chat) { return __awaiter(_this, void 0, void 0, function () {
@@ -195,10 +173,8 @@ var ChatsController = /** @class */ (function (_super) {
                                         case 0:
                                             if (chat.id === '0x0000000000000000000000000000000000000000_' + self_info.id && first)
                                                 chat.active = true;
-                                            // console.log(chat);
                                             return [4 /*yield*/, this.load_chat(chat, menu_chat)];
                                         case 1:
-                                            // console.log(chat);
                                             _a.sent();
                                             return [2 /*return*/];
                                     }
@@ -234,9 +210,6 @@ var ChatsController = /** @class */ (function (_super) {
                         return [4 /*yield*/, ChatModel_1.ChatModel.get_chat_opponent(data.id)];
                     case 5:
                         user = _b.sent();
-                        // let user = chat.get_chat_opponent();
-                        // chat.id = await chat.get_user_chat_meta();
-                        // chat.id=id;
                         this.send_data('get_my_vcard', this.render('main/modal_popup/modal_content.pug', user));
                         _b.label = 6;
                     case 6: return [2 /*return*/];
@@ -252,8 +225,6 @@ var ChatsController = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, this.get_self_info()];
                     case 1:
                         self_info = _a.sent();
-                        // return ret;
-                        // console.log(ret);
                         this.send_data('get_my_vcard', this.render('main/modal_popup/modal_content.pug', self_info));
                         return [2 /*return*/];
                 }
@@ -278,17 +249,9 @@ var ChatsController = /** @class */ (function (_super) {
                         user.bio = vcard.bio;
                         user.firstname = vcard.firstname;
                         user.lastname = vcard.lastname;
-                        // console.log(user);
                         return [4 /*yield*/, user.save()];
                     case 3:
-                        // console.log(user);
                         _a.sent();
-                        // try {
-                        //     await user.save();
-                        // } catch (e) {
-                        //     console.log(e);
-                        //     return;
-                        // }
                         user.type = this.chat_types.user;
                         return [4 /*yield*/, ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id)];
                     case 4:
@@ -406,7 +369,6 @@ var ChatsController = /** @class */ (function (_super) {
             var _this = this;
             return __generator(this, function (_a) {
                 this.queried_chats = {};
-                // let html = "";
                 console.log(result);
                 result.forEach(function (group) { return __awaiter(_this, void 0, void 0, function () {
                     var st, chat;
@@ -424,10 +386,6 @@ var ChatsController = /** @class */ (function (_super) {
                                     group.type = chat.type;
                                 else
                                     group.type = group.channel === '1' ? this.group_chat_types.join_channel : this.group_chat_types.join_group;
-                                // if (chats[group.id]) return;
-                                // group.contract_address = group.contractaddress;
-                                // let html = this.render('main/chatsblock/chats/imDialog.pug', chat);
-                                // console.log({id: chat.id, type: general_chat_type, html: html});
                                 this.queried_chats[group.id] = group;
                                 this.send_data('found_chats', this.render('main/chatsblock/chats/imDialog.pug', group));
                                 return [2 /*return*/];

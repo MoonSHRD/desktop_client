@@ -57,7 +57,6 @@ var Router = /** @class */ (function () {
         this.dxmpp = moonshard_core_1.dxmpp.getInstance();
         this.events = config.events;
         this.types = config.paths;
-        this.Controllers = require(config.paths.controllers + 'controllers_list');
     }
     ;
     Router.prototype.init_sqlite = function () {
@@ -68,9 +67,6 @@ var Router = /** @class */ (function () {
             entities: [
                 this.paths.models + "*.js"
             ],
-            // migrations: [
-            //     "sqlite/migrations/*.js"
-            // ],
             synchronize: true,
             logging: false
         }).then(function (connection) { return __awaiter(_this, void 0, void 0, function () {
@@ -121,7 +117,7 @@ var Router = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.run_controller('AuthController', 'init_auth')];
+                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('AuthController', 'init_auth')];
                     case 1:
                         _a.sent();
                         this.start_listening();
@@ -139,7 +135,7 @@ var Router = /** @class */ (function () {
         this.listen_event(this.ipcMain, 'submit_profile', function (event, arg) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.run_controller('AuthController', 'save_acc', arg)];
+                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('AuthController', 'save_acc', arg)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -149,7 +145,7 @@ var Router = /** @class */ (function () {
         this.listen_event(this.ipcMain, 'generate_mnemonic', function (event, arg) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.run_controller('AuthController', 'generate_mnemonic', (arg))];
+                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('AuthController', 'generate_mnemonic', (arg))];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -163,7 +159,7 @@ var Router = /** @class */ (function () {
                         console.log('jackal connected');
                         console.log(data);
                         this.online = true;
-                        return [4 /*yield*/, this.controller_register.run_controller('MenuController', 'init_main')];
+                        return [4 /*yield*/, this.controller_register.queue_controller('MenuController', 'init_main')];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -187,7 +183,7 @@ var Router = /** @class */ (function () {
                         if (this.connecting)
                             return [2 /*return*/];
                         this.connecting = true;
-                        return [4 /*yield*/, this.controller_register.run_controller('AuthController', 'init_auth')];
+                        return [4 /*yield*/, this.controller_register.queue_controller('AuthController', 'init_auth')];
                     case 2:
                         _a.sent();
                         return [4 /*yield*/, sleep(5000)];
@@ -204,7 +200,7 @@ var Router = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         console.log("user " + user.id + " is " + state);
-                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'user_change_state', user, state, statusText, resource)];
+                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'user_change_state', user, state, statusText, resource)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -216,10 +212,8 @@ var Router = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         console.log("got user " + vcard.id + " vcard");
-                        // console.log(vcard);
-                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'user_vcard', vcard)];
+                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'user_vcard', vcard)];
                     case 1:
-                        // console.log(vcard);
                         _a.sent();
                         return [2 /*return*/];
                 }
@@ -234,7 +228,7 @@ var Router = /** @class */ (function () {
         this.listen_event(this.ipcMain, 'send_subscribe', function (event, data) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'subscribe', data)];
+                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'subscribe', data)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -244,7 +238,7 @@ var Router = /** @class */ (function () {
         this.listen_event(this.ipcMain, 'get_my_vcard', function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'get_my_vcard')];
+                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'get_my_vcard')];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -254,7 +248,7 @@ var Router = /** @class */ (function () {
         this.listen_event(this.ipcMain, 'get_chat_msgs', function (event, arg) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.run_controller('MessagesController', 'get_chat_messages', arg)];
+                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('MessagesController', 'get_chat_messages', arg)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -264,7 +258,7 @@ var Router = /** @class */ (function () {
         this.listen_event(this.ipcMain, 'send_message', function (event, arg) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.run_controller('MessagesController', 'send_message', arg)];
+                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('MessagesController', 'send_message', arg)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -274,7 +268,7 @@ var Router = /** @class */ (function () {
         this.listen_event(this.ipcMain, 'change_menu_state', function (event, arg) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.controller_register.run_controller('MenuController', 'load_menu', arg)];
+                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('MenuController', 'load_menu', arg)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -284,11 +278,8 @@ var Router = /** @class */ (function () {
         this.listen_event(this.ipcMain, 'show_popup', function (event, arg) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: 
-                    // console.log(arg);
-                    return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'show_chat_info', arg)];
+                    case 0: return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'show_chat_info', arg)];
                     case 1:
-                        // console.log(arg);
                         _a.sent();
                         return [2 /*return*/];
                 }
@@ -299,7 +290,7 @@ var Router = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         console.log('finding groups');
-                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'find_groups', group_name)];
+                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'find_groups', group_name)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -311,7 +302,7 @@ var Router = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         console.log('creating group');
-                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'create_group', group_name)];
+                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'create_group', group_name)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -323,7 +314,7 @@ var Router = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         console.log('creating group');
-                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'join_chat', chat)];
+                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'join_chat', chat)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -335,7 +326,7 @@ var Router = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         console.log('groups found');
-                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'found_groups', result)];
+                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'found_groups', result)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -347,7 +338,7 @@ var Router = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         console.log("joined " + room_data.name + " as " + room_data.role);
-                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'joined_room', room_data)];
+                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'joined_room', room_data)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -359,7 +350,7 @@ var Router = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         console.log("user " + user.id + " subscribed");
-                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'user_subscribed', user)];
+                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'user_subscribed', user)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -371,7 +362,7 @@ var Router = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         console.log("user " + user.id + " subscribed");
-                        return [4 /*yield*/, this.controller_register.run_controller('MessagesController', 'received_message', user, message)];
+                        return [4 /*yield*/, this.controller_register.queue_controller('MessagesController', 'received_message', user, message)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -383,7 +374,7 @@ var Router = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         console.log("user " + user.id + " joined room " + room_data.id);
-                        return [4 /*yield*/, this.controller_register.run_controller('ChatsController', 'user_joined_room', user, room_data)];
+                        return [4 /*yield*/, this.controller_register.queue_controller('ChatsController', 'user_joined_room', user, room_data)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -395,7 +386,7 @@ var Router = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         console.log(sender.address + " says " + message + " in " + room_data.id + " chat on " + stamp);
-                        return [4 /*yield*/, this.controller_register.run_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp)];
+                        return [4 /*yield*/, this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
