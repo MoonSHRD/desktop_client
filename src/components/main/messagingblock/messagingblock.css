@@ -130,6 +130,22 @@ ul li.outMessage p {
     box-shadow: 0 0 13px rgba(0, 123, 255,0.5);
 }
 
+ul li.outMessage img, ul li.inMessage img {
+    border-radius: 100%;
+}
+
+ul li.outMessage img{
+    float: right;
+}
+
+ul li.inMessage p {
+   left: 15px;
+}
+
+ul li.outMessage p {
+    margin-right: 15px;
+}
+
 ul li.outMessage p::after {
     content: '';
     position: absolute;

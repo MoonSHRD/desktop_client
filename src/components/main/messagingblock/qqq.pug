@@ -1,6 +1,6 @@
 div(class="head_peer" id="head_peer")
     h3
-        a(class="peer_name" href='#')
+        a(class="peer_name" data-event="show_chat_info" href='#')
             if (id)
                 img(src=avatar width=44 height=44)
                 |       #{name}
@@ -43,7 +43,7 @@ div(class="head_peer" id="head_peer")
                         div(class='image')
                             img(src="components/main/messagingblock/img/dropDown_menu.png")
                     ul.dropdownDoth
-                        li Info
+                        li(data-event="show_chat_info") Info
                         li Leave a channel
                         li Switch off notifications
                         li Write a message to administrator
