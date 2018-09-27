@@ -60,6 +60,21 @@ class ChatsController extends Controller_1.Controller {
             }
         });
     }
+    load_chats_by_menu(menu_to_chat) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let type;
+            switch (menu_to_chat) {
+                case this.chat_to_menu.user:
+                    type = this.chat_types.user;
+                    break;
+                case this.chat_to_menu.group:
+                    type = this.chat_types.group;
+                    break;
+            }
+            if (type)
+                yield this.load_chats(type);
+        });
+    }
     load_chats(type, first = false) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('load_chats');
@@ -83,6 +98,7 @@ class ChatsController extends Controller_1.Controller {
     }
     show_chat_info(data) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(data);
             if (Object.values(this.group_chat_types).includes(data.type)) {
                 switch (data.type) {
                     case this.group_chat_types.channel: {

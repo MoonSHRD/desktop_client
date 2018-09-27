@@ -115,6 +115,9 @@ class Router {
         this.listen_event(this.ipcMain, 'send_subscribe', (event, data) => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('ChatsController', 'subscribe', data);
         }));
+        this.listen_event(this.ipcMain, 'load_chats_by_menu', (event, menu) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('ChatsController', 'load_chats_by_menu', menu);
+        }));
         this.listen_event(this.ipcMain, 'get_my_vcard', () => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('ChatsController', 'get_my_vcard');
         }));
@@ -128,6 +131,7 @@ class Router {
             yield this.controller_register.queue_controller('MenuController', 'load_menu', arg);
         }));
         this.listen_event(this.ipcMain, 'show_popup', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            console.log('show_popup');
             yield this.controller_register.queue_controller('ChatsController', 'show_chat_info', arg);
         }));
         this.listen_event(this.ipcMain, 'find_groups', (event, group_name) => __awaiter(this, void 0, void 0, function* () {

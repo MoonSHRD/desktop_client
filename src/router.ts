@@ -129,6 +129,10 @@ export class Router {
             await this.controller_register.queue_controller('ChatsController', 'subscribe', data);
         });
 
+        this.listen_event(this.ipcMain, 'load_chats_by_menu', async (event, menu) => {
+            await this.controller_register.queue_controller('ChatsController', 'load_chats_by_menu', menu);
+        });
+
         this.listen_event(this.ipcMain, 'get_my_vcard', async () => {
             await this.controller_register.queue_controller('ChatsController', 'get_my_vcard');
         });
@@ -146,6 +150,7 @@ export class Router {
         });
 
         this.listen_event(this.ipcMain, 'show_popup', async (event, arg) => {
+            console.log('show_popup');
             await this.controller_register.queue_controller('ChatsController', 'show_chat_info', arg);
         });
 

@@ -51,6 +51,20 @@ class ChatsController extends Controller {
         }
     }
 
+    async load_chats_by_menu(menu_to_chat:string){
+        let type:string;
+        switch (menu_to_chat) {
+            case this.chat_to_menu.user:
+                type=this.chat_types.user;
+                break;
+            case this.chat_to_menu.group:
+                type=this.chat_types.group;
+                break;
+        }
+        if (type)
+            await this.load_chats(type);
+    }
+
     async load_chats(type: string, first: boolean = false) {
         console.log('load_chats');
         let self_info = await this.get_self_info();
@@ -72,6 +86,7 @@ class ChatsController extends Controller {
     }
 
     async show_chat_info(data) {
+        console.log(data);
         if (Object.values(this.group_chat_types).includes(data.type)) {
             switch (data.type) {
                 case this.group_chat_types.channel: {

@@ -1,7 +1,8 @@
 $('.searchInput').bind('input', function (e) {
+    let menu = 'menu_chats';
     let group = $(this).val();
     if (!group) {
-        ipcRenderer.send('load_chats');
+        ipcRenderer.send('load_chats_by_menu',menu);
     } else {
         $('.chats ul').empty();
     }
