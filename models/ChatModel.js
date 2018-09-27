@@ -23,6 +23,7 @@ const MessageModel_1 = require("./MessageModel");
 const UserModel_1 = require("./UserModel");
 const var_helper_1 = require("../src/var_helper");
 const AccountModel_1 = require("./AccountModel");
+const EventModel_1 = require("./EventModel");
 // helper
 let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
     // helper
@@ -35,8 +36,6 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
         this.role = '';
         this.type = '';
         this.contract_address = '';
-        //
-        //
         this.active = false;
     }
     static get_user_chat_id(self_id, user_id) {
@@ -103,7 +102,6 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
     get_user_chat_meta() {
         return __awaiter(this, void 0, void 0, function* () {
             let data = (yield ChatModel_1.get_chat_opponent(this.id));
-            // this.id=data.id;
             this.avatar = data.avatar;
             this.name = data.name;
             this.domain = data.domain;
@@ -147,6 +145,10 @@ __decorate([
     typeorm_1.OneToMany(type => MessageModel_1.MessageModel, messages => messages.chat),
     __metadata("design:type", Array)
 ], ChatModel.prototype, "messages", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => EventModel_1.EventModel, events => events.chat),
+    __metadata("design:type", Array)
+], ChatModel.prototype, "events", void 0);
 __decorate([
     typeorm_1.ManyToMany(type => UserModel_1.UserModel),
     typeorm_1.JoinTable(),

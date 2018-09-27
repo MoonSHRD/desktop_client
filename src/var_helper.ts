@@ -34,6 +34,14 @@ const group_chat_types = {
     join_channel: 'join_channel',
 };
 
+const event_types = {
+    info:'info',
+    primary:'primary',
+    success:'success',
+    error:'danger',
+    warning:'warning',
+};
+
 // const menues
 
 const events = {
@@ -62,5 +70,6 @@ export const helper = {
     group_chat_types,
     chat_to_menu,
     events,
+    event_types,
     pug_options
 };

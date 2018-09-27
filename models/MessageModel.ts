@@ -7,16 +7,13 @@ import {ChatModel} from "./ChatModel";
 export class MessageModel extends BaseEntity {
 
     @PrimaryGeneratedColumn()
-    id: string;
-    // @Column()
-    // sender: string;
-    // @Column()
-    // chat: string = '';
+    id: number;
+    @Column()
+    server_id: number=0;
     @Column()
     text: string = '';
     @Column()
     time: string = '';
-
 
     @ManyToOne(type => ChatModel, chat => chat.messages)
     @JoinColumn()
@@ -31,7 +28,4 @@ export class MessageModel extends BaseEntity {
     static async get_chat_messages_with_sender(chat_id:string):Promise<MessageModel[]>{
         return await MessageModel.find({relations:['sender'],where:{chat:chat_id}})
     }
-
-    // @ManyToOne(type => ChatModel, chat => chat.users)
-    // chat: UserModel;
 }

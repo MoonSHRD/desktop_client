@@ -26,14 +26,9 @@ let MessageModel = MessageModel_1 = class MessageModel extends typeorm_1.BaseEnt
     // import {ChatModel} from "./ChatModel";
     constructor() {
         super(...arguments);
-        // @Column()
-        // sender: string;
-        // @Column()
-        // chat: string = '';
+        this.server_id = 0;
         this.text = '';
         this.time = '';
-        // @ManyToOne(type => ChatModel, chat => chat.users)
-        // chat: UserModel;
     }
     static get_chat_messages_with_sender(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -43,8 +38,12 @@ let MessageModel = MessageModel_1 = class MessageModel extends typeorm_1.BaseEnt
 };
 __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
-    __metadata("design:type", String)
+    __metadata("design:type", Number)
 ], MessageModel.prototype, "id", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Number)
+], MessageModel.prototype, "server_id", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)

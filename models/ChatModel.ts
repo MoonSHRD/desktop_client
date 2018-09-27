@@ -3,6 +3,7 @@ import {MessageModel} from "./MessageModel";
 import {UserModel} from "./UserModel";
 import {helper} from "../src/var_helper";
 import {AccountModel} from "./AccountModel";
+import {EventModel} from "./EventModel";
 
 // helper
 
@@ -28,13 +29,15 @@ export class ChatModel extends BaseEntity {
 
     @OneToMany(type => MessageModel, messages => messages.chat)
     messages: MessageModel[];
-    //
-    //
-    active:boolean=false;
+
+    @OneToMany(type => EventModel, events => events.chat)
+    events: EventModel[];
 
     @ManyToMany(type => UserModel)
     @JoinTable()
     users: UserModel[];
+
+    active:boolean=false;
 
     static get_user_chat_id(self_id:string,user_id:string){
         let sort=[self_id,user_id];
@@ -91,7 +94,6 @@ export class ChatModel extends BaseEntity {
 
     async get_user_chat_meta():Promise<string>{
         let data:UserModel=(await ChatModel.get_chat_opponent(this.id));
-        // this.id=data.id;
         this.avatar=data.avatar;
         this.name=data.name;
         this.domain=data.domain;

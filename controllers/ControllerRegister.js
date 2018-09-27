@@ -14,6 +14,7 @@ const Controllers = {
     ChatsController: require(__dirname + '/Main/ChatsController'),
     MessagesController: require(__dirname + '/Main/MessagesController'),
     MenuController: require(__dirname + '/Main/MenuController'),
+    EventsController: require(__dirname + '/Main/EventsController'),
 };
 class ControllerRegister {
     constructor(window) {

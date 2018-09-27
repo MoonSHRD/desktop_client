@@ -79,7 +79,7 @@ class MessagesController extends Controller_1.Controller {
             else if (Object.values(this.group_chat_types).includes(chat.type)) {
                 group = true;
             }
-            this.dxmpp.send(chat, text, group);
+            this.dxmpp.send(chat, text, message.id, group);
             yield this.render_message(message, id);
         });
     }

@@ -158,9 +158,14 @@ class Router {
             console.log(`user ${user.id} subscribed`);
             yield this.controller_register.queue_controller('MessagesController', 'received_message', user, message);
         }));
+        this.listen_event(this.dxmpp, 'confirmation', (user, message) => __awaiter(this, void 0, void 0, function* () {
+            console.log('confirmation');
+            console.log(message);
+            // await this.controller_register.queue_controller('MessagesController', 'received_message', user, message);
+        }));
         this.listen_event(this.dxmpp, 'user_joined_room', (user, room_data) => __awaiter(this, void 0, void 0, function* () {
             console.log(`user ${user.id} joined room ${room_data.id}`);
-            yield this.controller_register.queue_controller('ChatsController', 'user_joined_room', user, room_data);
+            yield this.controller_register.queue_controller('EventsController', 'user_joined_room', user, room_data);
         }));
         this.listen_event(this.dxmpp, 'groupchat', (room_data, message, sender, stamp) => __awaiter(this, void 0, void 0, function* () {
             console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);

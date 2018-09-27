@@ -168,14 +168,6 @@ class ChatsController extends Controller_1.Controller {
             this.dxmpp.join(chat);
         });
     }
-    user_joined_room(user, room_data) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log(room_data);
-            let chat = yield ChatModel_1.ChatModel.findOne(room_data.id);
-            console.log(chat);
-            this.send_data('user_joined_room', `user ${user.id} joined ${chat.name}`);
-        });
-    }
     found_groups(result) {
         return __awaiter(this, void 0, void 0, function* () {
             this.queried_chats = {};

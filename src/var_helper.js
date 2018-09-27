@@ -26,6 +26,13 @@ const group_chat_types = {
     join_group: 'join_group',
     join_channel: 'join_channel',
 };
+const event_types = {
+    info: 'info',
+    primary: 'primary',
+    success: 'success',
+    error: 'danger',
+    warning: 'warning',
+};
 // const menues
 const events = {
     change_app_state: "change_app_state",
@@ -52,6 +59,7 @@ exports.helper = {
     group_chat_types,
     chat_to_menu,
     events,
+    event_types,
     pug_options
 };
 //# sourceMappingURL=var_helper.js.map

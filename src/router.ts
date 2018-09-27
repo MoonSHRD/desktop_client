@@ -184,9 +184,15 @@ export class Router {
             await this.controller_register.queue_controller('MessagesController', 'received_message', user, message);
         });
 
+        this.listen_event(this.dxmpp, 'confirmation', async (user, message) => {
+            console.log('confirmation');
+            console.log(message);
+            // await this.controller_register.queue_controller('MessagesController', 'received_message', user, message);
+        });
+
         this.listen_event(this.dxmpp, 'user_joined_room', async (user, room_data) => {
             console.log(`user ${user.id} joined room ${room_data.id}`);
-            await this.controller_register.queue_controller('ChatsController', 'user_joined_room', user, room_data);
+            await this.controller_register.queue_controller('EventsController', 'user_joined_room', user, room_data);
         });
 
         this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, stamp) => {

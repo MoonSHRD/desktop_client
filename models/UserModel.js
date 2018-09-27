@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const ChatModel_1 = require("./ChatModel");
+const AccountModel_1 = require("./AccountModel");
 const MessageModel_1 = require("./MessageModel");
 let UserModel = class UserModel extends typeorm_1.BaseEntity {
     constructor() {
@@ -60,6 +61,11 @@ __decorate([
     typeorm_1.Column(),
     __metadata("design:type", Boolean)
 ], UserModel.prototype, "self", void 0);
+__decorate([
+    typeorm_1.OneToOne(type => AccountModel_1.AccountModel, account => account.user),
+    typeorm_1.JoinColumn(),
+    __metadata("design:type", AccountModel_1.AccountModel)
+], UserModel.prototype, "account", void 0);
 __decorate([
     typeorm_1.OneToMany(type => MessageModel_1.MessageModel, message => message.chat),
     __metadata("design:type", Array)

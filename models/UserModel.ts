@@ -38,17 +38,12 @@ export class UserModel extends BaseEntity {
     type: string;
     state: string;
 
-    // @OneToOne(type => AccountModel, account => account.user)
-    // @JoinColumn()
-    // account: AccountModel;
-
-    // @OneToOne(type => ChatModel, user_chat => user_chat.id)
-    // @JoinColumn()
-    // user_chat: ChatModel;
+    @OneToOne(type => AccountModel, account => account.user)
+    @JoinColumn()
+    account: AccountModel;
 
     @OneToMany(type => MessageModel, message => message.chat)
     messages: MessageModel[];
-
 
     @ManyToMany(type => ChatModel)
     @JoinTable()

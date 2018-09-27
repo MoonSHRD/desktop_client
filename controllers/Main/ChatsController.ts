@@ -150,13 +150,6 @@ class ChatsController extends Controller {
         this.dxmpp.join(chat)
     }
 
-    async user_joined_room(user, room_data) {
-        console.log(room_data);
-        let chat = await ChatModel.findOne(room_data.id);
-        console.log(chat);
-        this.send_data('user_joined_room', `user ${user.id} joined ${chat.name}`);
-    }
-
     async found_groups(result: any) {
         this.queried_chats = {};
         console.log(result);
