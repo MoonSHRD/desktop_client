@@ -13,7 +13,7 @@ export class MessageModel extends BaseEntity {
     @Column()
     text: string = '';
     @Column()
-    time: string = '';
+    time: string = null;
 
     @ManyToOne(type => ChatModel, chat => chat.messages)
     @JoinColumn()

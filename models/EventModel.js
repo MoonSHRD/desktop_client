@@ -26,6 +26,10 @@ __decorate([
     __metadata("design:type", String)
 ], EventModel.prototype, "type", void 0);
 __decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], EventModel.prototype, "date", void 0);
+__decorate([
     typeorm_1.ManyToOne(type => ChatModel_1.ChatModel, chat => chat.events),
     typeorm_1.JoinColumn(),
     __metadata("design:type", ChatModel_1.ChatModel)

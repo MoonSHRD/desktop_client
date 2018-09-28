@@ -135,23 +135,23 @@ class ChatsController extends Controller_1.Controller {
             yield this.load_chat(chat, this.chat_to_menu.user);
         });
     }
-    subscribe(user) {
+    subscribe(user, key) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(`subscribing to user ${user.id}`);
             this.dxmpp.subscribe(user);
         });
     }
-    user_subscribed(user) {
+    user_subscribed(user, key) {
         return __awaiter(this, void 0, void 0, function* () {
             this.dxmpp.acceptSubscription(user);
             let check = yield UserModel_1.UserModel.findOne(user.id);
             if (!check)
-                yield this.subscribe(user);
+                yield this.subscribe(user, key);
         });
     }
     joined_room(room_data, messages) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(messages);
+            console.log("Old messages:\n", messages);
             let chat = new ChatModel_1.ChatModel();
             chat.id = room_data.id;
             chat.domain = room_data.domain;
@@ -165,6 +165,12 @@ class ChatsController extends Controller_1.Controller {
                 chat.contract_address = room_data.contractaddress;
             yield chat.save();
             yield this.load_chat(chat, this.chat_to_menu.group);
+            messages.forEach((message) => __awaiter(this, void 0, void 0, function* () {
+                console.log(message.time);
+                let buf = message.time.split(" ");
+                message.time = `${buf[0]} ${buf[1]}`;
+                yield this.controller_register.run_controller("MessageController", "received_group_message", message.message, message.sender, message.time);
+            }));
         });
     }
     create_group(group_name, group_type = this.group_chat_types.channel) {
@@ -196,7 +202,7 @@ class ChatsController extends Controller_1.Controller {
                 if (chat)
                     group.type = chat.type;
                 else
-                    group.type = group.channel === '1' ? this.group_chat_types.join_channel : this.group_chat_types.join_group;
+                    group.type = group.channel === 'channel' ? this.group_chat_types.join_channel : this.group_chat_types.join_group;
                 this.queried_chats[group.id] = group;
                 this.send_data('found_chats', this.render('main/chatsblock/chats/imDialog.pug', group));
             }));

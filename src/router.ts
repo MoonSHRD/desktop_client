@@ -174,19 +174,19 @@ export class Router {
             await this.controller_register.queue_controller('ChatsController', 'found_groups', result);
         });
 
-        this.listen_event(this.dxmpp, 'joined_room', async (room_data,messages) => {
+        this.listen_event(this.dxmpp, 'joined_room', async (room_data, messages) => {
             console.log(`joined ${room_data.name} as ${room_data.role}`);
-            await this.controller_register.queue_controller('ChatsController', 'joined_room', room_data,messages);
+            await this.controller_register.queue_controller('ChatsController', 'joined_room', room_data, messages);
         });
 
-        this.listen_event(this.dxmpp, 'subscribe', async (user) => {
+        this.listen_event(this.dxmpp, 'subscribe', async (user, key) => {
             console.log(`user ${user.id} subscribed`);
-            await this.controller_register.queue_controller('ChatsController', 'user_subscribed', user);
+            await this.controller_register.queue_controller('ChatsController', 'user_subscribed', user, key);
         });
 
-        this.listen_event(this.dxmpp, 'chat', async (user, message) => {
-            console.log(`user ${user.id} subscribed`);
-            await this.controller_register.queue_controller('MessagesController', 'received_message', user, message);
+        this.listen_event(this.dxmpp, 'chat', async (user, message, date) => {
+            console.log(`user ${user.id} subscribed at ${date}`);
+            await this.controller_register.queue_controller('MessagesController', 'received_message', user, message, date);
         });
 
         this.listen_event(this.dxmpp, 'confirmation', async (message) => {
@@ -194,15 +194,15 @@ export class Router {
             await this.controller_register.queue_controller('MessagesController', 'message_delivered', message);
         });
 
-        this.listen_event(this.dxmpp, 'user_joined_room', async (user, room_data) => {
-            console.log(`user ${user.id} joined room ${room_data.id}`);
-            await this.controller_register.queue_controller('EventsController', 'user_joined_room', user, room_data);
+        this.listen_event(this.dxmpp, 'user_joined_room', async (user, room_data, date) => {
+            console.log(`user ${user.id} joined room ${room_data.id} at ${date}`);
+            await this.controller_register.queue_controller('EventsController', 'user_joined_room', user, room_data, date);
         });
 
-        this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, stamp) => {
+        this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, date) => {
             // console.log(`${sender} says ${message} in ${room_data.id} chat on ${stamp}`);
-            console.log(`${message} in ${room_data.id} chat on ${stamp}`);
-            await this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
+            console.log(`${message} in ${room_data.id} chat on ${date}. Sender: ${sender}`);
+            await this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, date);
         });
     }
 }
