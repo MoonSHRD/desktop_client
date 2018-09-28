@@ -129,8 +129,8 @@ export class Router {
             await this.controller_register.queue_controller('ChatsController', 'subscribe', data);
         });
 
-        this.listen_event(this.ipcMain, 'load_chats_by_menu', async (event, menu) => {
-            await this.controller_register.queue_controller('ChatsController', 'load_chats_by_menu', menu);
+        this.listen_event(this.ipcMain, 'load_chats', async (event, type) => {
+            await this.controller_register.queue_controller('ChatsController', 'load_chats', type);
         });
 
         this.listen_event(this.ipcMain, 'get_my_vcard', async () => {
@@ -179,9 +179,9 @@ export class Router {
             await this.controller_register.queue_controller('ChatsController', 'found_groups', result);
         });
 
-        this.listen_event(this.dxmpp, 'joined_room', async (room_data) => {
+        this.listen_event(this.dxmpp, 'joined_room', async (room_data,messages) => {
             console.log(`joined ${room_data.name} as ${room_data.role}`);
-            await this.controller_register.queue_controller('ChatsController', 'joined_room', room_data);
+            await this.controller_register.queue_controller('ChatsController', 'joined_room', room_data,messages);
         });
 
         this.listen_event(this.dxmpp, 'subscribe', async (user) => {
@@ -194,10 +194,9 @@ export class Router {
             await this.controller_register.queue_controller('MessagesController', 'received_message', user, message);
         });
 
-        this.listen_event(this.dxmpp, 'confirmation', async (user, message) => {
-            console.log('confirmation');
-            console.log(message);
-            // await this.controller_register.queue_controller('MessagesController', 'received_message', user, message);
+        this.listen_event(this.dxmpp, 'confirmation', async (message) => {
+            console.log(`message ${message.userid} delivered`);
+            await this.controller_register.queue_controller('MessagesController', 'message_delivered', message);
         });
 
         this.listen_event(this.dxmpp, 'user_joined_room', async (user, room_data) => {
@@ -206,7 +205,8 @@ export class Router {
         });
 
         this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, stamp) => {
-            console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
+            // console.log(`${sender} says ${message} in ${room_data.id} chat on ${stamp}`);
+            console.log(`${message} in ${room_data.id} chat on ${stamp}`);
             await this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
         });
     }

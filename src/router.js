@@ -115,8 +115,8 @@ class Router {
         this.listen_event(this.ipcMain, 'send_subscribe', (event, data) => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('ChatsController', 'subscribe', data);
         }));
-        this.listen_event(this.ipcMain, 'load_chats_by_menu', (event, menu) => __awaiter(this, void 0, void 0, function* () {
-            yield this.controller_register.queue_controller('ChatsController', 'load_chats_by_menu', menu);
+        this.listen_event(this.ipcMain, 'load_chats', (event, type) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('ChatsController', 'load_chats', type);
         }));
         this.listen_event(this.ipcMain, 'get_my_vcard', () => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('ChatsController', 'get_my_vcard');
@@ -154,9 +154,9 @@ class Router {
             console.log('groups found');
             yield this.controller_register.queue_controller('ChatsController', 'found_groups', result);
         }));
-        this.listen_event(this.dxmpp, 'joined_room', (room_data) => __awaiter(this, void 0, void 0, function* () {
+        this.listen_event(this.dxmpp, 'joined_room', (room_data, messages) => __awaiter(this, void 0, void 0, function* () {
             console.log(`joined ${room_data.name} as ${room_data.role}`);
-            yield this.controller_register.queue_controller('ChatsController', 'joined_room', room_data);
+            yield this.controller_register.queue_controller('ChatsController', 'joined_room', room_data, messages);
         }));
         this.listen_event(this.dxmpp, 'subscribe', (user) => __awaiter(this, void 0, void 0, function* () {
             console.log(`user ${user.id} subscribed`);
@@ -166,17 +166,17 @@ class Router {
             console.log(`user ${user.id} subscribed`);
             yield this.controller_register.queue_controller('MessagesController', 'received_message', user, message);
         }));
-        this.listen_event(this.dxmpp, 'confirmation', (user, message) => __awaiter(this, void 0, void 0, function* () {
-            console.log('confirmation');
-            console.log(message);
-            // await this.controller_register.queue_controller('MessagesController', 'received_message', user, message);
+        this.listen_event(this.dxmpp, 'confirmation', (message) => __awaiter(this, void 0, void 0, function* () {
+            console.log(`message ${message.userid} delivered`);
+            yield this.controller_register.queue_controller('MessagesController', 'message_delivered', message);
         }));
         this.listen_event(this.dxmpp, 'user_joined_room', (user, room_data) => __awaiter(this, void 0, void 0, function* () {
             console.log(`user ${user.id} joined room ${room_data.id}`);
             yield this.controller_register.queue_controller('EventsController', 'user_joined_room', user, room_data);
         }));
         this.listen_event(this.dxmpp, 'groupchat', (room_data, message, sender, stamp) => __awaiter(this, void 0, void 0, function* () {
-            console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
+            // console.log(`${sender} says ${message} in ${room_data.id} chat on ${stamp}`);
+            console.log(`${message} in ${room_data.id} chat on ${stamp}`);
             yield this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
         }));
     }

@@ -433,6 +433,20 @@ background: #fff;
     cursor: pointer;
 }
 
+.offerPublication {
+
+    background-color: #2BC2F9;
+    border: 0;
+    height: 40px;
+    background-size: 18px;
+    width: 50%;
+    border-radius: 10px;
+    color: #fff;
+
+    outline: none;
+    cursor: pointer;
+}
+
 .showOnMapChannel{
     background-image: url(./components/main/chatsblock/img/mapPoint.png);
 

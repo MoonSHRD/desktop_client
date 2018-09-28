@@ -35,18 +35,18 @@ class MessagesController extends Controller {
 
     private async render_message(message: MessageModel, chat_id: string) {
         let self_info = await this.get_self_info();
-        message.sender_avatar = message.sender.avatar;
-        message.mine = (self_info.id === message.sender.id);
+        message.sender_avatar = message.sender?message.sender.avatar:message.chat.avatar;
+        message.mine = message.sender?(self_info.id === message.sender.id):false;
         let html = this.render('main/messagingblock/message.pug', message);
         const data = {
-            id: chat_id,
+            id: message.chat.id,
             message: html,
         };
         this.send_data('received_message', data);
     }
 
     private async render_chat_messages(chat_id: string) {
-        let messages = await MessageModel.get_chat_messages_with_sender(chat_id);
+        let messages = await MessageModel.get_chat_messages_with_sender_chat(chat_id);
 
         messages.forEach(async (message) => {
             await this.render_message(message, chat_id);
@@ -73,8 +73,14 @@ class MessagesController extends Controller {
         }
 
         // this.dxmpp.send(chat, text, group);
-        this.dxmpp.send(chat, text, message.id, group);
+        this.dxmpp.send(chat, text, message.id, chat.type);
         await this.render_message(message, id);
+    };
+
+    async message_delivered(message_d) {
+        let message = await MessageModel.findOne(message_d.userid);
+        message.server_id=message_d.DBid;
+        await message.save();
     };
 
     async received_message(user, text) {
@@ -91,13 +97,14 @@ class MessagesController extends Controller {
     };
 
     async received_group_message(room_data, message, sender, stamp) {
+
         let self_info = await this.get_self_info();
 
-        if (self_info.id === sender.address) return;
+        if (self_info.id === sender) return;
 
         let userModel: UserModel;
         if (sender)
-            userModel = await UserModel.findOne(sender.address);
+            userModel = await UserModel.findOne(sender);
 
         let chat = await ChatModel.findOne(room_data.id);
         let messageModel = new MessageModel();

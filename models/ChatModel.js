@@ -37,6 +37,7 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
         this.type = '';
         this.contract_address = '';
         this.active = false;
+        this.online = false;
     }
     static get_user_chat_id(self_id, user_id) {
         let sort = [self_id, user_id];
@@ -104,6 +105,7 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
             let data = (yield ChatModel_1.get_chat_opponent(this.id));
             this.avatar = data.avatar;
             this.name = data.name;
+            this.online = data.online;
             this.domain = data.domain;
             return data.id;
         });

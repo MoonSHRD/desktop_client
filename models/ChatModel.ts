@@ -38,6 +38,7 @@ export class ChatModel extends BaseEntity {
     users: UserModel[];
 
     active:boolean=false;
+    online:boolean=false;
 
     static get_user_chat_id(self_id:string,user_id:string){
         let sort=[self_id,user_id];
@@ -96,6 +97,7 @@ export class ChatModel extends BaseEntity {
         let data:UserModel=(await ChatModel.get_chat_opponent(this.id));
         this.avatar=data.avatar;
         this.name=data.name;
+        this.online=data.online;
         this.domain=data.domain;
         return data.id
     }

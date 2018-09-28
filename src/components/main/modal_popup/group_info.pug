@@ -8,25 +8,45 @@ style
     .container.scrollbar#style-10(style='overflow-y: scroll; height: 630px')
         .row.m-0.groupInfoHeader
             .gradient
-            .col-sm-3.text-left
-                img.mr-3(src='components/main/modal_popup/img/portfol.png')
-                p.m-0(style='line-height: 1') Share Your News
-            .col-sm-4.offset-sm-1.text-center(style='margin-top: -60px')
+            .col-sm-4.text-left
+                .row
+                    .col-sm-6.text-center.m-0.p-0
+                        p.m-0.p-0
+                            b Section:
+                        p.m-0.p-0
+                            b Category:
+                    .col-sm-6.m-0.p-0
+                        p.m-0.p-0 Celebrities
+                        p.m-0.p-0 Culture
+            .col-sm-4.o.text-center(style='margin-top: -60px')
                 img.rounded-circle(src=avatar width=80 height=80)
                 h5.modal-title #{name}
-            .col-sm-3.offset-sm-1.text-left
+            .col-sm-3.offset-1.text-left
                 img.mr-3(src='components/main/modal_popup/img/bell.png')
                 p.m-0(style='line-height: 1') Switch on notifications
 
-        .row.m-4(style='margin-top: 70px !important')
+        .row.mt-3(style='margin-top: 80px !important')
             .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
-                img(src='components/main/modal_popup/img/leave.png')
-                p.m-0.ml-3(style="color: #2BC2F9") Leave a group
+                img(src='components/main/modal_popup/img/groups.png')
+                p.m-0.ml-3(style="color: #2BC2F9") Join a group
+        .row.m-3
+            .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                img(src='components/main/modal_popup/img/lock.png')
+                p.m-0.ml-3() Private group
 
-        .row.m-0.justify-content-around
-            .col-sm-5
-                .row.cardInfo
-                    .col-sm-6
+        .row.m-3
+            .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                button.offerPublication.col-sm-6 Offer a publication
+
+        .row.mt-4
+            .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                p.m-0.p-0 Token price:
+                    b 1Grdn=2MnShrd
+
+        .row.m-2.justify-content-around
+            .col-sm-6
+                .row.cardInfo.p-0.m-0.pb-3
+                    .col-sm-6.text-center
                         p.my-3
                             b Token name
                         p.my-3
@@ -34,23 +54,20 @@ style
                     .col-sm-6
                         p.my-3 gordon_token
                         p.my-3 100 000
-            .col-sm-5
-                .row.cardInfo
-                    .col-sm-6
-                        p.my-3
-                            b Section
-                        p.my-3
-                            b.mt-0 Category
-                    .col-sm-6
-                        p.my-3 Celebrities
-                        p.my-3 Culture
+                    button.offerPublication.col-sm-6.offset-3 Get more tokens
+
+                    .col-md-12.text-right
+                        a(href='#')
+                            img(src='components/main/modal_popup/img/gift.png')
+
+
 
         .row.mx-0.my-5.justify-content-around
-            .col-sm-5.p-0
+            .col-sm-6.p-0.text-center
                 button.showOnMapChannel.col-sm-12 Show On a Map
 
-            .col-sm-5.p-0
-                button.calendarChannel.col-sm-12 Сalendar of events
+            //.col-sm-5.p-0
+            //    button.calendarChannel.col-sm-12 Сalendar of events
 
 
 
@@ -117,52 +134,7 @@ style
 
                 .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
                     p.m-0(style="color: #2BC2F9") #blogger
-            //    .col-sm-6.p-0
-            //
-            //        p Alexandr Gordon
-            //        p Alexandr Gordon
-            //    .col-sm-2.p-0
-            //        img(src='components/main/modal_popup/img/chats.png')
-            //        img(src='components/main/modal_popup/img/chats.png')
-            //        img(src='components/main/modal_popup/img/chats.png')
-            //.col-sm-5.p-0
-            //    p Goals
-            //    input.serchInChannel.col-sm-12(placeholder="search")
-            //    .row.shadow
-            //        .col-sm-6
-            //            p Section
-            //            p Category
-            //        .col-sm-6
-            //            p Celebrities
-            //            p Culture
-            //.col-sm-6
 
-
-            //.col-sm
-            //    table.table
-            //        tbody
-            //            tr
-            //                th(scope='row') Channel name
-            //                td #{name}
-            //            tr
-            //                th(scope='row') Token name
-            //                td #{name}_token
-            //            tr
-            //                th(scope='row') Total supply
-            //                td 100000
-
-//.modal-footer
-//    .container
-//        if (role !== "moderator")
-//            .row
-//                .col-sm-12
-//                    label Offer publication:
-//            .row.align-items-center
-//                .col-sm-8
-//                    textarea.form-control.noresize(rows="2")
-//
-//                .col-sm-4
-//                    button(class='btn btn-primary col-sm-12' ) Suggest publication
 
 script
     include script.js

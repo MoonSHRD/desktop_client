@@ -42,11 +42,11 @@ class MessagesController extends Controller_1.Controller {
     render_message(message, chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
-            message.sender_avatar = message.sender.avatar;
-            message.mine = (self_info.id === message.sender.id);
+            message.sender_avatar = message.sender ? message.sender.avatar : message.chat.avatar;
+            message.mine = message.sender ? (self_info.id === message.sender.id) : false;
             let html = this.render('main/messagingblock/message.pug', message);
             const data = {
-                id: chat_id,
+                id: message.chat.id,
                 message: html,
             };
             this.send_data('received_message', data);
@@ -54,7 +54,7 @@ class MessagesController extends Controller_1.Controller {
     }
     render_chat_messages(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let messages = yield MessageModel_1.MessageModel.get_chat_messages_with_sender(chat_id);
+            let messages = yield MessageModel_1.MessageModel.get_chat_messages_with_sender_chat(chat_id);
             messages.forEach((message) => __awaiter(this, void 0, void 0, function* () {
                 yield this.render_message(message, chat_id);
             }));
@@ -80,8 +80,16 @@ class MessagesController extends Controller_1.Controller {
                 group = true;
             }
             // this.dxmpp.send(chat, text, group);
-            this.dxmpp.send(chat, text, message.id, group);
+            this.dxmpp.send(chat, text, message.id, chat.type);
             yield this.render_message(message, id);
+        });
+    }
+    ;
+    message_delivered(message_d) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let message = yield MessageModel_1.MessageModel.findOne(message_d.userid);
+            message.server_id = message_d.DBid;
+            yield message.save();
         });
     }
     ;
@@ -103,11 +111,11 @@ class MessagesController extends Controller_1.Controller {
     received_group_message(room_data, message, sender, stamp) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
-            if (self_info.id === sender.address)
+            if (self_info.id === sender)
                 return;
             let userModel;
             if (sender)
-                userModel = yield UserModel_1.UserModel.findOne(sender.address);
+                userModel = yield UserModel_1.UserModel.findOne(sender);
             let chat = yield ChatModel_1.ChatModel.findOne(room_data.id);
             let messageModel = new MessageModel_1.MessageModel();
             messageModel.text = message;

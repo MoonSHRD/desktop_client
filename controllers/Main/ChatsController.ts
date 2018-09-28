@@ -51,19 +51,19 @@ class ChatsController extends Controller {
         }
     }
 
-    async load_chats_by_menu(menu_to_chat:string){
-        let type:string;
-        switch (menu_to_chat) {
-            case this.chat_to_menu.user:
-                type=this.chat_types.user;
-                break;
-            case this.chat_to_menu.group:
-                type=this.chat_types.group;
-                break;
-        }
-        if (type)
-            await this.load_chats(type);
-    }
+    // async load_chats_by_menu(menu_to_chat:string){
+    //     let type:string;
+    //     switch (menu_to_chat) {
+    //         case this.chat_to_menu.user:
+    //             type=this.chat_types.user;
+    //             break;
+    //         case this.chat_to_menu.group:
+    //             type=this.chat_types.group;
+    //             break;
+    //     }
+    //     if (type)
+    //         await this.load_chats(type);
+    // }
 
     async load_chats(type: string, first: boolean = false) {
         console.log('load_chats');
@@ -133,14 +133,15 @@ class ChatsController extends Controller {
             await this.subscribe(user);
     }
 
-    async joined_room(room_data) {
+    async joined_room(room_data,messages) {
+        console.log(messages);
         let chat = new ChatModel();
 
         chat.id = room_data.id;
         chat.domain = room_data.domain;
         chat.avatar = room_data.avatar;
         chat.name = room_data.name;
-        chat.type = room_data.channel === "1" ? this.group_chat_types.channel : this.group_chat_types.group;
+        chat.type = room_data.channel;
         chat.role = room_data.role;
         if (room_data.bio)
             chat.bio = room_data.bio;
@@ -152,8 +153,8 @@ class ChatsController extends Controller {
         await this.load_chat(chat, this.chat_to_menu.group)
     }
 
-    async create_group(group_name: string) {
-        let group = {name: group_name, domain: "localhost"};
+    async create_group(group_name: string, group_type:string=this.group_chat_types.channel) {
+        let group = {name: group_name, domain: "localhost", type: group_type};
         this.dxmpp.register_channel(group, '');
     }
 
