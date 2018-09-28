@@ -60,21 +60,19 @@ class ChatsController extends Controller_1.Controller {
             }
         });
     }
-    load_chats_by_menu(menu_to_chat) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let type;
-            switch (menu_to_chat) {
-                case this.chat_to_menu.user:
-                    type = this.chat_types.user;
-                    break;
-                case this.chat_to_menu.group:
-                    type = this.chat_types.group;
-                    break;
-            }
-            if (type)
-                yield this.load_chats(type);
-        });
-    }
+    // async load_chats_by_menu(menu_to_chat:string){
+    //     let type:string;
+    //     switch (menu_to_chat) {
+    //         case this.chat_to_menu.user:
+    //             type=this.chat_types.user;
+    //             break;
+    //         case this.chat_to_menu.group:
+    //             type=this.chat_types.group;
+    //             break;
+    //     }
+    //     if (type)
+    //         await this.load_chats(type);
+    // }
     load_chats(type, first = false) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('load_chats');
@@ -151,14 +149,15 @@ class ChatsController extends Controller_1.Controller {
                 yield this.subscribe(user);
         });
     }
-    joined_room(room_data) {
+    joined_room(room_data, messages) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(messages);
             let chat = new ChatModel_1.ChatModel();
             chat.id = room_data.id;
             chat.domain = room_data.domain;
             chat.avatar = room_data.avatar;
             chat.name = room_data.name;
-            chat.type = room_data.channel === "1" ? this.group_chat_types.channel : this.group_chat_types.group;
+            chat.type = room_data.channel;
             chat.role = room_data.role;
             if (room_data.bio)
                 chat.bio = room_data.bio;
@@ -168,9 +167,9 @@ class ChatsController extends Controller_1.Controller {
             yield this.load_chat(chat, this.chat_to_menu.group);
         });
     }
-    create_group(group_name) {
+    create_group(group_name, group_type = this.group_chat_types.channel) {
         return __awaiter(this, void 0, void 0, function* () {
-            let group = { name: group_name, domain: "localhost" };
+            let group = { name: group_name, domain: "localhost", type: group_type };
             this.dxmpp.register_channel(group, '');
         });
     }

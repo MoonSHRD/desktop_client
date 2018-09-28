@@ -35,6 +35,11 @@ let MessageModel = MessageModel_1 = class MessageModel extends typeorm_1.BaseEnt
             return yield MessageModel_1.find({ relations: ['sender'], where: { chat: chat_id } });
         });
     }
+    static get_chat_messages_with_sender_chat(chat_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield MessageModel_1.find({ relations: ['sender', 'chat'], where: { chat: chat_id } });
+        });
+    }
 };
 __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
