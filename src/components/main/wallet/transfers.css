@@ -1,0 +1,18 @@
+.transfer input {
+    width: 150px;
+    border: none;
+    background-color: #F7F7F7;
+    border-radius: 12px;
+    padding: 0 10px;
+}
+
+.transfer table a {
+    color: #2BC2F9;
+}
+
+.sendTokenButton {
+    background-color: #2BC2F9;
+    width: 70px;
+    border-radius: 10px;
+    color: white;
+}

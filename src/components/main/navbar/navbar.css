@@ -76,6 +76,7 @@
 
 .resize {
     width: 300px;
+    min-width: 200px;
     -moz-box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Для Firefox */
     -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Для Safari и Chrome */
     box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */

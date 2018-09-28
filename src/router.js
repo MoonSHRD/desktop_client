@@ -153,6 +153,10 @@ class Router {
             console.log('creating group');
             yield this.controller_register.queue_controller('ChatsController', 'join_chat', chat);
         }));
+        this.listen_event(this.ipcMain, 'change_wallet_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            console.log('change_wallet_menu');
+            yield this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
+        }));
         this.listen_event(this.dxmpp, 'find_groups', (result) => __awaiter(this, void 0, void 0, function* () {
             console.log('groups found');
             yield this.controller_register.queue_controller('ChatsController', 'found_groups', result);

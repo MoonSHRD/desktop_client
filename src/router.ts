@@ -177,6 +177,11 @@ export class Router {
             await this.controller_register.queue_controller('ChatsController', 'join_chat', chat);
         });
 
+        this.listen_event(this.ipcMain, 'change_wallet_menu', async (event, arg) => {
+            console.log('change_wallet_menu');
+            await this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
+        });
+
         this.listen_event(this.dxmpp, 'find_groups', async (result) => {
             console.log('groups found');
             await this.controller_register.queue_controller('ChatsController', 'found_groups', result);

@@ -130,6 +130,22 @@ ul li.outMessage p {
     box-shadow: 0 0 13px rgba(0, 123, 255,0.5);
 }
 
+ul li.outMessage img, ul li.inMessage img {
+    border-radius: 100%;
+}
+
+ul li.outMessage img{
+    float: right;
+}
+
+ul li.inMessage p {
+   left: 15px;
+}
+
+ul li.outMessage p {
+    margin-right: 15px;
+}
+
 ul li.outMessage p::after {
     content: '';
     position: absolute;
@@ -417,6 +433,20 @@ background: #fff;
     cursor: pointer;
 }
 
+.offerPublication {
+
+    background-color: #2BC2F9;
+    border: 0;
+    height: 40px;
+    background-size: 18px;
+    width: 50%;
+    border-radius: 10px;
+    color: #fff;
+
+    outline: none;
+    cursor: pointer;
+}
+
 .showOnMapChannel{
     background-image: url(./components/main/chatsblock/img/mapPoint.png);
 
@@ -426,3 +456,59 @@ background: #fff;
     background-image: url(./components/main/modal_popup/img//calendar.png);
 
 }
+
+
+/* change font size to change size */
+
+/* change font size to change size */
+
+.loader {
+    font-size: 5px;
+    position: relative;
+    width: 4em;
+    height: 1em;
+    /*margin: 100px auto;*/
+}
+
+.dot {
+    width: 1em;
+    height: 1em;
+    border-radius: 0.5em;
+    background: #333;
+    position: absolute;
+    animation-duration: 0.5s;
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
+}
+
+.dot1, .dot2 {
+    left: 0;
+}
+
+.dot3 { left: 1.5em; }
+
+.dot4 { left: 3em; }
+
+@keyframes reveal {
+    from { transform: scale(0.001); }
+    to { transform: scale(1); }
+}
+
+@keyframes slide {
+    to { transform: translateX(1.5em) }
+}
+
+
+.dot1 {
+    /*animation-name: reveal;*/
+}
+
+.dot2, .dot3 {
+    animation-name: slide;
+}
+
+.dot4 {
+    animation-name: reveal;
+    animation-direction: reverse; /* thx @HugoGiraudel */
+}
+

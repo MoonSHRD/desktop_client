@@ -354,7 +354,7 @@ window.onload = function () {
         }
     });
 
-    $(document).on('click', '.peer_name', function () {
+    $(document).on('click', '[data-event=show_chat_info]', function () {
         const active_dialog = $('.active_dialog');
         const id = active_dialog.attr('id');
         const type=active_dialog.attr('data-type');

@@ -23,6 +23,11 @@ th {
 .cardInfo {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
-    height: 100px;
+    /*height: 100px;*/
     align-items: center;
+    padding: 20px;
 }
+
+
+
+
