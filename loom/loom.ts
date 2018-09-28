@@ -20,9 +20,11 @@ export class Loom {
     private pub: any;
     private addr: any;
     public token_addr: string=config.token_addr;
+    public token_decimals: number;
     private web3: any;
-    private NetReg: any;
-    private Token: any;
+    private NetRegContract: any;
+    private MoonshardTokenContract: any;
+    private IdentityContract: any;
     private $: any = qbox.create();
 
     public static getInstance() {
@@ -38,27 +40,29 @@ export class Loom {
         this.addr = LocalAddress.fromPublicKey(this.pub).toString();
         const loomTruffleProvider = new LoomTruffleProvider(
             "default",
-            "http://" + config.host + ":46658/rpc",
-            "http://" + config.host + ":46658/query",
+            `http://${config.loom_host}:${config.loom_port}/rpc`,
+            `http://${config.loom_host}:${config.loom_port}/query`,
             this.priv,
         );
         this.provider = loomTruffleProvider.getProviderEngine();
 
 
         this.web3 = new Web3(this.provider);
-        this.NetReg = new this.web3.eth.Contract(network_abi, config.net_reg_addr, {from: this.addr});
-        this.NetReg.methods.setToken(config.token_addr).send();
+        this.NetRegContract = new this.web3.eth.Contract(network_abi, config.net_reg_addr, {from: this.addr});
+        this.MoonshardTokenContract=new this.web3.eth.Contract(token_abi, this.token_addr, {from: this.addr});
+        this.token_decimals= await await this.MoonshardTokenContract.methods.decimals().call();
+    }
 
-        // this.token_addr=await this.get_token_addr();
-        this.Token=new this.web3.eth.Contract(token_abi, this.token_addr, {from: this.addr});
+    private prep_val(value){
+        return value/10^this.token_decimals;
     }
 
     async set_identity(name: string) {
-        return await this.NetReg.methods.createIdentity(name).send();
+        return await this.NetRegContract.methods.createIdentity(name).send();
     }
 
     async get_identity() {
-        return (await this.NetReg.methods.myIdentity().call()).toLowerCase();
+        return (await this.NetRegContract.methods.myIdentity().call()).toLowerCase();
     }
 
     async get_accs_list() {
@@ -85,21 +89,24 @@ export class Loom {
     // }
 
     async get_my_balance() {
-        return await this.Token.methods.balanceOf(this.addr).call();
+        let val = await this.MoonshardTokenContract.methods.balanceOf(this.addr).call();
+        return this.prep_val(val)
     }
 
     async get_balance(addres) {
-        return await this.Token.methods.balanceOf(addres).call();
+        let val =  await this.MoonshardTokenContract.methods.balanceOf(addres).call();
+        return this.prep_val(val)
     }
 
     async get_total_supply() {
-        // let token_addr = '0x4Dd841b5B4F69507C7E93ca23D2A72c7f28217a8'.toLowerCase();
-        return await this.Token.methods.totalSupply().call();
+        // let dec = await this.Token.methods.;
+        let val =  await this.MoonshardTokenContract.methods.totalSupply().call();
+        return this.prep_val(val)
     }
 
     async set_token_addr(token_addr: string = '') {
         token_addr = '0x4Dd841b5B4F69507C7E93ca23D2A72c7f28217a8'.toLowerCase();
-        return await this.NetReg.methods.setToken(token_addr).send();
+        return await this.NetRegContract.methods.setToken(token_addr).send();
     }
 
     static generate_private(): string {

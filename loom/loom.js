@@ -35,23 +35,25 @@ class Loom {
             this.priv = loom_js_1.CryptoUtils.B64ToUint8Array(private_key);
             this.pub = loom_js_1.CryptoUtils.publicKeyFromPrivateKey(this.priv);
             this.addr = loom_js_1.LocalAddress.fromPublicKey(this.pub).toString();
-            const loomTruffleProvider = new LoomTruffleProvider("default", "http://" + env_config_1.config.host + ":46658/rpc", "http://" + env_config_1.config.host + ":46658/query", this.priv);
+            const loomTruffleProvider = new LoomTruffleProvider("default", `http://${env_config_1.config.loom_host}:${env_config_1.config.loom_port}/rpc`, `http://${env_config_1.config.loom_host}:${env_config_1.config.loom_port}/query`, this.priv);
             this.provider = loomTruffleProvider.getProviderEngine();
             this.web3 = new Web3(this.provider);
-            this.NetReg = new this.web3.eth.Contract(network_abi, env_config_1.config.net_reg_addr, { from: this.addr });
-            this.NetReg.methods.setToken(env_config_1.config.token_addr).send();
-            // this.token_addr=await this.get_token_addr();
-            this.Token = new this.web3.eth.Contract(token_abi, this.token_addr, { from: this.addr });
+            this.NetRegContract = new this.web3.eth.Contract(network_abi, env_config_1.config.net_reg_addr, { from: this.addr });
+            this.MoonshardTokenContract = new this.web3.eth.Contract(token_abi, this.token_addr, { from: this.addr });
+            this.token_decimals = yield yield this.MoonshardTokenContract.methods.decimals().call();
         });
+    }
+    prep_val(value) {
+        return value / 10 ^ this.token_decimals;
     }
     set_identity(name) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.NetReg.methods.createIdentity(name).send();
+            return yield this.NetRegContract.methods.createIdentity(name).send();
         });
     }
     get_identity() {
         return __awaiter(this, void 0, void 0, function* () {
-            return (yield this.NetReg.methods.myIdentity().call()).toLowerCase();
+            return (yield this.NetRegContract.methods.myIdentity().call()).toLowerCase();
         });
     }
     get_accs_list() {
@@ -81,24 +83,27 @@ class Loom {
     // }
     get_my_balance() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.Token.methods.balanceOf(this.addr).call();
+            let val = yield this.MoonshardTokenContract.methods.balanceOf(this.addr).call();
+            return this.prep_val(val);
         });
     }
     get_balance(addres) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.Token.methods.balanceOf(addres).call();
+            let val = yield this.MoonshardTokenContract.methods.balanceOf(addres).call();
+            return this.prep_val(val);
         });
     }
     get_total_supply() {
         return __awaiter(this, void 0, void 0, function* () {
-            // let token_addr = '0x4Dd841b5B4F69507C7E93ca23D2A72c7f28217a8'.toLowerCase();
-            return yield this.Token.methods.totalSupply().call();
+            // let dec = await this.Token.methods.;
+            let val = yield this.MoonshardTokenContract.methods.totalSupply().call();
+            return this.prep_val(val);
         });
     }
     set_token_addr(token_addr = '') {
         return __awaiter(this, void 0, void 0, function* () {
             token_addr = '0x4Dd841b5B4F69507C7E93ca23D2A72c7f28217a8'.toLowerCase();
-            return yield this.NetReg.methods.setToken(token_addr).send();
+            return yield this.NetRegContract.methods.setToken(token_addr).send();
         });
     }
     static generate_private() {

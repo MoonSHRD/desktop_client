@@ -3,59 +3,24 @@
     "constant": false,
     "inputs": [
       {
-        "name": "_token",
+        "name": "_identity",
         "type": "address"
-      }
-    ],
-    "name": "setToken",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getToken",
-    "outputs": [
+      },
       {
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_addr",
-        "type": "address"
-      }
-    ],
-    "name": "setTokenFactory",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_username",
+        "name": "_pubkey",
         "type": "string"
-      }
-    ],
-    "name": "createIdentity",
-    "outputs": [
+      },
       {
-        "name": "",
-        "type": "address"
+        "name": "_messageCid",
+        "type": "string"
+      },
+      {
+        "name": "force",
+        "type": "bool"
       }
     ],
+    "name": "makeConversation",
+    "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
@@ -85,51 +50,28 @@
   },
   {
     "constant": false,
-    "inputs": [],
-    "name": "construct",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "myIdentity",
-    "outputs": [
+    "inputs": [
       {
-        "name": "",
+        "name": "_identity",
         "type": "address"
       }
     ],
+    "name": "conversationRequest",
+    "outputs": [],
     "payable": false,
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "constant": false,
     "inputs": [
       {
-        "name": "_addr",
-        "type": "address"
+        "name": "_username",
+        "type": "string"
       }
     ],
-    "name": "setSubFactory",
+    "name": "setUsername",
     "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "whoAmI",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
-    ],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
@@ -147,6 +89,38 @@
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "name": "_username",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "name": "username",
+        "type": "string"
+      }
+    ],
+    "name": "IdentityCreated",
+    "type": "event"
   },
   {
     "anonymous": false,

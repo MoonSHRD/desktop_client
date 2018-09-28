@@ -30,14 +30,18 @@ class AuthController extends Controller_1.Controller {
     ;
     auth(account) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.loom.connect(account.privKeyLoom);
-            console.log('loom connected');
-            // console.log(await this.loom.set_identity('gwagwa'));
-            console.log(yield this.loom.get_identity());
-            console.log(yield this.loom.token_addr);
-            console.log(yield this.loom.get_total_supply());
-            console.log(yield this.loom.get_my_balance());
-            console.log(yield this.loom.get_balance('0x0000000000000000000000000000000000000000'));
+            // await this.loom.connect(account.privKeyLoom);
+            // console.log('loom connected');
+            // try {
+            //     console.log(await this.loom.set_identity('gwagwa'));
+            // } catch (e) {
+            //     console.log(e);
+            // }
+            // console.log(await this.loom.get_identity());
+            // console.log(await this.loom.token_addr);
+            // console.log(await this.loom.get_total_supply());
+            // console.log(await this.loom.get_my_balance());
+            // console.log(await this.loom.get_balance('0x0000000000000000000000000000000000000000'));
             account.host = this.dxmpp_config.host;
             account.jidhost = this.dxmpp_config.jidhost;
             account.port = this.dxmpp_config.port;
