@@ -35,8 +35,8 @@ class MessagesController extends Controller {
 
     private async render_message(message: MessageModel, chat_id: string) {
         let self_info = await this.get_self_info();
-        message.sender_avatar = message.sender && message.chat.type!==this.group_chat_types.channel?message.sender.avatar:message.chat.avatar;
         message.mine = message.sender?(self_info.id === message.sender.id):false;
+        message.sender_avatar = message.sender && (message.chat.type!==this.group_chat_types.channel || message.mine)?message.sender.avatar:message.chat.avatar;
         let html = this.render('main/messagingblock/message.pug', message);
         const data = {
             id: message.chat.id,
