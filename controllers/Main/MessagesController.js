@@ -73,6 +73,7 @@ class MessagesController extends Controller_1.Controller {
             yield message.save();
             let group;
             if (chat.type === this.chat_types.user) {
+                yield this.render_message(message, id);
                 chat.id = yield chat.get_user_chat_meta();
                 group = false;
             }
@@ -81,7 +82,7 @@ class MessagesController extends Controller_1.Controller {
             }
             // this.dxmpp.send(chat, text, group);
             this.dxmpp.send(chat, text, group);
-            yield this.render_message(message, id);
+            // await this.render_message(message, id);
         });
     }
     ;

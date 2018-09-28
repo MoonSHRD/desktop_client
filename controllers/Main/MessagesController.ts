@@ -65,7 +65,9 @@ class MessagesController extends Controller {
         await message.save();
         let group: boolean;
 
+
         if (chat.type === this.chat_types.user) {
+            await this.render_message(message, id);
             chat.id = await chat.get_user_chat_meta();
             group = false;
         } else if (Object.values(this.group_chat_types).includes(chat.type)) {
@@ -74,7 +76,7 @@ class MessagesController extends Controller {
 
         // this.dxmpp.send(chat, text, group);
         this.dxmpp.send(chat, text, group);
-        await this.render_message(message, id);
+        // await this.render_message(message, id);
     };
 
     async message_delivered(message_d) {
