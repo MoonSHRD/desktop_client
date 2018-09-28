@@ -34,6 +34,7 @@ class Loom {
             this.priv = loom_js_1.CryptoUtils.B64ToUint8Array(private_key);
             this.pub = loom_js_1.CryptoUtils.publicKeyFromPrivateKey(this.priv);
             this.addr = loom_js_1.LocalAddress.fromPublicKey(this.pub).toString();
+            console.log('my address: ' + this.addr);
             const loomTruffleProvider = new LoomTruffleProvider("default", `http://${env_config_1.config.loom_host}:${env_config_1.config.loom_port}/rpc`, `http://${env_config_1.config.loom_host}:${env_config_1.config.loom_port}/query`, this.priv);
             this.provider = loomTruffleProvider.getProviderEngine();
             this.web3 = new Web3(this.provider);

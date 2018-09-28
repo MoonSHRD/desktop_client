@@ -18,7 +18,7 @@ export class Loom {
     private provider: any;
     private priv: any;
     private pub: any;
-    private addr: any;
+    public addr: any;
     public token_addr;//: string=config.token_addr;
     public token_decimals: number;
     private web3: any;
@@ -38,6 +38,7 @@ export class Loom {
         this.priv = CryptoUtils.B64ToUint8Array(private_key);
         this.pub = CryptoUtils.publicKeyFromPrivateKey(this.priv);
         this.addr = LocalAddress.fromPublicKey(this.pub).toString();
+        console.log('my address: '+this.addr);
         const loomTruffleProvider = new LoomTruffleProvider(
             "default",
             `http://${config.loom_host}:${config.loom_port}/rpc`,
