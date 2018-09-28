@@ -115,7 +115,7 @@ class MessagesController extends Controller_1.Controller {
             // if (self_info.id === sender) return;
             let userModel;
             if (sender)
-                userModel = yield UserModel_1.UserModel.findOne(sender.id);
+                userModel = yield UserModel_1.UserModel.findOne(sender.address);
             let chat = yield ChatModel_1.ChatModel.findOne(room_data.id);
             let messageModel = new MessageModel_1.MessageModel();
             messageModel.text = message;
