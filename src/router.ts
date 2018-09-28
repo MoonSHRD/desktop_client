@@ -93,7 +93,7 @@ export class Router {
             console.log(data);
             this.online = true;
             if (this.loading) {
-                await this.controller_register.queue_controller('MenuController', 'init_main');
+                // await this.controller_register.queue_controller('MenuController', 'init_main');
                 this.loading=false;
             }
 
@@ -143,6 +143,10 @@ export class Router {
 
         this.listen_event(this.ipcMain, 'get_my_vcard', async () => {
             await this.controller_register.queue_controller('ChatsController', 'get_my_vcard');
+        });
+
+        this.listen_event(this.ipcMain, 'transfer_token', async (event, arg) => {
+            await this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
         });
 
         this.listen_event(this.ipcMain, 'get_chat_msgs', async (event, arg) => {

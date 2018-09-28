@@ -87,7 +87,7 @@ class Router {
             console.log(data);
             this.online = true;
             if (this.loading) {
-                yield this.controller_register.queue_controller('MenuController', 'init_main');
+                // await this.controller_register.queue_controller('MenuController', 'init_main');
                 this.loading = false;
             }
         }));
@@ -127,6 +127,9 @@ class Router {
         }));
         this.listen_event(this.ipcMain, 'get_my_vcard', () => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('ChatsController', 'get_my_vcard');
+        }));
+        this.listen_event(this.ipcMain, 'transfer_token', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
         }));
         this.listen_event(this.ipcMain, 'get_chat_msgs', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('MessagesController', 'get_chat_messages', arg);

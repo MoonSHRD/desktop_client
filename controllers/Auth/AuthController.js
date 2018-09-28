@@ -28,15 +28,16 @@ class AuthController extends Controller_1.Controller {
         this.send_data(this.events.generate_mnemonic, this.eth.generate_mnemonic());
     }
     ;
-    auth(account) {
+    auth(account, first = false) {
         return __awaiter(this, void 0, void 0, function* () {
-            // await this.loom.connect(account.privKeyLoom);
-            // console.log('loom connected');
-            // try {
-            //     console.log(await this.loom.set_identity('gwagwa'));
-            // } catch (e) {
-            //     console.log(e);
-            // }
+            yield this.controller_register.run_controller('MenuController', 'init_main');
+            yield this.loom.connect(account.privKeyLoom);
+            console.log('loom connected');
+            if (first) {
+                let identyti_tx = yield this.loom.set_identity('tatat');
+                console.log(identyti_tx);
+                this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
+            }
             // console.log(await this.loom.get_identity());
             // console.log(await this.loom.token_addr);
             // console.log(await this.loom.get_total_supply());
@@ -69,7 +70,7 @@ class AuthController extends Controller_1.Controller {
             account.user = user;
             yield account.save();
             this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
-            yield this.auth(account);
+            yield this.auth(account, true);
         });
     }
     ;

@@ -18,14 +18,15 @@ class AuthController extends Controller {
         this.send_data(this.events.generate_mnemonic, this.eth.generate_mnemonic());
     };
 
-    private async auth(account: AccountModel) {
-        // await this.loom.connect(account.privKeyLoom);
-        // console.log('loom connected');
-        // try {
-        //     console.log(await this.loom.set_identity('gwagwa'));
-        // } catch (e) {
-        //     console.log(e);
-        // }
+    private async auth(account: AccountModel,first:boolean=false) {
+        await this.controller_register.run_controller('MenuController', 'init_main');
+        await this.loom.connect(account.privKeyLoom);
+        console.log('loom connected');
+        if (first) {
+            let identyti_tx= await this.loom.set_identity('tatat');
+            console.log(identyti_tx);
+            this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
+        }
         // console.log(await this.loom.get_identity());
         // console.log(await this.loom.token_addr);
         // console.log(await this.loom.get_total_supply());
@@ -60,7 +61,7 @@ class AuthController extends Controller {
         await account.save();
 
         this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
-        await this.auth(account);
+        await this.auth(account,true);
     };
 }
 
