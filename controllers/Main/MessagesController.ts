@@ -102,11 +102,11 @@ class MessagesController extends Controller {
 
         let self_info = await this.get_self_info();
 
-        if (self_info.id === sender) return;
+        // if (self_info.id === sender) return;
 
         let userModel: UserModel;
         if (sender)
-            userModel = await UserModel.findOne(sender);
+            userModel = await UserModel.findOne(sender.id);
 
         let chat = await ChatModel.findOne(room_data.id);
         let messageModel = new MessageModel();

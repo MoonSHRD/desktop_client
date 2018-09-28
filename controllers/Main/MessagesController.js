@@ -112,11 +112,10 @@ class MessagesController extends Controller_1.Controller {
     received_group_message(room_data, message, sender, stamp) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
-            if (self_info.id === sender)
-                return;
+            // if (self_info.id === sender) return;
             let userModel;
             if (sender)
-                userModel = yield UserModel_1.UserModel.findOne(sender);
+                userModel = yield UserModel_1.UserModel.findOne(sender.id);
             let chat = yield ChatModel_1.ChatModel.findOne(room_data.id);
             let messageModel = new MessageModel_1.MessageModel();
             messageModel.text = message;
