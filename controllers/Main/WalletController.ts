@@ -7,7 +7,7 @@ import {MessageModel} from "../../models/MessageModel";
 
 class WalletController extends Controller {
 
-    async change_wallet_menu(menu_type: string) {
+    async change_wallet_menu(menu_type: string="wallet_token") {
         this.send_data('change_wallet_menu', this.render(`main/wallet/${menu_type}.pug`));
         let data;
         switch (menu_type) {

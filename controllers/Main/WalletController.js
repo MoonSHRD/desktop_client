@@ -11,7 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const Controller_1 = require("../Controller");
 class WalletController extends Controller_1.Controller {
-    change_wallet_menu(menu_type) {
+    change_wallet_menu(menu_type = "wallet_token") {
         return __awaiter(this, void 0, void 0, function* () {
             this.send_data('change_wallet_menu', this.render(`main/wallet/${menu_type}.pug`));
             let data;

@@ -80,7 +80,7 @@ class MessagesController extends Controller_1.Controller {
                 group = true;
             }
             // this.dxmpp.send(chat, text, group);
-            this.dxmpp.send(chat, text, message.id, chat.type);
+            this.dxmpp.send(chat, text, group);
             yield this.render_message(message, id);
         });
     }
