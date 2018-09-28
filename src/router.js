@@ -185,8 +185,8 @@ class Router {
             yield this.controller_register.queue_controller('EventsController', 'user_joined_room', user, room_data);
         }));
         this.listen_event(this.dxmpp, 'groupchat', (room_data, message, sender, stamp) => __awaiter(this, void 0, void 0, function* () {
-            // console.log(`${sender} says ${message} in ${room_data.id} chat on ${stamp}`);
-            console.log(`${message} in ${room_data.id} chat on ${stamp}`);
+            console.log(`${sender} says ${message} in ${room_data.id} chat on ${stamp}`);
+            // console.log(`${message} in ${room_data.id} chat on ${stamp}`);
             yield this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
         }));
     }
