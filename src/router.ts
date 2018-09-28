@@ -10,17 +10,20 @@ import {dxmpp} from "moonshard_core";
 import {ipcMain} from "electron";
 import {ControllerRegister} from "../controllers/ControllerRegister";
 import {helper} from "./var_helper";
+import {Loom} from "../loom/loom";
 
 export class Router {
     readonly window: any;
     private paths: any;
     private controller_register: ControllerRegister;
     private online: boolean;
+    private loading: boolean=true;
     readonly ipcMain: any;
     readonly dxmpp: any;
     private events: any;
     private connecting: boolean = false;
     private types: any;
+    private loom: Loom = Loom.getInstance();
 
     constructor(window) {
         this.window = window;
@@ -29,6 +32,7 @@ export class Router {
         this.paths = helper.paths;
         this.ipcMain = ipcMain;
         this.dxmpp = dxmpp.getInstance();
+        this.loom = Loom.getInstance();
         this.events = helper.events;
         this.types = helper.paths;
     };
@@ -65,7 +69,7 @@ export class Router {
     }
 
     private async init_app() {
-        await this.controller_register.queue_controller('AuthController', 'init_auth');
+        await this.controller_register.run_controller('AuthController', 'init_auth');
         this.start_listening();
     }
 
@@ -88,7 +92,11 @@ export class Router {
             console.log('jackal connected');
             console.log(data);
             this.online = true;
-            await this.controller_register.queue_controller('MenuController', 'init_main');
+            if (this.loading) {
+                await this.controller_register.queue_controller('MenuController', 'init_main');
+                this.loading=false;
+            }
+
         });
 
         this.listen_event(this.dxmpp, 'close', async () => {
