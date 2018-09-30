@@ -344,8 +344,9 @@ window.onload = function () {
     });
 
     ipcRenderer.on('offer_publication', (event, data) => {
-        // $('#AppModal').modal('hide');
-        $('.modal-content').html(data);
+        $('#AppModal').modal('toggle');
+        $('#AppModal1').modal('toggle');
+        $('.modal-content1').html(data);
         // $('#AppModal').modal('show');
 
     });
