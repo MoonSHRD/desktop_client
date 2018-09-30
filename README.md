@@ -1,9 +1,5 @@
 # Moonshard
 
-A lot of work was done...
-
-move to https://github.com/MoonSHRD/react_desktop_client
-
 
 
 ## To Use
