@@ -20,6 +20,7 @@ class AuthController extends Controller {
 
     private async auth(account: AccountModel,first:boolean=false) {
         // await this.controller_register.run_controller('MenuController', 'init_main');
+
         await this.loom.connect(account.privKeyLoom);
         console.log('loom connected');
         if (first) {
@@ -27,6 +28,7 @@ class AuthController extends Controller {
             console.log(identyti_tx);
             this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
         }
+
         // console.log(await this.loom.get_identity());
         // console.log(await this.loom.token_addr);
         // console.log(await this.loom.get_total_supply());

@@ -5,31 +5,64 @@ style
     form.groupInfoModals
 
         // fieldsets
-        fieldset.modal-content
+        fieldset.modal-content(style='background-color: #F3F3F3')
             h2.fs-title Publication price:  1$ for 1 publication
             h3.fs-subtitle Amount to offer
-            textarea.invalid(rows='1', name='mnemonic', placeholder='Enter the amount for all your publications' id='' required=true)
+            textarea.invalid(rows='1', name='amountForPublic', placeholder='Enter the amount for all your publications' id='' required=true)
 
             h3.fs-subtitle Publication to offer
-            textarea.invalid(rows='1', name='mnemonic', placeholder='Topic of publicity' id='' required=true)
-            textarea.invalid(rows='4', name='mnemonic', placeholder='Text of the publication' id='' required=true)
+            textarea.invalid(rows='1', name='topicOfPublic', placeholder='Topic of publicity' id='' required=true)
+            textarea.invalid(rows='4', name='textOfPublic', placeholder='Text of the publication' id='' required=true)
 
             input.action-button(type='button', value='Generate' id='generate_mnemonic')
-            textarea.invalid(rows='3', name='mnemonic', placeholder='Write a text message for administrator' id='' required=true)
+            textarea.invalid(rows='3', name='textForAdmin', placeholder='Write a text message for administrator' id='' required=true)
 
-            input.groupInfoNext.action-button(type='button', name="next" value='Finalize offer' id='')
+            input.groupInfoNext.action-button(type='button' id='finalizeOffer' name="next" value='Finalize offer' )
 
             input.action-button(type='button', value='Cancel' id='')
             //input.groupInfoNext.action-button(type='button', name='next', id='input_mnemonic_next')
 
-        fieldset.modal-content
+        fieldset.modal-content(style='background-color: #F3F3F3')
             h2.fs-title Enter the four-digit PIN to confirm your identity
 
-            input.invalid(name='firstname', placeholder='****', type='text' required=true)
+            input.invalid(name='pinInput' maxlength="4" placeholder='****', type='text' )
 
 
-            input.groupInfoNext.action-button(type='button', name='next', value='Enter', id='')
+            input.action-button(type='button', name='pinConfirm', value='Enter', id='')
             input.previousGroupInfo.action-button(type='button', value='Cancel' name='Previous')
+
+        fieldset.modal-content(style='background-color: #F3F3F3')
+            h2.fs-title Publication price:  1$ for 1 publication
+            h3.fs-subtitle Amount to offer
+            textarea.invalid(rows='1', name='amountForPublicUnedit', placeholder='Enter the amount for all your publications' disabled required=true)
+
+            h3.fs-subtitle Publication to offer
+            textarea.invalid(rows='1', name='topicOfPublicUnedit', placeholder='Topic of publicity' disabled required=true)
+            textarea.invalid(rows='4', name='textOfPublicUnedit', placeholder='Text of the publication' disabled required=true)
+
+            input.action-button(type='button', value='Generate' id='generate_mnemonic')
+            textarea.invalid(rows='3', name='textForAdminUnedit', placeholder='Write a text message for administrator' disabled required=true)
+
+            input.groupInfoNext.action-button(type='button' id='' name="next" value='Send offer' )
+
+            input.action-button(type='button', value='Cancel' id='')
+
+
+        fieldset.modal-content(style='background-color: #F3F3F3')
+            h2.fs-title Your offer has been accepted.
+            img(src='components/main/modal_popup/img/bigBell.png')
+            h2 Withdrawn: -45 MNshrd (=3$)
+
+            input.action-button(type='button' value='OK' data-dismiss="modal" aria-label="Close")
+
+        fieldset.modal-content(style='background-color: #F3F3F3')
+            h2.fs-title You have not enough funds, do you want to buy 45 tokens for procceed purchase?
+            img(src='components/main/modal_popup/img/bigBell.png')
+
+
+            input.action-button(type='button', value='Get more tokens' id='')
+            input.action-button(type='button', value='Cancel' id='')
+            //input.groupInfoNext.action-button(type='button', name='next', id='input_mnemonic_next')
             //h2.next-step-title Step 3
         //fieldset.modal-content
         //    h2.fs-title Step 3

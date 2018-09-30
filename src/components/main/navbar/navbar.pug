@@ -39,11 +39,12 @@ style
         a.mt-3(data-id="menu_create_chat")
             div(class='image')
                 img(src="components/main/navbar/img/newChat.png")
-            span(data-translate-key="CREATE_CHAT")
-                | New group
-                br
-                | or channel
-            label(notice='{88}/')
+            span(data-translate-key="CREATE_CHAT") New group
+        a(data-id="menu_create_chat")
+            div(class='image')
+                img(src="components/main/navbar/img/bell.png")
+            span(data-translate-key="NOTIFICATIONS") Notifications
+
     div(class='exit')
 
         a
