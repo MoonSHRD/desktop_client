@@ -43,7 +43,7 @@ let current_fst, next_fst, previous_fst; //fieldsets
             //1. scale current_fs down to 80%
             scale = 1 - (1 - now) * 0.2;
             //2. bring next_fs from the right(50%)
-            left = (now * 50)+"%";
+            // left = (now * 50)+"%";
             //3. increase opacity of next_fs to 1 as it moves in
             opacity = 1 - now;
             current_fst.css({
@@ -51,7 +51,7 @@ let current_fst, next_fst, previous_fst; //fieldsets
                 'position': 'absolute',
 
             });
-            next_fst.css({'left': left, 'opacity': opacity});
+            next_fst.css({'left': 0, 'opacity': opacity});
         },
         duration: 800,
         complete: function(){
@@ -85,7 +85,7 @@ let current_fst, next_fst, previous_fst; //fieldsets
             left = ((1-now) * 50)+"%";
             //3. increase opacity of previous_fs to 1 as it moves in
             opacity = 1 - now;
-            current_fst.css({'left': left});
+            current_fst.css({'left': 0});
             previous_fst.css({'transform': 'scale('+scale+')', 'opacity': opacity, 'position': 'absolute'});
         },
         duration: 800,
@@ -97,6 +97,75 @@ let current_fst, next_fst, previous_fst; //fieldsets
         easing: 'easeInOutBack'
     });
 });
+
+
+
+    $('#finalizeOffer').click(function () {
+        let amountForPublic = $('textarea[name=amountForPublic]').val()
+        let topicOfPublic = $('textarea[name=topicOfPublic]').val()
+        let textOfPublic = $('textarea[name=textOfPublic]').val()
+        let textForAdmin = $('textarea[name=textForAdmin]').val()
+
+        $('textarea[name=amountForPublicUnedit]').val(amountForPublic) ;
+        $('textarea[name=topicOfPublicUnedit]').val(amountForPublic) ;
+        $('textarea[name=textOfPublicUnedit]').val(amountForPublic) ;
+        $('textarea[name=textForAdminUnedit]').val(amountForPublic) ;
+        // console.log(amountForPublic, topicOfPublic, textOfPublic, textForAdmin)
+    })
+
+    $('input[name=pinInput]').bind('input', function (e) {
+        console.log($(this).val());
+        if ($(this).val() !== '1111') $(this).addClass('invalid');
+        else $(this).removeClass('invalid');
+    });
+
+    $('input[name=pinConfirm]').click(function () {
+        if(!$('input[name=pinInput]').hasClass('invalid')){
+            if(animatingGroup) return false;
+            animatingGroup = true;
+
+            current_fst = $(this).parent();
+            next_fst = $(this).parent().next();
+
+            //activate next step on progressbar using the index of next_fs
+            // $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+            //show the next fieldset
+            next_fst.show();
+            //hide the current fieldset with style
+            current_fst.animate({opacity: 0}, {
+                step: function(now, mx) {
+                    //as the opacity of current_fs reduces to 0 - stored in "now"
+                    //1. scale current_fs down to 80%
+                    scale = 1 - (1 - now) * 0.2;
+                    //2. bring next_fs from the right(50%)
+                    left = (now * 50)+"%";
+                    //3. increase opacity of next_fs to 1 as it moves in
+                    opacity = 1 - now;
+                    current_fst.css({
+                        'transform': 'scale('+scale+')',
+                        'position': 'absolute',
+
+                    });
+                    next_fst.css({'left': 0, 'opacity': opacity});
+                },
+                duration: 800,
+                complete: function(){
+                    current_fst.hide();
+                    animatingGroup = false;
+                },
+                //this comes from the custom easing plugin
+                easing: 'easeInOutBack'
+            });
+            console.log('all good!')
+        }else{
+            console.log('Incorrect PIN')
+
+        }
+
+    });
+
+
 });
 
 //
@@ -247,11 +316,7 @@ let current_fst, next_fst, previous_fst; //fieldsets
 // // }
 //
 //
-// $('input[name=firstname]').bind('input', function (e) {
-//     // console.log($(this).val());
-//     if (!$(this).val()) $(this).addClass('invalid');
-//     else $(this).removeClass('invalid');
-// });
+
 //
 // $('textarea[name=mnemonic]').bind('input', function (e) {
 //     // console.log($(this).val());
