@@ -30,11 +30,11 @@ class AuthController extends Controller_1.Controller {
     ;
     auth(account, first = false) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.controller_register.run_controller('MenuController', 'init_main');
+            // await this.controller_register.run_controller('MenuController', 'init_main');
             yield this.loom.connect(account.privKeyLoom);
             console.log('loom connected');
             if (first) {
-                let identyti_tx = yield this.loom.set_identity('tatat');
+                let identyti_tx = yield this.loom.set_identity(account.user.name);
                 console.log(identyti_tx);
                 this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
             }
@@ -46,11 +46,12 @@ class AuthController extends Controller_1.Controller {
             account.host = this.dxmpp_config.host;
             account.jidhost = this.dxmpp_config.jidhost;
             account.port = this.dxmpp_config.port;
-            this.dxmpp.connect(account);
+            yield this.dxmpp.connect(account);
         });
     }
     save_acc(data) {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.run_controller('EventsController', 'init_loading');
             const privKey = this.eth.generate_priv_key();
             const address = this.eth.generate_address(privKey);
             let user = new UserModel_1.UserModel();

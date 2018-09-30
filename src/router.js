@@ -63,7 +63,7 @@ class Router {
     start_loading() {
         setTimeout(() => {
             this.init_sqlite();
-        }, 10000);
+        }, 1000);
     }
     init_app() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -84,10 +84,10 @@ class Router {
         }));
         this.listen_event(this.dxmpp, 'online', (data) => __awaiter(this, void 0, void 0, function* () {
             console.log('jackal connected');
-            console.log(data);
+            // console.log(data);
             this.online = true;
             if (this.loading) {
-                // await this.controller_register.queue_controller('MenuController', 'init_main');
+                yield this.controller_register.queue_controller('MenuController', 'init_main');
                 this.loading = false;
             }
         }));

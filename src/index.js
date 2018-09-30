@@ -399,6 +399,24 @@ window.onload = function () {
         });
     }
 
+    ipcRenderer.on('throw_error', (event, text) => {
+        $.notify(text, {
+
+            placement: {
+                from: "bottom",
+                align: "right"
+            },
+            animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+            },
+            z_index: 10031,
+            offset: 20,
+            spacing: 10,
+            type: 'danger'
+        });
+    });
+
     ipcRenderer.on('user_joined_room', (event, text) => {
         bot_notif(text);
     });

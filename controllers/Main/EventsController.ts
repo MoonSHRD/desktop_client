@@ -27,6 +27,14 @@ class EventsController extends Controller {
         // text+=' '+chat.name;
         // this.send_data('user_joined_room', text);
     }
+
+    async send_error(text:string) {
+        this.send_data('throw_error', text);
+    }
+
+    async init_loading() {
+        this.send_data(this.events.change_app_state, this.render(`loading/loading.pug`));
+    }
 }
 
 module.exports = EventsController;

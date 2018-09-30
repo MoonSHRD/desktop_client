@@ -65,7 +65,7 @@ export class Router {
     public start_loading() {
         setTimeout(() => {
             this.init_sqlite();
-        }, 10000)
+        }, 1000)
     }
 
     private async init_app() {
@@ -90,10 +90,10 @@ export class Router {
 
         this.listen_event(this.dxmpp, 'online', async (data) => {
             console.log('jackal connected');
-            console.log(data);
+            // console.log(data);
             this.online = true;
             if (this.loading) {
-                // await this.controller_register.queue_controller('MenuController', 'init_main');
+                await this.controller_register.queue_controller('MenuController', 'init_main');
                 this.loading=false;
             }
 

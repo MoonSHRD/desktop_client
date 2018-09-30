@@ -38,6 +38,16 @@ class EventsController extends Controller_1.Controller {
             // this.send_data('user_joined_room', text);
         });
     }
+    send_error(text) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.send_data('throw_error', text);
+        });
+    }
+    init_loading() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.send_data(this.events.change_app_state, this.render(`loading/loading.pug`));
+        });
+    }
 }
 module.exports = EventsController;
 //# sourceMappingURL=EventsController.js.map
