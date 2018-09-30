@@ -82,6 +82,9 @@ class Router {
         this.listen_event(this.ipcMain, 'generate_mnemonic', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('AuthController', 'generate_mnemonic', (arg));
         }));
+        this.listen_event(this.ipcMain, 'channel_suggestion', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('ChatsController', 'channel_suggestion', (arg));
+        }));
         this.listen_event(this.dxmpp, 'online', (data) => __awaiter(this, void 0, void 0, function* () {
             console.log('jackal connected');
             // console.log(data);

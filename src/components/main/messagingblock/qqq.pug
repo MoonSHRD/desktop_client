@@ -17,7 +17,7 @@ div(class="head_peer" id="head_peer")
 
 
 
-    if (type==="user_chat" || type==="group" || (type==="channel" && role==="moderator"))
+    if (type==="user_chat" )
 
         div(class='dropDown_menu')
             ul
@@ -48,6 +48,28 @@ div(class="head_peer" id="head_peer")
                         li Switch off notifications
                         li Write a message to administrator
 
+    else if  (type === "channel")
+
+        div(class='dropDown_menu')
+            ul
+                li
+                    a(data-id="")
+                        div(class='image')
+                            img(src="components/main/messagingblock/img/micr.png")
+                li
+                    a(data-id="")
+                        div(class='image')
+                            img(src="components/main/messagingblock/img/files.png")
+                li
+                    a(data-id="")
+                        div(class='image')
+                            img(src="components/main/messagingblock/img/dropDown_menu.png")
+                    ul.dropdownDoth
+                        li(data-event="show_chat_info") Info
+                        li Leave a channel
+                        li Switch off notifications
+                        li Write a message to administrator
+
 
 div(class="messaging_history" id="messaging_history")
 
@@ -59,6 +81,7 @@ div(class="messaging_history" id="messaging_history")
                 if (type === "join_channel" || type === "join_group_chat")
                     include join_button
                 else if (type === "user_chat" || type === "group" || (type === "channel" && role === "moderator"))
+
                     textarea(class="send_message_input"  placeholder="текст сообщения")
                     button(class="send_message_btn" data-translate-key="SEND_MESSAGE") отправить
         #buzz.tab-pane.fade(role='tabpanel')

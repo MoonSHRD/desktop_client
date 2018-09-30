@@ -1,5 +1,8 @@
 style
     include modal-content.css
+script
+    include script.js
+
 //.modal-header
 //    //h5.modal-title #{name}
 //    button.close(type='button', data-dismiss='modal', aria-label='Close')
@@ -9,15 +12,16 @@ style
         .row.m-0.groupInfoHeader
             .gradient
             .col-sm-4.text-left
-                .row
-                    .col-sm-6.text-center.m-0.p-0
-                        p.m-0.p-0
-                            b Section:
-                        p.m-0.p-0
-                            b Category:
-                    .col-sm-6.m-0.p-0
-                        p.m-0.p-0 Celebrities
-                        p.m-0.p-0 Culture
+
+                .col-sm-6.text-left.m-0.p-0
+                    p.m-0.p-0
+                        span
+                            b.mr-1 Section:
+                            | Celebrities
+                    p.m-0.p-0
+                        span
+                            b.mr-1 Category:
+                            | Culture
             .col-sm-4.o.text-center(style='margin-top: -60px')
                 img.rounded-circle(src=avatar width=80 height=80)
                 h5.modal-title #{name}
@@ -78,13 +82,13 @@ style
                 div.slick
                     div
                         //h1 1
-                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                        img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
                     div
                         //h1 2
-                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                        img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
                     div
                         //h1 3
-                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                        img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
 
                     div
                         //h1 4
@@ -97,7 +101,27 @@ style
                     div
                         //h1 6
                         img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                    div
+                        //h1 1
+                        img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+                    div
+                        //h1 2
+                        img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
+                    div
+                        //h1 3
+                        img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
 
+                    div
+                        //h1 4
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+                    div
+                        //h1 5
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+                    div
+                        //h1 6
+                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
         .row.m-4
             .col-sm-5.p-0
                 input.serchInChannel.col-sm-12(placeholder="search")
@@ -136,5 +160,3 @@ style
                     p.m-0(style="color: #2BC2F9") #blogger
 
 
-script
-    include script.js

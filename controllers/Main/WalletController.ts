@@ -20,7 +20,7 @@ class WalletController extends Controller {
                     amount: await this.loom.get_my_balance(),
                     total_supply: await this.loom.get_total_supply(),
                 };
-                this.send_data('wallet_load_token', this.render(`main/wallet/token.pug`, data));
+                this.send_data('wallet_token_table', this.render(`main/wallet/wallet_token_table.pug`, data));
                 break;
             default:
                 // this.send_data('change_wallet_menu', this.render(`main/wallet/${menu_type}.pug`));

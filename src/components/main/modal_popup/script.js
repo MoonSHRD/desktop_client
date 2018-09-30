@@ -7,10 +7,12 @@ $(function(){
         prevArrow: false,
         nextArrow: false,
         infinite: true,
+        // arrows: true,
         // speed: 300,
-        slidesToShow: 3,
         // centerMode: true,
         variableWidth: true,
+        slidesToShow: 3,
+        slidesToScroll: 3
 
     });
 let current_fst, next_fst, previous_fst; //fieldsets

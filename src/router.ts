@@ -88,6 +88,10 @@ export class Router {
             await this.controller_register.queue_controller('AuthController', 'generate_mnemonic', (arg));
         });
 
+        this.listen_event(this.ipcMain, 'channel_suggestion', async (event, arg) => {
+            await this.controller_register.queue_controller('ChatsController', 'channel_suggestion', (arg));
+        });
+
         this.listen_event(this.dxmpp, 'online', async (data) => {
             console.log('jackal connected');
             // console.log(data);

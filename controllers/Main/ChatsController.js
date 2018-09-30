@@ -178,6 +178,12 @@ class ChatsController extends Controller_1.Controller {
             this.dxmpp.find_group(group_name);
         });
     }
+    channel_suggestion() {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('suggested');
+            this.send_data('offer_publication', this.render('main/modal_popup/offer.pug'));
+        });
+    }
     join_chat(chat) {
         return __awaiter(this, void 0, void 0, function* () {
             this.dxmpp.join(chat);
