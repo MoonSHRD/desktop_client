@@ -51,9 +51,11 @@
 }
 
 .icon-bar span {
+    cursor: default;
     font-size: 15px;
     margin-left: 30px;
     white-space: nowrap
+
 }
 
 .icon-bar a:hover {

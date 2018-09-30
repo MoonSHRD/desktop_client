@@ -178,7 +178,33 @@ window.onload = function () {
     });
 
 
-    $(document).on('click', '.send_message_btn', function () {
+    $(document).on('keydown', '.send_message_input', function () {
+
+        if (event.ctrlKey && event.keyCode === 13) {
+            let msg_input = $('.send_message_input');
+            if (msg_input.val().trim() === ''){
+                msg_input.val('');
+                return;
+            }
+            let active_dialog = $('.active_dialog');
+            let obj = {
+                user:{
+                    id: active_dialog.attr('id'),
+                    domain: active_dialog.attr('data-domain'),
+                },
+                text: msg_input.val().trim(),
+                group: $('.active_dialog').attr('data-type')==='channel',
+            };
+
+            obj={id: active_dialog.attr('id'),text: msg_input.val().trim()};
+            // console.log(obj);
+            ipcRenderer.send("send_message", obj);
+            msg_input.val('');
+        }
+
+    });
+
+    $(document).on('click keydown', '.send_message_btn', function () {
         let msg_input = $('.send_message_input');
         if (msg_input.val().trim() === ''){
             msg_input.val('');

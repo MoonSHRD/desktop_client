@@ -7,7 +7,7 @@ let dict = {
         'SETTINGS': 'Settings',
         'SEND_MESSAGE': 'Send',
         'PEOPLE_NEARBY': 'People nearby',
-        'CREATE_CHAT': 'Create new chat' + '<br />' + 'or channel',
+        'CREATE_CHAT': 'New group',
 
     },
     ru: {

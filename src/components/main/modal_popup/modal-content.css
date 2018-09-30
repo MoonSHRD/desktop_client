@@ -28,6 +28,16 @@ th {
     padding: 20px;
 }
 
+/*.slick-list{*/
+   /*padding: 0 10px;*/
+/*}*/
+
+.slick-slide img {
+    border-radius: 25px;
+    box-shadow: 0 0 13px rgba(97, 97, 97, 1);
+    height: 150px;
+}
+
 
 
 
