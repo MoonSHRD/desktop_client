@@ -12,12 +12,13 @@ require("reflect-metadata");
 const AccountModel_1 = require("../../models/AccountModel");
 const Controller_1 = require("../Controller");
 const UserModel_1 = require("../../models/UserModel");
+const loom_1 = require("../../loom/loom");
 class AuthController extends Controller_1.Controller {
     init_auth() {
         return __awaiter(this, void 0, void 0, function* () {
             let account = yield AccountModel_1.AccountModel.findOne(1);
             if (account)
-                this.auth(account);
+                yield this.auth(account);
             else
                 this.send_data(this.events.change_app_state, this.render('auth/123.pug'));
         });
@@ -27,14 +28,30 @@ class AuthController extends Controller_1.Controller {
         this.send_data(this.events.generate_mnemonic, this.eth.generate_mnemonic());
     }
     ;
-    auth(account) {
-        account.host = this.dxmpp_config.host;
-        account.jidhost = this.dxmpp_config.jidhost;
-        account.port = this.dxmpp_config.port;
-        this.dxmpp.connect(account);
+    auth(account, first = false) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // await this.controller_register.run_controller('MenuController', 'init_main');
+            yield this.loom.connect(account.privKeyLoom);
+            console.log('loom connected');
+            if (first) {
+                let identyti_tx = yield this.loom.set_identity(account.user.name);
+                console.log(identyti_tx);
+                this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
+            }
+            // console.log(await this.loom.get_identity());
+            // console.log(await this.loom.token_addr);
+            // console.log(await this.loom.get_total_supply());
+            // console.log(await this.loom.get_my_balance());
+            // console.log(await this.loom.get_balance('0x0000000000000000000000000000000000000000'));
+            account.host = this.dxmpp_config.host;
+            account.jidhost = this.dxmpp_config.jidhost;
+            account.port = this.dxmpp_config.port;
+            yield this.dxmpp.connect(account);
+        });
     }
     save_acc(data) {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.run_controller('EventsController', 'init_loading');
             const privKey = this.eth.generate_priv_key();
             const address = this.eth.generate_address(privKey);
             let user = new UserModel_1.UserModel();
@@ -49,12 +66,12 @@ class AuthController extends Controller_1.Controller {
             yield user.save();
             let account = new AccountModel_1.AccountModel();
             account.privKey = privKey;
-            account.privKeyLoom = "fwafawfawfwa";
+            account.privKeyLoom = loom_1.Loom.generate_private();
             account.passphrase = data.mnemonic;
             account.user = user;
             yield account.save();
             this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
-            this.auth(account);
+            yield this.auth(account, true);
         });
     }
     ;

@@ -19,15 +19,19 @@ const moonshard_core_1 = require("moonshard_core");
 const electron_1 = require("electron");
 const ControllerRegister_1 = require("../controllers/ControllerRegister");
 const var_helper_1 = require("./var_helper");
+const loom_1 = require("../loom/loom");
 class Router {
     constructor(window) {
+        this.loading = true;
         this.connecting = false;
+        this.loom = loom_1.Loom.getInstance();
         this.window = window;
         this.controller_register = ControllerRegister_1.ControllerRegister.getInstance(window);
         this.online = false;
         this.paths = var_helper_1.helper.paths;
         this.ipcMain = electron_1.ipcMain;
         this.dxmpp = moonshard_core_1.dxmpp.getInstance();
+        this.loom = loom_1.Loom.getInstance();
         this.events = var_helper_1.helper.events;
         this.types = var_helper_1.helper.paths;
     }
@@ -59,11 +63,11 @@ class Router {
     start_loading() {
         setTimeout(() => {
             this.init_sqlite();
-        }, 2000);
+        }, 1000);
     }
     init_app() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.controller_register.queue_controller('AuthController', 'init_auth');
+            yield this.controller_register.run_controller('AuthController', 'init_auth');
             this.start_listening();
         });
     }
@@ -78,11 +82,17 @@ class Router {
         this.listen_event(this.ipcMain, 'generate_mnemonic', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('AuthController', 'generate_mnemonic', (arg));
         }));
+        this.listen_event(this.ipcMain, 'channel_suggestion', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('ChatsController', 'channel_suggestion', (arg));
+        }));
         this.listen_event(this.dxmpp, 'online', (data) => __awaiter(this, void 0, void 0, function* () {
             console.log('jackal connected');
-            console.log(data);
+            // console.log(data);
             this.online = true;
-            yield this.controller_register.queue_controller('MenuController', 'init_main');
+            if (this.loading) {
+                yield this.controller_register.queue_controller('MenuController', 'init_main');
+                this.loading = false;
+            }
         }));
         this.listen_event(this.dxmpp, 'close', () => __awaiter(this, void 0, void 0, function* () {
             console.log('jackal disconnected');
@@ -120,6 +130,9 @@ class Router {
         }));
         this.listen_event(this.ipcMain, 'get_my_vcard', () => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('ChatsController', 'get_my_vcard');
+        }));
+        this.listen_event(this.ipcMain, 'transfer_token', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
         }));
         this.listen_event(this.ipcMain, 'get_chat_msgs', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('MessagesController', 'get_chat_messages', arg);
@@ -175,8 +188,8 @@ class Router {
             yield this.controller_register.queue_controller('EventsController', 'user_joined_room', user, room_data);
         }));
         this.listen_event(this.dxmpp, 'groupchat', (room_data, message, sender, stamp) => __awaiter(this, void 0, void 0, function* () {
-            // console.log(`${sender} says ${message} in ${room_data.id} chat on ${stamp}`);
-            console.log(`${message} in ${room_data.id} chat on ${stamp}`);
+            console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
+            // console.log(`${message} in ${room_data.id} chat on ${stamp}`);
             yield this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
         }));
     }

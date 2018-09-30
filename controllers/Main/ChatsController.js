@@ -157,7 +157,7 @@ class ChatsController extends Controller_1.Controller {
             chat.domain = room_data.domain;
             chat.avatar = room_data.avatar;
             chat.name = room_data.name;
-            chat.type = room_data.channel;
+            chat.type = room_data.channel ? this.group_chat_types.channel : this.group_chat_types.group;
             chat.role = room_data.role;
             if (room_data.bio)
                 chat.bio = room_data.bio;
@@ -169,13 +169,19 @@ class ChatsController extends Controller_1.Controller {
     }
     create_group(group_name, group_type = this.group_chat_types.channel) {
         return __awaiter(this, void 0, void 0, function* () {
-            let group = { name: group_name, domain: "localhost", type: group_type };
+            let group = { name: group_name, domain: "localhost", type: (group_type !== this.chat_types.user) };
             this.dxmpp.register_channel(group, '');
         });
     }
     find_groups(group_name) {
         return __awaiter(this, void 0, void 0, function* () {
             this.dxmpp.find_group(group_name);
+        });
+    }
+    channel_suggestion() {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('suggested');
+            this.send_data('offer_publication', this.render('main/modal_popup/offer.pug'));
         });
     }
     join_chat(chat) {

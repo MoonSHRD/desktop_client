@@ -5,6 +5,7 @@ import * as Pug from "pug";
 import {AccountModel} from "../models/AccountModel";
 import {UserModel} from "../models/UserModel";
 import {ControllerRegister} from "./ControllerRegister";
+import {Loom} from "../loom/loom";
 
 export abstract class Controller {
     protected pug = Pug;
@@ -19,6 +20,7 @@ export abstract class Controller {
     protected group_chat_types = helper.group_chat_types;
     protected chat_to_menu = helper.chat_to_menu;
     protected eth = eth;
+    protected loom: Loom = Loom.getInstance();
     private self_info: UserModel = null;
 
     protected constructor(window) {

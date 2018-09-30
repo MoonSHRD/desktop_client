@@ -42,8 +42,8 @@ class MessagesController extends Controller_1.Controller {
     render_message(message, chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
-            message.sender_avatar = message.sender ? message.sender.avatar : message.chat.avatar;
             message.mine = message.sender ? (self_info.id === message.sender.id) : false;
+            message.sender_avatar = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.avatar : message.chat.avatar;
             let html = this.render('main/messagingblock/message.pug', message);
             const data = {
                 id: message.chat.id,
@@ -73,6 +73,7 @@ class MessagesController extends Controller_1.Controller {
             yield message.save();
             let group;
             if (chat.type === this.chat_types.user) {
+                yield this.render_message(message, id);
                 chat.id = yield chat.get_user_chat_meta();
                 group = false;
             }
@@ -80,8 +81,8 @@ class MessagesController extends Controller_1.Controller {
                 group = true;
             }
             // this.dxmpp.send(chat, text, group);
-            this.dxmpp.send(chat, text, message.id, chat.type);
-            yield this.render_message(message, id);
+            this.dxmpp.send(chat, text, group);
+            // await this.render_message(message, id);
         });
     }
     ;
@@ -111,11 +112,10 @@ class MessagesController extends Controller_1.Controller {
     received_group_message(room_data, message, sender, stamp) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
-            if (self_info.id === sender)
-                return;
+            // if (self_info.id === sender) return;
             let userModel;
             if (sender)
-                userModel = yield UserModel_1.UserModel.findOne(sender);
+                userModel = yield UserModel_1.UserModel.findOne(sender.address);
             let chat = yield ChatModel_1.ChatModel.findOne(room_data.id);
             let messageModel = new MessageModel_1.MessageModel();
             messageModel.text = message;

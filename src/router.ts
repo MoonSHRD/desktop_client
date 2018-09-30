@@ -10,17 +10,20 @@ import {dxmpp} from "moonshard_core";
 import {ipcMain} from "electron";
 import {ControllerRegister} from "../controllers/ControllerRegister";
 import {helper} from "./var_helper";
+import {Loom} from "../loom/loom";
 
 export class Router {
     readonly window: any;
     private paths: any;
     private controller_register: ControllerRegister;
     private online: boolean;
+    private loading: boolean=true;
     readonly ipcMain: any;
     readonly dxmpp: any;
     private events: any;
     private connecting: boolean = false;
     private types: any;
+    private loom: Loom = Loom.getInstance();
 
     constructor(window) {
         this.window = window;
@@ -29,6 +32,7 @@ export class Router {
         this.paths = helper.paths;
         this.ipcMain = ipcMain;
         this.dxmpp = dxmpp.getInstance();
+        this.loom = Loom.getInstance();
         this.events = helper.events;
         this.types = helper.paths;
     };
@@ -61,11 +65,11 @@ export class Router {
     public start_loading() {
         setTimeout(() => {
             this.init_sqlite();
-        }, 2000)
+        }, 1000)
     }
 
     private async init_app() {
-        await this.controller_register.queue_controller('AuthController', 'init_auth');
+        await this.controller_register.run_controller('AuthController', 'init_auth');
         this.start_listening();
     }
 
@@ -84,11 +88,19 @@ export class Router {
             await this.controller_register.queue_controller('AuthController', 'generate_mnemonic', (arg));
         });
 
+        this.listen_event(this.ipcMain, 'channel_suggestion', async (event, arg) => {
+            await this.controller_register.queue_controller('ChatsController', 'channel_suggestion', (arg));
+        });
+
         this.listen_event(this.dxmpp, 'online', async (data) => {
             console.log('jackal connected');
-            console.log(data);
+            // console.log(data);
             this.online = true;
-            await this.controller_register.queue_controller('MenuController', 'init_main');
+            if (this.loading) {
+                await this.controller_register.queue_controller('MenuController', 'init_main');
+                this.loading=false;
+            }
+
         });
 
         this.listen_event(this.dxmpp, 'close', async () => {
@@ -135,6 +147,10 @@ export class Router {
 
         this.listen_event(this.ipcMain, 'get_my_vcard', async () => {
             await this.controller_register.queue_controller('ChatsController', 'get_my_vcard');
+        });
+
+        this.listen_event(this.ipcMain, 'transfer_token', async (event, arg) => {
+            await this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
         });
 
         this.listen_event(this.ipcMain, 'get_chat_msgs', async (event, arg) => {
@@ -205,8 +221,8 @@ export class Router {
         });
 
         this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, stamp) => {
-            // console.log(`${sender} says ${message} in ${room_data.id} chat on ${stamp}`);
-            console.log(`${message} in ${room_data.id} chat on ${stamp}`);
+            console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
+            // console.log(`${message} in ${room_data.id} chat on ${stamp}`);
             await this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
         });
     }

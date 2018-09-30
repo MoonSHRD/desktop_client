@@ -343,6 +343,13 @@ window.onload = function () {
 
     });
 
+    ipcRenderer.on('offer_publication', (event, data) => {
+        // $('#AppModal').modal('hide');
+        $('.modal-content').html(data);
+        // $('#AppModal').modal('show');
+
+    });
+
     ipcRenderer.on('found_chats', (event, data) => {
         // console.log(data);
         $('.chats ul').append(data);
@@ -390,25 +397,25 @@ window.onload = function () {
         ipcRenderer.send('show_popup', {id,type});
     });
 
-    $(document).on('click', '[data-name=submit_suggest_to_channel]', function () {
-        let textbox = $('[data-name=suggest_to_channel]');
-        let text = textbox.val();
-        if (text.trim() === "") return;
-        console.log(`Suggest: ${text}`);
-        textbox.val('');
-
-        bot_notif("Success! Your suggest has been sent");
-        console.log(text);
-        // return;
-        let active_dialog = $('.active_dialog');
-        // console.log({id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
-        ipcRenderer.send('channel_suggestion', {
-            id:active_dialog.attr('id'),
-            domain:active_dialog.attr('data-domain'),
-            contract_address:active_dialog.attr('data-contract_address'),
-            text: text
-        });
-    });
+    // $(document).on('click', '[data-name=submit_suggest_to_channel]', function () {
+    //     let textbox = $('[data-name=suggest_to_channel]');
+    //     let text = textbox.val();
+    //     if (text.trim() === "") return;
+    //     console.log(`Suggest: ${text}`);
+    //     textbox.val('');
+    //
+    //     bot_notif("Success! Your suggest has been sent");
+    //     console.log(text);
+    //     // return;
+    //     let active_dialog = $('.active_dialog');
+    //     // console.log({id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
+    //     ipcRenderer.send('channel_suggestion', {
+    //         id:active_dialog.attr('id'),
+    //         domain:active_dialog.attr('data-domain'),
+    //         contract_address:active_dialog.attr('data-contract_address'),
+    //         text: text
+    //     });
+    // });
 
     function bot_notif(text){
         $.notify(text, {
@@ -426,6 +433,24 @@ window.onload = function () {
             spacing: 10
         });
     }
+
+    ipcRenderer.on('throw_error', (event, text) => {
+        $.notify(text, {
+
+            placement: {
+                from: "bottom",
+                align: "right"
+            },
+            animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+            },
+            z_index: 10031,
+            offset: 20,
+            spacing: 10,
+            type: 'danger'
+        });
+    });
 
     ipcRenderer.on('user_joined_room', (event, text) => {
         bot_notif(text);
@@ -486,6 +511,10 @@ window.onload = function () {
 
     $(document).on('mousedown','.dropDown_menu ul li ',function(event) {
         $(this).find('ul').toggleClass('d-block')
+    })
+
+    $(document).on('click','.offerPublication',function(event) {
+        ipcRenderer.send('channel_suggestion', {});
     })
 
 

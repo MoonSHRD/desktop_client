@@ -14,6 +14,7 @@ const env_config_1 = require("../src/env_config");
 const Pug = require("pug");
 const AccountModel_1 = require("../models/AccountModel");
 const ControllerRegister_1 = require("./ControllerRegister");
+const loom_1 = require("../loom/loom");
 class Controller {
     constructor(window) {
         this.pug = Pug;
@@ -27,6 +28,7 @@ class Controller {
         this.group_chat_types = var_helper_1.helper.group_chat_types;
         this.chat_to_menu = var_helper_1.helper.chat_to_menu;
         this.eth = moonshard_core_1.eth;
+        this.loom = loom_1.Loom.getInstance();
         this.self_info = null;
         this.window = window;
     }

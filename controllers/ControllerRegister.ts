@@ -19,11 +19,7 @@ export class ControllerRegister {
         this.window = window;
 
         this.queue = new Queue(async (fn, cb) => {
-            try {
-                await fn();
-            } catch (e) {
-                console.log(e);
-            }
+            await this.run_with_handling(fn);
             cb();
         });
     }
@@ -50,8 +46,20 @@ export class ControllerRegister {
         });
     }
 
+    private async run_with_handling(func){
+        try {
+            await func();
+        } catch (e) {
+            await this.run_controller('EventsController','send_error',e.toString());
+            // console.log('ошибка');
+            console.log(e);
+        }
+    }
+
     public async run_controller(controller: string, func: string, ...args) {
-        return await this.get_controller(controller)[func](...args);
+        await this.run_with_handling(async ()=>{
+            return await this.get_controller(controller)[func](...args);
+        });
     }
 
     public get_controller_parameter(controller: string, parameter: string) {

@@ -35,8 +35,8 @@ class MessagesController extends Controller {
 
     private async render_message(message: MessageModel, chat_id: string) {
         let self_info = await this.get_self_info();
-        message.sender_avatar = message.sender?message.sender.avatar:message.chat.avatar;
         message.mine = message.sender?(self_info.id === message.sender.id):false;
+        message.sender_avatar = message.sender && (message.chat.type!==this.group_chat_types.channel || message.mine)?message.sender.avatar:message.chat.avatar;
         let html = this.render('main/messagingblock/message.pug', message);
         const data = {
             id: message.chat.id,
@@ -65,7 +65,9 @@ class MessagesController extends Controller {
         await message.save();
         let group: boolean;
 
+
         if (chat.type === this.chat_types.user) {
+            await this.render_message(message, id);
             chat.id = await chat.get_user_chat_meta();
             group = false;
         } else if (Object.values(this.group_chat_types).includes(chat.type)) {
@@ -73,8 +75,8 @@ class MessagesController extends Controller {
         }
 
         // this.dxmpp.send(chat, text, group);
-        this.dxmpp.send(chat, text, message.id, chat.type);
-        await this.render_message(message, id);
+        this.dxmpp.send(chat, text, group);
+        // await this.render_message(message, id);
     };
 
     async message_delivered(message_d) {
@@ -100,11 +102,11 @@ class MessagesController extends Controller {
 
         let self_info = await this.get_self_info();
 
-        if (self_info.id === sender) return;
+        // if (self_info.id === sender) return;
 
         let userModel: UserModel;
         if (sender)
-            userModel = await UserModel.findOne(sender);
+            userModel = await UserModel.findOne(sender.address);
 
         let chat = await ChatModel.findOne(room_data.id);
         let messageModel = new MessageModel();

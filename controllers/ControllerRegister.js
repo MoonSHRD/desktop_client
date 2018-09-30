@@ -22,12 +22,7 @@ class ControllerRegister {
         this.Controllers = [];
         this.window = window;
         this.queue = new Queue((fn, cb) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield fn();
-            }
-            catch (e) {
-                console.log(e);
-            }
+            yield this.run_with_handling(fn);
             cb();
         }));
     }
@@ -52,9 +47,23 @@ class ControllerRegister {
             }));
         });
     }
+    run_with_handling(func) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield func();
+            }
+            catch (e) {
+                yield this.run_controller('EventsController', 'send_error', e.toString());
+                // console.log('ошибка');
+                console.log(e);
+            }
+        });
+    }
     run_controller(controller, func, ...args) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.get_controller(controller)[func](...args);
+            yield this.run_with_handling(() => __awaiter(this, void 0, void 0, function* () {
+                return yield this.get_controller(controller)[func](...args);
+            }));
         });
     }
     get_controller_parameter(controller, parameter) {
