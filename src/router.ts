@@ -65,7 +65,7 @@ export class Router {
     public start_loading() {
         setTimeout(() => {
             this.init_sqlite();
-        }, 2000)
+        }, 10000)
     }
 
     private async init_app() {

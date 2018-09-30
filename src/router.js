@@ -63,7 +63,7 @@ class Router {
     start_loading() {
         setTimeout(() => {
             this.init_sqlite();
-        }, 2000);
+        }, 10000);
     }
     init_app() {
         return __awaiter(this, void 0, void 0, function* () {

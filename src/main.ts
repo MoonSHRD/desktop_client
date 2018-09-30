@@ -19,7 +19,7 @@ app.on('ready', async () => {
     let mainWindow = new BrowserWindow({ width: 1600, height: 800, resizable: false, show: false, webPreferences: {
             nodeIntegration: true   } });
 
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`file://${__dirname}/index.pug`);
     mainWindow.webContents.on('dom-ready', function() {
         // console.log('finished');
