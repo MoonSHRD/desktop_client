@@ -25,7 +25,7 @@ class MessagesController extends Controller_1.Controller {
     get_chat_messages(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('get_chat_messages');
-            let chat = yield ChatModel_1.ChatModel.findOne(chat_id);
+            let chat = yield ChatModel_1.ChatModel.get_chat_with_events(chat_id);
             if (!chat)
                 return this.load_join_chat(chat_id);
             switch (chat.type) {

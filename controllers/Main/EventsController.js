@@ -22,8 +22,11 @@ class EventsController extends Controller_1.Controller {
             event.type = var_helper_1.helper.event_types.info;
             event.chat = chat;
             event.text = text;
+            yield event.save();
             text += ' ' + chat.name;
             this.send_data('user_joined_room', text);
+            const html = this.render('main/messagingblock/notice.pug', event);
+            this.send_data('get_notice', { id: chat.id, html: html });
         });
     }
     get_chat_events(chat_id) {

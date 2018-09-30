@@ -50,6 +50,10 @@ export class ChatModel extends BaseEntity {
         return await ChatModel.findOne(ChatModel.get_user_chat_id(self_id,user_id));
     }
 
+    static async get_chat_with_events(chat_id:string){
+        return (await ChatModel.find({relations:['events'], where:{id:chat_id}}))[0];
+    }
+
     static async get_user_chat_with_messages(self_id:string,user_id:string){
         return (await ChatModel.find({ relations: ["messages"], where: {id:ChatModel.get_user_chat_id(self_id,user_id)}, take:1 }))[0];
     }

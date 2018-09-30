@@ -49,6 +49,11 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
             return yield ChatModel_1.findOne(ChatModel_1.get_user_chat_id(self_id, user_id));
         });
     }
+    static get_chat_with_events(chat_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return (yield ChatModel_1.find({ relations: ['events'], where: { id: chat_id } }))[0];
+        });
+    }
     static get_user_chat_with_messages(self_id, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             return (yield ChatModel_1.find({ relations: ["messages"], where: { id: ChatModel_1.get_user_chat_id(self_id, user_id) }, take: 1 }))[0];

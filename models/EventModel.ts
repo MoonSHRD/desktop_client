@@ -9,6 +9,8 @@ export class EventModel extends BaseEntity {
     @Column()
     text: string;
     @Column()
+    time: string;
+    @Column()
     type: string;
 
     @ManyToOne(type => ChatModel, chat => chat.events)

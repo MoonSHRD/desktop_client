@@ -17,7 +17,7 @@ class MessagesController extends Controller {
 
     async get_chat_messages(chat_id: string) {
         console.log('get_chat_messages');
-        let chat = await ChatModel.findOne(chat_id);
+        let chat = await ChatModel.get_chat_with_events(chat_id);
 
         if (!chat)
             return this.load_join_chat(chat_id);

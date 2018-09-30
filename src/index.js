@@ -507,13 +507,19 @@ window.onload = function () {
         }
     });
 
-    $(document).on('mousedown','.dropDown_menu ul li ',function(event) {
+    $(document).on('mousedown','.dropDown_menu ul li ',function(e) {
         $(this).find('ul').toggleClass('d-block')
-    })
+    });
 
-    $(document).on('click','.offerPublication',function(event) {
+    $(document).on('click','.offerPublication',function(e) {
         ipcRenderer.send('channel_suggestion', {});
-    })
+    });
+
+    ipcRenderer.on("wallet_token_table", (event, obj) => {
+        console.log('token table');
+        $('.loader').remove();
+        $('.myTokens').append(obj);
+    });
 
 
 

@@ -13,8 +13,11 @@ class EventsController extends Controller {
         event.type=helper.event_types.info;
         event.chat=chat;
         event.text=text;
+        await event.save();
         text+=' '+chat.name;
         this.send_data('user_joined_room', text);
+        const html = this.render('main/messagingblock/notice.pug', event);
+        this.send_data('get_notice', {id: chat.id, html: html});
     }
 
     async get_chat_events(chat_id:string) {

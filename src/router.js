@@ -76,24 +76,7 @@ class Router {
          * ipcMain is for listening frontend
          * dxmpp is for listening jackal
          **/
-        this.listen_event(this.ipcMain, 'submit_profile', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            yield this.controller_register.queue_controller('AuthController', 'save_acc', arg);
-        }));
-        this.listen_event(this.ipcMain, 'generate_mnemonic', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            yield this.controller_register.queue_controller('AuthController', 'generate_mnemonic', (arg));
-        }));
-        this.listen_event(this.ipcMain, 'channel_suggestion', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            yield this.controller_register.queue_controller('ChatsController', 'channel_suggestion', (arg));
-        }));
-        this.listen_event(this.dxmpp, 'online', (data) => __awaiter(this, void 0, void 0, function* () {
-            console.log('jackal connected');
-            // console.log(data);
-            this.online = true;
-            if (this.loading) {
-                yield this.controller_register.queue_controller('MenuController', 'init_main');
-                this.loading = false;
-            }
-        }));
+        /** Connect & disconnect **/
         this.listen_event(this.dxmpp, 'close', () => __awaiter(this, void 0, void 0, function* () {
             console.log('jackal disconnected');
             this.online = false;
@@ -110,6 +93,26 @@ class Router {
                 yield sleep(5000);
                 this.connecting = false;
             }
+        }));
+        this.listen_event(this.dxmpp, 'online', (data) => __awaiter(this, void 0, void 0, function* () {
+            console.log('jackal connected');
+            // console.log(data);
+            this.online = true;
+            if (this.loading) {
+                yield this.controller_register.queue_controller('MenuController', 'init_main');
+                this.loading = false;
+            }
+        }));
+        /** Auth Events **/
+        this.listen_event(this.ipcMain, 'submit_profile', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('AuthController', 'save_acc', arg);
+        }));
+        this.listen_event(this.ipcMain, 'generate_mnemonic', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('AuthController', 'generate_mnemonic', (arg));
+        }));
+        /** Chats Events **/
+        this.listen_event(this.ipcMain, 'channel_suggestion', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('ChatsController', 'channel_suggestion', (arg));
         }));
         this.listen_event(this.dxmpp, 'buddy', (user, state, statusText, resource) => __awaiter(this, void 0, void 0, function* () {
             console.log(`user ${user.id} is ${state}`);
@@ -131,18 +134,6 @@ class Router {
         this.listen_event(this.ipcMain, 'get_my_vcard', () => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('ChatsController', 'get_my_vcard');
         }));
-        this.listen_event(this.ipcMain, 'transfer_token', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            yield this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
-        }));
-        this.listen_event(this.ipcMain, 'get_chat_msgs', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            yield this.controller_register.queue_controller('MessagesController', 'get_chat_messages', arg);
-        }));
-        this.listen_event(this.ipcMain, 'send_message', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            yield this.controller_register.queue_controller('MessagesController', 'send_message', arg);
-        }));
-        this.listen_event(this.ipcMain, 'change_menu_state', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            yield this.controller_register.queue_controller('MenuController', 'load_menu', arg);
-        }));
         this.listen_event(this.ipcMain, 'show_popup', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             console.log('show_popup');
             yield this.controller_register.queue_controller('ChatsController', 'show_chat_info', arg);
@@ -159,10 +150,6 @@ class Router {
             console.log('creating group');
             yield this.controller_register.queue_controller('ChatsController', 'join_chat', chat);
         }));
-        this.listen_event(this.ipcMain, 'change_wallet_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            console.log('change_wallet_menu');
-            yield this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
-        }));
         this.listen_event(this.dxmpp, 'find_groups', (result) => __awaiter(this, void 0, void 0, function* () {
             console.log('groups found');
             yield this.controller_register.queue_controller('ChatsController', 'found_groups', result);
@@ -175,6 +162,16 @@ class Router {
             console.log(`user ${user.id} subscribed`);
             yield this.controller_register.queue_controller('ChatsController', 'user_subscribed', user);
         }));
+        /** General Events **/
+        this.listen_event(this.dxmpp, 'user_joined_room', (user, room_data) => __awaiter(this, void 0, void 0, function* () {
+            console.log(`user ${user.id} joined room ${room_data.id}`);
+            yield this.controller_register.queue_controller('EventsController', 'user_joined_room', user, room_data);
+        }));
+        /** Messages events **/
+        this.listen_event(this.dxmpp, 'groupchat', (room_data, message, sender, stamp) => __awaiter(this, void 0, void 0, function* () {
+            console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
+            yield this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
+        }));
         this.listen_event(this.dxmpp, 'chat', (user, message) => __awaiter(this, void 0, void 0, function* () {
             console.log(`user ${user.id} subscribed`);
             yield this.controller_register.queue_controller('MessagesController', 'received_message', user, message);
@@ -183,14 +180,22 @@ class Router {
             console.log(`message ${message.userid} delivered`);
             yield this.controller_register.queue_controller('MessagesController', 'message_delivered', message);
         }));
-        this.listen_event(this.dxmpp, 'user_joined_room', (user, room_data) => __awaiter(this, void 0, void 0, function* () {
-            console.log(`user ${user.id} joined room ${room_data.id}`);
-            yield this.controller_register.queue_controller('EventsController', 'user_joined_room', user, room_data);
+        this.listen_event(this.ipcMain, 'get_chat_msgs', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('MessagesController', 'get_chat_messages', arg);
         }));
-        this.listen_event(this.dxmpp, 'groupchat', (room_data, message, sender, stamp) => __awaiter(this, void 0, void 0, function* () {
-            console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
-            // console.log(`${message} in ${room_data.id} chat on ${stamp}`);
-            yield this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
+        this.listen_event(this.ipcMain, 'send_message', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('MessagesController', 'send_message', arg);
+        }));
+        /** Wallet events **/
+        this.listen_event(this.ipcMain, 'change_wallet_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            console.log('change_wallet_menu');
+            yield this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
+        }));
+        this.listen_event(this.ipcMain, 'change_menu_state', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            this.controller_register.run_controller('MenuController', 'load_menu', arg);
+        }));
+        this.listen_event(this.ipcMain, 'transfer_token', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
         }));
     }
 }

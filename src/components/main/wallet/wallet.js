@@ -21,9 +21,3 @@ ipcRenderer.on("change_wallet_menu", (event, obj) => {
     $('.walletRight').html(obj);
     // $('#tokens_table').html('<div class="lds-roller"></div>');
 });
-
-ipcRenderer.on("wallet_token_table", (event, obj) => {
-    // if ($('.lds-roller').length)
-    $('.loader').remove();
-    $('.myTokens').append(obj);
-});

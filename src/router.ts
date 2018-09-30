@@ -80,28 +80,7 @@ export class Router {
          * dxmpp is for listening jackal
          **/
 
-        this.listen_event(this.ipcMain, 'submit_profile', async (event, arg) => {
-            await this.controller_register.queue_controller('AuthController', 'save_acc', arg);
-        });
-
-        this.listen_event(this.ipcMain, 'generate_mnemonic', async (event, arg) => {
-            await this.controller_register.queue_controller('AuthController', 'generate_mnemonic', (arg));
-        });
-
-        this.listen_event(this.ipcMain, 'channel_suggestion', async (event, arg) => {
-            await this.controller_register.queue_controller('ChatsController', 'channel_suggestion', (arg));
-        });
-
-        this.listen_event(this.dxmpp, 'online', async (data) => {
-            console.log('jackal connected');
-            // console.log(data);
-            this.online = true;
-            if (this.loading) {
-                await this.controller_register.queue_controller('MenuController', 'init_main');
-                this.loading=false;
-            }
-
-        });
+        /** Connect & disconnect **/
 
         this.listen_event(this.dxmpp, 'close', async () => {
             console.log('jackal disconnected');
@@ -121,6 +100,37 @@ export class Router {
                 await sleep(5000);
                 this.connecting = false;
             }
+        });
+
+        this.listen_event(this.dxmpp, 'online', async (data) => {
+            console.log('jackal connected');
+            // console.log(data);
+            this.online = true;
+            if (this.loading) {
+                await this.controller_register.queue_controller('MenuController', 'init_main');
+                this.loading=false;
+            }
+
+        });
+
+
+
+        /** Auth Events **/
+
+        this.listen_event(this.ipcMain, 'submit_profile', async (event, arg) => {
+            await this.controller_register.queue_controller('AuthController', 'save_acc', arg);
+        });
+
+        this.listen_event(this.ipcMain, 'generate_mnemonic', async (event, arg) => {
+            await this.controller_register.queue_controller('AuthController', 'generate_mnemonic', (arg));
+        });
+
+
+
+        /** Chats Events **/
+
+        this.listen_event(this.ipcMain, 'channel_suggestion', async (event, arg) => {
+            await this.controller_register.queue_controller('ChatsController', 'channel_suggestion', (arg));
         });
 
         this.listen_event(this.dxmpp, 'buddy', async (user, state, statusText, resource) => {
@@ -149,22 +159,6 @@ export class Router {
             await this.controller_register.queue_controller('ChatsController', 'get_my_vcard');
         });
 
-        this.listen_event(this.ipcMain, 'transfer_token', async (event, arg) => {
-            await this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
-        });
-
-        this.listen_event(this.ipcMain, 'get_chat_msgs', async (event, arg) => {
-            await this.controller_register.queue_controller('MessagesController', 'get_chat_messages', arg);
-        });
-
-        this.listen_event(this.ipcMain, 'send_message', async (event, arg) => {
-            await this.controller_register.queue_controller('MessagesController', 'send_message', arg);
-        });
-
-        this.listen_event(this.ipcMain, 'change_menu_state', async (event, arg) => {
-            await this.controller_register.queue_controller('MenuController', 'load_menu', arg);
-        });
-
         this.listen_event(this.ipcMain, 'show_popup', async (event, arg) => {
             console.log('show_popup');
             await this.controller_register.queue_controller('ChatsController', 'show_chat_info', arg);
@@ -185,11 +179,6 @@ export class Router {
             await this.controller_register.queue_controller('ChatsController', 'join_chat', chat);
         });
 
-        this.listen_event(this.ipcMain, 'change_wallet_menu', async (event, arg) => {
-            console.log('change_wallet_menu');
-            await this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
-        });
-
         this.listen_event(this.dxmpp, 'find_groups', async (result) => {
             console.log('groups found');
             await this.controller_register.queue_controller('ChatsController', 'found_groups', result);
@@ -205,6 +194,24 @@ export class Router {
             await this.controller_register.queue_controller('ChatsController', 'user_subscribed', user);
         });
 
+
+
+        /** General Events **/
+
+        this.listen_event(this.dxmpp, 'user_joined_room', async (user, room_data) => {
+            console.log(`user ${user.id} joined room ${room_data.id}`);
+            await this.controller_register.queue_controller('EventsController', 'user_joined_room', user, room_data);
+        });
+
+
+
+        /** Messages events **/
+
+        this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, stamp) => {
+            console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
+            await this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
+        });
+
         this.listen_event(this.dxmpp, 'chat', async (user, message) => {
             console.log(`user ${user.id} subscribed`);
             await this.controller_register.queue_controller('MessagesController', 'received_message', user, message);
@@ -215,15 +222,29 @@ export class Router {
             await this.controller_register.queue_controller('MessagesController', 'message_delivered', message);
         });
 
-        this.listen_event(this.dxmpp, 'user_joined_room', async (user, room_data) => {
-            console.log(`user ${user.id} joined room ${room_data.id}`);
-            await this.controller_register.queue_controller('EventsController', 'user_joined_room', user, room_data);
+        this.listen_event(this.ipcMain, 'get_chat_msgs', async (event, arg) => {
+            await this.controller_register.queue_controller('MessagesController', 'get_chat_messages', arg);
         });
 
-        this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, stamp) => {
-            console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
-            // console.log(`${message} in ${room_data.id} chat on ${stamp}`);
-            await this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
+        this.listen_event(this.ipcMain, 'send_message', async (event, arg) => {
+            await this.controller_register.queue_controller('MessagesController', 'send_message', arg);
+        });
+
+
+
+        /** Wallet events **/
+
+        this.listen_event(this.ipcMain, 'change_wallet_menu', async (event, arg) => {
+            console.log('change_wallet_menu');
+            await this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
+        });
+
+        this.listen_event(this.ipcMain, 'change_menu_state', async (event, arg) => {
+            this.controller_register.run_controller('MenuController', 'load_menu', arg);
+        });
+
+        this.listen_event(this.ipcMain, 'transfer_token', async (event, arg) => {
+            await this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
         });
     }
 }
