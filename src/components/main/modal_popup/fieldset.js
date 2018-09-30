@@ -3,19 +3,7 @@
 
 //DOM Ready
 $(function(){
-    $('.slick').slick({
-        prevArrow: false,
-        nextArrow: false,
-        infinite: true,
-        // arrows: true,
-        // speed: 300,
-        // centerMode: true,
-        variableWidth: true,
-        slidesToShow: 3,
-        slidesToScroll: 3
-
-    });
-let current_fst, next_fst, previous_fst; //fieldsets
+    let current_fst, next_fst, previous_fst; //fieldsets
     let left, opacity, scale; //fieldset properties which we will animate
 
 
@@ -23,80 +11,80 @@ let current_fst, next_fst, previous_fst; //fieldsets
 
     $(".groupInfoNext").click(function(){
         console.log('sdfsdfdsf')
-    // if (check_fields($(this).closest('fieldset'))) return;
+        // if (check_fields($(this).closest('fieldset'))) return;
 
-    if(animatingGroup) return false;
-    animatingGroup = true;
+        if(animatingGroup) return false;
+        animatingGroup = true;
 
-    current_fst = $(this).parent();
-    next_fst = $(this).parent().next();
+        current_fst = $(this).parent();
+        next_fst = $(this).parent().next();
 
-    //activate next step on progressbar using the index of next_fs
-    // $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+        //activate next step on progressbar using the index of next_fs
+        // $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
-    //show the next fieldset
-    next_fst.show();
-    //hide the current fieldset with style
-    current_fst.animate({opacity: 0}, {
-        step: function(now, mx) {
-            //as the opacity of current_fs reduces to 0 - stored in "now"
-            //1. scale current_fs down to 80%
-            scale = 1 - (1 - now) * 0.2;
-            //2. bring next_fs from the right(50%)
-            // left = (now * 50)+"%";
-            //3. increase opacity of next_fs to 1 as it moves in
-            opacity = 1 - now;
-            current_fst.css({
-                'transform': 'scale('+scale+')',
-                'position': 'absolute',
+        //show the next fieldset
+        next_fst.show();
+        //hide the current fieldset with style
+        current_fst.animate({opacity: 0}, {
+            step: function(now, mx) {
+                //as the opacity of current_fs reduces to 0 - stored in "now"
+                //1. scale current_fs down to 80%
+                scale = 1 - (1 - now) * 0.2;
+                //2. bring next_fs from the right(50%)
+                // left = (now * 50)+"%";
+                //3. increase opacity of next_fs to 1 as it moves in
+                opacity = 1 - now;
+                current_fst.css({
+                    'transform': 'scale('+scale+')',
+                    'position': 'absolute',
 
-            });
-            next_fst.css({'left': 0, 'opacity': opacity});
-        },
-        duration: 800,
-        complete: function(){
-            current_fst.hide();
-            animatingGroup = false;
-        },
-        //this comes from the custom easing plugin
-        easing: 'easeInOutBack'
+                });
+                next_fst.css({'left': 0, 'opacity': opacity});
+            },
+            duration: 800,
+            complete: function(){
+                current_fst.hide();
+                animatingGroup = false;
+            },
+            //this comes from the custom easing plugin
+            easing: 'easeInOutBack'
+        });
     });
-});
 
     $(".previousGroupInfo").click(function(){
-    if(animatingGroup) return false;
-    animatingGroup = true;
-    console.log('sdfdsfsd')
-    current_fst = $(this).parent();
-    previous_fst = $(this).parent().prev();
+        if(animatingGroup) return false;
+        animatingGroup = true;
+        console.log('sdfdsfsd')
+        current_fst = $(this).parent();
+        previous_fst = $(this).parent().prev();
 
-    //de-activate current step on progressbar
-    // $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+        //de-activate current step on progressbar
+        // $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
 
-    //show the previous fieldset
-    previous_fst.show();
-    //hide the current fieldset with style
-    current_fst.animate({opacity: 0}, {
-        step: function(now, mx) {
-            //as the opacity of current_fs reduces to 0 - stored in "now"
-            //1. scale previous_fs from 80% to 100%
-            scale = 0.8 + (1 - now) * 0.2;
-            //2. take current_fs to the right(50%) - from 0%
-            left = ((1-now) * 50)+"%";
-            //3. increase opacity of previous_fs to 1 as it moves in
-            opacity = 1 - now;
-            current_fst.css({'left': 0});
-            previous_fst.css({'transform': 'scale('+scale+')', 'opacity': opacity, 'position': 'absolute'});
-        },
-        duration: 800,
-        complete: function(){
-            current_fst.hide();
-            animatingGroup = false;
-        },
-        //this comes from the custom easing plugin
-        easing: 'easeInOutBack'
+        //show the previous fieldset
+        previous_fst.show();
+        //hide the current fieldset with style
+        current_fst.animate({opacity: 0}, {
+            step: function(now, mx) {
+                //as the opacity of current_fs reduces to 0 - stored in "now"
+                //1. scale previous_fs from 80% to 100%
+                scale = 0.8 + (1 - now) * 0.2;
+                //2. take current_fs to the right(50%) - from 0%
+                left = ((1-now) * 50)+"%";
+                //3. increase opacity of previous_fs to 1 as it moves in
+                opacity = 1 - now;
+                current_fst.css({'left': 0});
+                previous_fst.css({'transform': 'scale('+scale+')', 'opacity': opacity, 'position': 'absolute'});
+            },
+            duration: 800,
+            complete: function(){
+                current_fst.hide();
+                animatingGroup = false;
+            },
+            //this comes from the custom easing plugin
+            easing: 'easeInOutBack'
+        });
     });
-});
 
 
 
