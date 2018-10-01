@@ -8,155 +8,450 @@ script
 //    button.close(type='button', data-dismiss='modal', aria-label='Close')
 //        span(aria-hidden='true') ×
 .modal-body
-    .container.scrollbar#style-10(style='overflow-y: scroll; height: 630px')
-        .row.m-0.groupInfoHeader
-            .gradient
-            .col-sm-4.text-left
 
-                .col-sm-6.text-left.m-0.p-0
-                    p.m-0.p-0
-                        span
-                            b.mr-1 Section:
-                            | Celebrities
-                    p.m-0.p-0
-                        span
-                            b.mr-1 Category:
-                            | Culture
-            .col-sm-4.o.text-center(style='margin-top: -60px')
-                img.rounded-circle(src=avatar width=80 height=80)
-                h5.modal-title #{name}
-            .col-sm-3.offset-1.text-left
-                img.mr-3(src='components/main/modal_popup/img/bell.png')
-                p.m-0(style='line-height: 1') Switch on notifications
+    if (role !== "moderator")
 
-        .row.mt-3(style='margin-top: 80px !important')
-            .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
-                img(src='components/main/modal_popup/img/groups.png')
-                p.m-0.ml-3(style="color: #2BC2F9") Join a group
-        .row.m-3
-            .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
-                img(src='components/main/modal_popup/img/lock.png')
-                p.m-0.ml-3() Private group
+        .container.scrollbar#style-10(style='overflow-y: scroll; height: 630px')
+            .row.m-0.groupInfoHeader
+                .gradient
+                .col-sm-4.text-left
 
-        .row.m-3
-            .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
-                button.offerPublication.col-sm-6 Offer a publication
+                    .col-sm-6.text-left.m-0.p-0
+                        p.m-0.p-0
+                            span
+                                b.mr-1 Section:
+                                | Celebrities
+                        p.m-0.p-0
+                            span
+                                b.mr-1 Category:
+                                | Culture
+                .col-sm-4.o.text-center(style='margin-top: -60px')
+                    img.rounded-circle(src=avatar width=80 height=80)
+                    h5.modal-title #{name}
+                .col-sm-3.offset-1.text-left
+                    img.mr-3(src='components/main/modal_popup/img/bell.png')
+                    p.m-0(style='line-height: 1') Switch on notifications
 
-        .row.mt-4
-            .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
-                p.m-0.p-0 Token price:
-                    b 1Grdn=2MnShrd
+            .row.mt-3(style='margin-top: 80px !important')
+                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                    img(src='components/main/modal_popup/img/groups.png')
+                    p.m-0.ml-3(style="color: #2BC2F9") Join a group
+            .row.m-3
+                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                    img(src='components/main/modal_popup/img/lock.png')
+                    p.m-0.ml-3() Private group
 
-        .row.m-2.justify-content-around
-            .col-sm-6
-                .row.cardInfo.p-0.m-0.pb-3
-                    .col-sm-6.text-center
-                        p.my-3
-                            b Token name
-                        p.my-3
-                            b Total supply
-                    .col-sm-6
-                        p.my-3 gordon_token
-                        p.my-3 100 000
-                    button.col-sm-6.offset-3 Get more tokens
+            .row.m-3
+                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                    button.offerPublication.col-sm-6 Offer a publication
 
-                    .col-md-12.text-right
-                        a(href='#')
-                            img(src='components/main/modal_popup/img/gift.png')
+            .row.mt-4
+                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                    p.m-0.p-0 Token price:
+                        b 1Grdn=2MnShrd
 
+            .row.m-2.justify-content-around
+                .col-sm-6
+                    .row.cardInfo.p-0.m-0.pb-3
+                        .col-sm-6.text-center
+                            p.my-3
+                                b Token name
+                            p.my-3
+                                b Total supply
+                        .col-sm-6
+                            p.my-3 gordon_token
+                            p.my-3 100 000
+                        button.col-sm-6.offset-3 Get more tokens
 
-
-        .row.mx-0.my-5.justify-content-around
-            .col-sm-6.p-0.text-center
-                button.showOnMapChannel.col-sm-12 Show On a Map
-
-            //.col-sm-5.p-0
-            //    button.calendarChannel.col-sm-12 Сalendar of events
+                        .col-md-12.text-right
+                            a(href='#')
+                                img(src='components/main/modal_popup/img/gift.png')
 
 
 
-        .row.m-0
-            .col-sm-12.text-left
-                p
-                    b Gallery
-                div.slick
-                    div
-                        //h1 1
-                        img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
-                    div
-                        //h1 2
-                        img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
-                    div
-                        //h1 3
-                        img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+            .row.mx-0.my-5.justify-content-around
+                .col-sm-6.p-0.text-center
+                    button.showOnMapChannel.col-sm-12 Show On a Map
 
-                    div
-                        //h1 4
-                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-
-                    div
-                        //h1 5
-                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-
-                    div
-                        //h1 6
-                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-                    div
-                        //h1 1
-                        img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
-                    div
-                        //h1 2
-                        img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
-                    div
-                        //h1 3
-                        img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
-
-                    div
-                        //h1 4
-                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-
-                    div
-                        //h1 5
-                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-
-                    div
-                        //h1 6
-                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-        .row.m-4
-            .col-sm-5.p-0
-                input.serchInChannel.col-sm-12(placeholder="search")
-
-        .row.m-4
-            .col-sm-5.p-0
-                p
-                    b Participants
-                .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
-                    img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
-                    p.m-0 Alexandr Gordon
-                    img(src='components/main/modal_popup/img/chats.png')
-
-                .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
-                    img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
-                    p.m-0 Gordon
-                    img(src='components/main/modal_popup/img/chats.png')
-
-                .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
-                    img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
-                    p.m-0 Alexandr
-                    img(src='components/main/modal_popup/img/chats.png' style='visibility: hidden')
+                //.col-sm-5.p-0
+                //    button.calendarChannel.col-sm-12 Сalendar of events
 
 
 
-            .col-sm-5.p-0.offset-2
-                p
-                    b Goals
-                .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
-                    | #administrator
+            .row.m-0
+                .col-sm-12.text-left
+                    p
+                        b Gallery
+                    div.slick
+                        div
+                            //h1 1
+                            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+                        div
+                            //h1 2
+                            img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
+                        div
+                            //h1 3
+                            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
 
-                .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
-                    p.m-0(style="color: #2BC2F9") #fan #journalist #getanautograph
+                        div
+                            //h1 4
+                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
 
-                .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
-                    p.m-0(style="color: #2BC2F9") #blogger
+                        div
+                            //h1 5
+                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+                        div
+                            //h1 6
+                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                        div
+                            //h1 1
+                            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+                        div
+                            //h1 2
+                            img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
+                        div
+                            //h1 3
+                            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+
+                        div
+                            //h1 4
+                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+                        div
+                            //h1 5
+                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+                        div
+                            //h1 6
+                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+            .row.m-4
+                .col-sm-5.p-0
+                    input.serchInChannel.col-sm-12(placeholder="search")
+
+            .row.m-4
+                .col-sm-5.p-0
+                    p
+                        b Participants
+                    .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
+                        img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
+                        p.m-0.position-absolute(style='left: 65px') Alexandr Gordon
+                        img(src='components/main/modal_popup/img/chats.png')
+
+                    .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
+                        img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
+                        p.m-0.position-absolute(style='left: 65px') Gordon
+                        img(src='components/main/modal_popup/img/chats.png')
+
+                    .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
+                        img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
+                        p.m-0.position-absolute(style='left: 65px') Alexandr
+                        img(src='components/main/modal_popup/img/chats.png' style='visibility: hidden')
 
 
+
+                .col-sm-5.p-0.offset-2
+                    p
+                        b Goals
+                    .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                        | #administrator
+
+                    .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                        p.m-0(style="color: #2BC2F9") #fan #journalist #getanautograph
+
+                    .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                        p.m-0(style="color: #2BC2F9") #blogger
+
+
+    else
+        .container.scrollbar#style-10(style='overflow-y: scroll; height: 630px')
+            .row.m-0.groupInfoHeader
+                .gradient
+                .col-sm-4.text-left
+
+                    .col-sm-6.text-left.m-0.p-0.position-relative
+                        p.m-0.p-0
+                            span.d-flex
+                                b.mr-1 Section:
+                                input(name='sectionName' value='Celebrities' disabled="disabled")
+                                a(href='#')
+                                    img(src='components/main/modal_popup/img/edit.png')
+                        p.m-0.p-0
+                            span.d-flex
+                                b.mr-1 Category:
+                                input(name='categoryName' value='Culture' disabled="disabled")
+                                a(href='#')
+                                    img(src='components/main/modal_popup/img/edit.png')
+                .col-sm-4.o.text-center(style='margin-top: -60px')
+                    img.rounded-circle(src=avatar width=80 height=80)
+                    h5.modal-title #{name}
+                .col-sm-3.offset-1.text-left
+                    img.mr-3(src='components/main/modal_popup/img/bell.png')
+                    p.m-0(style='line-height: 1') Switch on notifications
+
+            .row.mt-3(style='margin-top: 80px !important')
+                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                    img(src='components/main/modal_popup/img/groups.png')
+                    p.m-0.ml-3(style="color: #2BC2F9") Administrator
+            .row.m-3
+                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                    img.m-2(src='components/main/modal_popup/img/lock.png')
+                    | Private group
+                    span.switch1
+                        input#switch-lg.switch1(type="checkbox")
+                        |
+                        label.m-0.mx-4(for="switch-lg")
+                    img.m-2(src='components/main/modal_popup/img/face.png')
+                    | Opened group
+
+            .row.m-3
+                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                    button.offerPublication.col-sm-6 Create a publication
+
+            .row.mt-4
+                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                    p.m-0.p-0 Token price:
+                        b 1Grdn=2MnShrd
+                        a.p-2(href='#')
+                            img(src='components/main/modal_popup/img/edit.png')
+
+            .row.my-4.p-0.justify-content-around
+
+                .col-sm-6.cardInfo.p-0.m-0.p-3.pl-5
+                    .row
+                        .col-sm-4.p-0
+                            p.my-3
+                                b Token name
+                            p.my-3
+                                b Total supply
+                        .col-sm-6
+                            p.my-3 gordon_token
+                            p.my-3 100 000
+                .col-sm-5.cardInfo.p-0.m-0.p-3.pl-5
+                    .row
+                        .col-sm-7.text-left.p-0
+                            p.my-3
+                                b Sold tokens
+                            p.my-3
+                                b Raffled off  tokens
+                        .col-sm-5
+                            p.my-3 2 784
+                            p.my-3 42
+                    //button.col-sm-6.offset-3 Get more tokens
+
+                    //.col-md-12.text-right
+                    //    a(href='#')
+                    //        img(src='components/main/modal_popup/img/gift.png')
+
+
+
+            .row.mx-0.my-5.justify-content-around
+                .col-sm-5.p-0.text-center
+                    button.showOnMapChannel.col-sm-12 Set the point on the map
+
+                //.col-sm-5.p-0
+                //    button.calendarChannel.col-sm-12 Сalendar of events
+
+
+
+            .row.m-0
+                .col-sm-12.text-left
+                    p
+                        b Channel gallery
+                    div.slick
+                        div
+                            //h1 1
+                            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+                        div
+                            //h1 2
+                            img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
+                        div
+                            //h1 3
+                            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+
+                        div
+                            //h1 4
+                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+                        div
+                            //h1 5
+                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+                        div
+                            //h1 6
+                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                        div
+                            //h1 1
+                            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+                        div
+                            //h1 2
+                            img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
+                        div
+                            //h1 3
+                            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+
+                        div
+                            //h1 4
+                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+                        div
+                            //h1 5
+                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+                        div
+                            //h1 6
+                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+
+
+            .row.mt-4
+                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                    p.m-0.p-0.mr-1 Publication price:
+                        b 3MnShrd for 1 publication
+                        a.p-2(href='#')
+                            img(src='components/main/modal_popup/img/edit.png')
+
+
+            .row.m-4
+                .col-sm-12.align-items-center.p-0
+                    ul#list.p-0
+                        li Publication offers
+                            img(src='components/main/modal_popup/img/arrow.png')
+                            ul
+                                li sublist
+                        |
+                        li Awaiting publication
+                            img(src='components/main/modal_popup/img/arrow.png')
+                            ul
+                                table.table(style='    ')
+                                    thead
+                                        tr
+                                            th(scope='col')
+                                            th(scope='col') Sender
+                                            th(scope='col') Topic
+                                            //th(scope='col') Status
+                                            th(scope='col') Text
+                                            th(scope='col') Attached
+                                            th(scope='col') Contract
+                                            th(scope='col') Dialog
+                                    tbody#tokens_table
+                                        tr
+                                            th(scope='row')
+                                                img(src=avatar width='40' height='40')
+                                            td Sam Gorilla
+                                            td My life in the rocks...
+                                            td Read
+                                            td 1 img
+                                            td Read
+                                            td Detail
+                                        tr
+                                            th(scope='row')
+                                                img(src=avatar width='40' height='40')
+                                            td Sam Gorilla
+                                            td My life in the rocks...
+                                            td Read
+                                            td 1 img
+                                            td Read
+                                            td Detail
+                                        tr
+                                            th(scope='row')
+                                                img(src=avatar width='40' height='40')
+                                            td Sam Gorilla
+                                            td My life in the rocks...
+                                            td Read
+                                            td 1 img
+                                            td Read
+                                            td Detail
+
+                        li Rejected offers
+                            img(src='components/main/modal_popup/img/arrow.png')
+                            ul
+                                li sublist
+
+                        li Archive
+                            img(src='components/main/modal_popup/img/arrow.png')
+                            ul
+                                table.table(style='    ')
+                                    thead
+                                        tr
+                                            th(scope='col')
+                                            th(scope='col') Sender
+                                            th(scope='col') Topic
+                                            //th(scope='col') Status
+                                            th(scope='col') Text
+                                            th(scope='col') Attached
+                                            th(scope='col') Contract
+                                            th(scope='col') Dialog
+                                    tbody#tokens_table
+                                        tr
+                                            th(scope='row')
+                                                img(src=avatar width='40' height='40')
+                                            td Sam Gorilla
+                                            td My life in the rocks...
+                                            td Read
+                                            td 1 img
+                                            td Read
+                                            td Detail
+                                        tr
+                                            th(scope='row')
+                                                img(src=avatar width='40' height='40')
+                                            td Sam Gorilla
+                                            td My life in the rocks...
+                                            td Read
+                                            td 1 img
+                                            td Read
+                                            td Detail
+                                        tr
+                                            th(scope='row')
+                                                img(src=avatar width='40' height='40')
+                                            td Sam Gorilla
+                                            td My life in the rocks...
+                                            td Read
+                                            td 1 img
+                                            td Read
+                                            td Detail
+
+
+            .row.m-0.my-4.d-flex.align-items-center.justify-content-between
+                .col-sm-5.p-0
+                    input.serchInChannel.col-sm-12(placeholder="search")
+                .col-sm-5.p-0.text-right
+                    span.switch
+                        img(src='components/main/modal_popup/img/groups.png')
+                        input#switch-id.switch(type="checkbox")
+                        |
+                        label.m-0.mx-4(for="switch-id")
+                        img(src='components/main/modal_popup/img/block.png')
+
+            .row.m-0.my-4(style='background-color: white; border-radius: 20px')
+                .col-md-12.p-4.d-flex
+                    .col-sm-5.p-0
+                        p
+                            b Participants
+                        .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
+                            img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
+                            p.m-0.position-absolute(style='left: 65px') Alexandr Gordon
+                            img(src='components/main/modal_popup/img/chats.png')
+
+                        .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
+                            img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
+                            p.m-0.position-absolute(style='left: 65px') Gordon
+                            img(src='components/main/modal_popup/img/chats.png')
+
+                        .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
+                            img.rounded-circle(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png' width='50' height='50')
+                            p.m-0.position-absolute(style='left: 65px') Alexandr
+                            img(src='components/main/modal_popup/img/chats.png' style='visibility: hidden')
+
+
+
+                    .col-sm-5.p-0.offset-2
+                        p
+                            b Goals
+                        .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                            | #administrator
+
+                        .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                            p.m-0(style="color: #2BC2F9") #fan #journalist #getanautograph
+
+                        .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                            p.m-0(style="color: #2BC2F9") #blogger

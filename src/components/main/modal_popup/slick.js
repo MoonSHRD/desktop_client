@@ -15,4 +15,10 @@ $(function() {
         slidesToScroll: 3
 
     });
+
+    $('#list > li').click(function (event) {
+        $(this).children("img").toggleClass('rotate')
+        $(this).children("ul").slideToggle();
+        event.stopPropagation();
+    });
 })

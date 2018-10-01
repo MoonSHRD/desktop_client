@@ -13,7 +13,7 @@
     padding: 20px 10px;
 }
 
-.walletMenu ul li a {
+.walletMenu  a {
     height: 57px;
     display: flex;
     align-items: center;
@@ -31,7 +31,9 @@
     margin: 0;
     padding: 0 10px;
 }
-
+.active_wallet  a{
+    color: white !important;
+}
 
 .walletMenu a:hover {
     border-radius: 8px;
@@ -59,7 +61,11 @@
 }
 
 
+.active_wallet {
+    background-color: #2BC2F9;
+    border-radius: 8px;
 
+}
 
 
 
