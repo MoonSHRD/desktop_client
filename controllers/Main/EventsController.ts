@@ -10,11 +10,11 @@ class EventsController extends Controller {
         let chat = await ChatModel.findOne(room_data.id);
         let event=new EventModel();
         let text = `user ${user.id} joined`;
-        let currentdate = new Date();
+        // let currentdate = new Date();
         event.type=helper.event_types.info;
         event.chat=chat;
         event.text=text;
-        event.time= currentdate.getHours() + ":" + currentdate.getMinutes();
+        event.time= this.dxmpp.take_time();
         await event.save();
         text+=' '+chat.name;
         this.send_data('user_joined_room', text);

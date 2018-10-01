@@ -56,11 +56,11 @@ class MessagesController extends Controller {
     async send_message({id, text}) {
         let self_info = await this.get_self_info();
         let chat = await ChatModel.findOne(id);
-        let date = new Date();
+        // let date = new Date();
         let message = new MessageModel();
         message.sender = self_info;
         message.text = text;
-        message.time = `${date.getHours()}:${date.getMinutes()}`;
+        message.time = this.dxmpp.take_time();
         message.chat = chat;
         await message.save();
         let group: boolean;

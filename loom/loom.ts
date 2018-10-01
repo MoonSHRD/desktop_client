@@ -35,10 +35,11 @@ export class Loom {
     }
 
     async connect(private_key: string) {
-        this.priv = CryptoUtils.B64ToUint8Array(private_key);
+        this.priv = Loom.from_b64(private_key);
+        console.log('fawfa');
         this.pub = CryptoUtils.publicKeyFromPrivateKey(this.priv);
         this.addr = LocalAddress.fromPublicKey(this.pub).toString();
-        console.log('my address: '+this.addr);
+        console.log('my address: ' + this.addr);
         const loomTruffleProvider = new LoomTruffleProvider(
             "default",
             `http://${config.loom_host}:${config.loom_port}/rpc`,
@@ -52,23 +53,23 @@ export class Loom {
         console.log('1');
         this.NetRegContract = new this.web3.eth.Contract(network_abi, config.net_reg_addr, {from: this.addr});
         console.log('1');
-        this.token_addr=await this.get_token_addr();
-        this.MoonshardTokenContract=new this.web3.eth.Contract(token_abi, this.token_addr, {from: this.addr});
+        this.token_addr = await this.get_token_addr();
+        this.MoonshardTokenContract = new this.web3.eth.Contract(token_abi, this.token_addr, {from: this.addr});
         console.log('1');
-        this.token_decimals= await await this.MoonshardTokenContract.methods.decimals().call();
+        this.token_decimals = await await this.MoonshardTokenContract.methods.decimals().call();
         console.log('1');
     }
 
-    private prep_val(value:number){
+    private prep_val(value: number) {
         // value=value.toFixed(this.token_decimals);
         // Math.pow(10,this.token_decimals);
-        return (value/Math.pow(10,this.token_decimals)).toFixed(5);
+        return (value / Math.pow(10, this.token_decimals)).toFixed(5);
     }
 
-    private prep_val_back(value){
+    private prep_val_back(value) {
         // value=value.toFixed(this.token_decimals);
         // Math.pow(10,this.token_decimals);
-        return value*Math.pow(10,this.token_decimals);
+        return value * Math.pow(10, this.token_decimals);
     }
 
     async set_identity(name: string) {
@@ -108,14 +109,14 @@ export class Loom {
     }
 
     async get_balance(addres) {
-        let val =  await this.MoonshardTokenContract.methods.balanceOf(addres).call();
+        let val = await this.MoonshardTokenContract.methods.balanceOf(addres).call();
         return this.prep_val(val)
     }
 
     async get_total_supply() {
         // console.log(this.MoonshardTokenContract);
         // let dec = await this.Token.methods.;
-        let val =  await this.MoonshardTokenContract.methods.totalSupply().call();
+        let val = await this.MoonshardTokenContract.methods.totalSupply().call();
         return this.prep_val(val)
     }
 
@@ -135,10 +136,33 @@ export class Loom {
 
     async transfer_token(address: string, amount) {
         console.log(this.prep_val_back(amount));
-        return await this.MoonshardTokenContract.methods.transfer(address,this.prep_val_back(amount)).send();
+        return await this.MoonshardTokenContract.methods.transfer(address, this.prep_val_back(amount)).send();
     }
 
     static generate_private(): string {
         return CryptoUtils.Uint8ArrayToB64(CryptoUtils.generatePrivateKey());
+    }
+
+    static generate_address(privKey): string {
+        return LocalAddress.fromPublicKey(privKey).toString();
+    }
+
+    static generate_acc() {
+        let priv= CryptoUtils.generatePrivateKey();
+        let pub= CryptoUtils.publicKeyFromPrivateKey(priv);
+        let addr= LocalAddress.fromPublicKey(pub).toString();
+        return {
+            priv:Loom.to_b64(priv),
+            pub:Loom.to_b64(pub),
+            addr:addr
+        };
+    }
+
+    static to_b64(uint8:Uint8Array):string{
+        return CryptoUtils.Uint8ArrayToB64(uint8);
+    }
+
+    static from_b64(str:string):Uint8Array{
+        return CryptoUtils.B64ToUint8Array(str);
     }
 }

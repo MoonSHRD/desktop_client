@@ -3,6 +3,8 @@ import {AccountModel} from "../../models/AccountModel";
 import {Controller} from "../Controller";
 import {UserModel} from "../../models/UserModel";
 import {Loom} from "../../loom/loom";
+import {TextEncoder,TextDecoder} from 'text-encoding';
+// let {TextDecoder} = require('text-encoding');
 
 class AuthController extends Controller {
 
@@ -20,6 +22,9 @@ class AuthController extends Controller {
 
     private async auth(account: AccountModel,first:boolean=false) {
         // await this.controller_register.run_controller('MenuController', 'init_main');
+
+
+        // console.log(account.privKey);
 
         await this.loom.connect(account.privKeyLoom);
         console.log('loom connected');
@@ -43,7 +48,10 @@ class AuthController extends Controller {
     async save_acc(data) {
         await this.controller_register.run_controller('EventsController','init_loading');
         const privKey = this.eth.generate_priv_key();
+        // const privKey = Loom.generate_private();
         const address = this.eth.generate_address(privKey);
+        // const address = Loom.generate_address(privKey);
+        // const loom_data=Loom.generate_acc();
 
         let user = new UserModel();
         user.id = address;
@@ -57,7 +65,12 @@ class AuthController extends Controller {
         await user.save();
 
         let account = new AccountModel();
-        account.privKey = privKey;
+        account.privKey = privKey;//TextDecoder.encode(loom_data.priv);
+        // account.pubKey = loom_data.pub;
+        // console.log(
+        //     account.privKey,
+        //     account.pubKey
+        // );
         account.privKeyLoom = Loom.generate_private();
         account.passphrase = data.mnemonic;
         account.user = user;

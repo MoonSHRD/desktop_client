@@ -8,6 +8,8 @@ export class AccountModel extends BaseEntity {
     id: number;
     @Column()
     privKey: string;
+    // @Column()
+    // pubKey: string;
     @Column()
     privKeyLoom: string="";
     @Column()

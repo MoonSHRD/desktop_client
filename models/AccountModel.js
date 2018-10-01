@@ -14,6 +14,8 @@ const UserModel_1 = require("./UserModel");
 let AccountModel = class AccountModel extends typeorm_1.BaseEntity {
     constructor() {
         super(...arguments);
+        // @Column()
+        // pubKey: string;
         this.privKeyLoom = "";
     }
 };

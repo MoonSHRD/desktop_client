@@ -31,7 +31,8 @@ class Loom {
     }
     connect(private_key) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.priv = loom_js_1.CryptoUtils.B64ToUint8Array(private_key);
+            this.priv = Loom.from_b64(private_key);
+            console.log('fawfa');
             this.pub = loom_js_1.CryptoUtils.publicKeyFromPrivateKey(this.priv);
             this.addr = loom_js_1.LocalAddress.fromPublicKey(this.pub).toString();
             console.log('my address: ' + this.addr);
@@ -140,6 +141,25 @@ class Loom {
     }
     static generate_private() {
         return loom_js_1.CryptoUtils.Uint8ArrayToB64(loom_js_1.CryptoUtils.generatePrivateKey());
+    }
+    static generate_address(privKey) {
+        return loom_js_1.LocalAddress.fromPublicKey(privKey).toString();
+    }
+    static generate_acc() {
+        let priv = loom_js_1.CryptoUtils.generatePrivateKey();
+        let pub = loom_js_1.CryptoUtils.publicKeyFromPrivateKey(priv);
+        let addr = loom_js_1.LocalAddress.fromPublicKey(pub).toString();
+        return {
+            priv: Loom.to_b64(priv),
+            pub: Loom.to_b64(pub),
+            addr: addr
+        };
+    }
+    static to_b64(uint8) {
+        return loom_js_1.CryptoUtils.Uint8ArrayToB64(uint8);
+    }
+    static from_b64(str) {
+        return loom_js_1.CryptoUtils.B64ToUint8Array(str);
     }
 }
 exports.Loom = Loom;

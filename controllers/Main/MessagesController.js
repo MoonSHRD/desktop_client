@@ -64,11 +64,11 @@ class MessagesController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             let chat = yield ChatModel_1.ChatModel.findOne(id);
-            let date = new Date();
+            // let date = new Date();
             let message = new MessageModel_1.MessageModel();
             message.sender = self_info;
             message.text = text;
-            message.time = `${date.getHours()}:${date.getMinutes()}`;
+            message.time = this.dxmpp.take_time();
             message.chat = chat;
             yield message.save();
             let group;

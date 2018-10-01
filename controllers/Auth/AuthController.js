@@ -13,6 +13,7 @@ const AccountModel_1 = require("../../models/AccountModel");
 const Controller_1 = require("../Controller");
 const UserModel_1 = require("../../models/UserModel");
 const loom_1 = require("../../loom/loom");
+// let {TextDecoder} = require('text-encoding');
 class AuthController extends Controller_1.Controller {
     init_auth() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -31,6 +32,7 @@ class AuthController extends Controller_1.Controller {
     auth(account, first = false) {
         return __awaiter(this, void 0, void 0, function* () {
             // await this.controller_register.run_controller('MenuController', 'init_main');
+            // console.log(account.privKey);
             yield this.loom.connect(account.privKeyLoom);
             console.log('loom connected');
             if (first) {
@@ -53,7 +55,10 @@ class AuthController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.run_controller('EventsController', 'init_loading');
             const privKey = this.eth.generate_priv_key();
+            // const privKey = Loom.generate_private();
             const address = this.eth.generate_address(privKey);
+            // const address = Loom.generate_address(privKey);
+            // const loom_data=Loom.generate_acc();
             let user = new UserModel_1.UserModel();
             user.id = address;
             user.domain = 'localhost';
@@ -65,7 +70,12 @@ class AuthController extends Controller_1.Controller {
             user.avatar = data.avatar;
             yield user.save();
             let account = new AccountModel_1.AccountModel();
-            account.privKey = privKey;
+            account.privKey = privKey; //TextDecoder.encode(loom_data.priv);
+            // account.pubKey = loom_data.pub;
+            // console.log(
+            //     account.privKey,
+            //     account.pubKey
+            // );
             account.privKeyLoom = loom_1.Loom.generate_private();
             account.passphrase = data.mnemonic;
             account.user = user;
