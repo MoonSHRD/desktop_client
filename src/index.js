@@ -514,7 +514,7 @@ window.onload = function () {
     ipcRenderer.on("wallet_token_table", (event, obj) => {
         console.log('token table');
         $('.loader').remove();
-        $('.myTokens').append(obj);
+        $('.myTokens').html(obj);
     });
 
 
