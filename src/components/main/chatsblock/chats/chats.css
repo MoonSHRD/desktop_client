@@ -151,7 +151,10 @@
 .active_dialog {
     background-color: #2BC2F9;
     border-radius: 8px;
+}
 
+.active_dialog a {
+   color: white;
 }
 
 .settings {

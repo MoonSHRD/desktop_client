@@ -352,7 +352,7 @@ ul li.inMessage p::after {
     background-position: 15px center;
     border: 0;
     height: 45px;
-    box-shadow: 0 0 27px rgba(97, 97, 97, 0.1);
+    box-shadow: 0 0 30px rgba(43, 194, 249, 0.1);
     border: none;
     border-radius: 29px;
     padding-left: 55px;
@@ -376,7 +376,7 @@ ul li.inMessage p::after {
     position: absolute;
     z-index: 2;
     right: 0;
-    top: 45px;
+    top: 50px;
     left: 0;
     height: 40px;
 

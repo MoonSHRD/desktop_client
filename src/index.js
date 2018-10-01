@@ -204,7 +204,7 @@ window.onload = function () {
 
     });
 
-    $(document).on('click keydown', '.send_message_btn', function () {
+    $(document).on('click', '.send_message_btn', function () {
         let msg_input = $('.send_message_input');
         if (msg_input.val().trim() === ''){
             msg_input.val('');
@@ -295,24 +295,17 @@ window.onload = function () {
         const $this=$(this);
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
         $('.messaging_history ul').empty();
-        // let chat = {id:$this.attr('id'),domain:$this.attr('domain')};
         let chat = $this.attr('id');
         ipcRenderer.send('get_chat_msgs', chat);
-        // switch ($this.attr('data-type')) {
-        //     case chat_types.join_channel:
-        //         ipcRenderer.send('join_channel_html', chat);
-        //         console.log('pre join');
-        //         break;
-        //     case chat_types.user:
-        //         ipcRenderer.send('get_chat_msgs', chat);
-        //         console.log("1");
-        //
-        //         break;
-        //     case chat_types.channel:
-        //         console.log("2");
-        //         ipcRenderer.send('get_channel_msgs', chat);
-        //         break;
-        // }
+
+    });
+
+    $(document).on('click', '.walletMenu li', function () {
+
+        const $this=$(this);
+        $this.addClass('active_wallet').siblings().removeClass('active_wallet');
+
+
     });
 
 
