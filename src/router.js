@@ -169,7 +169,7 @@ class Router {
         }));
         /** Messages events **/
         this.listen_event(this.dxmpp, 'groupchat', (room_data, message, sender, stamp) => __awaiter(this, void 0, void 0, function* () {
-            console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
+            console.log(`${sender} says ${message} in ${room_data.id} chat on ${stamp}`);
             yield this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
         }));
         this.listen_event(this.dxmpp, 'chat', (user, message) => __awaiter(this, void 0, void 0, function* () {
