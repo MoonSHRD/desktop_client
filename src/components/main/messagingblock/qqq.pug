@@ -14,6 +14,12 @@ div(class="head_peer" id="head_peer")
                 a.nav-link(href='#references', role='tab', data-toggle='tab') Channel info
             li.nav-item
                 a.nav-link(href='#buzz', role='tab', data-toggle='tab') Notifications
+    else
+        style(type='text/css').
+            .messaging_history {
+               margin-top: 0;
+                max-height: calc(100% - 155px);
+            }
 
 
 
@@ -42,11 +48,11 @@ div(class="head_peer" id="head_peer")
                     a(data-id="")
                         div(class='image')
                             img(src="components/main/messagingblock/img/dropDown_menu.png")
-                    ul.dropdownDoth
-                        li(data-event="show_chat_info") Info
-                        li Leave a channel
-                        li Switch off notifications
-                        li Write a message to administrator
+                    //ul.dropdownDoth
+                    //    li(data-event="show_chat_info") Info
+                    //    li Leave a channel
+                    //    li Switch off notifications
+                    //    li Write a message to administrator
 
     else if  (type === "channel")
 
@@ -61,7 +67,7 @@ div(class="head_peer" id="head_peer")
                         div(class='image')
                             img(src="components/main/messagingblock/img/files.png")
                 li
-                    a(data-id="")
+                    a(href='#')
                         div(class='image')
                             img(src="components/main/messagingblock/img/dropDown_menu.png")
                     ul.dropdownDoth
@@ -71,7 +77,8 @@ div(class="head_peer" id="head_peer")
                         li Write a message to administrator
 
 
-div(class="messaging_history" id="messaging_history")
+div(class="messaging_history" id="messaging_history" )
+
 
     .tab-content
         #chat.tab-pane.fade.in.active.show(role='tabpanel')
@@ -82,7 +89,7 @@ div(class="messaging_history" id="messaging_history")
                     include join_button
                 else if (type === "user_chat" || type === "group" || (type === "channel" && role === "moderator"))
 
-                    textarea(class="send_message_input"  placeholder="текст сообщения")
+                    textarea(class="send_message_input"  placeholder="Write a text message")
                     button(class="send_message_btn" data-translate-key="SEND_MESSAGE") отправить
         #buzz.tab-pane.fade(role='tabpanel')
             .notifyBlock

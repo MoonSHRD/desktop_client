@@ -5,18 +5,18 @@
 
 }
 
-th {
-    width: 25%;
-}
-.table th, .table td{
+/*#list th {*/
+    /*width: 25%;*/
+/*}*/
+#list .table th, #list .table td{
     border-top: none ;
 }
 
-.table tr {
+#list .table tr {
     border-top: 1px solid #dee2e6;
 }
 
-.table tr:first-child {
+#list .table tr:first-child {
     border-top: none;
 }
 
@@ -30,27 +30,45 @@ th {
 }
 
 
-#list li ul {
+#list li ul  {
     display: none;
     padding: 0;
 }
 
-#list > li {
+#listGallery li ul  {
+    padding: 0;
+}
+
+
+#list > li, #listGallery > li {
     list-style: none;
     margin: 10px 0;
 }
 
-#list > li ul li {
+#list > li a, #listGallery > li > a {
+    color: black;
+}
+
+#list > li a:hover, #listGallery > li a:hover {
+    text-decoration: none;
+}
+
+#list > li ul li, #listGallery > li ul li {
     list-style: none;
 }
 
 
-#list li img {
+#list > li > img, #listGallery > li > img {
     margin-left: 10px;
     transition: 0.5s;
+    border-radius: 100%;
 }
 .rotate{
     transform: rotate(90deg);
+}
+
+#listGallery > li > p {
+    cursor: pointer;
 }
 
 #list td, th, thead th {
@@ -61,6 +79,10 @@ th {
 
 }
 
+.viewAllImages {
+    color: #2BC2F9;
+    text-align: center;
+}
 
 #list tbody {
     background-color: white;
@@ -81,7 +103,9 @@ th {
     border-spacing: 0px 15px;
 }
 
-
+#list table img {
+   border-radius: 100%;
+}
 #list tr td:first-child,
 #list tr th:first-child {
     border-top-left-radius: 15px;
@@ -92,6 +116,8 @@ th {
 #list tr th:last-child {
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
+    /*min-width: 160px;*/
+    background-color: transparent;
 }
 
 /*.slick-list{*/
@@ -117,9 +143,9 @@ th {
     right: -70px;
 }
 
-
-
-
+.avatarBg {
+    border: 2px solid #BB6BD9;
+}
 
 
 .switch {
@@ -220,7 +246,7 @@ th {
 }
 .switch1 input + label {
     position: relative;
-    min-width: 30px;
+    min-width: 45px;
     border-radius: calc(2.375rem * .8);
     height: 20px;
     line-height: calc(2.375rem * .8);
@@ -237,7 +263,7 @@ th {
     position: absolute;
     top: 0;
     left: 0;
-    width: 70px;
+    width: 50px;
     bottom: 0;
     display: block;
 }

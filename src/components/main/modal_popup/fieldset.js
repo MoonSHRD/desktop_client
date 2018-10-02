@@ -107,7 +107,7 @@ $(function(){
         else $(this).removeClass('invalid');
     });
 
-    $('input[name=pinConfirm]').click(function () {
+    $('#pinConfirm').click(function () {
         if(!$('input[name=pinInput]').hasClass('invalid')){
             if(animatingGroup) return false;
             animatingGroup = true;

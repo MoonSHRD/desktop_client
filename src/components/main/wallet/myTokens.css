@@ -8,26 +8,34 @@
 .walletRight td, th, thead th {
     border-top: none!important;
     border-bottom: none!important;
+    vertical-align: middle;
 
 }
 
 
 .walletRight tbody {
     background-color: white;
+    line-height: 1;
 
 }
 
 .walletRight thead tr {
-    line-height: 0;
+    line-height: 1;
     font-size: 13px;
 }
 
 .walletRight tr {
-    line-height: 35px;
+    /*line-height: 35px;*/
 }
 .walletRight table {
     border-collapse: separate;
     border-spacing: 0px 15px;
+    word-break: break-word;
+
+}
+
+.walletRight table img {
+   border-radius: 100%;
 }
 
 
@@ -35,6 +43,7 @@
 .walletRight tr th:first-child {
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
+    vertical-align: middle;
 }
 
 .walletRight tr td:last-child,
