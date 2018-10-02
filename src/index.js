@@ -503,8 +503,8 @@ window.onload = function () {
         }
     });
 
-    $(document).on('mousedown','.dropDown_menu ul li ',function(e) {
-        $(this).find('ul').toggleClass('d-block')
+    $(document).on('click','.dropDown_menu > ul > li ',function(e) {
+        $(this).children('ul').toggleClass('d-block')
     });
 
     $(document).on('click','.offerPublication',function(e) {
@@ -514,7 +514,7 @@ window.onload = function () {
     ipcRenderer.on("wallet_token_table", (event, obj) => {
         console.log('token table');
         $('.loader').remove();
-        $('.myTokens').html(obj);
+        $('.myTokens').append(obj);
     });
 
 

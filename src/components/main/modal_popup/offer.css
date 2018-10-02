@@ -1,9 +1,37 @@
 
+.darkButton{
+    background-color: #BDBDBD;
+    /*box-shadow: 0 0 0 2px white, 0 0 0 3px #00abe4;*/
+    /*width: 100px !important;*/
+    cursor: pointer;
+    color: black;
+    padding: 8px 10px;
+    margin: 5px;
+    border-radius: 10px;
+    width: 130px;
 
+
+}
+
+.blueButton{
+    background-color: #2BC2F9;
+    box-shadow: 0 0 7px rgba(43, 194, 249, 1);    /*width: 100px !important;*/
+    cursor: pointer;
+    color: #ffffff;
+    padding: 8px 10px;
+    margin: 5px;
+    border-radius: 10px;
+    width: 130px;
+}
+
+.blueText{
+    color: #2BC2F9;
+
+}
 
 /*form styles*/
 .groupInfoModals {
-    /*width: 400px;*/
+    width: 555px;
     text-align: center;
     position: relative;
     margin: 0 auto;
@@ -17,7 +45,7 @@
     width: 68%;
     margin: 0px 16%;
     position: relative;
-    padding: 20px;
+    padding: 35px 45px;
     /*stacking fieldsets above each other*/
     display: block;
 
@@ -69,10 +97,10 @@
 }
 /*headings*/
 .fs-title {
-    font-size: 20px;
+    font-size: 18px;
     /*text-transform: uppercase;*/
     color: black;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .next-step-title {
@@ -133,6 +161,10 @@
     /*border: 1px solid rgba(0, 0, 0, 0.2);*/
     border-radius: 0.3rem;
     outline: 0;
+}
+
+#pinInput::placeholder {
+    text-align: center;
 }
 
 

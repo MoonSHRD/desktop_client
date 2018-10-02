@@ -16,9 +16,18 @@ $(function() {
 
     });
 
-    $('#list > li').click(function (event) {
-        $(this).children("img").toggleClass('rotate')
-        $(this).children("ul").slideToggle();
+    $('#list > li > a').click(function (event) {
+        $(this).parent().children("img").toggleClass('rotate')
+        $(this).parent().children("ul").slideToggle();
         event.stopPropagation();
     });
+
+    $('#listGallery > li > a').click(function (event) {
+        $(this).parent().children("img").toggleClass('rotate')
+        $(this).parent().children("ul").slideToggle();
+        event.stopPropagation();
+    });
+
+$('.listOfParticipants').tooltip('enable')
+$('.blockedParticipants').tooltip('enable')
 })

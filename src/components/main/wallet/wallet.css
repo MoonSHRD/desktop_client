@@ -1,5 +1,6 @@
 .walletLeft{
     width: 300px;
+    min-width: 300px;
     padding: 20px;
     background-color: #F3F3F3;
 }

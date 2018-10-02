@@ -35,6 +35,10 @@
 
 }
 
+.send_message_input::placeholder {
+    color: #2BC2F9;
+}
+
 .send_message_btn {
    width: 100px;
     height: 50px;
@@ -246,6 +250,7 @@ ul li.inMessage p::after {
     padding: 20px 10px;
     cursor: auto;
     display: none;
+    z-index: 1;
 
 }
 
@@ -367,20 +372,25 @@ ul li.inMessage p::after {
     position: fixed;
     background-color: #F3F3F3;
     z-index: 99;
-    width: 91%;
+    width: 95%;
     left: 50%;
     transform: translate(-50%, 0%);
+    height: 65px;
+}
+
+.groupInfoHeader .modal-title {
+   margin-top: 15px;
 }
 
 .gradient {
     position: absolute;
     z-index: 2;
     right: 0;
-    top: 50px;
+    top: 65px;
     left: 0;
-    height: 40px;
+    height: 20px;
 
-    background: linear-gradient(to top, rgba(255,255,255,0) 0%,#F3F3F3 70%);
+    background: linear-gradient(to top, rgba(255,255,255,0) 0%,#F3F3F3 90%);
 }
 
 
@@ -433,7 +443,7 @@ background: #fff;
     cursor: pointer;
 }
 
-.offerPublication {
+.offerPublication, .getMoreTokens {
 
     background-color: #2BC2F9;
     border: 0;
@@ -442,7 +452,6 @@ background: #fff;
     width: 50%;
     border-radius: 10px;
     color: #fff;
-
     outline: none;
     cursor: pointer;
 }
