@@ -12,12 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const UserModel_1 = require("./UserModel");
 let AccountModel = class AccountModel extends typeorm_1.BaseEntity {
-    constructor() {
-        super(...arguments);
-        // @Column()
-        // pubKey: string;
-        this.privKeyLoom = "";
-    }
 };
 __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
@@ -27,10 +21,6 @@ __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
 ], AccountModel.prototype, "privKey", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", String)
-], AccountModel.prototype, "privKeyLoom", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)

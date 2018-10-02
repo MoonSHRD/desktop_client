@@ -26,7 +26,7 @@ class AuthController extends Controller {
 
         // console.log(account.privKey);
 
-        await this.loom.connect(account.privKeyLoom);
+        await this.loom.connect(account.privKey);
         console.log('loom connected');
         if (first) {
             let identyti_tx= await this.loom.set_identity(account.user.name);
@@ -47,14 +47,14 @@ class AuthController extends Controller {
 
     async save_acc(data) {
         await this.controller_register.run_controller('EventsController','init_loading');
-        const privKey = this.eth.generate_priv_key();
+        // const privKey = this.eth.generate_priv_key();
         // const privKey = Loom.generate_private();
-        const address = this.eth.generate_address(privKey);
+        // const address = this.eth.generate_address(privKey);
         // const address = Loom.generate_address(privKey);
-        // const loom_data=Loom.generate_acc();
+        const loom_data=Loom.generate_acc();
 
         let user = new UserModel();
-        user.id = address;
+        user.id = loom_data.addr;
         user.domain = 'localhost';
         user.self = true;
         user.name = data.firstname + (data.lastname ? " " + data.lastname : "");
@@ -65,13 +65,13 @@ class AuthController extends Controller {
         await user.save();
 
         let account = new AccountModel();
-        account.privKey = privKey;//TextDecoder.encode(loom_data.priv);
+        account.privKey = loom_data.priv;//TextDecoder.encode(loom_data.priv);
         // account.pubKey = loom_data.pub;
         // console.log(
         //     account.privKey,
         //     account.pubKey
         // );
-        account.privKeyLoom = Loom.generate_private();
+        // account.privKeyLoom = Loom.generate_private();
         account.passphrase = data.mnemonic;
         account.user = user;
         await account.save();

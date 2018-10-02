@@ -10,8 +10,8 @@ export class AccountModel extends BaseEntity {
     privKey: string;
     // @Column()
     // pubKey: string;
-    @Column()
-    privKeyLoom: string="";
+    // @Column()
+    // privKeyLoom: string="";
     @Column()
     passphrase: string;
 

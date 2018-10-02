@@ -33,7 +33,7 @@ class AuthController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             // await this.controller_register.run_controller('MenuController', 'init_main');
             // console.log(account.privKey);
-            yield this.loom.connect(account.privKeyLoom);
+            yield this.loom.connect(account.privKey);
             console.log('loom connected');
             if (first) {
                 let identyti_tx = yield this.loom.set_identity(account.user.name);
@@ -54,13 +54,13 @@ class AuthController extends Controller_1.Controller {
     save_acc(data) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.run_controller('EventsController', 'init_loading');
-            const privKey = this.eth.generate_priv_key();
+            // const privKey = this.eth.generate_priv_key();
             // const privKey = Loom.generate_private();
-            const address = this.eth.generate_address(privKey);
+            // const address = this.eth.generate_address(privKey);
             // const address = Loom.generate_address(privKey);
-            // const loom_data=Loom.generate_acc();
+            const loom_data = loom_1.Loom.generate_acc();
             let user = new UserModel_1.UserModel();
-            user.id = address;
+            user.id = loom_data.addr;
             user.domain = 'localhost';
             user.self = true;
             user.name = data.firstname + (data.lastname ? " " + data.lastname : "");
@@ -70,13 +70,13 @@ class AuthController extends Controller_1.Controller {
             user.avatar = data.avatar;
             yield user.save();
             let account = new AccountModel_1.AccountModel();
-            account.privKey = privKey; //TextDecoder.encode(loom_data.priv);
+            account.privKey = loom_data.priv; //TextDecoder.encode(loom_data.priv);
             // account.pubKey = loom_data.pub;
             // console.log(
             //     account.privKey,
             //     account.pubKey
             // );
-            account.privKeyLoom = loom_1.Loom.generate_private();
+            // account.privKeyLoom = Loom.generate_private();
             account.passphrase = data.mnemonic;
             account.user = user;
             yield account.save();
