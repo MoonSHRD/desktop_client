@@ -10,11 +10,13 @@ style
             .col-sm-3
                 img.rounded-circle(src=avatar width = 128 height = 128)
             .col-sm
+
                 table.table
                     tbody
                         tr
-                            th(scope='row') Username
-                            td #{id}
+                            th(scope='row' ) Username
+                            td#copyTo #{id}
+                                input.copyButton(value='copy' type='button' )
                         tr
                             th(scope='row') Firstname
                             td #{firstname}

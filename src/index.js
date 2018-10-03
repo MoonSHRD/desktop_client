@@ -15,6 +15,45 @@ window.onload = function () {
         });
 
     };
+    // var div =  $('.messaging_history');
+    //
+    // div.scrollTop(div.prop('scrollHeight'));
+
+
+
+    $(document).on('click','.copyButton',function () {
+        if (document.selection) {
+            var range = document.body.createTextRange();
+            range.moveToElementText(document.getElementById('copyTo'));
+            range.select().createTextRange();
+            document.execCommand("Copy");
+
+        } else if (window.getSelection) {
+            var range = document.createRange();
+            range.selectNode(document.getElementById('copyTo'));
+            window.getSelection().addRange(range);
+            document.execCommand("Copy");
+            // alert("text copied")
+        }
+    })
+
+    $(document).on('click','.attachFileToChat',function () {
+        console.log('sdfsdf')
+        $("input[id='attachFileToChat']").trigger('click');
+        // e.preventDefault();
+    })
+
+    $(document).on('click','.attachFileToGroup',function () {
+        console.log('sdfsdf')
+        $("input[id='attachFileToGroup']").trigger('click');
+        // e.preventDefault();
+    })
+
+
+    $(document).on('change','input[id="attachFileToChat"]',function () {
+        // alert('Selected file: ' + this.value);
+    })
+
 
     $(document).on('click','[data-id=menu_user_chats]',function () {
         const type = $(this).attr('data-id');
@@ -516,6 +555,7 @@ window.onload = function () {
         $('.loader').remove();
         $('.myTokens').append(obj);
     });
+
 
 
 
