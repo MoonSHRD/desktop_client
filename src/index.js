@@ -33,25 +33,38 @@ window.onload = function () {
             range.selectNode(document.getElementById('copyTo'));
             window.getSelection().addRange(range);
             document.execCommand("Copy");
+            console.log(range)
+            $.notify('address copied \n' + range, {
+
+                placement: {
+                    from: "bottom",
+                    align: "right"
+                },
+                animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                },
+                z_index: 10031,
+                offset: 20,
+                spacing: 10
+            });
             // alert("text copied")
         }
     })
 
     $(document).on('click','.attachFileToChat',function () {
-        console.log('sdfsdf')
         $("input[id='attachFileToChat']").trigger('click');
         // e.preventDefault();
     })
 
     $(document).on('click','.attachFileToGroup',function () {
-        console.log('sdfsdf')
         $("input[id='attachFileToGroup']").trigger('click');
         // e.preventDefault();
     })
 
 
-    $(document).on('change','input[id="attachFileToChat"]',function () {
-        // alert('Selected file: ' + this.value);
+    $(document).on('change','input[id="attachFileToChat"], input[id="attachFileToGroup"]',function () {
+        console.log('Selected file: ' + this.value);
     })
 
 
