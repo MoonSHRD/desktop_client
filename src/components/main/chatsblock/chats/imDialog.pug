@@ -6,3 +6,10 @@ li(id=id data-domain=domain data-type=type data-contract_address=contract_addres
         if type==='user_chat'
             span(class="stateLabel "+(online?"online":"offline"))
         p #{name}
+        if file
+            if file.type='image'
+                | файл картинка
+                img(src=file.file)
+            else
+                | файл
+                img(src='#')

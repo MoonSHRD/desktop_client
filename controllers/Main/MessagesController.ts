@@ -76,11 +76,17 @@ class MessagesController extends Controller {
         let hash;
 
         if (file) {
-            hash=await this.ipfs.add_file(file);
+            let preview = false;
+            if ([
+                'image/jpeg',
+                'image/png',
+            ].includes(file.type))
+                preview=true;
+            file={hash:await this.ipfs.add_file(file),preview:preview, name:"file"};
         }
 
         // this.dxmpp.send(chat, text, group);
-        this.dxmpp.send(chat, text, group,hash);
+        this.dxmpp.send(chat, text, group,file);
         // await this.render_message(message, id);
     };
 
@@ -90,7 +96,7 @@ class MessagesController extends Controller {
         await message.save();
     };
 
-    async received_message(user, text) {
+    async received_message(user, text,file) {
         let self_info = await this.get_self_info();
         let userModel = await UserModel.findOne(user.id);
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
@@ -100,6 +106,14 @@ class MessagesController extends Controller {
         message.chat = chat;
         message.time = this.dxmpp.take_time();
         await message.save();
+
+        let ipfs_file;
+        if (file && file.preview){
+            ipfs_file=await this.ipfs.get_file(file.hash);
+            message.file=file;
+            console.log(ipfs_file);
+        }
+
         await this.render_message(message, chat.id);
     };
 

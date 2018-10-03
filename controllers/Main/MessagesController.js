@@ -82,10 +82,16 @@ class MessagesController extends Controller_1.Controller {
             }
             let hash;
             if (file) {
-                hash = yield this.ipfs.add_file(file);
+                let preview = false;
+                if ([
+                    'image/jpeg',
+                    'image/png',
+                ].includes(file.type))
+                    preview = true;
+                file = { hash: yield this.ipfs.add_file(file), preview: preview, name: "file" };
             }
             // this.dxmpp.send(chat, text, group);
-            this.dxmpp.send(chat, text, group, hash);
+            this.dxmpp.send(chat, text, group, file);
             // await this.render_message(message, id);
         });
     }
@@ -98,7 +104,7 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_message(user, text) {
+    received_message(user, text, file) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             let userModel = yield UserModel_1.UserModel.findOne(user.id);
@@ -109,6 +115,12 @@ class MessagesController extends Controller_1.Controller {
             message.chat = chat;
             message.time = this.dxmpp.take_time();
             yield message.save();
+            let ipfs_file;
+            if (file && file.preview) {
+                ipfs_file = yield this.ipfs.get_file(file.hash);
+                message.file = file;
+                console.log(ipfs_file);
+            }
             yield this.render_message(message, chat.id);
         });
     }
