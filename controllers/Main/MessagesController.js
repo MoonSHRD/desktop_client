@@ -60,7 +60,7 @@ class MessagesController extends Controller_1.Controller {
             }));
         });
     }
-    send_message({ id, text }) {
+    send_message({ id, text, file }) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             let chat = yield ChatModel_1.ChatModel.findOne(id);
@@ -80,8 +80,12 @@ class MessagesController extends Controller_1.Controller {
             else if (Object.values(this.group_chat_types).includes(chat.type)) {
                 group = true;
             }
+            let hash;
+            if (file) {
+                hash = yield this.ipfs.add_file(file);
+            }
             // this.dxmpp.send(chat, text, group);
-            this.dxmpp.send(chat, text, group);
+            this.dxmpp.send(chat, text, group, hash);
             // await this.render_message(message, id);
         });
     }

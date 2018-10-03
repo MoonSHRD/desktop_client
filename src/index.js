@@ -274,7 +274,18 @@ window.onload = function () {
 
         obj={id: active_dialog.attr('id'),text: msg_input.val().trim()};
         // console.log(obj);
-        ipcRenderer.send("send_message", obj);
+        let file = $('#attachFileToChat').prop('files')[0];
+        if (file) {
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function () {
+                obj.file={file:reader.result,type:file.type};
+                ipcRenderer.send("send_message", obj);
+            };
+        } else {
+            ipcRenderer.send("send_message", obj);
+        }
+        // console.log(file);
         msg_input.val('');
     });
 
@@ -572,5 +583,14 @@ window.onload = function () {
 
 
 
-
+    $(document).on('change','#attachFileToChat',function (e) {
+        const file = this.files[0];
+        if (file) {
+            let reader = new FileReader();
+            reader.onloadend = function () {
+                console.log('read file');
+            };
+            reader.readAsDataURL(file);
+        }
+    })
 };

@@ -53,7 +53,7 @@ class MessagesController extends Controller {
         });
     }
 
-    async send_message({id, text}) {
+    async send_message({id, text, file}) {
         let self_info = await this.get_self_info();
         let chat = await ChatModel.findOne(id);
         // let date = new Date();
@@ -73,9 +73,14 @@ class MessagesController extends Controller {
         } else if (Object.values(this.group_chat_types).includes(chat.type)) {
             group = true;
         }
+        let hash;
+
+        if (file) {
+            hash=await this.ipfs.add_file(file);
+        }
 
         // this.dxmpp.send(chat, text, group);
-        this.dxmpp.send(chat, text, group);
+        this.dxmpp.send(chat, text, group,hash);
         // await this.render_message(message, id);
     };
 
