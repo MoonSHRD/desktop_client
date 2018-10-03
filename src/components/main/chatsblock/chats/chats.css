@@ -32,6 +32,11 @@
     position: relative;
 }
 
+.chats a p{
+  padding: 0;
+    margin: 0;
+}
+
 .chats a:hover {
     border-radius: 8px;
     background-color: #2BC2F9;

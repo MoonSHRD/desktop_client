@@ -1,3 +1,5 @@
+
+
 .messaging_block {
     flex: 1;
     height: 100vh;
@@ -82,6 +84,7 @@
     margin: 15px 15px 5px 0;
     width: calc(100% - 25px);
     font-size: 0.9em;
+
 }
 
 
@@ -132,6 +135,8 @@ ul li.outMessage p {
     color: white;
     position: relative;
     box-shadow: 0 0 13px rgba(0, 123, 255,0.5);
+    margin-right: 15px;
+    padding-right: 50px;
 }
 
 ul li.outMessage img, ul li.inMessage img {
@@ -146,9 +151,6 @@ ul li.inMessage p {
    left: 15px;
 }
 
-ul li.outMessage p {
-    margin-right: 15px;
-}
 
 ul li.outMessage p::after {
     content: '';
@@ -162,9 +164,11 @@ ul li.outMessage p::after {
 ul li.outMessage p span{
     text-decoration: none;
     font-size: 11px;
-    padding-left: 10px;
-    float: right;
     color: white;
+    /* float: right; */
+    bottom: 0;
+    right: 9px;
+    position: absolute;
 }
 
 
@@ -182,6 +186,9 @@ ul li.inMessage p span{
     padding-left: 10px;
     float: right;
     color: black;
+    position: relative;
+    bottom: -10px;
+    right: -5px;
 }
 
 ul li.inMessage p::after {
@@ -202,7 +209,7 @@ ul li.inMessage p::after {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    border-bottom: 1px solid #c3c3c3;
+    /*border-bottom: 1px solid #c3c3c3;*/
 }
 
 .head_peer h3 {
@@ -441,6 +448,7 @@ background: #fff;
     /*font-size: 18px;*/
     outline: none;
     cursor: pointer;
+
 }
 
 .offerPublication, .getMoreTokens {
@@ -454,6 +462,8 @@ background: #fff;
     color: #fff;
     outline: none;
     cursor: pointer;
+    box-shadow: 0 0 13px rgba(0, 123, 255,0.5);
+
 }
 
 .showOnMapChannel{

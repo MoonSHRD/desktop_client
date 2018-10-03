@@ -1,13 +1,14 @@
 div(class="head_peer" id="head_peer")
-    h3
+    h4
         a(class="peer_name" data-event="show_chat_info" href='#')
             if (id)
-                img(src=avatar width=44 height=44)
+                //img(src=avatar width=44 height=44)
                 |       #{name}
 
 
+
     if (type === "channel")
-        ul.nav.nav-tabs.nav-justified(role='tablist')
+        ul.block.nav.nav-tabs.nav-justified(role='tablist')
             li.nav-item
                 a.nav-link.active(href='#chat', role='tab', data-toggle='tab') Chat
             li.nav-item
@@ -25,7 +26,7 @@ div(class="head_peer" id="head_peer")
 
     if (type==="user_chat" )
 
-        div(class='dropDown_menu')
+        div.block(class='dropDown_menu')
             ul
                 li
                     a(data-id="")
@@ -37,10 +38,15 @@ div(class="head_peer" id="head_peer")
                             img(src="components/main/messagingblock/img/call.png")
 
                 li
+
                     a(data-id="")
+
+
                         div(class='image')
                             img(src="components/main/messagingblock/img/videoCall.png")
-                li
+                input(type="file" id="attachFileToChat" style="display:none")
+                li.attachFileToChat
+
                     a(data-id="")
                         div(class='image')
                             img(src="components/main/messagingblock/img/files.png")
@@ -62,8 +68,12 @@ div(class="head_peer" id="head_peer")
                     a(data-id="")
                         div(class='image')
                             img(src="components/main/messagingblock/img/micr.png")
-                li
-                    a(data-id="")
+                input(type="file" id="attachFileToGroup" style="display:none")
+                li.attachFileToGroup
+
+                    a(data-id="" )
+                        //input(type="file" id="attachFile" style="display:none;")
+
                         div(class='image')
                             img(src="components/main/messagingblock/img/files.png")
                 li
