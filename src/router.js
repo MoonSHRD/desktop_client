@@ -78,21 +78,15 @@ class Router {
          **/
         /** Connect & disconnect **/
         this.listen_event(this.dxmpp, 'close', () => __awaiter(this, void 0, void 0, function* () {
-            console.log('jackal disconnected');
+            console.log('jackal reconnecting');
             this.online = false;
             function sleep(ms) {
                 return new Promise(resolve => {
                     setTimeout(resolve, ms);
                 });
             }
-            while (!this.online) {
-                if (this.connecting)
-                    return;
-                this.connecting = true;
-                yield this.controller_register.queue_controller('AuthController', 'init_auth');
-                yield sleep(5000);
-                this.connecting = false;
-            }
+            yield this.controller_register.queue_controller('AuthController', 'init_auth');
+            yield sleep(5000);
         }));
         this.listen_event(this.dxmpp, 'online', (data) => __awaiter(this, void 0, void 0, function* () {
             console.log('jackal connected');

@@ -21,11 +21,8 @@ class AuthController extends Controller {
     };
 
     private async auth(account: AccountModel,first:boolean=false) {
-        // await this.controller_register.run_controller('MenuController', 'init_main');
-
-
-        // console.log(account.privKey);
-
+        await this.ipfs.connect();
+        // await this.ipfs.ipfs_info();
         await this.loom.connect(account.privKey);
         console.log('loom connected');
         if (first) {
@@ -33,12 +30,6 @@ class AuthController extends Controller {
             console.log(identyti_tx);
             this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
         }
-
-        // console.log(await this.loom.get_identity());
-        // console.log(await this.loom.token_addr);
-        // console.log(await this.loom.get_total_supply());
-        // console.log(await this.loom.get_my_balance());
-        // console.log(await this.loom.get_balance('0x0000000000000000000000000000000000000000'));
         account.host = this.dxmpp_config.host;
         account.jidhost = this.dxmpp_config.jidhost;
         account.port = this.dxmpp_config.port;
@@ -47,10 +38,6 @@ class AuthController extends Controller {
 
     async save_acc(data) {
         await this.controller_register.run_controller('EventsController','init_loading');
-        // const privKey = this.eth.generate_priv_key();
-        // const privKey = Loom.generate_private();
-        // const address = this.eth.generate_address(privKey);
-        // const address = Loom.generate_address(privKey);
         const loom_data=Loom.generate_acc();
 
         let user = new UserModel();
@@ -65,13 +52,7 @@ class AuthController extends Controller {
         await user.save();
 
         let account = new AccountModel();
-        account.privKey = loom_data.priv;//TextDecoder.encode(loom_data.priv);
-        // account.pubKey = loom_data.pub;
-        // console.log(
-        //     account.privKey,
-        //     account.pubKey
-        // );
-        // account.privKeyLoom = Loom.generate_private();
+        account.privKey = loom_data.priv;
         account.passphrase = data.mnemonic;
         account.user = user;
         await account.save();

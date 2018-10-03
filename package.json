@@ -57,7 +57,7 @@
     "l20n": "^5.0.0",
     "loom-js": "^1.4.3",
     "loom-truffle-provider": "^0.5.0",
-    "moonshard_core": "^0.1.45",
+    "moonshard_core": "^0.1.46",
     "peer-id": "^0.11.0",
     "popper.js": "^1.14.4",
     "pug": "^2.0.3",

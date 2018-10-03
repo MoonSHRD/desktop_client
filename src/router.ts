@@ -83,7 +83,7 @@ export class Router {
         /** Connect & disconnect **/
 
         this.listen_event(this.dxmpp, 'close', async () => {
-            console.log('jackal disconnected');
+            console.log('jackal reconnecting');
             this.online = false;
 
             function sleep(ms) {
@@ -92,14 +92,8 @@ export class Router {
                 });
             }
 
-            while (!this.online) {
-                if (this.connecting) return;
-                this.connecting = true;
-
-                await this.controller_register.queue_controller('AuthController', 'init_auth');
-                await sleep(5000);
-                this.connecting = false;
-            }
+            await this.controller_register.queue_controller('AuthController', 'init_auth');
+            await sleep(5000);
         });
 
         this.listen_event(this.dxmpp, 'online', async (data) => {
