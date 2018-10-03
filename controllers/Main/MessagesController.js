@@ -120,7 +120,8 @@ class MessagesController extends Controller_1.Controller {
             if (file && file.preview) {
                 ipfs_file = yield this.ipfs.get_file(file.hash);
                 message.file = {
-                    file: ipfs_file.content,
+                    file: ipfs_file.file,
+                    preview: file.preview,
                     type: file.type,
                     name: file.name,
                 };

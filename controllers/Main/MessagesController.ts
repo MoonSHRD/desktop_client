@@ -112,7 +112,8 @@ class MessagesController extends Controller {
         if (file && file.preview) {
             ipfs_file = await this.ipfs.get_file(file.hash);
             message.file = {
-                file: ipfs_file.content,
+                file: ipfs_file.file,
+                preview: file.preview,
                 type: file.type,
                 name: file.name,
             };
