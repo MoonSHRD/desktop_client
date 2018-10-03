@@ -72,6 +72,17 @@ class MessagesController extends Controller_1.Controller {
             message.chat = chat;
             yield message.save();
             let group;
+            let file_send;
+            if (file) {
+                let preview = false;
+                if ([
+                    'image/jpeg',
+                    'image/png',
+                ].includes(file.type))
+                    preview = true;
+                file_send = { file: file.file, hash: yield this.ipfs.add_file(file), preview: preview, name: file.name };
+            }
+            message.file = file_send;
             if (chat.type === this.chat_types.user) {
                 yield this.render_message(message, id);
                 chat.id = yield chat.get_user_chat_meta();
@@ -80,18 +91,8 @@ class MessagesController extends Controller_1.Controller {
             else if (Object.values(this.group_chat_types).includes(chat.type)) {
                 group = true;
             }
-            let hash;
-            if (file) {
-                let preview = false;
-                if ([
-                    'image/jpeg',
-                    'image/png',
-                ].includes(file.type))
-                    preview = true;
-                file = { hash: yield this.ipfs.add_file(file), preview: preview, name: "file" };
-            }
             // this.dxmpp.send(chat, text, group);
-            this.dxmpp.send(chat, text, group, file);
+            this.dxmpp.send(chat, text, group, file_send);
             // await this.render_message(message, id);
         });
     }
@@ -118,7 +119,11 @@ class MessagesController extends Controller_1.Controller {
             let ipfs_file;
             if (file && file.preview) {
                 ipfs_file = yield this.ipfs.get_file(file.hash);
-                message.file = file;
+                message.file = {
+                    file: ipfs_file.content,
+                    type: file.type,
+                    name: file.name,
+                };
                 console.log(ipfs_file);
             }
             yield this.render_message(message, chat.id);

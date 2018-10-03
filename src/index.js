@@ -302,10 +302,11 @@ window.onload = function () {
         // console.log(obj);
         let file = $('#attachFileToChat').prop('files')[0];
         if (file) {
+            console.log(file);
             let reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onloadend = function () {
-                obj.file={file:reader.result,type:file.type};
+                obj.file={file:reader.result,type:file.type,name:file.name};
                 ipcRenderer.send("send_message", obj);
             };
         } else {
@@ -609,14 +610,14 @@ window.onload = function () {
 
 
 
-    $(document).on('change','#attachFileToChat',function (e) {
-        const file = this.files[0];
-        if (file) {
-            let reader = new FileReader();
-            reader.onloadend = function () {
-                console.log('read file');
-            };
-            reader.readAsDataURL(file);
-        }
-    })
+    // $(document).on('change','#attachFileToChat',function (e) {
+    //     const file = this.files[0];
+    //     if (file) {
+    //         let reader = new FileReader();
+    //         reader.onloadend = function () {
+    //             console.log('read file');
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // })
 };

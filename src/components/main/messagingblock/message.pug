@@ -3,6 +3,14 @@ li(class=mine?"outMessage":"inMessage")
 
     img.block(src = sender_avatar width = 44 height = 44)
     p  #{text}
+        if file
+            if file.preview
+                | файл картинка
+                img(src=file.file)
+            else
+                | файл
+                img(src='#')
+
         //br
         span.block #{time}
         //.loader
