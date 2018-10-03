@@ -5,6 +5,13 @@
 /*cursor: default;*/
 }
 
+.block{
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-app-region: no-drag;
+    cursor: default;
+}
+
 html, body {
     margin: 0;
     padding: 0;

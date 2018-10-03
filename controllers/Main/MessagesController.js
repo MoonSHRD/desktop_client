@@ -60,7 +60,7 @@ class MessagesController extends Controller_1.Controller {
             }));
         });
     }
-    send_message({ id, text }) {
+    send_message({ id, text, file }) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             let chat = yield ChatModel_1.ChatModel.findOne(id);
@@ -72,6 +72,17 @@ class MessagesController extends Controller_1.Controller {
             message.chat = chat;
             yield message.save();
             let group;
+            let file_send;
+            if (file) {
+                let preview = false;
+                if ([
+                    'image/jpeg',
+                    'image/png',
+                ].includes(file.type))
+                    preview = true;
+                file_send = { file: file.file, hash: yield this.ipfs.add_file(file), preview: preview, name: file.name };
+            }
+            message.file = file_send;
             if (chat.type === this.chat_types.user) {
                 yield this.render_message(message, id);
                 chat.id = yield chat.get_user_chat_meta();
@@ -81,7 +92,7 @@ class MessagesController extends Controller_1.Controller {
                 group = true;
             }
             // this.dxmpp.send(chat, text, group);
-            this.dxmpp.send(chat, text, group);
+            this.dxmpp.send(chat, text, group, file_send);
             // await this.render_message(message, id);
         });
     }
@@ -94,7 +105,7 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_message(user, text) {
+    received_message(user, text, file) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             let userModel = yield UserModel_1.UserModel.findOne(user.id);
@@ -105,6 +116,17 @@ class MessagesController extends Controller_1.Controller {
             message.chat = chat;
             message.time = this.dxmpp.take_time();
             yield message.save();
+            let ipfs_file;
+            if (file && file.preview) {
+                ipfs_file = yield this.ipfs.get_file(file.hash);
+                message.file = {
+                    file: ipfs_file.file,
+                    preview: file.preview,
+                    type: file.type,
+                    name: file.name,
+                };
+                console.log(ipfs_file);
+            }
             yield this.render_message(message, chat.id);
         });
     }

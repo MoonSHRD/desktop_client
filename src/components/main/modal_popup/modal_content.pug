@@ -9,18 +9,23 @@ style
         .row
             .col-sm-3
                 img.rounded-circle(src=avatar width = 128 height = 128)
-            .col-sm
+            .col-sm-9
+
                 table.table
                     tbody
                         tr
-                            th(scope='row') Username
-                            td #{id}
+                            th(scope='row' ) Username
+                            td#copyTo #{id}
+                            td
+                                input.copyButton(value='copy' type='button' )
                         tr
                             th(scope='row') Firstname
                             td #{firstname}
+                            td
                         tr
                             th(scope='row') Lastname
                             td #{lastname}
+                            td
 if bio
     .modal-footer
         .container

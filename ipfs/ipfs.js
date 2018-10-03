@@ -58,7 +58,7 @@ class Ipfs {
     }
     add_file(file) {
         return __awaiter(this, void 0, void 0, function* () {
-            const buffer = Buffer.from(file);
+            const buffer = Buffer.from(JSON.stringify(file));
             let response = yield this.connection.add(buffer, { progress: (prog) => console.log(`received: ${prog}`) });
             console.log(response);
             let ipfsId = response[0].hash;
@@ -70,6 +70,10 @@ class Ipfs {
         return __awaiter(this, void 0, void 0, function* () {
             let response = yield this.connection.get(ipfsId, { progress: (prog) => console.log(`received: ${prog}`) });
             console.log(response);
+            console.log(response[0]);
+            console.log(response[0].content);
+            console.log(response[0].content.toString());
+            return JSON.parse(response[0].content.toString());
             // let ipfsId = response[0].hash;
             // console.log(ipfsId);
             // return ipfsId;

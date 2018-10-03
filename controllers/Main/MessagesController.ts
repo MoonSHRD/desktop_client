@@ -35,8 +35,8 @@ class MessagesController extends Controller {
 
     private async render_message(message: MessageModel, chat_id: string) {
         let self_info = await this.get_self_info();
-        message.mine = message.sender?(self_info.id === message.sender.id):false;
-        message.sender_avatar = message.sender && (message.chat.type!==this.group_chat_types.channel || message.mine)?message.sender.avatar:message.chat.avatar;
+        message.mine = message.sender ? (self_info.id === message.sender.id) : false;
+        message.sender_avatar = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.avatar : message.chat.avatar;
         let html = this.render('main/messagingblock/message.pug', message);
         const data = {
             id: message.chat.id,
@@ -53,7 +53,7 @@ class MessagesController extends Controller {
         });
     }
 
-    async send_message({id, text}) {
+    async send_message({id, text, file}) {
         let self_info = await this.get_self_info();
         let chat = await ChatModel.findOne(id);
         // let date = new Date();
@@ -65,6 +65,18 @@ class MessagesController extends Controller {
         await message.save();
         let group: boolean;
 
+        let file_send;
+        if (file) {
+            let preview = false;
+            if ([
+                'image/jpeg',
+                'image/png',
+            ].includes(file.type))
+                preview = true;
+            file_send = {file: file.file, hash: await this.ipfs.add_file(file), preview: preview, name: file.name};
+        }
+
+        message.file = file_send;
 
         if (chat.type === this.chat_types.user) {
             await this.render_message(message, id);
@@ -75,17 +87,17 @@ class MessagesController extends Controller {
         }
 
         // this.dxmpp.send(chat, text, group);
-        this.dxmpp.send(chat, text, group);
+        this.dxmpp.send(chat, text, group, file_send);
         // await this.render_message(message, id);
     };
 
     async message_delivered(message_d) {
         let message = await MessageModel.findOne(message_d.userid);
-        message.server_id=message_d.DBid;
+        message.server_id = message_d.DBid;
         await message.save();
     };
 
-    async received_message(user, text) {
+    async received_message(user, text, file) {
         let self_info = await this.get_self_info();
         let userModel = await UserModel.findOne(user.id);
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
@@ -95,6 +107,19 @@ class MessagesController extends Controller {
         message.chat = chat;
         message.time = this.dxmpp.take_time();
         await message.save();
+
+        let ipfs_file;
+        if (file && file.preview) {
+            ipfs_file = await this.ipfs.get_file(file.hash);
+            message.file = {
+                file: ipfs_file.file,
+                preview: file.preview,
+                type: file.type,
+                name: file.name,
+            };
+            console.log(ipfs_file);
+        }
+
         await this.render_message(message, chat.id);
     };
 

@@ -15,10 +15,88 @@ window.onload = function () {
         });
 
     };
+    // var div =  $('.messaging_history');
+    //
+    // div.scrollTop(div.prop('scrollHeight'));
+
+
+
+    $(document).on('click','.copyButton',function () {
+        if (document.selection) {
+            var range = document.body.createTextRange();
+            range.moveToElementText(document.getElementById('copyTo'));
+            range.select().createTextRange();
+            document.execCommand("Copy");
+
+        } else if (window.getSelection) {
+            var range = document.createRange();
+            range.selectNode(document.getElementById('copyTo'));
+            window.getSelection().addRange(range);
+            document.execCommand("Copy");
+            console.log(range)
+            $.notify('address copied \n' + range, {
+
+                placement: {
+                    from: "bottom",
+                    align: "right"
+                },
+                animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                },
+                z_index: 10031,
+                offset: 20,
+                spacing: 10
+            });
+            // alert("text copied")
+        }
+    })
+
+    $(document).on('click','.attachFileToChat',function () {
+        $("input[id='attachFileToChat']").trigger('click');
+        // e.preventDefault();
+    })
+
+    $(document).on('click','.attachFileToGroup',function () {
+        $("input[id='attachFileToGroup']").trigger('click');
+        // e.preventDefault();
+    })
+
+
+    $(document).on('change','input[id="attachFileToChat"], input[id="attachFileToGroup"]',function () {
+        console.log('Selected file: ' + this.value);
+    })
+
 
     $(document).on('click','[data-id=menu_user_chats]',function () {
         const type = $(this).attr('data-id');
         ipcRenderer.send('change_state',type);
+    });
+
+
+    $(document).on('change','input[id="attachFileToChat"], input[id="attachFileToGroup"]',function () {
+        readURL(this);
+    });
+
+
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#upload_file').attr('src', e.target.result);
+                $('#upload_file').css('cursor', 'pointer');
+
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }    }
+
+
+    $(document).on('click','#upload_file',function () {
+        $('#upload_file').attr('src', '');
+        $('#upload_file').css('cursor', 'default');
     });
 
     $(document).on('click','.menu a',function () {
@@ -222,7 +300,19 @@ window.onload = function () {
 
         obj={id: active_dialog.attr('id'),text: msg_input.val().trim()};
         // console.log(obj);
-        ipcRenderer.send("send_message", obj);
+        let file = $('#attachFileToChat').prop('files')[0];
+        if (file) {
+            console.log(file);
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function () {
+                obj.file={file:reader.result,type:file.type,name:file.name};
+                ipcRenderer.send("send_message", obj);
+            };
+        } else {
+            ipcRenderer.send("send_message", obj);
+        }
+        // console.log(file);
         msg_input.val('');
     });
 
@@ -520,4 +610,14 @@ window.onload = function () {
 
 
 
+    // $(document).on('change','#attachFileToChat',function (e) {
+    //     const file = this.files[0];
+    //     if (file) {
+    //         let reader = new FileReader();
+    //         reader.onloadend = function () {
+    //             console.log('read file');
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // })
 };
