@@ -121,3 +121,9 @@
     animation-name: reveal;
     animation-direction: reverse; /* thx @HugoGiraudel */
 }
+
+.td-token {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 140px;
+}

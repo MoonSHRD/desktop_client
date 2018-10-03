@@ -1,10 +1,9 @@
-tr
-    th(scope='row')
+tr.table_02
+    th(scope='row' class='token-avatar')
         img(src=avatar width='40' height='40')
     td #{name}
-    td #{label}
-    td #{contract_address}
+    td(class='td-token') #{contract_address}
     td #{amount}
-    td #{total_supply}
+    td #{link_info}
+        a Channel link
     //td status
-

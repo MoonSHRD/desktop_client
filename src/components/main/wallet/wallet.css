@@ -48,9 +48,9 @@
     padding: 6px 30px;
 }
 
-.userBar img {
-    border: 1px solid  #2BC2F9 ;
-    border-radius: 100%;
+
+.walletMenu ul li {
+    margin-bottom: 2px;
 }
 
 .userBar span{
@@ -156,3 +156,29 @@
         transform: rotate(360deg);
     }
 }
+
+.token-avatar {
+    width: 50px;
+}
+
+.table_01 th,.table_02 th,.table_02 td {
+    text-align: center;
+}
+
+.table_02 a {
+    text-decoration: underline;
+    color: #2BC2F9;
+}
+
+.walletInfo table {
+    width: 100%;
+}
+
+.walletInfo td,.walletInfo th {
+    width: 50%;
+}
+
+.walletInfo th {
+    font-weight: 600;
+}
+
