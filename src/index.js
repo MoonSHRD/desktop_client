@@ -73,6 +73,32 @@ window.onload = function () {
         ipcRenderer.send('change_state',type);
     });
 
+
+    $(document).on('change','input[id="attachFileToChat"], input[id="attachFileToGroup"]',function () {
+        readURL(this);
+    });
+
+
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#upload_file').attr('src', e.target.result);
+                $('#upload_file').css('cursor', 'pointer');
+
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }    }
+
+
+    $(document).on('click','#upload_file',function () {
+        $('#upload_file').attr('src', '');
+        $('#upload_file').css('cursor', 'default');
+    });
+
     $(document).on('click','.menu a',function () {
         const $this=$(this);
         if ($this.attr('data-id')!=='menu_create_chat')
