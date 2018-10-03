@@ -1,0 +1,89 @@
+style
+    include offer.css
+
+.modal-body
+    form.groupInfoModals
+
+        // fieldsets
+        fieldset.modal-content(style='background-color: #F3F3F3')
+            h5 Publication price:  1$ for 1 publication
+            h3.fs-subtitle Amount to offer
+            textarea.invalid(rows='1', name='amountForPublic', placeholder='Enter the amount for all your publications' id='' required=true)
+
+            h3.fs-subtitle.text-left.p-2.m-0 Publication to offer
+            textarea.invalid(rows='1', name='topicOfPublic', placeholder='Topic of publicity' id='' required=true)
+            textarea.invalid.m-0(rows='4', name='textOfPublic', placeholder='Text of the publication' id='' required=true)
+
+            .row.justify-content-md-center
+                a.m-3(href='#')
+                    img.mr-3(src='components/main/modal_popup/img/addPhoto.png')
+                    span(style='color: #272B46; font-size: 13px') Add more publications
+
+            textarea.invalid(rows='3', name='textForAdmin', placeholder='Write a text message for administrator' id='' required=true)
+
+            .btn.groupInfoNext.blueButton( id='finalizeOffer' name="next" value='Finalize offer' ) Finalize offer
+
+            .btn.darkButton(value='Cancel' id='') Cancel
+            //input.groupInfoNext.action-button(type='button', name='next', id='input_mnemonic_next')
+
+        fieldset.modal-content(style='background-color: #F3F3F3')
+            h2.fs-subtitle.text-left.p-2.m-0 Enter the four-digit PIN to confirm your identity
+
+            .row.justify-content-md-center
+                .col-md-3
+                    input.invalid.text-center#pinInput(name='pinInput' maxlength="4" placeholder='****', type='text' )
+
+
+            .btn.blueButton(id='pinConfirm') Enter
+            .btn.darkButton.previousGroupInfo(value='Cancel' name='Previous') Cancel
+
+        fieldset.modal-content(style='background-color: #F3F3F3')
+            h2.fs-title.m-0.p-0 Сheck the correctness of the data
+            h3.fs-subtitle.m-0.p-0 Publication price:  1$ for 1 publication
+            h3.fs-subtitle.mt-3.p-0 Amount to offer
+            label.mt-3.blueText 3$
+
+            h3.fs-subtitle.text-left.p-2.m-0 Publication to offer
+            textarea.invalid(rows='1', name='topicOfPublicUnedit', placeholder='Topic of publicity' disabled required=true)
+            textarea.invalid(rows='4', name='textOfPublicUnedit', placeholder='Text of the publication' disabled required=true)
+            textarea.invalid(rows='3', name='textForAdminUnedit', placeholder='Write a text message for administrator' disabled required=true)
+
+            .btn.blueButton.groupInfoNext(id='') Send offer
+
+            .btn.darkButton.previousGroupInfo(id='') Cancel
+
+
+        fieldset.modal-content(style='background-color: #F3F3F3')
+            h2.fs-title Your offer has been accepted.
+            img(src='components/main/modal_popup/img/bigBell.png')
+            .m-2 Withdrawn: -45 MNshrd (=3$)
+
+            .btn.blueButton.position-absolute(data-dismiss="modal" aria-label="Close" style='left: 125px; bottom: -25px;') Ok
+
+        fieldset.modal-content(style='background-color: #F3F3F3')
+            h4.fs-title You have not enough funds, do you want to buy 45 tokens for procceed purchase?
+            img(src='components/main/modal_popup/img/bigBell.png')
+
+
+            input.action-button(type='button', value='Get more tokens' id='')
+            input.action-button(type='button', value='Cancel' id='')
+            //input.groupInfoNext.action-button(type='button', name='next', id='input_mnemonic_next')
+            //h2.next-step-title Step 3
+        //fieldset.modal-content
+        //    h2.fs-title Step 3
+        //    h3.fs-subtitle You can upload your photo
+        //    .avatar_preview
+        //        img.rounded-circle(id='avatar_preview' src='components/auth/default-avatar1.jpg')
+        //    .input-file-container
+        //        input#my-file.input-file(type='file' name='avatar')
+        //        label.input-file-trigger(tabindex='0', for='my-file') Select an avatar
+        //    //input.previous.action-button(type='button', name='previous', value='Previous')
+        //    h2.next-step-title FINISH
+        //    input.previousGroupInfo.action-button(type='button', value='previous' name='Previous')
+
+
+
+
+
+script
+    include fieldset.js

@@ -1,10 +1,21 @@
+/**, *::after, *::before {*/
+    /*-webkit-user-select: none;*/
+    /*-webkit-user-drag: none;*/
+    /*-webkit-app-region: no-drag;*/
+    /*!*cursor: default;*!*/
+/*}*/
 
-
-.infopanel {
+a.infopanel {
     display: flex;
     text-decoration: none;
-    padding: 20px;
+    padding: 20px 0;
     transition: 0.5s;
+
+}
+
+.infopanel:hover   .infopanel > b  {
+    /*text-decoration: underline; !* Добавляем подчеркивание при наведении курсора на ссылку *!*/
+    color: #007bff;
 
 }
 
@@ -24,14 +35,15 @@
     color: black;
 }
 
-.infopanel_title b, span {
+.infopanel_title > b, .infopanel:hover > span {
     text-decoration: none;
+    color: black;
 }
 
-.infopanel:hover {
-    /*background-color: white;*/
-    padding-left: 30px;
-}
+/*.infopanel:hover {*/
+    /*!*background-color: white;*!*/
+    /*padding-left: 30px;*/
+/*}*/
 
 
 .overlay {
@@ -176,3 +188,9 @@ label > span{
     background: #EA7B00;
     color: #fff;
 }
+
+
+.alert .close {
+    top: 12px !important;
+}
+

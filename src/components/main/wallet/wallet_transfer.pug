@@ -1,0 +1,26 @@
+style
+    include myTokens.css
+style
+    include transfers.css
+div.myTokens.transfer
+    table.table(style='    ')
+        thead
+            tr
+                th(scope='col') Send Moonshard tokens to
+                th(scope='col') Value
+                th(scope='col') Info
+                th(scope='col') Send to All
+        tbody
+            tr
+                th(scope='row')
+                    input(placeholder='Enter the name or address' name='address')
+                td
+                    input(placeholder='How much?' name='amount')
+                td
+                    a(href='#') Add info
+                td
+                    .btn.sendTokenButton Send
+
+
+
+

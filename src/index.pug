@@ -1,16 +1,23 @@
 doctype html
 html
     head
-        link(rel='stylesheet' href='css/bootstrap.min.css')
+        link(rel='stylesheet' href='../node_modules/bootstrap/dist/css/bootstrap.css')
+        link(rel='stylesheet' href='../node_modules/animate.css/animate.css')
+        link(rel='stylesheet', type='text/css', href='../node_modules/slick-carousel/slick/slick.css')
+        link(rel='stylesheet', type='text/css', href='../node_modules/slick-carousel/slick/slick-theme.css')
+        //link(rel='stylesheet', type='text/css', href='//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick-theme.css')
+
+        //link(rel='stylesheet' href='../node_modules/tiny-slider/dist/tiny-slider.css')
+        //link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css")
         block head
             meta(charset = 'utf-8')
             meta(name='viewport', content="initial-scale=1.0, width=device-width")
             title Moonshard
-    body
+    body(lang="en")
         style
             include App.css
 
-        div(class='App' id=('view'))
+        div(class='App' id='view')
             include components/loading/loading
             //<div id="loader-wrapper">
             //<div id="loader"></div>
@@ -25,8 +32,18 @@ html
 
         script.
             require('jqueryui')
+        //script.
+        //    require('bootstrap')
+        //script.
+        //    require('./js/bootstrap.min.js')
         script.
-            require('./js/bootstrap.min')
+            require('bootstrap')
+
+        script.
+            require('bootstrap-notify')
+
+        ////script.
+        //    require('./langs/lang')
         //script.
         //    require('navigo')
 
@@ -41,3 +58,5 @@ html
 
 
         script(async id="__bs_script__" src="http://localhost:3000/browser-sync/browser-sync-client.js?v=2.24.6")
+        //script(async id="__bs_script__" src="http://localhost:3000/browser-sync/browser-sync-client.js?v=2.24.6")
+        script(src='../node_modules/slick-carousel/slick/slick.js')

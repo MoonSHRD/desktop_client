@@ -1,18 +1,20 @@
+style
+    include modal-content.css
 .modal-header
-    h5.modal-title #{full_name}
+    h5.modal-title #{name}
     button.close(type='button', data-dismiss='modal', aria-label='Close')
         span(aria-hidden='true') ×
 .modal-body
     .container
         .row
             .col-sm-3
-                img.rounded-circle(src=avatar)
+                img.rounded-circle(src=avatar width = 128 height = 128)
             .col-sm
                 table.table
                     tbody
                         tr
                             th(scope='row') Username
-                            td #{address}
+                            td #{id}
                         tr
                             th(scope='row') Firstname
                             td #{firstname}
@@ -26,3 +28,4 @@ if bio
                 .col-sm-3
                     strong Bio
                 .col-sm !{bio}
+

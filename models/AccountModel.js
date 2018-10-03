@@ -1,60 +1,37 @@
-// let sql = require('sql.js');
-// let fs = require('fs');
-// const file_buffer = fs.readFileSync('../databases/account.sqlite');
-// let db = new sql.Database(file_buffer);
-
-class AccountModel {
-    static exit_programm () {
-        console.log('Goodbye!');
-        // Insert callback to server - user out
-        close();
-    };
-
-    static log_in () {
-        if (check_user() === true) {
-
-        }
-        else {
-            console.log("Sorry, we can't find you. Please register");
-            this.registration();
-        }
-    };
-
-    static registration () {
-
-    };
-
-    static get_contacts (id) {
-        let stmt = db.prepare("SELECT * FROM contacts WHERE id=:id_val");
-        stmt.bind([id]);
-        let list_contacts = [];
-        while (stmt.step()) list_contacts.push(stmt.get());
-        return list_contacts // Will return array with arrays with values
-    };
-
-    static get_own_profile () {
-        let res = db.exec("SELECT * FROM info");
-        return res[0].values[0] // Will return array with values
-    };
-
-    static get_groups (id) {
-        let list_group = [];
-        list_group[0] = {
-            id: '1',
-            name: 'first simple group'
-        };
-        list_group[1] = {
-            id: '2',
-            name: 'second simple group'
-        };
-        list_group[2] = {
-            id: '3',
-            name: 'third simple group'
-        };
-        return list_group;
-    };
-
-
-}
-
-module.exports=AccountModel;
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typeorm_1 = require("typeorm");
+const UserModel_1 = require("./UserModel");
+let AccountModel = class AccountModel extends typeorm_1.BaseEntity {
+};
+__decorate([
+    typeorm_1.PrimaryGeneratedColumn(),
+    __metadata("design:type", Number)
+], AccountModel.prototype, "id", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], AccountModel.prototype, "privKey", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], AccountModel.prototype, "passphrase", void 0);
+__decorate([
+    typeorm_1.OneToOne(type => UserModel_1.UserModel, user => user.account),
+    typeorm_1.JoinColumn(),
+    __metadata("design:type", UserModel_1.UserModel)
+], AccountModel.prototype, "user", void 0);
+AccountModel = __decorate([
+    typeorm_1.Entity()
+], AccountModel);
+exports.AccountModel = AccountModel;
+//# sourceMappingURL=AccountModel.js.map

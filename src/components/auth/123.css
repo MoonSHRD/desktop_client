@@ -39,15 +39,15 @@ body {
     top: 235px;
 }
 #profile_form fieldset {
-    background: white;
+    background: rgba(254, 254, 254, 0.7);
     border: 0 none;
-    border-radius: 3px;
-    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    /*box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);*/
     padding: 20px 30px;
     box-sizing: border-box;
-    width: 80%;
-    margin: 0 10%;
-
+    width: 68%;
+    margin: 0px 16%;
+    height: 420px;
     /*stacking fieldsets above each other*/
     position: relative;
 }
@@ -57,7 +57,7 @@ body {
 }
 /*inputs*/
 #profile_form input, #profile_form textarea {
-    padding: 15px;
+    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 3px;
     margin-bottom: 10px;
@@ -66,6 +66,9 @@ body {
     /*font-family: montserrat;*/
     color: #2C3E50;
     font-size: 13px;
+    border-radius: 10px;
+    resize: none;
+    outline: none;
 }
 /*buttons*/
 #profile_form .action-button {
@@ -77,18 +80,41 @@ body {
     /*border-radius: 1px;*/
     cursor: pointer;
     padding: 10px 5px;
-    margin: 10px 5px;
+    margin: 15px 5px;
+    margin-top: 5px;
     border-radius: 5px;
+}
+
+.submit, .next.action-button{
+
+    background-image: url(components/auth/Polygon_white.png) !important; ;
+    background-repeat: no-repeat !important;
+    background-position: 24px center !important;
+    transition: 0.5s;
+
 }
 #profile_form .action-button:hover, #profile_form .action-button:focus {
     box-shadow: 0 0 0 2px white, 0 0 0 3px #00abe4;
 }
 /*headings*/
 .fs-title {
+    font-size: 20px;
+    /*text-transform: uppercase;*/
+    color: #828282;
+    margin-bottom: 20px;
+}
+
+.next-step-title {
     font-size: 15px;
-    text-transform: uppercase;
-    color: #2C3E50;
-    margin-bottom: 10px;
+    /*text-transform: uppercase;*/
+    color: #2BC2F9;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    bottom: 30px;
+
 }
 .fs-subtitle {
     font-weight: normal;
@@ -116,13 +142,13 @@ body {
 #progressbar li:before {
     content: counter(step);
     counter-increment: step;
-    width: 20px;
-    line-height: 20px;
+    width: 30px;
+    line-height: 30px;
     display: block;
-    font-size: 10px;
+    font-size: 15px;
     color: #333;
     background: white;
-    border-radius: 3px;
+    border-radius: 24px;
     margin: 0 auto 5px auto;
     z-index: 1;
     position: relative;
@@ -135,7 +161,7 @@ body {
     background: white;
     position: absolute;
     left: -50%;
-    top: 9px;
+    top: 14px;
 
 }
 #progressbar li:first-child:after {
@@ -147,6 +173,7 @@ body {
 #progressbar li.active:before,  #progressbar li.active:after{
     background: #00abe4;
     color: white;
+    transition: 0.4s;
 }
 
 .allauth {
@@ -209,19 +236,30 @@ body {
 }
 
 #avatar_preview {
-    width: 58%;
+    width: 160px;
+    height: 160px;
     margin-bottom: 20px;
+    border: 5px solid white;
 }
 
 
+
+
 .invalid ~ .next.action-button {
-    background: #555!important;
+    background: #ffffff !important;
+    background-image: url(components/auth/Polygon.png) !important;
+    background-repeat: no-repeat !important;
+    background-position: 24px center !important;
+    box-shadow: 0 0 61px 5px rgba(43, 194, 249, 0.2);
+
+
 }
 
 .fs-warning {
     color: #272B46;
     font-weight: 500;
     font-size: 15px;
+    margin-bottom: 35px;
 }
 
 .div1 {
@@ -230,4 +268,13 @@ body {
 
 .div2 {
     line-height: 66px;
+}
+
+.submit, .next {
+    width: 60px !important;
+    height: 60px;
+    border-radius: 50px !important;
+    bottom: -45px;
+    left: calc(50% - 35px);
+    position: absolute;
 }

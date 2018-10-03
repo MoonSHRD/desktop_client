@@ -6,41 +6,47 @@ style
         a
             div(class='image')
                 img(src="components/main/navbar/img/logo.png")
-            span MOON SHARD
-        a(class='menuBtn')
+            span() MOON SHARD
+
+        a(class='menuBtn', data-translate-key="HEADING-ONE")
             div(class='image')
                 img(src="components/main/navbar/img/burger.png")
             span
         a(data-id="menu_user_chats" class='active_menu')
             div(class='image')
                 img(src="components/main/navbar/img/men.png")
-            span Люди
+            span(data-translate-key="CONTACTS") Contacts
             label(notice='{4}')
         a(data-id="menu_chats")
             div(class='image')
                 img(src="components/main/navbar/img/groups.png")
-            span Группы
+            span(data-translate-key="GROUPS") Groups
             label(notice='{7}/')
-        a(data-id="menu_create_chat")
-            div(class='image')
-                img(src="components/main/navbar/img/groups.png")
-            span Создать группу
-            label(notice='{88}/')
-        a(data-id="menu_under_construction")
+        a(data-id="menu_wallet")
             div(class='image')
                 img(src="components/main/navbar/img/balance.png")
-            span Кошелек
+            span(data-translate-key="WALLET") Wallet
             label(notice='{14}/')
-        a(data-id="menu_under_construction")
-            div(class='image')
-                img(src="components/main/navbar/img/calendar.png")
-            span Календарь
-            label(notice='{2}/')
+        //a(data-id="menu_under_construction")
+        //    div(class='image')
+        //        img(src="components/main/navbar/img/calendar.png")
+        //    span(data-translate-key="CALENDAR") Calendar
+        //    label(notice='{2}/')
         a(data-id="menu_under_construction")
             div(class='image')
                 img(src="components/main/navbar/img/settings.png")
-            span Настройки
+            span(data-translate-key="SETTINGS") Settings
+        a.mt-3(data-id="menu_create_chat")
+            div(class='image')
+                img(src="components/main/navbar/img/newChat.png")
+            span(data-translate-key="CREATE_CHAT") New group
+        a(data-id="")
+            div(class='image')
+                img(src="components/main/navbar/img/bell.png")
+            span(data-translate-key="NOTIFICATIONS") Notifications
+
     div(class='exit')
+
         a
             div(class='image')
                 img(src="components/main/navbar/img/logout.png")
