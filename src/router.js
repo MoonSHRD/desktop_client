@@ -158,11 +158,10 @@ class Router {
             console.log(`joined ${room_data.name} as ${room_data.role}`);
             yield this.controller_register.queue_controller('ChatsController', 'joined_room', room_data, messages);
         }));
-        this.listen_event(this.dxmpp, 'subscribe', (user) => __awaiter(this, void 0, void 0, function* () {
+        this.listen_event(this.dxmpp, 'subscribe', (user, key) => __awaiter(this, void 0, void 0, function* () {
             console.log(`user ${user.id} subscribed`);
-            yield this.controller_register.queue_controller('ChatsController', 'user_subscribed', user);
+            yield this.controller_register.queue_controller('ChatsController', 'user_subscribed', user, key);
         }));
-        /** General Events **/
         this.listen_event(this.dxmpp, 'user_joined_room', (user, room_data) => __awaiter(this, void 0, void 0, function* () {
             console.log(`user ${user.id} joined room ${room_data.id}`);
             yield this.controller_register.queue_controller('EventsController', 'user_joined_room', user, room_data);

@@ -39,7 +39,7 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    render_message(message, chat_id) {
+    render_message(message) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             message.mine = message.sender ? (self_info.id === message.sender.id) : false;
@@ -56,7 +56,7 @@ class MessagesController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             let messages = yield MessageModel_1.MessageModel.get_chat_messages_with_sender_chat(chat_id);
             messages.forEach((message) => __awaiter(this, void 0, void 0, function* () {
-                yield this.render_message(message, chat_id);
+                yield this.render_message(message);
             }));
         });
     }
@@ -94,7 +94,7 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_message(user, text) {
+    received_message(user, text, date) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             let userModel = yield UserModel_1.UserModel.findOne(user.id);
@@ -103,13 +103,13 @@ class MessagesController extends Controller_1.Controller {
             message.text = text;
             message.sender = userModel;
             message.chat = chat;
-            message.time = this.dxmpp.take_time();
+            message.time = date.replace("T", " ").replace("Z", "");
             yield message.save();
-            yield this.render_message(message, chat.id);
+            yield this.render_message(message);
         });
     }
     ;
-    received_group_message(room_data, message, sender, stamp) {
+    received_group_message(room_data, message, sender, date) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             // if (self_info.id === sender) return;
@@ -121,9 +121,9 @@ class MessagesController extends Controller_1.Controller {
             messageModel.text = message;
             messageModel.sender = userModel;
             messageModel.chat = chat;
-            messageModel.time = stamp ? stamp : this.dxmpp.take_time();
+            messageModel.time = date;
             yield messageModel.save();
-            yield this.render_message(messageModel, chat.id);
+            yield this.render_message(messageModel);
         });
     }
     ;

@@ -28,7 +28,7 @@ let MessageModel = MessageModel_1 = class MessageModel extends typeorm_1.BaseEnt
         super(...arguments);
         this.server_id = 0;
         this.text = '';
-        this.time = '';
+        this.time = null;
     }
     static get_chat_messages_with_sender(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
