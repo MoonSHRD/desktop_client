@@ -537,7 +537,7 @@ background: #fff;
     animation-direction: reverse; /* thx @HugoGiraudel */
 }
 
-.imageOutputFile{
+.outMessage .imageOutputFile{
     width: 100%;
     float: right;
     text-align: right;
@@ -546,14 +546,14 @@ background: #fff;
     top: -15px;
 }
 
-.imageOutputFile img {
+.outMessage .imageOutputFile img {
     margin: 5px 13px;
     border-radius: 10px;
     cursor: pointer;
 
 }
 
-.docOutputFile{
+.outMessage .docOutputFile{
     width: 100%;
     float: right;
     text-align: right;
@@ -563,7 +563,34 @@ background: #fff;
 
 }
 
-.docOutputFile img {
+.outMessage .docOutputFile img {
+    margin: 5px 13px;
+    border-radius: 10px;
+    cursor: pointer;
+
+}
+
+.inMessage .imageOutputFile{
+    width: 100%;
+    position: relative;
+    top: -15px;
+}
+
+.inMessage .imageOutputFile img {
+    margin: 5px 13px;
+    border-radius: 10px;
+    cursor: pointer;
+
+}
+
+.inMessage .docOutputFile{
+    width: 100%;
+    position: relative;
+    top: -15px;
+
+}
+
+.inMessage .docOutputFile img {
     margin: 5px 13px;
     border-radius: 10px;
     cursor: pointer;

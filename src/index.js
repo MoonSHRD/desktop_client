@@ -33,7 +33,7 @@ window.onload = function () {
             range.selectNode(document.getElementById('copyTo'));
             window.getSelection().addRange(range);
             document.execCommand("Copy");
-            console.log(range)
+            // console.log(range)
             $.notify('address copied \n' + range, {
 
                 placement: {
