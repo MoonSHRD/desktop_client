@@ -11,4 +11,8 @@ exports.config = {
     token_addr: '0x4dd841b5b4f69507c7e93ca23d2a72c7f28217a8',
     port: 5222,
 };
+exports.ipfs_config = {
+    host: 'localhost',
+    port: 5001,
+};
 //# sourceMappingURL=example.env_config.js.map

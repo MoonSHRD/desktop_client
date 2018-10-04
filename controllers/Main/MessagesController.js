@@ -39,7 +39,7 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    render_message(message) {
+    render_message(message, chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             message.mine = message.sender ? (self_info.id === message.sender.id) : false;
@@ -56,11 +56,11 @@ class MessagesController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             let messages = yield MessageModel_1.MessageModel.get_chat_messages_with_sender_chat(chat_id);
             messages.forEach((message) => __awaiter(this, void 0, void 0, function* () {
-                yield this.render_message(message);
+                yield this.render_message(message, chat_id);
             }));
         });
     }
-    send_message({ id, text }) {
+    send_message({ id, text, file }) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             let chat = yield ChatModel_1.ChatModel.findOne(id);
@@ -72,6 +72,17 @@ class MessagesController extends Controller_1.Controller {
             message.chat = chat;
             yield message.save();
             let group;
+            let file_send;
+            if (file) {
+                let preview = false;
+                if ([
+                    'image/jpeg',
+                    'image/png',
+                ].includes(file.type))
+                    preview = true;
+                file_send = { file: file.file, hash: yield this.ipfs.add_file(file), preview: preview, name: file.name };
+            }
+            message.file = file_send;
             if (chat.type === this.chat_types.user) {
                 yield this.render_message(message, id);
                 chat.id = yield chat.get_user_chat_meta();
@@ -81,7 +92,7 @@ class MessagesController extends Controller_1.Controller {
                 group = true;
             }
             // this.dxmpp.send(chat, text, group);
-            this.dxmpp.send(chat, text, group);
+            this.dxmpp.send(chat, text, group, file_send);
             // await this.render_message(message, id);
         });
     }
@@ -94,7 +105,7 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_message(user, text, date) {
+    received_message(user, text, file) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             let userModel = yield UserModel_1.UserModel.findOne(user.id);
@@ -103,13 +114,24 @@ class MessagesController extends Controller_1.Controller {
             message.text = text;
             message.sender = userModel;
             message.chat = chat;
-            message.time = date.replace("T", " ").replace("Z", "");
+            message.time = this.dxmpp.take_time();
             yield message.save();
-            yield this.render_message(message);
+            let ipfs_file;
+            if (file && file.preview) {
+                ipfs_file = yield this.ipfs.get_file(file.hash);
+                message.file = {
+                    file: ipfs_file.file,
+                    preview: file.preview,
+                    type: file.type,
+                    name: file.name,
+                };
+                console.log(ipfs_file);
+            }
+            yield this.render_message(message, chat.id);
         });
     }
     ;
-    received_group_message(room_data, message, sender, date) {
+    received_group_message(room_data, message, sender, stamp) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             // if (self_info.id === sender) return;
@@ -121,9 +143,9 @@ class MessagesController extends Controller_1.Controller {
             messageModel.text = message;
             messageModel.sender = userModel;
             messageModel.chat = chat;
-            messageModel.time = date;
+            messageModel.time = stamp ? stamp : this.dxmpp.take_time();
             yield messageModel.save();
-            yield this.render_message(messageModel);
+            yield this.render_message(messageModel, chat.id);
         });
     }
     ;

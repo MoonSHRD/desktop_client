@@ -49,7 +49,7 @@
     border: 2px solid #2BC2F9; /* Green */
     border-radius: 5px;
     cursor: pointer;
-    margin-left: 20px;
+    /*margin-left: 20px;*/
 
 }
 
@@ -61,6 +61,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     margin-top: 40px;
+    padding-bottom: 50px;
 }
 
 @media screen and (max-width: 735px) {
@@ -139,16 +140,22 @@ ul li.outMessage p {
     padding-right: 50px;
 }
 
-ul li.outMessage img, ul li.inMessage img {
+ul li.outMessage > img, ul li.inMessage > img {
     border-radius: 100%;
 }
 
-ul li.outMessage img{
+ul li.outMessage > img{
     float: right;
 }
 
 ul li.inMessage p {
    left: 15px;
+}
+
+ul li.outMessage p > img {
+    float: left;
+    margin: 10px 15px;
+    padding-left: 5px;
 }
 
 
@@ -531,3 +538,35 @@ background: #fff;
     animation-direction: reverse; /* thx @HugoGiraudel */
 }
 
+.imageOutputFile{
+    width: 100%;
+    float: right;
+    text-align: right;
+    margin-right: 45px;
+    position: relative;
+    top: -15px;
+}
+
+.imageOutputFile img {
+    margin: 5px 13px;
+    border-radius: 10px;
+    cursor: pointer;
+
+}
+
+.docOutputFile{
+    width: 100%;
+    float: right;
+    text-align: right;
+    margin-right: 45px;
+    position: relative;
+    top: -15px;
+
+}
+
+.docOutputFile img {
+    margin: 5px 13px;
+    border-radius: 10px;
+    cursor: pointer;
+
+}

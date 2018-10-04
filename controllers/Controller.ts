@@ -6,6 +6,7 @@ import {AccountModel} from "../models/AccountModel";
 import {UserModel} from "../models/UserModel";
 import {ControllerRegister} from "./ControllerRegister";
 import {Loom} from "../loom/loom";
+import {Ipfs} from "../ipfs/ipfs";
 
 export abstract class Controller {
     protected pug = Pug;
@@ -21,6 +22,7 @@ export abstract class Controller {
     protected chat_to_menu = helper.chat_to_menu;
     protected eth = eth;
     protected loom: Loom = Loom.getInstance();
+    protected ipfs: Ipfs = Ipfs.getInstance();
     private self_info: UserModel = null;
 
     protected constructor(window) {

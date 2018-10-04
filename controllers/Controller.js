@@ -15,6 +15,7 @@ const Pug = require("pug");
 const AccountModel_1 = require("../models/AccountModel");
 const ControllerRegister_1 = require("./ControllerRegister");
 const loom_1 = require("../loom/loom");
+const ipfs_1 = require("../ipfs/ipfs");
 class Controller {
     constructor(window) {
         this.pug = Pug;
@@ -29,6 +30,7 @@ class Controller {
         this.chat_to_menu = var_helper_1.helper.chat_to_menu;
         this.eth = moonshard_core_1.eth;
         this.loom = loom_1.Loom.getInstance();
+        this.ipfs = ipfs_1.Ipfs.getInstance();
         this.self_info = null;
         this.window = window;
     }
