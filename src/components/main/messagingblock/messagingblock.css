@@ -575,10 +575,11 @@ background: #fff;
     width: 100%;
     position: relative;
     top: -15px;
+    left: 50px;
 }
 
 .inMessage .imageOutputFile img {
-    margin: 5px 13px;
+    margin: 5px 10px;
     border-radius: 10px;
     cursor: pointer;
 
