@@ -61,6 +61,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     margin-top: 40px;
+    padding-bottom: 50px;
 }
 
 @media screen and (max-width: 735px) {

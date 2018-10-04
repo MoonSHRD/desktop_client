@@ -349,7 +349,8 @@ window.onload = function () {
     });
 
     ipcRenderer.on('received_message', (event, obj) => {
-        $('.messaging_history').scrollTop(($('.messaging_history')[0].scrollHeight) + 100);
+        $('.messaging_history').scrollTop(($('.messaging_history')[0].scrollHeight) + 1);
+        console.log($('.messaging_history')[0])
         // $('.messaging_history').scrollTop($('.messaging_history').scrollHeight);
         console.log(obj)
         if ($('.active_dialog').attr('id') === obj.id) {

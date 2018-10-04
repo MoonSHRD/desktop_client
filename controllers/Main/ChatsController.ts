@@ -121,20 +121,20 @@ class ChatsController extends Controller {
         await this.load_chat(chat, this.chat_to_menu.user);
     }
 
-    async subscribe(user) {
+    async subscribe(user, key) {
         console.log(`subscribing to user ${user.id}`);
         this.dxmpp.subscribe(user);
     }
 
-    async user_subscribed(user) {
+    async user_subscribed(user, key) {
         this.dxmpp.acceptSubscription(user);
         let check = await UserModel.findOne(user.id);
         if (!check)
-            await this.subscribe(user);
+            await this.subscribe(user, key);
     }
 
-    async joined_room(room_data,messages) {
-        console.log(messages);
+    async joined_room(room_data, messages) {
+        console.log("Old messages:\n", messages);
         let chat = new ChatModel();
 
         chat.id = room_data.id;
@@ -150,7 +150,14 @@ class ChatsController extends Controller {
 
         await chat.save();
 
-        await this.load_chat(chat, this.chat_to_menu.group)
+        await this.load_chat(chat, this.chat_to_menu.group);
+        messages.forEach(async (message) => {
+            console.log(message.time);
+            let buf = message.time.split(" ");
+            message.time = `${buf[0]} ${buf[1]}`;
+            await this.controller_register.run_controller("MessageController", "received_group_message", message.message, message.sender, message.time);
+        });
+
     }
 
     async create_group(group_name: string, group_type:string=this.group_chat_types.channel) {
@@ -187,7 +194,7 @@ class ChatsController extends Controller {
             if (chat)
                 group.type = chat.type;
             else
-                group.type = group.channel === '1' ? this.group_chat_types.join_channel : this.group_chat_types.join_group;
+                group.type = group.channel === 'channel' ? this.group_chat_types.join_channel : this.group_chat_types.join_group;
             this.queried_chats[group.id] = group;
 
             this.send_data('found_chats', this.render('main/chatsblock/chats/imDialog.pug', group));

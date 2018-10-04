@@ -1,13 +1,12 @@
-table.table(style='    ')
+table.table.table_01(style='    ')
     thead
         tr
             th(scope='col')
             th(scope='col') Token name
-            th(scope='col') Label
             //th(scope='col') Status
-            th(scope='col') Contract Address
-            th(scope='col') You have
-            th(scope='col') Total Supply
+            th(scope='col') Contract address
+            th(scope='col') Total supply
+            th(scope='col') Link Info
     tbody#tokens_table
         include token
         //tr
