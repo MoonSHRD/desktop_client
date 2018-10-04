@@ -69,6 +69,7 @@ class Ipfs {
     get_file(ipfsId) {
         return __awaiter(this, void 0, void 0, function* () {
             let response = yield this.connection.get(ipfsId, { progress: (prog) => console.log(`received: ${prog}`) });
+            // let response = ipfs.files.get(ipfsId);
             console.log(response);
             console.log(response[0]);
             console.log(response[0].content);

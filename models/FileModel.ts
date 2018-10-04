@@ -14,6 +14,8 @@ export class FileModel extends BaseEntity {
     @Column()
     link: string = '';
     @Column()
+    filename: string = '';
+    @Column()
     message_id: number;
 
 }

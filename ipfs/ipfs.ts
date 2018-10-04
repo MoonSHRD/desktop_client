@@ -66,6 +66,7 @@ export class Ipfs {
 
     async get_file(ipfsId){
         let response = await this.connection.get(ipfsId, { progress: (prog) => console.log(`received: ${prog}`) });
+        // let response = ipfs.files.get(ipfsId);
         console.log(response);
         console.log(response[0]);
         console.log(response[0].content);

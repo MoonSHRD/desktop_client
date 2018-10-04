@@ -87,8 +87,9 @@ class MessagesController extends Controller_1.Controller {
                 file_info.link = file_send.hash;
                 file_info.chat_id = chat.id;
                 file_info.message_id = message.id;
+                file_info.filename = file.name;
                 file_info.save();
-                console.log("Save file_nifo");
+                // console.log("Save file_nifo")
             }
             message.file = file_send;
             if (chat.type === this.chat_types.user) {
