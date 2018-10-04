@@ -8,26 +8,34 @@
 .walletRight td, th, thead th {
     border-top: none!important;
     border-bottom: none!important;
+    vertical-align: middle;
 
 }
 
 
 .walletRight tbody {
     background-color: white;
+    line-height: 1;
 
 }
 
 .walletRight thead tr {
-    line-height: 0;
+    line-height: 1;
     font-size: 13px;
 }
 
 .walletRight tr {
-    line-height: 35px;
+    /*line-height: 35px;*/
 }
 .walletRight table {
     border-collapse: separate;
     border-spacing: 0px 15px;
+    word-break: break-word;
+
+}
+
+.walletRight table img {
+   border-radius: 100%;
 }
 
 
@@ -35,6 +43,7 @@
 .walletRight tr th:first-child {
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
+    vertical-align: middle;
 }
 
 .walletRight tr td:last-child,
@@ -126,4 +135,29 @@
     text-overflow: ellipsis;
     overflow: hidden;
     max-width: 140px;
+}
+
+.td_namb {
+    width: 60px;
+}
+
+.table_02_history {
+    line-height: 35px;
+}
+
+.td_history_time {
+    line-height: 20px;
+}
+
+.grey_font {
+    color: rgba(39, 43, 70, 0.5);
+}
+
+.blue_font {
+    color: #2BC2F9;
+}
+
+.t02 {
+    box-shadow: 2px 2px 20px rgba(43, 194, 249, 0.1);
+    border-radius: 10px;
 }

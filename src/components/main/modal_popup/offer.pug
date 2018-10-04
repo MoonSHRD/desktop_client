@@ -6,54 +6,59 @@ style
 
         // fieldsets
         fieldset.modal-content(style='background-color: #F3F3F3')
-            h2.fs-title Publication price:  1$ for 1 publication
+            h5 Publication price:  1$ for 1 publication
             h3.fs-subtitle Amount to offer
             textarea.invalid(rows='1', name='amountForPublic', placeholder='Enter the amount for all your publications' id='' required=true)
 
-            h3.fs-subtitle Publication to offer
+            h3.fs-subtitle.text-left.p-2.m-0 Publication to offer
             textarea.invalid(rows='1', name='topicOfPublic', placeholder='Topic of publicity' id='' required=true)
-            textarea.invalid(rows='4', name='textOfPublic', placeholder='Text of the publication' id='' required=true)
+            textarea.invalid.m-0(rows='4', name='textOfPublic', placeholder='Text of the publication' id='' required=true)
 
-            input.action-button(type='button', value='Generate' id='generate_mnemonic')
+            .row.justify-content-md-center
+                a.m-3(href='#')
+                    img.mr-3(src='components/main/modal_popup/img/addPhoto.png')
+                    span(style='color: #272B46; font-size: 13px') Add more publications
+
             textarea.invalid(rows='3', name='textForAdmin', placeholder='Write a text message for administrator' id='' required=true)
 
-            input.groupInfoNext.action-button(type='button' id='finalizeOffer' name="next" value='Finalize offer' )
+            .btn.groupInfoNext.blueButton( id='finalizeOffer' name="next" value='Finalize offer' ) Finalize offer
 
-            input.action-button(type='button', value='Cancel' id='')
+            .btn.darkButton(value='Cancel' id='') Cancel
             //input.groupInfoNext.action-button(type='button', name='next', id='input_mnemonic_next')
 
         fieldset.modal-content(style='background-color: #F3F3F3')
-            h2.fs-title Enter the four-digit PIN to confirm your identity
+            h2.fs-subtitle.text-left.p-2.m-0 Enter the four-digit PIN to confirm your identity
 
-            input.invalid(name='pinInput' maxlength="4" placeholder='****', type='text' )
+            .row.justify-content-md-center
+                .col-md-3
+                    input.invalid.text-center#pinInput(name='pinInput' maxlength="4" placeholder='****', type='text' )
 
 
-            input.action-button(type='button', name='pinConfirm', value='Enter', id='')
-            input.previousGroupInfo.action-button(type='button', value='Cancel' name='Previous')
+            .btn.blueButton(id='pinConfirm') Enter
+            .btn.darkButton.previousGroupInfo(value='Cancel' name='Previous') Cancel
 
         fieldset.modal-content(style='background-color: #F3F3F3')
-            h2.fs-title Publication price:  1$ for 1 publication
-            h3.fs-subtitle Amount to offer
-            textarea.invalid(rows='1', name='amountForPublicUnedit', placeholder='Enter the amount for all your publications' disabled required=true)
+            h2.fs-title.m-0.p-0 Сheck the correctness of the data
+            h3.fs-subtitle.m-0.p-0 Publication price:  1$ for 1 publication
+            h3.fs-subtitle.mt-3.p-0 Amount to offer
+            label.mt-3.blueText 3$
 
-            h3.fs-subtitle Publication to offer
+            h3.fs-subtitle.text-left.p-2.m-0 Publication to offer
             textarea.invalid(rows='1', name='topicOfPublicUnedit', placeholder='Topic of publicity' disabled required=true)
             textarea.invalid(rows='4', name='textOfPublicUnedit', placeholder='Text of the publication' disabled required=true)
-
-            input.action-button(type='button', value='Generate' id='generate_mnemonic')
             textarea.invalid(rows='3', name='textForAdminUnedit', placeholder='Write a text message for administrator' disabled required=true)
 
-            input.groupInfoNext.action-button(type='button' id='' name="next" value='Send offer' )
+            .btn.blueButton.groupInfoNext(id='') Send offer
 
-            input.action-button(type='button', value='Cancel' id='')
+            .btn.darkButton.previousGroupInfo(id='') Cancel
 
 
         fieldset.modal-content(style='background-color: #F3F3F3')
             h2.fs-title Your offer has been accepted.
             img(src='components/main/modal_popup/img/bigBell.png')
-            h5.m-2 Withdrawn: -45 MNshrd (=3$)
+            .m-2 Withdrawn: -45 MNshrd (=3$)
 
-            input.action-button(type='button' value='OK' data-dismiss="modal" aria-label="Close")
+            .btn.blueButton.position-absolute(data-dismiss="modal" aria-label="Close" style='left: 125px; bottom: -25px;') Ok
 
         fieldset.modal-content(style='background-color: #F3F3F3')
             h4.fs-title You have not enough funds, do you want to buy 45 tokens for procceed purchase?

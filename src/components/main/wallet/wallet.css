@@ -1,5 +1,6 @@
 .walletLeft{
     width: 300px;
+    min-width: 300px;
     padding: 20px;
     background-color: #F3F3F3;
 }
@@ -182,3 +183,16 @@
     font-weight: 600;
 }
 
+.td-token {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.td-name {
+    padding: 0;
+}
+
+.table_02 a {
+    text-decoration: underline!important;
+    color: #2BC2F9!important;
+}

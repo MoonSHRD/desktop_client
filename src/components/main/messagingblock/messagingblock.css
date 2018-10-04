@@ -1,3 +1,5 @@
+
+
 .messaging_block {
     flex: 1;
     height: 100vh;
@@ -33,6 +35,10 @@
     padding:  0 10px;
     resize: none;
 
+}
+
+.send_message_input::placeholder {
+    color: #2BC2F9;
 }
 
 .send_message_btn {
@@ -78,6 +84,7 @@
     margin: 15px 15px 5px 0;
     width: calc(100% - 25px);
     font-size: 0.9em;
+
 }
 
 
@@ -128,6 +135,8 @@ ul li.outMessage p {
     color: white;
     position: relative;
     box-shadow: 0 0 13px rgba(0, 123, 255,0.5);
+    margin-right: 15px;
+    padding-right: 50px;
 }
 
 ul li.outMessage img, ul li.inMessage img {
@@ -142,9 +151,6 @@ ul li.inMessage p {
    left: 15px;
 }
 
-ul li.outMessage p {
-    margin-right: 15px;
-}
 
 ul li.outMessage p::after {
     content: '';
@@ -158,9 +164,11 @@ ul li.outMessage p::after {
 ul li.outMessage p span{
     text-decoration: none;
     font-size: 11px;
-    padding-left: 10px;
-    float: right;
     color: white;
+    /* float: right; */
+    bottom: 0;
+    right: 9px;
+    position: absolute;
 }
 
 
@@ -178,6 +186,9 @@ ul li.inMessage p span{
     padding-left: 10px;
     float: right;
     color: black;
+    position: relative;
+    bottom: -10px;
+    right: -5px;
 }
 
 ul li.inMessage p::after {
@@ -198,7 +209,7 @@ ul li.inMessage p::after {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    border-bottom: 1px solid #c3c3c3;
+    /*border-bottom: 1px solid #c3c3c3;*/
 }
 
 .head_peer h3 {
@@ -246,6 +257,7 @@ ul li.inMessage p::after {
     padding: 20px 10px;
     cursor: auto;
     display: none;
+    z-index: 1;
 
 }
 
@@ -367,20 +379,25 @@ ul li.inMessage p::after {
     position: fixed;
     background-color: #F3F3F3;
     z-index: 99;
-    width: 91%;
+    width: 95%;
     left: 50%;
     transform: translate(-50%, 0%);
+    height: 65px;
+}
+
+.groupInfoHeader .modal-title {
+   margin-top: 15px;
 }
 
 .gradient {
     position: absolute;
     z-index: 2;
     right: 0;
-    top: 50px;
+    top: 65px;
     left: 0;
-    height: 40px;
+    height: 20px;
 
-    background: linear-gradient(to top, rgba(255,255,255,0) 0%,#F3F3F3 70%);
+    background: linear-gradient(to top, rgba(255,255,255,0) 0%,#F3F3F3 90%);
 }
 
 
@@ -431,9 +448,10 @@ background: #fff;
     /*font-size: 18px;*/
     outline: none;
     cursor: pointer;
+
 }
 
-.offerPublication {
+.offerPublication, .getMoreTokens {
 
     background-color: #2BC2F9;
     border: 0;
@@ -442,9 +460,10 @@ background: #fff;
     width: 50%;
     border-radius: 10px;
     color: #fff;
-
     outline: none;
     cursor: pointer;
+    box-shadow: 0 0 13px rgba(0, 123, 255,0.5);
+
 }
 
 .showOnMapChannel{

@@ -15,6 +15,58 @@ window.onload = function () {
         });
 
     };
+    // var div =  $('.messaging_history');
+    //
+    // div.scrollTop(div.prop('scrollHeight'));
+
+
+
+    $(document).on('click','.copyButton',function () {
+        if (document.selection) {
+            var range = document.body.createTextRange();
+            range.moveToElementText(document.getElementById('copyTo'));
+            range.select().createTextRange();
+            document.execCommand("Copy");
+
+        } else if (window.getSelection) {
+            var range = document.createRange();
+            range.selectNode(document.getElementById('copyTo'));
+            window.getSelection().addRange(range);
+            document.execCommand("Copy");
+            console.log(range)
+            $.notify('address copied \n' + range, {
+
+                placement: {
+                    from: "bottom",
+                    align: "right"
+                },
+                animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                },
+                z_index: 10031,
+                offset: 20,
+                spacing: 10
+            });
+            // alert("text copied")
+        }
+    })
+
+    $(document).on('click','.attachFileToChat',function () {
+        $("input[id='attachFileToChat']").trigger('click');
+        // e.preventDefault();
+    })
+
+    $(document).on('click','.attachFileToGroup',function () {
+        $("input[id='attachFileToGroup']").trigger('click');
+        // e.preventDefault();
+    })
+
+
+    $(document).on('change','input[id="attachFileToChat"], input[id="attachFileToGroup"]',function () {
+        console.log('Selected file: ' + this.value);
+    })
+
 
     $(document).on('click','[data-id=menu_user_chats]',function () {
         const type = $(this).attr('data-id');
@@ -503,8 +555,8 @@ window.onload = function () {
         }
     });
 
-    $(document).on('mousedown','.dropDown_menu ul li ',function(e) {
-        $(this).find('ul').toggleClass('d-block')
+    $(document).on('click','.dropDown_menu > ul > li ',function(e) {
+        $(this).children('ul').toggleClass('d-block')
     });
 
     $(document).on('click','.offerPublication',function(e) {
@@ -516,6 +568,7 @@ window.onload = function () {
         $('.loader').remove();
         $('.myTokens').append(obj);
     });
+
 
 
 
