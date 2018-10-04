@@ -5,6 +5,7 @@ import {Controller} from "../Controller";
 import {MessageModel} from "../../models/MessageModel";
 import {ChatModel} from "../../models/ChatModel";
 import {assertAnyTypeAnnotation} from "babel-types";
+import {FileModel} from "../../models/FileModel";
 
 class MessagesController extends Controller {
 
@@ -74,6 +75,14 @@ class MessagesController extends Controller {
             ].includes(file.type))
                 preview = true;
             file_send = {file: file.file, hash: await this.ipfs.add_file(file), preview: preview, name: file.name};
+            let file_info = new FileModel();
+            file_info.usernmame = self_info.id;
+            file_info.link = file_send.hash;
+            file_info.chat_id = chat.id;
+            file_info.message_id = message.id;
+
+            file_info.save();
+            console.log("Save file_nifo")
         }
 
         message.file = file_send;

@@ -13,6 +13,7 @@ const UserModel_1 = require("../../models/UserModel");
 const Controller_1 = require("../Controller");
 const MessageModel_1 = require("../../models/MessageModel");
 const ChatModel_1 = require("../../models/ChatModel");
+const FileModel_1 = require("../../models/FileModel");
 class MessagesController extends Controller_1.Controller {
     load_join_chat(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -81,6 +82,13 @@ class MessagesController extends Controller_1.Controller {
                 ].includes(file.type))
                     preview = true;
                 file_send = { file: file.file, hash: yield this.ipfs.add_file(file), preview: preview, name: file.name };
+                let file_info = new FileModel_1.FileModel();
+                file_info.usernmame = self_info.id;
+                file_info.link = file_send.hash;
+                file_info.chat_id = chat.id;
+                file_info.message_id = message.id;
+                file_info.save();
+                console.log("Save file_nifo");
             }
             message.file = file_send;
             if (chat.type === this.chat_types.user) {
