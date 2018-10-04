@@ -16,7 +16,7 @@ let FileModel = class FileModel extends typeorm_1.BaseEntity {
     constructor() {
         super(...arguments);
         this.chat_id = '';
-        this.usernmame = '';
+        this.sender = '';
         this.link = '';
         this.filename = '';
     }
@@ -32,7 +32,7 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], FileModel.prototype, "usernmame", void 0);
+], FileModel.prototype, "sender", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
