@@ -2,6 +2,7 @@ import "reflect-metadata";
 import {UserModel} from "../../models/UserModel";
 import {Controller} from "../Controller";
 import {ChatModel} from "../../models/ChatModel";
+import {MessageModel} from "../../models/MessageModel";
 
 class ChatsController extends Controller {
 
@@ -149,6 +150,18 @@ class ChatsController extends Controller {
             chat.contract_address = room_data.contractaddress;
 
         await chat.save();
+        messages.forEach(async function (message) {
+            let room_data = {id: message.sender};
+            this.controller_register.run_controller(
+                "MessageController", "received_group_message",
+                room_data, message.message, message.sender, message.time);
+            // let _message = new MessageModel();
+            // _message.time = message.time;
+            // _message.text = message.message;
+            // _message.sender = message.sender;
+            // _message.chat = message.sender;
+            // await  _message.save();
+        });
 
         await this.load_chat(chat, this.chat_to_menu.group)
     }

@@ -68,6 +68,8 @@ class MessagesController extends Controller {
 
         let file_send;
         if (file) {
+            message.with_file = true;
+            await message.save();
             let preview = false;
             if ([
                 'image/jpeg',
@@ -83,10 +85,11 @@ class MessagesController extends Controller {
             file_info.filename = file.name;
 
             file_info.save();
-            // console.log("Save file_nifo")
+            // console.log("Save file_info")
         }
 
         message.file = file_send;
+        await message.save();
 
         if (chat.type === this.chat_types.user) {
             await this.render_message(message, id);
@@ -95,7 +98,6 @@ class MessagesController extends Controller {
         } else if (Object.values(this.group_chat_types).includes(chat.type)) {
             group = true;
         }
-
         // this.dxmpp.send(chat, text, group);
         this.dxmpp.send(chat, text, group, file_send);
         // await this.render_message(message, id);
@@ -120,6 +122,8 @@ class MessagesController extends Controller {
 
         let ipfs_file;
         if (file) {
+            message.with_file = true;
+            await message.save();
             let file_info = new FileModel();
             file_info.sender = self_info.id;
             file_info.link = file.hash;

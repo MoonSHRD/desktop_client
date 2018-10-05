@@ -1,5 +1,5 @@
 const ipfsAPI = require('ipfs-api');
-const ipfs = ipfsAPI('localhost', '5001');
+const ipfs = ipfsAPI('142.93.226.135', '5001');
 
 // ipfs.id((err, res) => {
 //     if (err) throw err;

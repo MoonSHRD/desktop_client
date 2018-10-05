@@ -75,6 +75,8 @@ class MessagesController extends Controller_1.Controller {
             let group;
             let file_send;
             if (file) {
+                message.with_file = true;
+                yield message.save();
                 let preview = false;
                 if ([
                     'image/jpeg',
@@ -89,9 +91,10 @@ class MessagesController extends Controller_1.Controller {
                 file_info.message_id = message.id;
                 file_info.filename = file.name;
                 file_info.save();
-                // console.log("Save file_nifo")
+                // console.log("Save file_info")
             }
             message.file = file_send;
+            yield message.save();
             if (chat.type === this.chat_types.user) {
                 yield this.render_message(message, id);
                 chat.id = yield chat.get_user_chat_meta();
@@ -127,6 +130,8 @@ class MessagesController extends Controller_1.Controller {
             yield message.save();
             let ipfs_file;
             if (file) {
+                message.with_file = true;
+                yield message.save();
                 let file_info = new FileModel_1.FileModel();
                 file_info.sender = self_info.id;
                 file_info.link = file.hash;

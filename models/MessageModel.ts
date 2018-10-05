@@ -14,6 +14,8 @@ export class MessageModel extends BaseEntity {
     text: string = '';
     @Column()
     time: string = '';
+    @Column()
+    with_file: boolean = false;
 
     @ManyToOne(type => ChatModel, chat => chat.messages)
     @JoinColumn()

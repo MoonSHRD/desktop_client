@@ -298,9 +298,22 @@ window.onload = function () {
             group: $('.active_dialog').attr('data-type')==='channel',
         };
 
-        obj={id: active_dialog.attr('id'),text: msg_input.val().trim()};
+        // obj={id: active_dialog.attr('id'),text: msg_input.val().trim()};
+        obj.id = active_dialog.attr('id');
+        obj.text = msg_input.val().trim();
         // console.log(obj);
-        let file = $('#attachFileToChat').prop('files')[0];
+        let file;
+        console.log("obj", obj.group);
+        if (obj.group) {
+            file = $('#attachFileToGroup').prop('files');
+            if (file.length === 0) {
+                file = null
+            } else {
+                file = file[0]
+            }
+        }else {
+            file = $('#attachFileToChat').prop('files')[0];
+        }
         if (file) {
             console.log(file);
             let reader = new FileReader();

@@ -164,6 +164,18 @@ class ChatsController extends Controller_1.Controller {
             if (room_data.contractaddress)
                 chat.contract_address = room_data.contractaddress;
             yield chat.save();
+            messages.forEach(function (message) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    let room_data = { id: message.sender };
+                    this.controller_register.run_controller("MessageController", "received_group_message", room_data, message.message, message.sender, message.time);
+                    // let _message = new MessageModel();
+                    // _message.time = message.time;
+                    // _message.text = message.message;
+                    // _message.sender = message.sender;
+                    // _message.chat = message.sender;
+                    // await  _message.save();
+                });
+            });
             yield this.load_chat(chat, this.chat_to_menu.group);
         });
     }
