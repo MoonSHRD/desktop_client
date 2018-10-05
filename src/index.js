@@ -34,6 +34,7 @@ window.onload = function () {
             window.getSelection().addRange(range);
             document.execCommand("Copy");
             // console.log(range)
+
             $.notify('address copied \n' + range, {
 
                 placement: {
@@ -300,6 +301,8 @@ window.onload = function () {
 
     });
 
+
+
     $(document).on('click', '.send_message_btn', function () {
         let msg_input = $('.send_message_input');
         if (msg_input.val().trim() === ''){
@@ -350,7 +353,6 @@ window.onload = function () {
 
     ipcRenderer.on('received_message', (event, obj) => {
         $('.messaging_history').scrollTop(($('.messaging_history')[0].scrollHeight) + 1);
-        console.log($('.messaging_history')[0])
         // $('.messaging_history').scrollTop($('.messaging_history').scrollHeight);
         console.log(obj)
         if ($('.active_dialog').attr('id') === obj.id) {

@@ -239,6 +239,7 @@ body {
     width: 160px;
     height: 160px;
     margin-bottom: 20px;
+    object-fit: cover;
     border: 5px solid white;
 }
 

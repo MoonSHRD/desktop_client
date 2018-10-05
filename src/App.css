@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 *, *::after, *::before {
-/*-webkit-user-select: none;*/
 -webkit-user-drag: none;
 -webkit-app-region: no-drag;
-/*cursor: default;*/
+    outline:none;
 }
+
+
 
 .block{
     -webkit-user-select: none;

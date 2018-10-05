@@ -554,6 +554,9 @@ background: #fff;
 
 }
 
+.outMessage .imageOutputFile span  {
+    padding-right: 15px;
+}
 .outMessage .docOutputFile{
     width: 100%;
     float: right;
@@ -571,11 +574,17 @@ background: #fff;
 
 }
 
+.outMessage .docOutputFile span  {
+    padding-right: 15px;
+}
+
 .inMessage .imageOutputFile{
     width: 100%;
     position: relative;
     top: -15px;
     left: 50px;
+
+
 }
 
 .inMessage .imageOutputFile img {

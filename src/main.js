@@ -22,7 +22,7 @@ app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
     catch (err) {
         // Could not initiate 'electron-pug'
     }
-    let mainWindow = new BrowserWindow({ width: 1600, minWidth: 1180, height: 800, resizable: true, show: false, webPreferences: {
+    let mainWindow = new BrowserWindow({ width: 1200, minWidth: 1180, height: 800, resizable: false, show: false, webPreferences: {
             nodeIntegration: true
         }, icon: __dirname + '/icon.png' });
     // mainWindow.webContents.openDevTools();
