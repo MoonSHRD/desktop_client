@@ -14,7 +14,7 @@ const ChatModel_1 = require("../../models/ChatModel");
 const EventModel_1 = require("../../models/EventModel");
 const var_helper_1 = require("../../src/var_helper");
 class EventsController extends Controller_1.Controller {
-    user_joined_room(user, room_data) {
+    user_joined_room(user, room_data, date) {
         return __awaiter(this, void 0, void 0, function* () {
             let chat = yield ChatModel_1.ChatModel.findOne(room_data.id);
             let event = new EventModel_1.EventModel();

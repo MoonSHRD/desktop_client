@@ -66,6 +66,7 @@ class MessagesController extends Controller {
         await message.save();
         let group: boolean;
 
+
         let file_send;
         if (file) {
             message.with_file = true;

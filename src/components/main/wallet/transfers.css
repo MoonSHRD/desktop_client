@@ -16,3 +16,19 @@
     border-radius: 10px;
     color: white;
 }
+
+.trasfer_in input {
+    height: 35px;
+}
+
+.trasfer_in th input {
+    width: 255px;
+}
+
+.trasfer_in td input {
+    width: 200px;
+}
+
+.trasfer_th th {
+    padding-left: 20px;
+}

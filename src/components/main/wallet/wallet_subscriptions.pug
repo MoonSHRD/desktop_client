@@ -1,0 +1,30 @@
+style
+    include myTokens.css
+div.myTokens
+    div.myTokensHeader
+        span 1 names of token
+        input.searchTokens.float-right(placeholder='search sub')
+
+    table.table.table_01.table_01_sub
+        thead
+            tr
+                th(scope='col')
+                th(scope='col') Channel
+                th(scope='col') Sector/Category
+                th(scope='col') Tokens
+                th(scope='col') Details
+                th(scope='col') Notifications
+                th(scope='col')
+        tbody
+            tr.table_02.table_02_sub.t02
+                td 1.
+                td #{name} Alexandr Gordon
+                td.td_history_time #{category} Celebrate
+                    br
+                    | /Culture
+                td.td_history_time #{tokens} AlexGord
+                    br
+                    | (AGrd)
+                td.blue_font #{info} Show info
+                td #{notifications} Not
+                td X

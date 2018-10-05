@@ -130,3 +130,34 @@
     animation-name: reveal;
     animation-direction: reverse; /* thx @HugoGiraudel */
 }
+
+.td-token {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 140px;
+}
+
+.td_namb {
+    width: 60px;
+}
+
+.table_02_history {
+    line-height: 35px;
+}
+
+.td_history_time {
+    line-height: 20px;
+}
+
+.grey_font {
+    color: rgba(39, 43, 70, 0.5);
+}
+
+.blue_font {
+    color: #2BC2F9;
+}
+
+.t02 {
+    box-shadow: 2px 2px 20px rgba(43, 194, 249, 0.1);
+    border-radius: 10px;
+}

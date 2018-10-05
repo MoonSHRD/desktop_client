@@ -6,7 +6,7 @@ import {EventModel} from "../../models/EventModel";
 import {helper} from "../../src/var_helper";
 
 class EventsController extends Controller {
-    async user_joined_room(user, room_data) {
+    async user_joined_room(user, room_data, date) {
         let chat = await ChatModel.findOne(room_data.id);
         let event=new EventModel();
         let text = `user ${user.id} joined`;
@@ -14,8 +14,12 @@ class EventsController extends Controller {
         event.type=helper.event_types.info;
         event.chat=chat;
         event.text=text;
+<<<<<<< HEAD
         event.time= this.dxmpp.take_time();
         await event.save();
+=======
+        event.date = date;
+>>>>>>> 6ad9618919eb687b1e6de6cb5e581f3cff3ab5fa
         text+=' '+chat.name;
         this.send_data('user_joined_room', text);
         const html = this.render('main/messagingblock/notice.pug', event);
