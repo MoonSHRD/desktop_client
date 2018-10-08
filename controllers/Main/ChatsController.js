@@ -164,24 +164,22 @@ class ChatsController extends Controller_1.Controller {
             if (room_data.contractaddress)
                 chat.contract_address = room_data.contractaddress;
             yield chat.save();
-            messages.forEach(function (message) {
-                return __awaiter(this, void 0, void 0, function* () {
-                    let room_data = { id: message.sender };
-                    this.controller_register.run_controller("MessageController", "received_group_message", room_data, message.message, message.sender, message.time);
-                    // let _message = new MessageModel();
-                    // _message.time = message.time;
-                    // _message.text = message.message;
-                    // _message.sender = message.sender;
-                    // _message.chat = message.sender;
-                    // await  _message.save();
-                });
-            });
+            messages.forEach((message) => __awaiter(this, void 0, void 0, function* () {
+                let room_data = { id: message.sender };
+                yield this.controller_register.queue_controller("MessagesController", "received_channel_message", room_data, message.message, message.sender, message.time);
+                // let _message = new MessageModel();
+                // _message.time = message.time;
+                // _message.text = message.message;
+                // _message.sender = message.sender;
+                // _message.chat = message.sender;
+                // await  _message.save();
+            }));
             yield this.load_chat(chat, this.chat_to_menu.group);
             messages.forEach((message) => __awaiter(this, void 0, void 0, function* () {
-                console.log(message.time);
+                // console.log(message.time);
                 let buf = message.time.split(" ");
                 message.time = `${buf[0]} ${buf[1]}`;
-                yield this.controller_register.run_controller("MessageController", "received_group_message", message.message, message.sender, message.time);
+                yield this.controller_register.run_controller("MessagesController", "received_channel_message", message.message, message.sender, message.time);
             }));
         });
     }
@@ -210,7 +208,7 @@ class ChatsController extends Controller_1.Controller {
     found_groups(result) {
         return __awaiter(this, void 0, void 0, function* () {
             this.queried_chats = {};
-            console.log(result);
+            // console.log(result);
             result.forEach((group) => __awaiter(this, void 0, void 0, function* () {
                 console.log(group);
                 const st = group.jid.split('@');

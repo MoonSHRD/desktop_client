@@ -85,7 +85,7 @@ class MessagesController extends Controller_1.Controller {
                     preview = true;
                 file_send = { file: file.file, hash: yield this.ipfs.add_file(file), preview: preview, name: file.name };
                 let file_info = new FileModel_1.FileModel();
-                file_info.sender = self_info.id;
+                // file_info.sender = self_info.id;
                 file_info.link = file_send.hash;
                 file_info.chat_id = chat.id;
                 file_info.message_id = message.id;
@@ -95,6 +95,9 @@ class MessagesController extends Controller_1.Controller {
             }
             message.file = file_send;
             yield message.save();
+            if (chat.type == this.group_chat_types.channel) {
+                yield this.render_message(message, chat.id);
+            }
             if (chat.type === this.chat_types.user) {
                 yield this.render_message(message, id);
                 chat.id = yield chat.get_user_chat_meta();
@@ -133,7 +136,7 @@ class MessagesController extends Controller_1.Controller {
                 message.with_file = true;
                 yield message.save();
                 let file_info = new FileModel_1.FileModel();
-                file_info.sender = self_info.id;
+                // file_info.sender = self_info.id;
                 file_info.link = file.hash;
                 file_info.chat_id = chat.id;
                 file_info.message_id = message.id;
@@ -159,12 +162,38 @@ class MessagesController extends Controller_1.Controller {
             let userModel;
             if (sender)
                 userModel = yield UserModel_1.UserModel.findOne(sender.address);
+            if (stamp) {
+                let time = stamp.split(" ")[1].split(":");
+                stamp = `${time[0]}:${time[1]}`;
+            }
+            else {
+                stamp = this.dxmpp.take_time();
+            }
             let chat = yield ChatModel_1.ChatModel.findOne(room_data.id);
             let messageModel = new MessageModel_1.MessageModel();
             messageModel.text = message;
             messageModel.sender = userModel;
             messageModel.chat = chat;
-            messageModel.time = stamp ? stamp : this.dxmpp.take_time();
+            messageModel.time = stamp;
+            yield messageModel.save();
+            yield this.render_message(messageModel, chat.id);
+        });
+    }
+    received_channel_message(room_data, message, sender, stamp) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (stamp) {
+                let time = stamp.split(" ")[1].split(":");
+                stamp = `${time[0]}:${time[1]}`;
+            }
+            else {
+                stamp = this.dxmpp.take_time();
+            }
+            let chat = yield ChatModel_1.ChatModel.findOne(room_data.id);
+            let messageModel = new MessageModel_1.MessageModel();
+            messageModel.text = message;
+            messageModel.sender = null;
+            messageModel.chat = chat;
+            messageModel.time = stamp;
             yield messageModel.save();
             yield this.render_message(messageModel, chat.id);
         });

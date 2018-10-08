@@ -14,12 +14,12 @@ class EventsController extends Controller {
         event.type=helper.event_types.info;
         event.chat=chat;
         event.text=text;
-<<<<<<< HEAD
+// <<<<<<< HEAD
         event.time= this.dxmpp.take_time();
         await event.save();
-=======
+// =======
         event.date = date;
->>>>>>> 6ad9618919eb687b1e6de6cb5e581f3cff3ab5fa
+// >>>>>>> 6ad9618919eb687b1e6de6cb5e581f3cff3ab5fa
         text+=' '+chat.name;
         this.send_data('user_joined_room', text);
         const html = this.render('main/messagingblock/notice.pug', event);

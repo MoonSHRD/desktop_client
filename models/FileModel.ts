@@ -9,8 +9,8 @@ export class FileModel extends BaseEntity {
     id: number;
     @Column()
     chat_id: string = '';
-    @Column()
-    sender: string = '';
+    // @Column()
+    // sender: string = '';
     @Column()
     link: string = '';
     @Column()

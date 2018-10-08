@@ -12,6 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const ChatModel_1 = require("./ChatModel");
 let EventModel = class EventModel extends typeorm_1.BaseEntity {
+    constructor() {
+        super(...arguments);
+        this.date = "";
+    }
 };
 __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
