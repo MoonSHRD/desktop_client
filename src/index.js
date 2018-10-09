@@ -383,6 +383,7 @@ window.onload = function () {
 
     ipcRenderer.on('reload_chat', (event, obj) => {
         $('#messaging_block').html(obj);
+        $(".send_message_input").focus();
     });
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
@@ -409,6 +410,7 @@ window.onload = function () {
     $(document).on('click', '.chats li', function () {
 
         const $this=$(this);
+
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
         $('.messaging_history ul').empty();
         let chat = $this.attr('id');
