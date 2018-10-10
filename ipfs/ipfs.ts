@@ -1,5 +1,7 @@
+import {ipfs_config} from "../src/env_config";
+
 const ipfsAPI = require('ipfs-api');
-const ipfs = ipfsAPI('142.93.226.135', '5001');
+// const ipfs = ipfsAPI(ipfs_config.host, ipfs_config.port);
 
 // ipfs.id((err, res) => {
 //     if (err) throw err;
@@ -32,7 +34,6 @@ const ipfs = ipfsAPI('142.93.226.135', '5001');
 // });
 
 
-import {ipfs_config} from "../src/env_config";
 
 export class Ipfs {
 
@@ -47,7 +48,7 @@ export class Ipfs {
     }
 
     async connect() {
-        this.connection=ipfsAPI(ipfs_config.host, ipfs_config.port);
+        this.connection=ipfsAPI(ipfs_config.host, ipfs_config.port, {protocol: 'https'});
     }
 
     async ipfs_info(){

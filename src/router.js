@@ -85,8 +85,8 @@ class Router {
                     setTimeout(resolve, ms);
                 });
             }
-            console.log("Loom reconecting");
-            yield this.controller_register.queue_controller("AuthController", "auth");
+            // console.log("Loom reconecting");
+            // await this.controller_register.queue_controller("AuthController", "auth");
             yield this.controller_register.queue_controller('AuthController', 'init_auth');
             yield sleep(5000);
         }));
