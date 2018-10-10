@@ -231,6 +231,7 @@ export class Router {
 
         this.listen_event(this.ipcMain, 'change_wallet_menu', async (event, arg) => {
             console.log('change_wallet_menu');
+
             await this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
         });
 
@@ -241,6 +242,22 @@ export class Router {
         this.listen_event(this.ipcMain, 'transfer_token', async (event, arg) => {
             await this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
         });
+
+
+        /** Settings events **/
+
+        // this.listen_event(this.ipcMain, 'change_settings_menu', async (event, arg) => {
+        //     console.log('change_settings_menu');
+        //     await this.controller_register.queue_controller('SettingsController', 'change_settings_menu', arg);
+        // });
+        //
+        // this.listen_event(this.ipcMain, 'change_menu_state', async (event, arg) => {
+        //     this.controller_register.run_controller('MenuController', 'load_menu', arg);
+        // });
+
+        // this.listen_event(this.ipcMain, 'transfer_token', async (event, arg) => {
+        //     await this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
+        // });
     }
 }
 

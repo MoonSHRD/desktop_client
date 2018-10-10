@@ -53,6 +53,15 @@ class MenuController extends Controller {
         await this.controller_register.run_controller('WalletController', 'change_wallet_menu');
     }
 
+    private async load_menu_settings(account) {
+        let self_info = await this.get_self_info();
+        self_info.state=this.chat_to_menu.user;
+        let html = this.render('main/settings/settings.pug', self_info);// +
+        // this.render('main/messagingblock/messagingblock.pug');
+        this.send_data('change_menu_state', html);
+        await this.controller_register.run_controller('SettingsController', 'change_settings_menu');
+    }
+
     private async generate_initial_chats() {
         let initial_user;
         let initial_user_chat;

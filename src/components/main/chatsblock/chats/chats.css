@@ -12,11 +12,11 @@
     margin: 0;
     padding: 20px;
     /*margin-top: 45px;*/
-
-
 }
 
-
+.chats ul li {
+   margin-bottom: 2px;
+}
 
 .chats a {
     height: 57px;

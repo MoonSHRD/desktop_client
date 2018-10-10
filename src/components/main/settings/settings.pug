@@ -1,0 +1,49 @@
+style
+    //include wallet.css
+div.walletLeft
+    //div.userBar
+    //    include infopanel.pug
+    div.walletInfo
+        table
+            tbody
+                tr
+                    td Total ETH
+                    th 10000
+                tr
+                    td ETH in tokens
+                    th 23
+                tr
+                    td Free ETH
+                    th 123
+
+
+    div.addToBalance.text-center
+        .btn.badge-primary.balanceBtn Add to Balance
+
+    div.walletMenu
+        ul
+            li.active_wallet(data-name="wallet_token")
+                a(href='#')
+                    img(src='components/main/wallet/img/first.png', width='40', height='40')
+                    p My Tokens
+            li(data-name="wallet_transfer")
+                a(href='#')
+                    img(src='components/main/wallet/img/second.png', width='40', height='40')
+                    p Transfer
+            li(data-name="wallet_history")
+                a(href='#')
+                    img(src='components/main/wallet/img/third.png', width='40', height='40')
+                    p Transaction history
+            li(data-name="wallet_subscriptions")
+                a(href='#')
+                    img(src='components/main/wallet/img/fourth.png', width='40', height='40')
+                    p My subscriptions
+            li(data-name="wallet_services")
+                a(href='#')
+                    img(src='components/main/wallet/img/fifth.png', width='40', height='40')
+                    p Services
+
+div.walletRight
+//    include wallet_token
+//script
+//    include wallet.js

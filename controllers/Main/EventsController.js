@@ -25,6 +25,7 @@ class EventsController extends Controller_1.Controller {
             event.text = text;
             event.time = this.dxmpp.take_time();
             yield event.save();
+            event.date = date;
             text += ' ' + chat.name;
             this.send_data('user_joined_room', text);
             const html = this.render('main/messagingblock/notice.pug', event);

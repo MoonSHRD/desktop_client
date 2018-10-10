@@ -24,7 +24,7 @@ app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
     }
     let mainWindow = new BrowserWindow({ width: 1200, minWidth: 1180, height: 800, resizable: false, show: false, webPreferences: {
             nodeIntegration: true
-        }, icon: __dirname + '/icon.png' });
+        }, icon: __dirname + '/icon.png', });
     // mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`file://${__dirname}/index.pug`);
     mainWindow.webContents.on('dom-ready', function () {
