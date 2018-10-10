@@ -1,9 +1,9 @@
 style
-    //include wallet.css
-div.walletLeft
+    include settings.css
+div.settingsLeft
     //div.userBar
     //    include infopanel.pug
-    div.walletInfo
+    div.settingsInfo
         table
             tbody
                 tr
@@ -20,30 +20,82 @@ div.walletLeft
     div.addToBalance.text-center
         .btn.badge-primary.balanceBtn Add to Balance
 
-    div.walletMenu
-        ul
-            li.active_wallet(data-name="wallet_token")
-                a(href='#')
-                    img(src='components/main/wallet/img/first.png', width='40', height='40')
-                    p My Tokens
-            li(data-name="wallet_transfer")
-                a(href='#')
-                    img(src='components/main/wallet/img/second.png', width='40', height='40')
-                    p Transfer
-            li(data-name="wallet_history")
-                a(href='#')
-                    img(src='components/main/wallet/img/third.png', width='40', height='40')
-                    p Transaction history
-            li(data-name="wallet_subscriptions")
-                a(href='#')
-                    img(src='components/main/wallet/img/fourth.png', width='40', height='40')
-                    p My subscriptions
-            li(data-name="wallet_services")
-                a(href='#')
-                    img(src='components/main/wallet/img/fifth.png', width='40', height='40')
-                    p Services
+    ul#optionsList.p-0.m-0
+        li
+            a(href='#')
+                b.my-2 Settings
+                img.rotate(src='components/main/modal_popup/img/arrow.png')
+            ul()
+                li
+                    label
+                        input(type='checkbox', name='option3', value='a3')
+                        | Allow screenshots of your messages
+                        span.checkmark
 
-div.walletRight
-//    include wallet_token
-//script
-//    include wallet.js
+                li
+                    label
+                        input(type='checkbox', name='option3', value='a3')
+                        | Show status
+                        span.checkmark
+
+                li
+                    label
+                        input(type='checkbox', name='option3', value='a3')
+                        | Visibility in the “People nearby”
+                        span.checkmark
+
+                li
+                    label
+                        input(type='checkbox', name='option3', value='a3')
+                        | Visibility in the “Nearby channels”
+                        span.checkmark
+
+
+
+    div.settingsMenu
+        ul
+            b.my-2.d-block Basic options
+
+            li.active_settings(data-name="settings_identification")
+                a(href='#')
+                    img(src='components/main/settings/img/ident.png', width='40', height='40')
+                    p Identification
+
+            li(data-name="settings_mySubscriptions")
+                a(href='#')
+                    img(src='components/main/settings/img/myPurSub.png', width='40', height='40')
+                    p My subscriptions
+
+            li(data-name="settings_history")
+                a(href='#')
+                    img(src='components/main/settings/img/relSub.png', width='40', height='40')
+                    p Released subscriptions
+
+            li(data-name="settings_subscriptions")
+                a(href='#')
+                    img(src='components/main/settings/img/blackList.png', width='40', height='40')
+                    p Black list
+
+            li(data-name="settings_services")
+                a(href='#')
+                    img(src='components/main/settings/img/myStickers.png', width='40', height='40')
+                    p My stickers
+
+            li(data-name="settings_services")
+                a(href='#')
+                    img(src='components/main/settings/img/faq.png', width='40', height='40')
+                    p Instructions & FAQ
+
+            li(data-name="settings_services")
+                a(href='#')
+                    img(src='components/main/settings/img/devices.png', width='40', height='40')
+                    p Connected devices & sessions
+
+            li(data-name="settings_services")
+                a(href='#')
+                    img(src='components/main/settings/img/support.png', width='40', height='40')
+                    p Write to tech support
+div.settingsRight
+    include settings_identification
+script
+    include settings.js

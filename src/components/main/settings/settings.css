@@ -1,0 +1,217 @@
+.settingsLeft{
+    width: 300px;
+    min-width: 300px;
+    padding: 20px;
+    background-color: #F3F3F3;
+}
+
+.settingsInfo {
+    margin: 20px 0px;
+}
+.settingsMenu ul {
+    list-style: none;
+    margin: 0;
+    padding: 20px 0;
+}
+
+.settingsMenu  a {
+    height: 57px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px 0 20px;
+    color: black;
+    text-decoration: none;
+    font-size: 13px;
+    font-family: 'Open Sans', sans-serif;
+    transition: all 0.1s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.settingsMenu ul li p {
+    margin: 0;
+    padding: 0 10px;
+}
+.active_settings  a{
+    color: white !important;
+}
+
+.settingsMenu a:hover {
+    border-radius: 8px;
+    background-color: #2BC2F9;
+    color: #ffffff;
+}
+
+.balanceBtn{
+    background-color: #2BC2F9;
+    border-radius: 10px;
+    margin: 20px 0;
+    padding: 6px 30px;
+}
+
+
+.settingsMenu ul li {
+    margin-bottom: 2px;
+}
+
+.userBar span{
+
+    margin-left: 10px;
+    color: black;
+
+}
+
+
+.active_settings {
+    background-color: #2BC2F9;
+    border-radius: 8px;
+
+}
+
+
+#optionsList li ul  {
+    display: block;
+    padding: 0;
+}
+
+
+#optionsList > li {
+    list-style: none;
+}
+
+#optionsList > li a {
+    color: black;
+}
+
+#optionsList > li a:hover {
+    text-decoration: none;
+}
+
+#optionsList > li ul li {
+    list-style: none;
+    margin-top: 20px;
+    display: block;
+    position: relative;
+    padding-right: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-size: 13px;
+}
+
+
+#optionsList > li > a > img {
+    margin-left: 10px;
+    transition: 0.5s;
+    border-radius: 100%;
+}
+.rotate{
+    transform: rotate(90deg);
+}
+
+#optionsList input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #ffffff;
+    border-radius: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+/* On mouse-over, add a grey background color */
+/*#optionsList:hover input ~ .checkmark {*/
+    /*background-color: #ffffff;*/
+    /*border-radius: 100%;*/
+/*}*/
+
+/* When the checkbox is checked, add a blue background */
+#optionsList input:checked ~ .checkmark {
+    background-color: #ffffff;
+    border-radius: 100%;
+
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+#optionsList input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+#optionsList .checkmark:after {
+
+    border-radius: 100%;
+    height: 17px;
+    width: 17px;
+    border: solid white;
+    background-color: #2196F3;
+
+
+}
+
+#optionsList label {
+    width: 100%;
+    cursor: pointer;
+    margin: 0;
+
+}
+
+
+/*   IDENTIFICATIONS   */
+
+.settingsRight {
+    flex: 1;
+    display: flex;
+    background-color: #F3F3F3;
+}
+
+.settings_identification {
+    padding: 30px;
+}
+
+.settingsRight textarea {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 0 30px rgba(43, 194, 249, 0.1);
+    resize: none;
+    width: 100%;
+    padding: 15px 20px;
+}
+
+.settingsRight p {
+    font-size: 14px;
+}
+
+.settingsRight .generateBtn {
+
+    border: none;
+    background-color: #2BC2F9;
+    border-radius: 7px;
+     outline: none;
+    padding: 12px 20px;
+    color: #ffffff;
+    cursor: pointer;
+}
+

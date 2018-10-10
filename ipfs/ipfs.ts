@@ -1,5 +1,7 @@
+import {ipfs_config} from "../src/env_config";
+
 const ipfsAPI = require('ipfs-api');
-const ipfs = ipfsAPI('localhost', '5001');
+// const ipfs = ipfsAPI(ipfs_config.host, ipfs_config.port);
 
 // ipfs.id((err, res) => {
 //     if (err) throw err;
@@ -32,7 +34,6 @@ const ipfs = ipfsAPI('localhost', '5001');
 // });
 
 
-import {ipfs_config} from "../src/env_config";
 
 export class Ipfs {
 
@@ -47,7 +48,7 @@ export class Ipfs {
     }
 
     async connect() {
-        this.connection=ipfsAPI(ipfs_config.host, ipfs_config.port);
+        this.connection=ipfsAPI(ipfs_config.host, ipfs_config.port, {protocol: 'https'});
     }
 
     async ipfs_info(){
@@ -66,6 +67,7 @@ export class Ipfs {
 
     async get_file(ipfsId){
         let response = await this.connection.get(ipfsId, { progress: (prog) => console.log(`received: ${prog}`) });
+        // let response = ipfs.files.get(ipfsId);
         console.log(response);
         console.log(response[0]);
         console.log(response[0].content);

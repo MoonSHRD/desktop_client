@@ -13,7 +13,7 @@ export class EventModel extends BaseEntity {
     @Column()
     type: string;
     @Column()
-    date: string;
+    date: string = "";
 
     @ManyToOne(type => ChatModel, chat => chat.events)
     @JoinColumn()

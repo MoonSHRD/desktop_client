@@ -319,9 +319,22 @@ window.onload = function () {
             group: $('.active_dialog').attr('data-type')==='channel',
         };
 
-        obj={id: active_dialog.attr('id'),text: msg_input.val().trim()};
+        // obj={id: active_dialog.attr('id'),text: msg_input.val().trim()};
+        obj.id = active_dialog.attr('id');
+        obj.text = msg_input.val().trim();
         // console.log(obj);
-        let file = $('#attachFileToChat').prop('files')[0];
+        let file;
+        console.log("obj", obj.group);
+        if (obj.group) {
+            file = $('#attachFileToGroup').prop('files');
+            if (file.length === 0) {
+                file = null
+            } else {
+                file = file[0]
+            }
+        }else {
+            file = $('#attachFileToChat').prop('files')[0];
+        }
         if (file) {
             console.log(file);
             let reader = new FileReader();
@@ -423,6 +436,12 @@ window.onload = function () {
         const $this=$(this);
         $this.addClass('active_wallet').siblings().removeClass('active_wallet');
 
+    });
+
+    $(document).on('click', '.settingsMenu li', function () {
+
+        const $this=$(this);
+        $this.addClass('active_settings').siblings().removeClass('active_settings');
 
     });
 
@@ -629,11 +648,23 @@ window.onload = function () {
         ipcRenderer.send('channel_suggestion', {});
     });
 
+    $(document).on('click','#sendTokenTo',function(e) {
+        ipcRenderer.send('get_contacts', {});
+    });
+
+    $(document).on('change','#sendTokenTo',function(e) {
+        ipcRenderer.send('channel_suggestion', {});
+    });
+
     ipcRenderer.on("wallet_token_table", (event, obj) => {
         console.log('token table');
         $('.loader').remove();
         $('.myTokens').append(obj);
     });
+
+
+
+
 
 
 

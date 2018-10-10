@@ -28,7 +28,8 @@ let MessageModel = MessageModel_1 = class MessageModel extends typeorm_1.BaseEnt
         super(...arguments);
         this.server_id = 0;
         this.text = '';
-        this.time = null;
+        this.time = '';
+        this.with_file = false;
     }
     static get_chat_messages_with_sender(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -57,6 +58,10 @@ __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
 ], MessageModel.prototype, "time", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Boolean)
+], MessageModel.prototype, "with_file", void 0);
 __decorate([
     typeorm_1.ManyToOne(type => ChatModel_1.ChatModel, chat => chat.messages),
     typeorm_1.JoinColumn(),

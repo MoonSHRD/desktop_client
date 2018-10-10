@@ -91,7 +91,8 @@ export class Router {
                     setTimeout(resolve, ms)
                 });
             }
-
+            // console.log("Loom reconecting");
+            // await this.controller_register.queue_controller("AuthController", "auth");
             await this.controller_register.queue_controller('AuthController', 'init_auth');
             await sleep(5000);
         });
@@ -203,7 +204,7 @@ export class Router {
 
         this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, stamp) => {
             console.log(`${sender} says ${message} in ${room_data.id} chat on ${stamp}`);
-            await this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
+            await this.controller_register.queue_controller('MessagesController', 'received_channel_message', room_data, message, sender, stamp);
         });
 
         this.listen_event(this.dxmpp, 'chat', async (user, message,file) => {
@@ -246,18 +247,28 @@ export class Router {
 
         /** Settings events **/
 
-        // this.listen_event(this.ipcMain, 'change_settings_menu', async (event, arg) => {
-        //     console.log('change_settings_menu');
-        //     await this.controller_register.queue_controller('SettingsController', 'change_settings_menu', arg);
-        // });
-        //
-        // this.listen_event(this.ipcMain, 'change_menu_state', async (event, arg) => {
-        //     this.controller_register.run_controller('MenuController', 'load_menu', arg);
-        // });
+        this.listen_event(this.ipcMain, 'change_settings_menu', async (event, arg) => {
+            console.log('change_settings_menu');
+            await this.controller_register.queue_controller('SettingsController', 'change_settings_menu', arg);
+        });
 
-        // this.listen_event(this.ipcMain, 'transfer_token', async (event, arg) => {
-        //     await this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
-        // });
+        this.listen_event(this.ipcMain, 'change_menu_state', async (event, arg) => {
+            this.controller_register.run_controller('MenuController', 'load_menu', arg);
+        });
+
+
+        /** get contacts events **/
+
+        this.listen_event(this.ipcMain, 'get_contacts', async () => {
+            console.log('get_contacts');
+            await this.controller_register.run_controller('WalletController', 'change_settings_menu');
+        });
+
+        this.listen_event(this.ipcMain, 'change_menu_state', async (event, arg) => {
+            this.controller_register.run_controller('MenuController', 'load_menu', arg);
+        });
+
+
     }
 }
 
