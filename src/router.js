@@ -88,7 +88,7 @@ class Router {
             // console.log("Loom reconecting");
             // await this.controller_register.queue_controller("AuthController", "auth");
             yield this.controller_register.queue_controller('AuthController', 'init_auth');
-            yield sleep(5000);
+            yield sleep(10000);
         }));
         this.listen_event(this.dxmpp, 'online', (data) => __awaiter(this, void 0, void 0, function* () {
             console.log('jackal connected');

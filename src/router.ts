@@ -94,7 +94,7 @@ export class Router {
             // console.log("Loom reconecting");
             // await this.controller_register.queue_controller("AuthController", "auth");
             await this.controller_register.queue_controller('AuthController', 'init_auth');
-            await sleep(5000);
+            await sleep(10000);
         });
 
         this.listen_event(this.dxmpp, 'online', async (data) => {
