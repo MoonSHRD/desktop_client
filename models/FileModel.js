@@ -10,40 +10,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
-const ChatModel_1 = require("./ChatModel");
-let EventModel = class EventModel extends typeorm_1.BaseEntity {
+// import {ChatModel} from "./ChatModel";
+let FileModel = class FileModel extends typeorm_1.BaseEntity {
+    // import {ChatModel} from "./ChatModel";
     constructor() {
         super(...arguments);
-        this.date = "";
+        this.chat_id = '';
+        // @Column()
+        // sender: string = '';
+        this.link = '';
+        this.filename = '';
     }
 };
 __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
     __metadata("design:type", Number)
-], EventModel.prototype, "id", void 0);
+], FileModel.prototype, "id", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], EventModel.prototype, "text", void 0);
+], FileModel.prototype, "chat_id", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], EventModel.prototype, "time", void 0);
+], FileModel.prototype, "link", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], EventModel.prototype, "type", void 0);
+], FileModel.prototype, "filename", void 0);
 __decorate([
     typeorm_1.Column(),
-    __metadata("design:type", String)
-], EventModel.prototype, "date", void 0);
-__decorate([
-    typeorm_1.ManyToOne(type => ChatModel_1.ChatModel, chat => chat.events),
-    typeorm_1.JoinColumn(),
-    __metadata("design:type", ChatModel_1.ChatModel)
-], EventModel.prototype, "chat", void 0);
-EventModel = __decorate([
+    __metadata("design:type", Number)
+], FileModel.prototype, "message_id", void 0);
+FileModel = __decorate([
     typeorm_1.Entity()
-], EventModel);
-exports.EventModel = EventModel;
-//# sourceMappingURL=EventModel.js.map
+], FileModel);
+exports.FileModel = FileModel;
+//# sourceMappingURL=FileModel.js.map

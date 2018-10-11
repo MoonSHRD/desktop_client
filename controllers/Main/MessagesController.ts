@@ -5,6 +5,8 @@ import {Controller} from "../Controller";
 import {MessageModel} from "../../models/MessageModel";
 import {ChatModel} from "../../models/ChatModel";
 import {assertAnyTypeAnnotation} from "babel-types";
+import {FileModel} from "../../models/FileModel";
+import InterceptFileProtocolRequest = Electron.InterceptFileProtocolRequest;
 
 class MessagesController extends Controller {
 
@@ -68,6 +70,8 @@ class MessagesController extends Controller {
 
         let file_send;
         if (file) {
+            message.with_file = true;
+            await message.save();
             let preview = false;
             if ([
                 'image/jpeg',
@@ -75,9 +79,22 @@ class MessagesController extends Controller {
             ].includes(file.type))
                 preview = true;
             file_send = {file: file.file, hash: await this.ipfs.add_file(file), preview: preview, name: file.name};
+            let file_info = new FileModel();
+            // file_info.sender = self_info.id;
+            file_info.link = file_send.hash;
+            file_info.chat_id = chat.id;
+            file_info.message_id = message.id;
+            file_info.filename = file.name;
+
+            file_info.save();
+            // console.log("Save file_info")
         }
 
         message.file = file_send;
+        await message.save();
+        if (chat.type == this.group_chat_types.channel) {
+            await this.render_message(message, chat.id);
+        }
 
         if (chat.type === this.chat_types.user) {
             await this.render_message(message, id);
@@ -86,7 +103,6 @@ class MessagesController extends Controller {
         } else if (Object.values(this.group_chat_types).includes(chat.type)) {
             group = true;
         }
-
         // this.dxmpp.send(chat, text, group);
         this.dxmpp.send(chat, text, group, file_send);
         // await this.render_message(message, id);
@@ -110,7 +126,17 @@ class MessagesController extends Controller {
         await message.save();
 
         let ipfs_file;
-        if (file && file.preview) {
+        if (file) {
+            message.with_file = true;
+            await message.save();
+            let file_info = new FileModel();
+            // file_info.sender = self_info.id;
+            file_info.link = file.hash;
+            file_info.chat_id = chat.id;
+            file_info.message_id = message.id;
+            file_info.filename = file.name;
+
+            file_info.save();
             ipfs_file = await this.ipfs.get_file(file.hash);
             message.file = {
                 file: ipfs_file.file,
@@ -133,13 +159,32 @@ class MessagesController extends Controller {
         let userModel: UserModel;
         if (sender)
             userModel = await UserModel.findOne(sender.address);
-
+        if (stamp) {
+            let time = stamp.split(" ")[1].split(":");
+            stamp = `${time[0]}:${time[1]}`;
+        } else {stamp = this.dxmpp.take_time()}
         let chat = await ChatModel.findOne(room_data.id);
         let messageModel = new MessageModel();
         messageModel.text = message;
         messageModel.sender = userModel;
         messageModel.chat = chat;
-        messageModel.time = stamp ? stamp : this.dxmpp.take_time();
+        messageModel.time = stamp;
+        await messageModel.save();
+        await this.render_message(messageModel, chat.id);
+    }
+
+    async received_channel_message(room_data, message, sender, stamp) {
+
+        if (stamp) {
+            let time = stamp.split(" ")[1].split(":");
+            stamp = `${time[0]}:${time[1]}`;
+        } else {stamp = this.dxmpp.take_time()}
+        let chat = await ChatModel.findOne(room_data.id);
+        let messageModel = new MessageModel();
+        messageModel.text = message;
+        messageModel.sender = null;
+        messageModel.chat = chat;
+        messageModel.time = stamp;
         await messageModel.save();
         await this.render_message(messageModel, chat.id);
     };

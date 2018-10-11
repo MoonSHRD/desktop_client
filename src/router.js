@@ -85,6 +85,8 @@ class Router {
                     setTimeout(resolve, ms);
                 });
             }
+            console.log("Loom reconecting");
+            yield this.controller_register.queue_controller("AuthController", "auth");
             yield this.controller_register.queue_controller('AuthController', 'init_auth');
             yield sleep(5000);
         }));
@@ -164,7 +166,7 @@ class Router {
         /** Messages events **/
         this.listen_event(this.dxmpp, 'groupchat', (room_data, message, sender, stamp) => __awaiter(this, void 0, void 0, function* () {
             console.log(`${sender} says ${message} in ${room_data.id} chat on ${stamp}`);
-            yield this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
+            yield this.controller_register.queue_controller('MessagesController', 'received_channel_message', room_data, message, sender, stamp);
         }));
         this.listen_event(this.dxmpp, 'chat', (user, message, file) => __awaiter(this, void 0, void 0, function* () {
             console.log(`user ${user.id} subscribed`);

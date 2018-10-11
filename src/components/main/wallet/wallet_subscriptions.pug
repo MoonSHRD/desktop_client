@@ -9,11 +9,11 @@ div.myTokens
         thead
             tr
                 th(scope='col')
-                th(scope='col') Channel
-                th(scope='col') Sector/Category
-                th(scope='col') Tokens
-                th(scope='col') Details
-                th(scope='col') Notifications
+                th.th_sub_c(scope='col') Channel
+                th.th_sub_s(scope='col') Sector/Category
+                th.th_sub_t(scope='col') Tokens
+                th.th_sub_d(scope='col') Details
+                th.th_sub_n(scope='col') Notifications
                 th(scope='col')
         tbody
             tr.table_02.table_02_sub.t02
@@ -28,5 +28,47 @@ div.myTokens
                     | (AGrd)
                 td.blue_font #{info} Show info
                 td #{notifications}
-                    img(src='components/main/wallet/img/ring-off.png', width='40', height='40')
+                    img(src='components/main/wallet/img/ring-off.png')
+                td X
+            tr.table_02.table_02_sub.t02
+                td
+                    img(src='components/main/wallet/img/ava1.png', width='40', height='40')
+                td #{name} Crafting beer lovers chat
+                td.td_history_time #{category} Chatterboxes
+                    br
+                    | /Food
+                td.td_history_time #{tokens} Beer lovers
+                    br
+                    | (BrL)
+                td.blue_font #{info} Show info
+                td #{notifications}
+                    img(src='components/main/wallet/img/ring-on.png')
+                td X
+            tr.table_02.table_02_sub.t02
+                td
+                    img(src='components/main/wallet/img/ava1.png', width='40', height='40')
+                td #{name} The Morning News
+                td.td_history_time #{category} Mass Media
+                    br
+                    | /Politics
+                td.td_history_time #{tokens} Morning Token
+                    br
+                    | (Mrn)
+                td.blue_font #{info} Show info
+                td #{notifications}
+                    img(src='components/main/wallet/img/ring-on.png')
+                td X
+            tr.table_02.table_02_sub.t02
+                td
+                    img(src='components/main/wallet/img/ava1.png', width='40', height='40')
+                td #{name} "AutoMir" automobile sales centre
+                td.td_history_time #{category} Companies
+                    br
+                    | /Tehnology
+                td.td_history_time #{tokens} AlexGord
+                    br
+                    | (AGrd)
+                td.blue_font #{info} Show info
+                td #{notifications}
+                    img(src='components/main/wallet/img/ring-off.png')
                 td X
