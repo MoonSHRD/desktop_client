@@ -11,6 +11,32 @@ $(function() {
         event.stopPropagation();
     });
 
+
+})
+var pin = '';
+$(document).on('click', '.singlePin', function () {
+
+    // console.log(pin)
+    if(pin.length !== 4) {
+        pin += $(this).children("p").text()
+        $('input[name="change_pin"]').val(pin)
+        $('input[name="change_pin"]').change()
+    }
+
+});
+
+$(document).on('change', 'input[name="change_pin"]', function () {
+    if(pin.length === 4) {
+        if ($(this).val() === '1111') {
+            console.log('Good password')
+            $('#back').css("cssText", "display: flex !important;")
+            $('#front').css("cssText", "display: none !important;")
+        } else {
+            console.log('Bad password')
+            pin = '';
+            $(this).val('')
+        }
+    }
 })
 
 

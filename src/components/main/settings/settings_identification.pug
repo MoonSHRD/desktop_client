@@ -1,12 +1,12 @@
-style
-    include settings.css
+//style
+//    include settings.css
 
 .container.settings_identification
     .row.text-center.justify-content-center
         .col-md-6
             b Change the Key
 
-    .row.text-center.justify-content-center
+    .row.m-3.text-center.justify-content-center
         .col-md-6.text-left
             p Enter 12 words of backup phrase you have now to restore your account
 
@@ -26,17 +26,84 @@ style
         .col-md-6
             button.generateBtn Generate
 
-    .row.text-center.justify-content-center
+    .row.m-3.text-center.justify-content-center
         .col-md-6.text-center
             | !Do not forget to save the phrase
             | on paper to avoid loss!
 
-    .row.text-center.justify-content-center
+    .row.m-3.text-center.justify-content-center
         .col-md-6
             b Change your PIN
 
-    .row.text-center.justify-content-center.mb-3
+    #front.row.text-center.justify-content-center.mb-3
         .col-md-7
-            textarea(rows='5')
+            .substradeForPin
+                label.text-left(style='padding: 0px 30px; font-size: 13px;') 1. Enter 5 numbers of your old Personal Identification Number
+                .singlePin
+                    p 1
 
+                .singlePin
+                    p 2
+
+                .singlePin
+                    p 3
+
+                .singlePin
+                    p 4
+
+                .singlePin
+                    p 5
+
+                .singlePin
+                    p 6
+
+                .singlePin
+                    p 7
+
+                .singlePin
+                    p 8
+
+                .singlePin
+                    p 9
+
+                .singlePin
+                    p 0
+
+                input#change_pin.m-2.text-center(name='change_pin' disabled=true)
+
+    #back.row.text-center.justify-content-center.mb-3(style='display: none ')
+        .col-md-7
+            .substradeForPin
+                label.text-left(style='padding: 0px 30px; font-size: 13px;') 2. Enter 5 numbers of your new Personal Identification Number
+                .singlePin
+                    p 1
+
+                .singlePin
+                    p 2
+
+                .singlePin
+                    p 3
+
+                .singlePin
+                    p 4
+
+                .singlePin
+                    p 5
+
+                .singlePin
+                    p 6
+
+                .singlePin
+                    p 7
+
+                .singlePin
+                    p 8
+
+                .singlePin
+                    p 9
+
+                .singlePin
+                    p 0
+
+                input#change_pin1.m-2.text-center(name='change_pin1' disabled=true)
 

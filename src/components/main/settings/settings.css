@@ -185,6 +185,7 @@
     flex: 1;
     display: flex;
     background-color: #F3F3F3;
+    overflow: auto;
 }
 
 .settings_identification {
@@ -214,4 +215,45 @@
     color: #ffffff;
     cursor: pointer;
 }
+
+.settingsRight .substradeForPin {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 0 30px rgba(43, 194, 249, 0.1);
+    width: 100%;
+    padding: 15px 20px;
+    background-color: #ffffff;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.settingsRight .substradeForPin .singlePin {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 0 30px rgba(43, 194, 249, 0.2);
+    padding: 15px 20px;
+    background-color: #ffffff;
+    color: #2BC2F9;
+    margin: 10px;
+    cursor: pointer;
+
+
+}
+
+.settingsRight .substradeForPin .singlePin p {
+   padding: 0;
+    margin: 0;
+}
+
+.settingsRight .substradeForPin input {
+    font-size: 13px;
+    width: 43px;
+    border: none;
+    background-color: #ffffff;
+    color: #2BC2F9;
+}
+
+
 
