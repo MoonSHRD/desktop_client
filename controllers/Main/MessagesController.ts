@@ -151,11 +151,8 @@ class MessagesController extends Controller {
     };
 
     async received_group_message(room_data, message, sender, stamp) {
-
         let self_info = await this.get_self_info();
-
-        // if (self_info.id === sender) return;
-
+        if (sender.address==self_info.id) return;
         let userModel: UserModel;
         if (sender)
             userModel = await UserModel.findOne(sender.address);
@@ -173,21 +170,21 @@ class MessagesController extends Controller {
         await this.render_message(messageModel, chat.id);
     }
 
-    async received_channel_message(room_data, message, sender, stamp) {
-
-        if (stamp) {
-            let time = stamp.split(" ")[1].split(":");
-            stamp = `${time[0]}:${time[1]}`;
-        } else {stamp = this.dxmpp.take_time()}
-        let chat = await ChatModel.findOne(room_data.id);
-        let messageModel = new MessageModel();
-        messageModel.text = message;
-        messageModel.sender = null;
-        messageModel.chat = chat;
-        messageModel.time = stamp;
-        await messageModel.save();
-        await this.render_message(messageModel, chat.id);
-    };
+    // async received_channel_message(room_data, message, sender, stamp) {
+    //
+    //     if (stamp) {
+    //         let time = stamp.split(" ")[1].split(":");
+    //         stamp = `${time[0]}:${time[1]}`;
+    //     } else {stamp = this.dxmpp.take_time()}
+    //     let chat = await ChatModel.findOne(room_data.id);
+    //     let messageModel = new MessageModel();
+    //     messageModel.text = message;
+    //     messageModel.sender = null;
+    //     messageModel.chat = chat;
+    //     messageModel.time = stamp;
+    //     await messageModel.save();
+    //     await this.render_message(messageModel, chat.id);
+    // };
 }
 
 module.exports = MessagesController;
