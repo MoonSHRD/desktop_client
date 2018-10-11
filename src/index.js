@@ -396,6 +396,7 @@ window.onload = function () {
 
     ipcRenderer.on('reload_chat', (event, obj) => {
         $('#messaging_block').html(obj);
+        $(".send_message_input").focus();
     });
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
@@ -422,6 +423,7 @@ window.onload = function () {
     $(document).on('click', '.chats li', function () {
 
         const $this=$(this);
+
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
         $('.messaging_history ul').empty();
         let chat = $this.attr('id');
@@ -434,6 +436,12 @@ window.onload = function () {
         const $this=$(this);
         $this.addClass('active_wallet').siblings().removeClass('active_wallet');
 
+    });
+
+    $(document).on('click', '.settingsMenu li', function () {
+
+        const $this=$(this);
+        $this.addClass('active_settings').siblings().removeClass('active_settings');
 
     });
 
@@ -640,11 +648,23 @@ window.onload = function () {
         ipcRenderer.send('channel_suggestion', {});
     });
 
+    $(document).on('click','#sendTokenTo',function(e) {
+        ipcRenderer.send('get_contacts', {});
+    });
+
+    $(document).on('change','#sendTokenTo',function(e) {
+        ipcRenderer.send('channel_suggestion', {});
+    });
+
     ipcRenderer.on("wallet_token_table", (event, obj) => {
         console.log('token table');
         $('.loader').remove();
         $('.myTokens').append(obj);
     });
+
+
+
+
 
 
 

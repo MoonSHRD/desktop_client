@@ -13,7 +13,7 @@ div.myTokens.transfer
         tbody
             tr.trasfer_in.t02
                 th(scope='row')
-                    input(placeholder='Enter the name or address' name='address' list="browsers" )
+                    input#sendTokenTo(placeholder='Enter the name or address' name='address' list="browsers" )
                     datalist#browsers
                         each val in ['0x40198821be5af9c9e684bbc7eead51e12fafdf5', '0x401988ewrewfdsfs9e684bbc7eead51efaf33d', '0x40198821be5af9c9e684bbc7eead51e1ayrf343']
                             option= val

@@ -32,6 +32,8 @@ class AuthController extends Controller_1.Controller {
     auth(account, first = false) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.ipfs.connect();
+            console.log('connected');
+            console.log(account);
             // await this.ipfs.ipfs_info();
             yield this.loom.connect(account.privKey);
             console.log('loom connected');

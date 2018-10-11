@@ -6,7 +6,9 @@
     outline:none;
 }
 
-
+img{
+    object-fit: cover;
+}
 
 .block{
     -webkit-user-select: none;

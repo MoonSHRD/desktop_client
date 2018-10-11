@@ -85,8 +85,8 @@ class Router {
                     setTimeout(resolve, ms);
                 });
             }
-            console.log("Loom reconecting");
-            yield this.controller_register.queue_controller("AuthController", "auth");
+            // console.log("Loom reconecting");
+            // await this.controller_register.queue_controller("AuthController", "auth");
             yield this.controller_register.queue_controller('AuthController', 'init_auth');
             yield sleep(5000);
         }));
@@ -193,6 +193,22 @@ class Router {
         }));
         this.listen_event(this.ipcMain, 'transfer_token', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
+        }));
+        /** Settings events **/
+        this.listen_event(this.ipcMain, 'change_settings_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            console.log('change_settings_menu');
+            yield this.controller_register.queue_controller('SettingsController', 'change_settings_menu', arg);
+        }));
+        this.listen_event(this.ipcMain, 'change_menu_state', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            this.controller_register.run_controller('MenuController', 'load_menu', arg);
+        }));
+        /** get contacts events **/
+        this.listen_event(this.ipcMain, 'get_contacts', () => __awaiter(this, void 0, void 0, function* () {
+            console.log('get_contacts');
+            yield this.controller_register.run_controller('WalletController', 'change_settings_menu');
+        }));
+        this.listen_event(this.ipcMain, 'change_menu_state', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            this.controller_register.run_controller('MenuController', 'load_menu', arg);
         }));
     }
 }

@@ -22,6 +22,8 @@ class AuthController extends Controller {
 
     private async auth(account: AccountModel,first:boolean=false) {
         await this.ipfs.connect();
+        console.log('connected');
+        console.log(account);
         // await this.ipfs.ipfs_info();
         await this.loom.connect(account.privKey);
         console.log('loom connected');
