@@ -16,6 +16,7 @@ const Controllers = {
     MenuController: require(__dirname + '/Main/MenuController'),
     EventsController: require(__dirname + '/Main/EventsController'),
     WalletController: require(__dirname + '/Main/WalletController'),
+    SettingsController: require(__dirname + '/Main/SettingsController'),
 };
 class ControllerRegister {
     constructor(window) {

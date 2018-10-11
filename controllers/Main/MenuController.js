@@ -67,6 +67,16 @@ class MenuController extends Controller_1.Controller {
             yield this.controller_register.run_controller('WalletController', 'change_wallet_menu');
         });
     }
+    load_menu_settings(account) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let self_info = yield this.get_self_info();
+            self_info.state = this.chat_to_menu.user;
+            let html = this.render('main/settings/settings.pug', self_info); // +
+            // this.render('main/messagingblock/messagingblock.pug');
+            this.send_data('change_menu_state', html);
+            yield this.controller_register.run_controller('SettingsController', 'change_settings_menu');
+        });
+    }
     generate_initial_chats() {
         return __awaiter(this, void 0, void 0, function* () {
             let initial_user;
