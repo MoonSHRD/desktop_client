@@ -84,6 +84,7 @@ class MessagesController extends Controller_1.Controller {
             message.text = text;
             message.time = this.dxmpp.take_time();
             message.chat = chat;
+            message.files = [];
             yield message.save();
             let group;
             let fileModel;
@@ -122,7 +123,7 @@ class MessagesController extends Controller_1.Controller {
                 group = true;
             }
             // this.dxmpp.send(chat, text, group);
-            this.dxmpp.send(chat, text, group, [fileModel]);
+            this.dxmpp.send(chat, text, group, message.files);
             // await this.render_message(message, id);
         });
     }
@@ -146,6 +147,7 @@ class MessagesController extends Controller_1.Controller {
             message.sender = userModel;
             message.chat = chat;
             message.time = this.dxmpp.take_time();
+            message.files = [];
             yield message.save();
             // let ipfs_file;
             if (files) {
