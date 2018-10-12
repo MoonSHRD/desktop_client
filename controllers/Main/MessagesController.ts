@@ -122,7 +122,7 @@ class MessagesController extends Controller {
             group = true;
         }
         // this.dxmpp.send(chat, text, group);
-        this.dxmpp.send(chat, text, group, fileModel);
+        this.dxmpp.send(chat, text, group, [fileModel]);
         // await this.render_message(message, id);
     };
 
@@ -132,8 +132,8 @@ class MessagesController extends Controller {
         await message.save();
     };
 
-    async received_message(user, text, file) {
-        console.log(file);
+    async received_message(user, text, files) {
+        console.log(files);
         let self_info = await this.get_self_info();
         let userModel = await UserModel.findOne(user.id);
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
@@ -145,32 +145,23 @@ class MessagesController extends Controller {
         await message.save();
 
         // let ipfs_file;
-        if (file) {
-            // message.with_file = true;
-            await message.save();
-            let fileModel = new FileModel();
-            // file_info.sender = self_info.id;
-            fileModel.hash = file.hash;
-            fileModel.chat = chat;
-            fileModel.message = message;
-            fileModel.name = file.name;
-            fileModel.type = file.type;
-            fileModel.preview = check_file_preview(file.type);
-            if (fileModel.preview) {
-                fileModel.file = (await this.ipfs.get_file(fileModel.hash)).file;
+        if (files) {
+            for (let num in files){
+                await message.save();
+                let fileModel = new FileModel();
+                // file_info.sender = self_info.id;
+                fileModel.hash = files[num].hash;
+                fileModel.chat = chat;
+                fileModel.message = message;
+                fileModel.name = files[num].name;
+                fileModel.type = files[num].type;
+                fileModel.preview = check_file_preview(files[num].type);
+                if (fileModel.preview) {
+                    fileModel.file = (await this.ipfs.get_file(fileModel.hash)).file;
+                }
+                await fileModel.save();
+                message.files.push(fileModel);
             }
-
-
-            await fileModel.save();
-
-            message.files=[fileModel];
-            // message.r_file = {
-            //     file: ipfs_file ? ipfs_file.file : null,
-            //     preview: file.preview,
-            //     type: file.type,
-            //     name: file.name,
-            // };
-            // console.log(ipfs_file);
         }
 
         await this.render_message(message, chat.id);

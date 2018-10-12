@@ -122,7 +122,7 @@ class MessagesController extends Controller_1.Controller {
                 group = true;
             }
             // this.dxmpp.send(chat, text, group);
-            this.dxmpp.send(chat, text, group, fileModel);
+            this.dxmpp.send(chat, text, group, [fileModel]);
             // await this.render_message(message, id);
         });
     }
@@ -135,9 +135,9 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_message(user, text, file) {
+    received_message(user, text, files) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(file);
+            console.log(files);
             let self_info = yield this.get_self_info();
             let userModel = yield UserModel_1.UserModel.findOne(user.id);
             let chat = yield ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id);
@@ -148,29 +148,23 @@ class MessagesController extends Controller_1.Controller {
             message.time = this.dxmpp.take_time();
             yield message.save();
             // let ipfs_file;
-            if (file) {
-                // message.with_file = true;
-                yield message.save();
-                let fileModel = new FileModel_1.FileModel();
-                // file_info.sender = self_info.id;
-                fileModel.hash = file.hash;
-                fileModel.chat = chat;
-                fileModel.message = message;
-                fileModel.name = file.name;
-                fileModel.type = file.type;
-                fileModel.preview = Helpers_1.check_file_preview(file.type);
-                if (fileModel.preview) {
-                    fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
+            if (files) {
+                for (let num in files) {
+                    yield message.save();
+                    let fileModel = new FileModel_1.FileModel();
+                    // file_info.sender = self_info.id;
+                    fileModel.hash = files[num].hash;
+                    fileModel.chat = chat;
+                    fileModel.message = message;
+                    fileModel.name = files[num].name;
+                    fileModel.type = files[num].type;
+                    fileModel.preview = Helpers_1.check_file_preview(files[num].type);
+                    if (fileModel.preview) {
+                        fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
+                    }
+                    yield fileModel.save();
+                    message.files.push(fileModel);
                 }
-                yield fileModel.save();
-                message.files = [fileModel];
-                // message.r_file = {
-                //     file: ipfs_file ? ipfs_file.file : null,
-                //     preview: file.preview,
-                //     type: file.type,
-                //     name: file.name,
-                // };
-                // console.log(ipfs_file);
             }
             yield this.render_message(message, chat.id);
         });
