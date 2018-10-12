@@ -24,6 +24,7 @@ const UserModel_1 = require("./UserModel");
 const var_helper_1 = require("../src/var_helper");
 const AccountModel_1 = require("./AccountModel");
 const EventModel_1 = require("./EventModel");
+const FileModel_1 = require("./FileModel");
 // helper
 let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
     // helper
@@ -161,6 +162,10 @@ __decorate([
     typeorm_1.JoinTable(),
     __metadata("design:type", Array)
 ], ChatModel.prototype, "users", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => FileModel_1.FileModel, files => files.chat),
+    __metadata("design:type", Array)
+], ChatModel.prototype, "files", void 0);
 ChatModel = ChatModel_1 = __decorate([
     typeorm_1.Entity()
 ], ChatModel);

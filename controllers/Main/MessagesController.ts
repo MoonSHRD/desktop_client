@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import * as fs from "fs";
 import {AccountModel} from "../../models/AccountModel";
 import {UserModel} from "../../models/UserModel";
 import {Controller} from "../Controller";
@@ -7,6 +8,8 @@ import {ChatModel} from "../../models/ChatModel";
 import {assertAnyTypeAnnotation} from "babel-types";
 import {FileModel} from "../../models/FileModel";
 import InterceptFileProtocolRequest = Electron.InterceptFileProtocolRequest;
+import {files_config} from "../../src/var_helper";
+import {check_file_preview, read_file, save_file} from "../Helpers";
 
 class MessagesController extends Controller {
 
@@ -36,9 +39,20 @@ class MessagesController extends Controller {
     };
 
     private async render_message(message: MessageModel, chat_id: string) {
+        // console.log(message);
         let self_info = await this.get_self_info();
         message.mine = message.sender ? (self_info.id === message.sender.id) : false;
         message.sender_avatar = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.avatar : message.chat.avatar;
+        for (let num in message.files){
+            if (check_file_preview(message.files[num].type)) {
+                message.files[num].preview=true;
+                if (!read_file(message.files[num])) {
+                    message.files[num].file = (await this.ipfs.get_file(message.files[num].hash)).file;
+                    save_file(message.files[num]);
+                }
+                console.log(message.files[num]);
+            }
+        }
         let html = this.render('main/messagingblock/message.pug', message);
         const data = {
             id: message.chat.id,
@@ -48,14 +62,15 @@ class MessagesController extends Controller {
     }
 
     private async render_chat_messages(chat_id: string) {
-        let messages = await MessageModel.get_chat_messages_with_sender_chat(chat_id);
+        let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
 
-        messages.forEach(async (message) => {
-            await this.render_message(message, chat_id);
-        });
+        for (let num in messages) {
+            await this.render_message(messages[num], chat_id);
+        }
     }
 
     async send_message({id, text, file}) {
+        console.log(file);
         let self_info = await this.get_self_info();
         let chat = await ChatModel.findOne(id);
         // let date = new Date();
@@ -68,30 +83,33 @@ class MessagesController extends Controller {
         let group: boolean;
 
 
-        let file_send;
+        let fileModel;
         if (file) {
-            message.with_file = true;
-            await message.save();
-            let preview = false;
-            if ([
-                'image/jpeg',
-                'image/png',
-            ].includes(file.type))
-                preview = true;
-            file_send = {file: file.file, hash: await this.ipfs.add_file(file), preview: preview, name: file.name};
-            let file_info = new FileModel();
+            fileModel = new FileModel();
+            // if ([
+            //     'image/jpeg',
+            //     'image/png',
+            // ].includes(file.type))
+                fileModel.preview = true;
+            // file_send = {fileModel: file.fileModel, hash: await this.ipfs.add_file(fileModel), preview: preview, name: fileModel.name};
             // file_info.sender = self_info.id;
-            file_info.link = file_send.hash;
-            file_info.chat_id = chat.id;
-            file_info.message_id = message.id;
-            file_info.filename = file.name;
+            fileModel.hash = await this.ipfs.add_file(file);
+            fileModel.chat = chat;
+            fileModel.message = message;
+            fileModel.file = file.file;
+            fileModel.name = file.name;
+            fileModel.type = file.type;
 
-            file_info.save();
+            await fileModel.save();
+            save_file(fileModel);
+
+            message.files=[fileModel];
+            // console.log(fileModel);
             // console.log("Save file_info")
         }
 
-        message.file = file_send;
-        await message.save();
+        // message.fileModel = file_send;
+        // await message.save();
         if (chat.type == this.group_chat_types.channel) {
             await this.render_message(message, chat.id);
         }
@@ -104,7 +122,7 @@ class MessagesController extends Controller {
             group = true;
         }
         // this.dxmpp.send(chat, text, group);
-        this.dxmpp.send(chat, text, group, file_send);
+        this.dxmpp.send(chat, text, group, fileModel);
         // await this.render_message(message, id);
     };
 
@@ -115,6 +133,7 @@ class MessagesController extends Controller {
     };
 
     async received_message(user, text, file) {
+        console.log(file);
         let self_info = await this.get_self_info();
         let userModel = await UserModel.findOne(user.id);
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
@@ -125,26 +144,33 @@ class MessagesController extends Controller {
         message.time = this.dxmpp.take_time();
         await message.save();
 
-        let ipfs_file;
+        // let ipfs_file;
         if (file) {
-            message.with_file = true;
+            // message.with_file = true;
             await message.save();
-            let file_info = new FileModel();
+            let fileModel = new FileModel();
             // file_info.sender = self_info.id;
-            file_info.link = file.hash;
-            file_info.chat_id = chat.id;
-            file_info.message_id = message.id;
-            file_info.filename = file.name;
+            fileModel.hash = file.hash;
+            fileModel.chat = chat;
+            fileModel.message = message;
+            fileModel.name = file.name;
+            fileModel.type = file.type;
+            fileModel.preview = check_file_preview(file.type);
+            if (fileModel.preview) {
+                fileModel.file = (await this.ipfs.get_file(fileModel.hash)).file;
+            }
 
-            file_info.save();
-            ipfs_file = await this.ipfs.get_file(file.hash);
-            message.file = {
-                file: ipfs_file.file,
-                preview: file.preview,
-                type: file.type,
-                name: file.name,
-            };
-            console.log(ipfs_file);
+
+            await fileModel.save();
+
+            message.files=[fileModel];
+            // message.r_file = {
+            //     file: ipfs_file ? ipfs_file.file : null,
+            //     preview: file.preview,
+            //     type: file.type,
+            //     name: file.name,
+            // };
+            // console.log(ipfs_file);
         }
 
         await this.render_message(message, chat.id);
@@ -152,14 +178,16 @@ class MessagesController extends Controller {
 
     async received_group_message(room_data, message, sender, stamp) {
         let self_info = await this.get_self_info();
-        if (sender.address==self_info.id) return;
+        if (sender.address == self_info.id) return;
         let userModel: UserModel;
         if (sender)
             userModel = await UserModel.findOne(sender.address);
         if (stamp) {
             let time = stamp.split(" ")[1].split(":");
             stamp = `${time[0]}:${time[1]}`;
-        } else {stamp = this.dxmpp.take_time()}
+        } else {
+            stamp = this.dxmpp.take_time()
+        }
         let chat = await ChatModel.findOne(room_data.id);
         let messageModel = new MessageModel();
         messageModel.text = message;

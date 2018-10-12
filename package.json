@@ -90,8 +90,7 @@
       "target": [
         "AppImage"
       ],
-      "category": "Network",
-      "icon": "src/icon.png"
+      "category": "Network"
     },
     "win": {
       "target": [

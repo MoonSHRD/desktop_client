@@ -1,4 +1,4 @@
-const paths = {
+export const paths = {
     root: __dirname + '/../',
     src: __dirname,
     components: __dirname + '/components/',
@@ -8,18 +8,22 @@ const paths = {
     db: __dirname + '/../storage/data.db',
 };
 
-const pug_options = {
+export const pug_options = {
     cache: true,
 };
 
-const chat_types = {
+export const files_config = {
+    files_path: './downloads/',
+};
+
+export const chat_types = {
     user: 'user_chat',
     group: 'group_chat',
     // group_chat: 'group',
     // channel: 'channel',
 };
 
-const chat_to_menu = {
+export const chat_to_menu = {
     user: 'menu_user_chats',
     group: 'menu_chats',
     // channel: 'channel',
@@ -27,14 +31,14 @@ const chat_to_menu = {
     // join_group_chat: 'join_group_chat',
 };
 
-const group_chat_types = {
+export const group_chat_types = {
     group: 'group',
     channel: 'channel',
     join_group: 'join_group',
     join_channel: 'join_channel',
 };
 
-const event_types = {
+export const event_types = {
     info:'info',
     primary:'primary',
     success:'success',
@@ -44,7 +48,7 @@ const event_types = {
 
 // const menues
 
-const events = {
+export const events = {
     change_app_state: "change_app_state",
     change_menu_state: "change_menu_state",
     generate_mnemonic: "generate_mnemonic",

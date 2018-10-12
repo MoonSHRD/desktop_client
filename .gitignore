@@ -9,6 +9,7 @@ src/env_config.js.map
 .idea
 .npmignore
 dist/
+downloads/
 release-builds/
 Makefile
 package-lock.json

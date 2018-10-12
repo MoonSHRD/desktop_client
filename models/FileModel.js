@@ -10,16 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
+const ChatModel_1 = require("./ChatModel");
+const MessageModel_1 = require("./MessageModel");
 // import {ChatModel} from "./ChatModel";
 let FileModel = class FileModel extends typeorm_1.BaseEntity {
     // import {ChatModel} from "./ChatModel";
     constructor() {
         super(...arguments);
-        this.chat_id = '';
-        // @Column()
-        // sender: string = '';
-        this.link = '';
-        this.filename = '';
+        this.file = null;
+        this.preview = false;
     }
 };
 __decorate([
@@ -29,19 +28,23 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], FileModel.prototype, "chat_id", void 0);
+], FileModel.prototype, "hash", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], FileModel.prototype, "link", void 0);
+], FileModel.prototype, "type", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], FileModel.prototype, "filename", void 0);
+], FileModel.prototype, "name", void 0);
 __decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", Number)
-], FileModel.prototype, "message_id", void 0);
+    typeorm_1.ManyToOne(type => MessageModel_1.MessageModel, message => message.files),
+    __metadata("design:type", MessageModel_1.MessageModel)
+], FileModel.prototype, "message", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => ChatModel_1.ChatModel, chat => chat.files),
+    __metadata("design:type", ChatModel_1.ChatModel)
+], FileModel.prototype, "chat", void 0);
 FileModel = __decorate([
     typeorm_1.Entity()
 ], FileModel);

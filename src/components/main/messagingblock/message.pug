@@ -4,17 +4,18 @@ li(class=mine?"outMessage":"inMessage")
     img.block(src = sender_avatar width = 44 height = 44)
     p  #{text}
         span.block #{time}
-    if file
-        if file.preview
-            |
-            div.imageOutputFile(style='')
-                img(src=file.file  width="200")
-                span.d-block.w-100 #{file.name}
-        else
-            |
-            div.docOutputFile
-                img(src='components/main/messagingblock/img/doc.png' width="60px" )
-                span.d-block.w-100 #{file.name}
+    if files
+        each file in files
+            if file.preview
+                |
+                div.imageOutputFile(style='')
+                    img(src=file.file  width="200")
+                    span.d-block.w-100 #{file.name}
+            else
+                |
+                div.docOutputFile
+                    img(src='components/main/messagingblock/img/doc.png' width="60px" )
+                    span.d-block.w-100 #{file.name}
         //br
 
         //.loader
