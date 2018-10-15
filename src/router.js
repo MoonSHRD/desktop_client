@@ -183,6 +183,9 @@ class Router {
         this.listen_event(this.ipcMain, 'send_message', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('MessagesController', 'send_message', arg);
         }));
+        this.listen_event(this.ipcMain, 'download_file', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('MessagesController', 'download_file', arg);
+        }));
         /** Wallet events **/
         this.listen_event(this.ipcMain, 'change_wallet_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             console.log('change_wallet_menu');

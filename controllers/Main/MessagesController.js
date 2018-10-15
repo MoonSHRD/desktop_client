@@ -73,6 +73,15 @@ class MessagesController extends Controller_1.Controller {
             }
         });
     }
+    download_file(file_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let file = yield FileModel_1.FileModel.findOne(file_id);
+            if (!Helpers_1.read_file(file)) {
+                file.file = (yield this.ipfs.get_file(file.hash)).file;
+                Helpers_1.save_file(file);
+            }
+        });
+    }
     send_message({ id, text, file }) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(file);

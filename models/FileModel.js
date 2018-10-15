@@ -30,7 +30,7 @@ __decorate([
     __metadata("design:type", String)
 ], FileModel.prototype, "hash", void 0);
 __decorate([
-    typeorm_1.Column(),
+    typeorm_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], FileModel.prototype, "type", void 0);
 __decorate([

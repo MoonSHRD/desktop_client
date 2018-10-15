@@ -5,8 +5,8 @@ const var_helper_1 = require("../src/var_helper");
 function save_file(file) {
     check_files_dir();
     let base64file = file.file.split(';base64,').pop();
-    let saved = fs.writeFileSync(`${var_helper_1.files_config.files_path}${file.id}_${file.name}`, base64file, { encoding: 'base64' });
-    console.log(`file ${file.name} saved`, saved);
+    fs.writeFileSync(`${var_helper_1.files_config.files_path}${file.id}_${file.name}`, base64file, { encoding: 'base64' });
+    console.log(`file ${file.name} saved`);
 }
 exports.save_file = save_file;
 function read_file(file) {

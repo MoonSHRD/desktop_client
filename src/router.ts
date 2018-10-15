@@ -226,6 +226,10 @@ export class Router {
             await this.controller_register.queue_controller('MessagesController', 'send_message', arg);
         });
 
+        this.listen_event(this.ipcMain, 'download_file', async (event, arg) => {
+            await this.controller_register.queue_controller('MessagesController', 'download_file', arg);
+        });
+
 
 
         /** Wallet events **/

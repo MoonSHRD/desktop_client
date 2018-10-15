@@ -5,8 +5,8 @@ import {files_config} from "../src/var_helper";
 export function save_file(file){
     check_files_dir();
     let base64file = file.file.split(';base64,').pop();
-    let saved=fs.writeFileSync(`${files_config.files_path}${file.id}_${file.name}`, base64file, {encoding: 'base64'});
-    console.log(`file ${file.name} saved`,saved);
+    fs.writeFileSync(`${files_config.files_path}${file.id}_${file.name}`, base64file, {encoding: 'base64'});
+    console.log(`file ${file.name} saved`);
 }
 
 export function read_file(file){

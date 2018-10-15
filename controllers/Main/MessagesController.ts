@@ -69,6 +69,14 @@ class MessagesController extends Controller {
         }
     }
 
+    async download_file(file_id: string) {
+        let file = await FileModel.findOne(file_id);
+        if (!read_file(file)) {
+            file.file = (await this.ipfs.get_file(file.hash)).file;
+            save_file(file);
+        }
+    }
+
     async send_message({id, text, file}) {
         console.log(file);
         let self_info = await this.get_self_info();

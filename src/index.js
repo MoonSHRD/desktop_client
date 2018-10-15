@@ -657,6 +657,10 @@ window.onload = function () {
         ipcRenderer.send('channel_suggestion', {});
     });
 
+    $(document).on('click','[data-type=file][data-subtype=file]',function(e) {
+        ipcRenderer.send('download_file', $(this).attr('data-id'));
+    });
+
     ipcRenderer.on("wallet_token_table", (event, obj) => {
         console.log('token table');
         $('.loader').remove();

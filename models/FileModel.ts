@@ -19,7 +19,7 @@ export class FileModel extends BaseEntity {
     id: number;
     @Column()
     hash: string;
-    @Column()
+    @Column({ nullable: true })
     type: string;
     @Column()
     name: string;

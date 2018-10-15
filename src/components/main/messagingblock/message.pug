@@ -8,12 +8,12 @@ li(class=mine?"outMessage":"inMessage")
         each file in files
             if file.preview
                 |
-                div.imageOutputFile(style='')
+                div.imageOutputFile(data-type="file" data-subtype="image" data-id=file.id)
                     img(src=file.file  width="200")
                     span.d-block.w-100 #{file.name}
             else
                 |
-                div.docOutputFile
+                div.docOutputFile(data-type="file" data-subtype="file" data-id=file.id)
                     img(src='components/main/messagingblock/img/doc.png' width="60px" )
                     span.d-block.w-100 #{file.name}
         //br
