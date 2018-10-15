@@ -286,6 +286,7 @@ window.onload = function () {
                 reader.readAsDataURL(file);
                 reader.onloadend = function () {
                     obj.file = {file: reader.result, type: file.type, name: file.name};
+                    // console.log(obj);
                     ipcRenderer.send("send_message", obj);
                 };
             } else {

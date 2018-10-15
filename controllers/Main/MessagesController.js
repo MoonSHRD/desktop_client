@@ -89,12 +89,13 @@ class MessagesController extends Controller_1.Controller {
             let group;
             let fileModel;
             if (file) {
+                console.log(file);
                 fileModel = new FileModel_1.FileModel();
                 // if ([
                 //     'image/jpeg',
                 //     'image/png',
                 // ].includes(file.type))
-                fileModel.preview = true;
+                fileModel.preview = Helpers_1.check_file_preview(file.type);
                 // file_send = {fileModel: file.fileModel, hash: await this.ipfs.add_file(fileModel), preview: preview, name: fileModel.name};
                 // file_info.sender = self_info.id;
                 fileModel.hash = yield this.ipfs.add_file(file);
