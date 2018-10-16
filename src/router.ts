@@ -21,7 +21,8 @@ export class Router {
     readonly ipcMain: any;
     readonly dxmpp: any;
     private events: any;
-    private connecting: boolean = false;
+    private connection_tries: number=0;
+    // private connecting: boolean = false;
     private types: any;
     private loom: Loom = Loom.getInstance();
 

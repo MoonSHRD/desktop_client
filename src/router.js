@@ -23,7 +23,7 @@ const loom_1 = require("../loom/loom");
 class Router {
     constructor(window) {
         this.loading = true;
-        this.connecting = false;
+        this.connection_tries = 0;
         this.loom = loom_1.Loom.getInstance();
         this.window = window;
         this.controller_register = ControllerRegister_1.ControllerRegister.getInstance(window);

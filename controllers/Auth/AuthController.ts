@@ -8,6 +8,8 @@ import {TextEncoder,TextDecoder} from 'text-encoding';
 
 class AuthController extends Controller {
 
+    private connection_tries:number=0;
+
     async init_auth() {
         let account = await AccountModel.findOne(1);
         if (account)
@@ -21,6 +23,10 @@ class AuthController extends Controller {
     };
 
     private async auth(account: AccountModel,first:boolean=false) {
+        if (this.connection_tries === 9)
+            this.connection_tries=0;
+        else
+            this.connection_tries+=1;
         await this.ipfs.connect();
         console.log('connected');
         console.log(account);
@@ -34,7 +40,7 @@ class AuthController extends Controller {
         }
         account.host = this.dxmpp_config.host;
         account.jidhost = this.dxmpp_config.jidhost;
-        account.port = this.dxmpp_config.port;
+        account.port = this.dxmpp_config.port+this.connection_tries;
         await this.dxmpp.connect(account)
     }
 

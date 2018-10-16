@@ -15,6 +15,10 @@ const UserModel_1 = require("../../models/UserModel");
 const loom_1 = require("../../loom/loom");
 // let {TextDecoder} = require('text-encoding');
 class AuthController extends Controller_1.Controller {
+    constructor() {
+        super(...arguments);
+        this.connection_tries = 0;
+    }
     init_auth() {
         return __awaiter(this, void 0, void 0, function* () {
             let account = yield AccountModel_1.AccountModel.findOne(1);
@@ -31,6 +35,10 @@ class AuthController extends Controller_1.Controller {
     ;
     auth(account, first = false) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (this.connection_tries === 9)
+                this.connection_tries = 0;
+            else
+                this.connection_tries += 1;
             yield this.ipfs.connect();
             console.log('connected');
             console.log(account);
@@ -44,7 +52,7 @@ class AuthController extends Controller_1.Controller {
             }
             account.host = this.dxmpp_config.host;
             account.jidhost = this.dxmpp_config.jidhost;
-            account.port = this.dxmpp_config.port;
+            account.port = this.dxmpp_config.port + this.connection_tries;
             yield this.dxmpp.connect(account);
         });
     }
