@@ -564,7 +564,6 @@ ul li.inMessage p::after {
   text-align: right;
   margin-right: 45px;
   position: relative;
-  /*top: -15px;*/
 }
 
 /*.outMessage .docOutputFile img {*/
