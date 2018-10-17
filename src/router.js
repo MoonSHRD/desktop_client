@@ -188,7 +188,7 @@ class Router {
         }));
         /** Wallet events **/
         this.listen_event(this.ipcMain, 'change_wallet_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            console.log('change_wallet_menu');
+            // console.log('change_wallet_menu');
             yield this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
         }));
         this.listen_event(this.ipcMain, 'change_menu_state', (event, arg) => __awaiter(this, void 0, void 0, function* () {
@@ -199,7 +199,7 @@ class Router {
         }));
         this.listen_event(this.ipcMain, 'get_contacts', () => __awaiter(this, void 0, void 0, function* () {
             console.log('get_contacts');
-            yield this.controller_register.run_controller('WalletController', 'change_settings_menu');
+            yield this.controller_register.run_controller('WalletController', 'get_contacts');
         }));
         /** Settings events **/
         this.listen_event(this.ipcMain, 'change_settings_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {

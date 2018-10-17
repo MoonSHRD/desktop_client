@@ -104,7 +104,15 @@ window.onload = function () {
 
     $(document).on('click','.menu a',function () {
         const $this=$(this);
-        if ($this.attr('data-id')!=='menu_create_chat')
+        // if(){
+        //     console.log('hello')
+        //     $this.addClass('active_menu1').siblings().removeClass('active_menu1');
+        // }
+
+
+
+
+        if ($this.attr('data-id')!=='menu_create_chat' && !$this.hasClass('not_active'))
             $this.addClass('active_menu').siblings().removeClass('active_menu');
         const type = $this.attr('data-id');
         if (type)
@@ -421,28 +429,130 @@ window.onload = function () {
         $(this).fadeOut();
     });
 
-    $(document).on('click', '.chats li', function () {
+    $(document).on('click', '.chats li', function (e) {
 
         const $this=$(this);
-
+        $this.siblings().removeClass('have_history');
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
-        $('.messaging_history ul').empty();
         let chat = $this.attr('id');
-        ipcRenderer.send('get_chat_msgs', chat);
+
+        if(!($this.hasClass("active_dialog") && $this.hasClass("have_history"))) {
+            ipcRenderer.send('get_chat_msgs', chat);
+            $this.addClass('have_history')
+        }else {
+
+        }
+        // Remove any old one
+        $(".ripple").remove();
+
+        // Setup
+        var posX = $(this).offset().left,
+            posY = $(this).offset().top,
+            buttonWidth = $(this).width(),
+            buttonHeight =  $(this).height();
+
+        // Add the element
+        $(this).children('a').prepend("<span class='ripple'></span>");
+
+
+        // Make it round!
+        if(buttonWidth >= buttonHeight) {
+            buttonHeight = buttonWidth;
+        } else {
+            buttonWidth = buttonHeight;
+        }
+
+        // Get the center of the element
+        var x = e.pageX - posX - buttonWidth / 2;
+        var y = e.pageY - posY - buttonHeight / 2;
+
+
+        // Add the ripples CSS and start the animation
+        $(".ripple").css({
+            width: buttonWidth,
+            height: buttonHeight,
+            top: y + 'px',
+            left: x + 'px'
+        }).addClass("rippleEffect");
 
     });
 
-    $(document).on('click', '.walletMenu li', function () {
-        console.log('change wallet menu index');
+    $(document).on('click', '.walletMenu li', function (e) {
+        // console.log('change wallet menu index');
         const $this=$(this);
         $this.addClass('active_wallet').siblings().removeClass('active_wallet');
 
+
+        $(".ripple").remove();
+
+        // Setup
+        var posX = $(this).offset().left,
+            posY = $(this).offset().top,
+            buttonWidth = $(this).width(),
+            buttonHeight =  $(this).height();
+
+        // Add the element
+        $(this).children('a').prepend("<span class='ripple'></span>");
+
+
+        // Make it round!
+        if(buttonWidth >= buttonHeight) {
+            buttonHeight = buttonWidth;
+        } else {
+            buttonWidth = buttonHeight;
+        }
+
+        // Get the center of the element
+        var x = e.pageX - posX - buttonWidth / 2;
+        var y = e.pageY - posY - buttonHeight / 2;
+
+
+        // Add the ripples CSS and start the animation
+        $(".ripple").css({
+            width: buttonWidth,
+            height: buttonHeight,
+            top: y + 'px',
+            left: x + 'px'
+        }).addClass("rippleEffect");
+
     });
 
-    $(document).on('click', '.settingsMenu li', function () {
+    $(document).on('click', '.settingsMenu li', function (e) {
 
         const $this=$(this);
         $this.addClass('active_settings').siblings().removeClass('active_settings');
+
+        $(".ripple").remove();
+
+        // Setup
+        var posX = $(this).offset().left,
+            posY = $(this).offset().top,
+            buttonWidth = $(this).width(),
+            buttonHeight =  $(this).height();
+
+        // Add the element
+        $(this).children('a').prepend("<span class='ripple'></span>");
+
+
+        // Make it round!
+        if(buttonWidth >= buttonHeight) {
+            buttonHeight = buttonWidth;
+        } else {
+            buttonWidth = buttonHeight;
+        }
+
+        // Get the center of the element
+        var x = e.pageX - posX - buttonWidth / 2;
+        var y = e.pageY - posY - buttonHeight / 2;
+
+
+        // Add the ripples CSS and start the animation
+        $(".ripple").css({
+            width: buttonWidth,
+            height: buttonHeight,
+            top: y + 'px',
+            left: x + 'px'
+        }).addClass("rippleEffect");
 
     });
 
@@ -649,13 +759,13 @@ window.onload = function () {
         ipcRenderer.send('channel_suggestion', {});
     });
 
-    $(document).on('click','#sendTokenTo',function(e) {
-        ipcRenderer.send('get_contacts', {});
-    });
+    // $(document).on('click','#sendTokenTo',function(e) {
+    //     ipcRenderer.send('get_contacts', {});
+    // });
 
-    $(document).on('change','#sendTokenTo',function(e) {
-        ipcRenderer.send('channel_suggestion', {});
-    });
+    // $(document).on('change','#sendTokenTo',function(e) {
+    //     ipcRenderer.send('channel_suggestion', {});
+    // });
 
     $(document).on('click','[data-type=file][data-subtype=file]',function(e) {
         ipcRenderer.send('download_file', $(this).attr('data-id'));
@@ -665,6 +775,11 @@ window.onload = function () {
         console.log('token table');
         $('.loader').remove();
         $('.myTokens').append(obj);
+    });
+
+    ipcRenderer.on("get_contacts", (event, obj) => {
+        $('#browsers').html(obj)
+
     });
 
 

@@ -31,9 +31,22 @@
 .walletMenu ul li p {
     margin: 0;
     padding: 0 10px;
+    position: relative;
+    z-index: 10;
 }
+.walletMenu ul li img {
+    position: relative;
+    z-index: 10;
+}
+
 .active_wallet  a{
     color: white !important;
+}
+
+.walletMenu a:hover {
+    border-radius: 8px;
+    background-color: #2BC2F9;
+    color: #ffffff;
 }
 
 .walletMenu a:hover {

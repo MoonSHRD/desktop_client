@@ -23,6 +23,11 @@ class WalletController extends Controller {
                 };
                 this.send_data('wallet_token_table', this.render(`main/wallet/wallet_token_table.pug`, data));
                 break;
+
+            case 'wallet_transfer':
+                // this.controller_register.run_controller(WalletController, get_contacts)
+                await this.get_contacts()
+                break;
             default:
                 // this.send_data('change_wallet_menu', this.render(`main/wallet/${menu_type}.pug`));
                 break;
@@ -33,6 +38,13 @@ class WalletController extends Controller {
         let identyti_tx=await this.loom.transfer_token(data.address,data.amount);
         this.send_data('user_joined_room', `Successfully transferred. <br/> txHash: ${identyti_tx.transactionHash}`);
     }
+
+    async get_contacts() {
+        let contacts = await UserModel.find({take:10});
+        this.send_data('get_contacts', this.render(`main/wallet/contacts.pug`, {contacts}))
+
+    };
+
 
 }
 

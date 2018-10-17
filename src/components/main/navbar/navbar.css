@@ -62,6 +62,10 @@
     background-color: #000; /* Add a hover color */
 }
 
+
+.active_menu {
+    background-color: #000; /* Add a hover color */
+}
 /*.active {*/
     /*background-color: #4CAF50; !* Add an active/current color *!*/
 /*}*/
@@ -93,18 +97,38 @@ transition: opacity .5s;
     position: absolute; /* Задаем абсолютное позиционирование для нашего меню */
     display: none; /* Изначально не показываем его */
     background-color: #fff; /* Цвет фона меню */
-    border: 1px solid #333; /* Граница */
+    border: 1px solid #ececec;
     width: 165px;
+    box-shadow: 0 0 10px rgba(220, 220, 220, 0.38);
+    border-radius: 5px;
+    z-index: 20;
 
 
 }
 
 /* Добавляем стили для списка которые будет находиться внутри меню и, собственно, содержать его пункты: */
-.context-menu ul { list-style: none; margin: 0; padding: 0; }
+.context-menu ul { list-style: none;
+    margin: 0;
+    padding: 10px 0; }
 
-.context-menu ul li { margin: 0; padding: 0; background-color: #fff; display: block; }
+.context-menu ul li {
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    display: block;
+    font-size: 10px;
+
+}
 
 /* Стили для ссылок пунктов меню: */
-.context-menu ul li a { color: #333; text-decoration: none; font-size: 16px; display: block; padding: 5px; font-family: 'Open Sans', sans-serif; }
+.context-menu ul li a {
+    color: #333;
+    text-decoration: none;
+    font-size: 13px;
+    display: block;
+    font-family: 'Roboto';    line-height: 0;
+    padding: 17px;
+    cursor: default;
+}
 
 .context-menu ul li a:hover { background-color: #eee; }

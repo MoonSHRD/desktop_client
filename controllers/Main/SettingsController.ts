@@ -29,10 +29,6 @@ class SettingsController extends Controller {
         }
     };
 
-    async get_contacts() {
-        let contacts = await UserModel.find({take:10});
-
-    };
 
     // async transfer_token(data) {
     //     let identyti_tx=await this.loom.transfer_token(data.address,data.amount);

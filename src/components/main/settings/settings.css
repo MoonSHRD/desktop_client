@@ -31,6 +31,8 @@
 .settingsMenu ul li p {
     margin: 0;
     padding: 0 10px;
+    position: relative;
+    z-index: 10;
 }
 .active_settings  a{
     color: white !important;
@@ -52,6 +54,12 @@
 
 .settingsMenu ul li {
     margin-bottom: 2px;
+}
+
+.settingsMenu ul li img {
+
+    position: relative;
+    z-index: 10;
 }
 
 .userBar span{
@@ -107,6 +115,8 @@
     margin-left: 10px;
     transition: 0.5s;
     border-radius: 100%;
+    position: relative;
+    z-index: 10;
 }
 .rotate{
     transform: rotate(90deg);

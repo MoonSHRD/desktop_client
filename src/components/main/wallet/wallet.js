@@ -1,5 +1,5 @@
 $('.walletMenu li').click(function (e) {
-    console.log('change wallet menu wallet');
+    // console.log('change wallet menu wallet');
     let type = $(this).attr('data-name');
     ipcRenderer.send('change_wallet_menu', type);
 });
