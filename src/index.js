@@ -359,18 +359,22 @@ window.onload = function () {
 
     });
 
-    ipcRenderer.on('get_chat_msgs', (event, obj) => {
+    let scrollDown = (id) => {
+        let targetBlock = document.getElementById(id);
+        targetBlock.scrollTop = targetBlock.scrollHeight;
+    }
 
+    ipcRenderer.on('get_chat_msgs', (event, obj) => {
         $('.messaging_history ul').append(obj);
+        scrollDown('messaging_history');
     });
 
     ipcRenderer.on('received_message', (event, obj) => {
-        $('.messaging_history').scrollTop(($('.messaging_history')[0].scrollHeight) + 1);
-        // $('.messaging_history').scrollTop($('.messaging_history').scrollHeight);
-        console.log(obj)
+        // console.log(obj);
         if ($('.active_dialog').attr('id') === obj.id) {
             $('.messaging_history ul').append(obj.message);
         }
+        scrollDown('messaging_history');
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
