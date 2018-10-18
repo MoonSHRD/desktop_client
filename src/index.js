@@ -53,7 +53,7 @@ window.onload = function () {
 
 
     $(document).on('change','input[id="attachFileToChat"], input[id="attachFileToGroup"]',function () {
-        console.log('Selected file: ' + this.value);
+        console.log('Selected files', this.files);
     })
 
 
