@@ -658,7 +658,12 @@ window.onload = function () {
     });
 
     $(document).on('click','[data-type=file][data-subtype=file]',function(e) {
-        ipcRenderer.send('download_file', $(this).attr('data-id'));
+      if ( $(this).hasClass('load') ) {
+        $(this).removeClass('load');
+      } else {
+        $(this).addClass('load');
+      }
+      ipcRenderer.send('download_file', $(this).attr('data-id'));
     });
 
     ipcRenderer.on("wallet_token_table", (event, obj) => {
