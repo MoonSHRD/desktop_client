@@ -209,7 +209,7 @@ export class Router {
         });
 
         this.listen_event(this.dxmpp, 'chat', async (user, message,file) => {
-            console.log(`user ${user.id} subscribed`);
+            // console.log(`user ${user.id} subscribed`);
             console.log(file);
             await this.controller_register.queue_controller('MessagesController', 'received_message', user, message,file);
         });

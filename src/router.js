@@ -169,7 +169,7 @@ class Router {
             yield this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
         }));
         this.listen_event(this.dxmpp, 'chat', (user, message, file) => __awaiter(this, void 0, void 0, function* () {
-            console.log(`user ${user.id} subscribed`);
+            // console.log(`user ${user.id} subscribed`);
             console.log(file);
             yield this.controller_register.queue_controller('MessagesController', 'received_message', user, message, file);
         }));
