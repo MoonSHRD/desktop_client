@@ -669,10 +669,9 @@ window.onload = function () {
     });
 
     ipcRenderer.on("file_dowloaded", (event, obj) => {
-        console.log(obj);
         let file=$(`[data-id=${obj.id}]`);
         if (file.hasClass('load'))
-            file.removeClass('load');
+            file.removeClass('load').addClass('complite');
     });
 
     ipcRenderer.on("wallet_token_table", (event, obj) => {

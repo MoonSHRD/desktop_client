@@ -565,12 +565,6 @@ ul li.inMessage p::after {
   margin-right: 45px;
   position: relative;
 }
-
-/*.outMessage .docOutputFile img {*/
-/*margin: 5px 13px;*/
-/*border-radius: 10px;*/
-/*cursor: pointer;*/
-/*}*/
 .outMessage .docOutputFile__icon {
   width: 45px;
   margin: 5px 13px;
@@ -578,6 +572,7 @@ ul li.inMessage p::after {
   cursor: pointer;
   display: inline-block;
   height: 45px;
+  text-align: center;
 }
 .outMessage .docOutputFile .stop {
   text-align: center;
@@ -593,6 +588,18 @@ ul li.inMessage p::after {
 }
 .outMessage .docOutputFile svg {
   cursor: pointer;
+  transition: .2s ease;
+}
+.outMessage .docOutputFile svg.fa-file {
+  height: 45px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+.outMessage .docOutputFile__icon_download svg.fa-file {
+  opacity: 0;
   transition: .2s ease;
 }
 .outMessage .docOutputFile svg.fa-spinner {
@@ -614,6 +621,12 @@ ul li.inMessage p::after {
 .outMessage .docOutputFile.load svg.fa-spinner {
   opacity: 1;
 }
+.outMessage .docOutputFile.complite .docOutputFile__icon_download svg {
+  opacity: 0;
+}
+.outMessage .docOutputFile.complite .docOutputFile__icon_download svg.fa-file {
+  opacity: 1;
+}
 .outMessage .docOutputFile svg path{
   fill: #212529;
 }
@@ -621,8 +634,8 @@ ul li.inMessage p::after {
   from {
     transform: rotate(0deg);
   } to {
-    transform: rotate(360deg);
-  }
+      transform: rotate(360deg);
+    }
 }
 
 .outMessage .docOutputFile span  {
