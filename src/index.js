@@ -8,10 +8,10 @@ const slick = require('slick-carousel');
 
 window.onload = function () {
 
-    $.html5Translate = function(dict, lang){
+    $.html5Translate = function (dict, lang) {
 
-        $('[data-translate-key]').each(function(){
-            $(this).html( dict[ lang ][ $(this).data('translateKey') ] );
+        $('[data-translate-key]').each(function () {
+            $(this).html(dict[lang][$(this).data('translateKey')]);
         });
 
     };
@@ -20,8 +20,7 @@ window.onload = function () {
     // div.scrollTop(div.prop('scrollHeight'));
 
 
-
-    $(document).on('click','.copyButton',function () {
+    $(document).on('click', '.copyButton', function () {
         if (document.selection) {
             var range = document.body.createTextRange();
             range.moveToElementText(document.getElementById('copyTo'));
@@ -53,29 +52,29 @@ window.onload = function () {
         }
     })
 
-    $(document).on('click','.attachFileToChat',function () {
+    $(document).on('click', '.attachFileToChat', function () {
         $("input[id='attachFileToChat']").trigger('click');
         // e.preventDefault();
     })
 
-    $(document).on('click','.attachFileToGroup',function () {
+    $(document).on('click', '.attachFileToGroup', function () {
         $("input[id='attachFileToGroup']").trigger('click');
         // e.preventDefault();
     })
 
 
-    $(document).on('change','input[id="attachFileToChat"], input[id="attachFileToGroup"]',function () {
+    $(document).on('change', 'input[id="attachFileToChat"], input[id="attachFileToGroup"]', function () {
         console.log('Selected file: ' + this.value);
     })
 
 
-    $(document).on('click','[data-id=menu_user_chats]',function () {
+    $(document).on('click', '[data-id=menu_user_chats]', function () {
         const type = $(this).attr('data-id');
-        ipcRenderer.send('change_state',type);
+        ipcRenderer.send('change_state', type);
     });
 
 
-    $(document).on('change','input[id="attachFileToChat"], input[id="attachFileToGroup"]',function () {
+    $(document).on('change', 'input[id="attachFileToChat"], input[id="attachFileToGroup"]', function () {
         readURL(this);
     });
 
@@ -85,30 +84,31 @@ window.onload = function () {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 $('#upload_file').attr('src', e.target.result);
                 $('#upload_file').css('cursor', 'pointer');
 
             }
 
             reader.readAsDataURL(input.files[0]);
-        }    }
+        }
+    }
 
 
-    $(document).on('click','#upload_file',function () {
+    $(document).on('click', '#upload_file', function () {
         $('#upload_file').attr('src', '');
         $('#upload_file').css('cursor', 'default');
         $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
 
     });
 
-    $(document).on('click','.menu a',function () {
-        const $this=$(this);
-        if ($this.attr('data-id')!=='menu_create_chat')
+    $(document).on('click', '.menu a', function () {
+        const $this = $(this);
+        if ($this.attr('data-id') !== 'menu_create_chat')
             $this.addClass('active_menu').siblings().removeClass('active_menu');
         const type = $this.attr('data-id');
         if (type)
-            ipcRenderer.send('change_menu_state',type);
+            ipcRenderer.send('change_menu_state', type);
     });
 
     ipcRenderer.on('change_menu_state', (event, arg) => {
@@ -211,10 +211,10 @@ window.onload = function () {
         let fileType = file.type;
         if (file) {
             let reader = new FileReader();
-             reader.onloadend = function () {
+            reader.onloadend = function () {
                 var image = new Image();
                 image.src = reader.result;
-                image.onload = function() {
+                image.onload = function () {
                     var maxWidth = 100,
                         maxHeight = 100,
                         imageWidth = image.width,
@@ -303,21 +303,20 @@ window.onload = function () {
     });
 
 
-
     $(document).on('click', '.send_message_btn', function () {
         let msg_input = $('.send_message_input');
-        if (msg_input.val().trim() === ''){
+        if (msg_input.val().trim() === '') {
             msg_input.val('');
             return;
         }
         let active_dialog = $('.active_dialog');
         let obj = {
-            user:{
+            user: {
                 id: active_dialog.attr('id'),
                 domain: active_dialog.attr('data-domain'),
             },
             text: msg_input.val().trim(),
-            group: $('.active_dialog').attr('data-type')==='channel',
+            group: $('.active_dialog').attr('data-type') === 'channel',
         };
 
         // obj={id: active_dialog.attr('id'),text: msg_input.val().trim()};
@@ -333,7 +332,7 @@ window.onload = function () {
             } else {
                 file = file[0]
             }
-        }else {
+        } else {
             file = $('#attachFileToChat').prop('files')[0];
         }
         if (file) {
@@ -341,7 +340,7 @@ window.onload = function () {
             let reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onloadend = function () {
-                obj.file={file:reader.result,type:file.type,name:file.name};
+                obj.file = {file: reader.result, type: file.type, name: file.name};
                 ipcRenderer.send("send_message", obj);
             };
         } else {
@@ -382,7 +381,7 @@ window.onload = function () {
         if (
             !$(`[data-id=${obj.type}]`).hasClass('active_menu') ||
             (obj.type === "menu_chats" && $('.searchInput').val())
-        ){
+        ) {
             return;
         }
         const chat_box = $('.chats ul');
@@ -409,13 +408,13 @@ window.onload = function () {
     });
 
     $(document).on('click', '[data-name=join_channel]', function () {
-        $(this).attr('disabled','disabled');
+        $(this).attr('disabled', 'disabled');
         let active_dialog = $('.active_dialog');
         // console.log({id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
         ipcRenderer.send('join_channel', {
-            id:active_dialog.attr('id'),
-            domain:active_dialog.attr('data-domain'),
-            contract_address:active_dialog.attr('data-contract_address')
+            id: active_dialog.attr('id'),
+            domain: active_dialog.attr('data-domain'),
+            contract_address: active_dialog.attr('data-contract_address')
         });
         $('#style-11').empty();
         $(this).fadeOut();
@@ -423,7 +422,7 @@ window.onload = function () {
 
     $(document).on('click', '.chats li', function () {
 
-        const $this=$(this);
+        const $this = $(this);
 
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
         $('.messaging_history ul').empty();
@@ -434,14 +433,14 @@ window.onload = function () {
 
     $(document).on('click', '.walletMenu li', function () {
         console.log('change wallet menu index');
-        const $this=$(this);
+        const $this = $(this);
         $this.addClass('active_wallet').siblings().removeClass('active_wallet');
 
     });
 
     $(document).on('click', '.settingsMenu li', function () {
 
-        const $this=$(this);
+        const $this = $(this);
         $this.addClass('active_settings').siblings().removeClass('active_settings');
 
     });
@@ -493,7 +492,7 @@ window.onload = function () {
 
     $(document).on("change", '.modal-content select[name=substype]', function () {
         // console.log($(this).find(":selected").val());
-        if ($(this).find(":selected").val()==='unfree') {
+        if ($(this).find(":selected").val() === 'unfree') {
             $("#token_row").show();
         } else {
             $("#token_row").hide();
@@ -505,7 +504,7 @@ window.onload = function () {
         // $('#popup_error').html("Can't connect to&nbsp;<a href='#'>node1.moonshrd.io</a>, please try again later.");
         // $('#popup_error').show();
         // return;
-        const data=$(this).serializeArray();
+        const data = $(this).serializeArray();
         let obj = {};
         data.forEach(function (elem) {
             obj[elem.name] = elem.value;
@@ -524,9 +523,9 @@ window.onload = function () {
     $(document).on('click', '[data-event=show_chat_info]', function () {
         const active_dialog = $('.active_dialog');
         const id = active_dialog.attr('id');
-        const type=active_dialog.attr('data-type');
+        const type = active_dialog.attr('data-type');
         // let data = $this.attr('href');
-        ipcRenderer.send('show_popup', {id,type});
+        ipcRenderer.send('show_popup', {id, type});
     });
 
     // $(document).on('click', '[data-name=submit_suggest_to_channel]', function () {
@@ -549,7 +548,7 @@ window.onload = function () {
     //     });
     // });
 
-    function bot_notif(text){
+    function bot_notif(text) {
         $.notify(text, {
 
             placement: {
@@ -603,7 +602,7 @@ window.onload = function () {
     })
 
 
-    $(document).on('mousedown','.chats li',function(event) {
+    $(document).on('mousedown', '.chats li', function (event) {
 
 
         // Убираем css класс selected-html-element у абсолютно всех элементов на странице с помощью селектора "*":
@@ -614,7 +613,7 @@ window.onload = function () {
         // Проверяем нажата ли именно правая кнопка мыши:
 
 
-        if (event.which === 3)  {
+        if (event.which === 3) {
             // alert('dsfdsf')
             // Получаем элемент на котором был совершен клик:
             var target = $(event.target);
@@ -627,8 +626,8 @@ window.onload = function () {
                 class: 'context-menu' // Присваиваем блоку наш css класс контекстного меню:
             })
                 .css({
-                    left: event.pageX+'px', // Задаем позицию меню на X
-                    top: event.pageY+'px' // Задаем позицию меню по Y
+                    left: event.pageX + 'px', // Задаем позицию меню на X
+                    top: event.pageY + 'px' // Задаем позицию меню по Y
                 })
                 .appendTo('body') // Присоединяем наше меню к body документа:
                 .append( // Добавляем пункты меню:
@@ -641,29 +640,39 @@ window.onload = function () {
         }
     });
 
-    $(document).on('click','.dropDown_menu > ul > li ',function(e) {
+    $(document).on('click', '.dropDown_menu > ul > li ', function (e) {
         $(this).children('ul').toggleClass('d-block')
     });
 
-    $(document).on('click','.offerPublication',function(e) {
+    $(document).on('click', '.offerPublication', function (e) {
         ipcRenderer.send('channel_suggestion', {});
     });
 
-    $(document).on('click','#sendTokenTo',function(e) {
+    $(document).on('click', '#sendTokenTo', function (e) {
         ipcRenderer.send('get_contacts', {});
     });
 
-    $(document).on('change','#sendTokenTo',function(e) {
+    $(document).on('change', '#sendTokenTo', function (e) {
         ipcRenderer.send('channel_suggestion', {});
     });
 
-    $(document).on('click','[data-type=file][data-subtype=file]',function(e) {
-      if ( $(this).hasClass('load') ) {
-        $(this).removeClass('load');
-      } else {
-        $(this).addClass('load');
-      }
-      ipcRenderer.send('download_file', $(this).attr('data-id'));
+    // $(document).on('click', '.fa-download', function (e) {
+    //
+    //     ipcRenderer.send('download_file', $(this).closest('[data-type=file]').attr('data-id'));
+    // });
+
+    $(document).on('click', '[data-type=file][data-subtype=file]', function (e) {
+        // todo: возможность отменить закачку файла
+        if (!$(this).hasClass('load'))
+            $(this).addClass('load');
+        ipcRenderer.send('download_file', $(this).attr('data-id'));
+    });
+
+    ipcRenderer.on("file_dowloaded", (event, obj) => {
+        console.log(obj);
+        let file=$(`[data-id=${obj.id}]`);
+        if (file.hasClass('load'))
+            file.removeClass('load');
     });
 
     ipcRenderer.on("wallet_token_table", (event, obj) => {
@@ -671,12 +680,6 @@ window.onload = function () {
         $('.loader').remove();
         $('.myTokens').append(obj);
     });
-
-
-
-
-
-
 
 
     // $(document).on('change','#attachFileToChat',function (e) {

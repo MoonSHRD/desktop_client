@@ -32,4 +32,5 @@ export class FileModel extends BaseEntity {
 
     file:any=null;
     preview:boolean=false;
+    downloaded:boolean=false;
 }

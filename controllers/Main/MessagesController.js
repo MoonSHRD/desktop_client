@@ -56,6 +56,10 @@ class MessagesController extends Controller_1.Controller {
                     }
                     console.log(message.files[num]);
                 }
+                else {
+                    if (Helpers_1.check_file_exist(message.files[num]))
+                        message.files[num].downloaded = true;
+                }
             }
             let html = this.render('main/messagingblock/message.pug', message);
             const data = {
@@ -80,6 +84,7 @@ class MessagesController extends Controller_1.Controller {
                 file.file = (yield this.ipfs.get_file(file.hash)).file;
                 Helpers_1.save_file(file);
             }
+            this.send_data('file_dowloaded', { id: file_id });
         });
     }
     send_message({ id, text, file }) {

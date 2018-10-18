@@ -22,6 +22,11 @@ export function read_file(file){
 
 }
 
+export function check_file_exist(file) {
+    check_files_dir();
+    return fs.existsSync(`${files_config.files_path}${file.id}_${file.name}`);
+}
+
 export function check_file_preview(type) {
     return [
         'image/jpeg',

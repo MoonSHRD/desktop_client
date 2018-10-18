@@ -9,7 +9,7 @@ import {assertAnyTypeAnnotation} from "babel-types";
 import {FileModel} from "../../models/FileModel";
 import InterceptFileProtocolRequest = Electron.InterceptFileProtocolRequest;
 import {files_config} from "../../src/var_helper";
-import {check_file_preview, read_file, save_file} from "../Helpers";
+import {check_file_exist, check_file_preview, read_file, save_file} from "../Helpers";
 
 class MessagesController extends Controller {
 
@@ -51,6 +51,9 @@ class MessagesController extends Controller {
                     save_file(message.files[num]);
                 }
                 console.log(message.files[num]);
+            } else {
+                if (check_file_exist(message.files[num]))
+                    message.files[num].downloaded=true;
             }
         }
         let html = this.render('main/messagingblock/message.pug', message);
@@ -75,6 +78,7 @@ class MessagesController extends Controller {
             file.file = (await this.ipfs.get_file(file.hash)).file;
             save_file(file);
         }
+        this.send_data('file_dowloaded',{id:file_id});
     }
 
     async send_message({id, text, file}) {

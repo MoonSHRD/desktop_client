@@ -19,6 +19,7 @@ let FileModel = class FileModel extends typeorm_1.BaseEntity {
         super(...arguments);
         this.file = null;
         this.preview = false;
+        this.downloaded = false;
     }
 };
 __decorate([
