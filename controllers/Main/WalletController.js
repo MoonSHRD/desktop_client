@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
+const UserModel_1 = require("../../models/UserModel");
 const Controller_1 = require("../Controller");
 class WalletController extends Controller_1.Controller {
     change_wallet_menu(menu_type = "wallet_token") {
@@ -28,6 +29,10 @@ class WalletController extends Controller_1.Controller {
                     };
                     this.send_data('wallet_token_table', this.render(`main/wallet/wallet_token_table.pug`, data));
                     break;
+                case 'wallet_transfer':
+                    // this.controller_register.run_controller(WalletController, get_contacts)
+                    yield this.get_contacts();
+                    break;
                 default:
                     // this.send_data('change_wallet_menu', this.render(`main/wallet/${menu_type}.pug`));
                     break;
@@ -41,6 +46,13 @@ class WalletController extends Controller_1.Controller {
             this.send_data('user_joined_room', `Successfully transferred. <br/> txHash: ${identyti_tx.transactionHash}`);
         });
     }
+    get_contacts() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let contacts = yield UserModel_1.UserModel.find({ take: 10 });
+            this.send_data('get_contacts', this.render(`main/wallet/contacts.pug`, { contacts }));
+        });
+    }
+    ;
 }
 module.exports = WalletController;
 //# sourceMappingURL=WalletController.js.map

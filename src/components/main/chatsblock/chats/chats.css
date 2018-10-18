@@ -16,6 +16,7 @@
 
 .chats ul li {
    margin-bottom: 2px;
+
 }
 
 .chats a {
@@ -30,11 +31,14 @@
     transition: all 0.1s ease;
     overflow: hidden;
     position: relative;
+    z-index: 10;
 }
 
 .chats a p{
   padding: 0;
     margin: 0;
+    position: relative;
+    z-index: 0;
 }
 
 .chats a:hover {
@@ -46,6 +50,8 @@
 .chats img {
     border-radius: 100px;
     margin-right: 20px;
+    position: relative;
+    z-index: 0;
 }
 
 .search {
@@ -160,6 +166,7 @@
 
 .active_dialog a {
    color: white;
+
 }
 
 .settings {
@@ -180,3 +187,5 @@
     color: #fff;
     font-size: 12px;
 }
+
+
