@@ -92,6 +92,7 @@ window.onload = function () {
     });
 
     $(document).on('click','.menu a',function () {
+        console.log('menu_click');
         const $this=$(this);
         if ($this.attr('data-id')!=='menu_create_chat' && !$this.hasClass('not_active'))
             $this.addClass('active_menu').siblings().removeClass('active_menu');
@@ -120,38 +121,9 @@ window.onload = function () {
         if (file) {
             let reader = new FileReader();
             reader.onloadend = function () {
-                var image = new Image();
-                image.src = reader.result;
-                image.onload = function () {
-                    var maxWidth = 100,
-                        maxHeight = 100,
-                        imageWidth = image.width,
-                        imageHeight = image.height;
-
-                    if (imageWidth > imageHeight) {
-                        if (imageWidth > maxWidth) {
-                            imageHeight *= maxWidth / imageWidth;
-                            imageWidth = maxWidth;
-                        }
-                    }
-                    else {
-                        if (imageHeight > maxHeight) {
-                            imageWidth *= maxHeight / imageHeight;
-                            imageHeight = maxHeight;
-                        }
-                    }
-                    var canvas = document.createElement('canvas');
-                    canvas.width = imageWidth;
-                    canvas.height = imageHeight;
-
-                    var ctx = canvas.getContext("2d");
-                    ctx.drawImage(this, 0, 0, imageWidth, imageHeight);
-                    // The resized file ready for upload
-                    var finalFile = canvas.toDataURL(fileType);
-                    $('#avatar_preview').attr('src', finalFile);
-                    // console.log($("#avatar_preview").);
-                    $('#avatar_preview').show();
-                }
+                // var image = new Image();
+                // image.src = reader.result;
+                $('#avatar_preview').attr('src', reader.result);
             };
             reader.readAsDataURL(file);
         }
@@ -344,6 +316,7 @@ window.onload = function () {
 
 
     $(document).on('click', '.chats li', function (e) {
+        console.log('chat_clicked');
         const $this = $(this);
 
         $this.siblings().removeClass('have_history');
@@ -537,10 +510,9 @@ window.onload = function () {
     });
 
     ipcRenderer.on("file_dowloaded", (event, obj) => {
-        console.log(obj);
         let file=$(`[data-id=${obj.id}]`);
         if (file.hasClass('load'))
-            file.removeClass('load');
+            file.removeClass('load').addClass('complite');
     });
 
     ipcRenderer.on("wallet_token_table", (event, obj) => {
