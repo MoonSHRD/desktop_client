@@ -77,7 +77,7 @@ html, body {
     z-index: 0;
 }
 .rippleEffect {
-    animation: rippleDrop .5s linear;
+    animation: rippleDrop .4s linear;
 }
 
 @keyframes rippleDrop {

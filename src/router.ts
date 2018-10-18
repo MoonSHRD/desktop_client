@@ -219,7 +219,7 @@ export class Router {
         });
 
         this.listen_event(this.ipcMain, 'get_chat_msgs', async (event, arg) => {
-            await this.controller_register.queue_controller('MessagesController', 'get_chat_messages', arg);
+            await this.controller_register.run_controller('MessagesController', 'get_chat_messages', arg);
         });
 
         this.listen_event(this.ipcMain, 'send_message', async (event, arg) => {

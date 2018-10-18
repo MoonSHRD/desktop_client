@@ -432,16 +432,8 @@ window.onload = function () {
     $(document).on('click', '.chats li', function (e) {
 
         const $this=$(this);
-        $this.siblings().removeClass('have_history');
-        $this.addClass('active_dialog').siblings().removeClass('active_dialog');
-        let chat = $this.attr('id');
 
-        if(!($this.hasClass("active_dialog") && $this.hasClass("have_history"))) {
-            ipcRenderer.send('get_chat_msgs', chat);
-            $this.addClass('have_history')
-        }else {
 
-        }
         // Remove any old one
         $(".ripple").remove();
 
@@ -475,6 +467,15 @@ window.onload = function () {
             left: x + 'px'
         }).addClass("rippleEffect");
 
+        $this.siblings().removeClass('have_history');
+        $this.addClass('active_dialog').siblings().removeClass('active_dialog');
+        let chat = $this.attr('id');
+
+        if(!($this.hasClass("active_dialog") && $this.hasClass("have_history"))) {
+
+            ipcRenderer.send('get_chat_msgs', chat);
+            $this.addClass('have_history')
+        }
     });
 
     $(document).on('click', '.walletMenu li', function (e) {

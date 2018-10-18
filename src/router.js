@@ -178,7 +178,7 @@ class Router {
             yield this.controller_register.queue_controller('MessagesController', 'message_delivered', message);
         }));
         this.listen_event(this.ipcMain, 'get_chat_msgs', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            yield this.controller_register.queue_controller('MessagesController', 'get_chat_messages', arg);
+            yield this.controller_register.run_controller('MessagesController', 'get_chat_messages', arg);
         }));
         this.listen_event(this.ipcMain, 'send_message', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('MessagesController', 'send_message', arg);

@@ -217,7 +217,7 @@ ul li.inMessage p::after {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    /*border-bottom: 1px solid #c3c3c3;*/
+    border-bottom: 1px solid #c3c3c3;
 }
 
 .head_peer h3 {
