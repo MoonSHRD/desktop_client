@@ -1,0 +1,21 @@
+/*=========================*/
+/*==== Vendor Packages ====*/
+/*=========================*/
+/* Fonts */
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+/* Animate.css */
+@import url('../../node_modules/animate.css/animate.min.css');
+/* Bootstrap 4 */
+@import '../../node_modules/bootstrap/scss/bootstrap';
+/* Slick Carousel - need delete later */
+@import '../../node_modules/slick-carousel/slick/slick.scss';
+@import '../../node_modules/slick-carousel/slick/slick-theme.scss';
+
+
+/*=========================*/
+/*====== Our Packages =====*/
+/*=========================*/
+/* Global Settings */
+@import 'global';
+/* App */
+@import "app";

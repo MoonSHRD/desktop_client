@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
-*, *::after, *::before {
+*,
+*::after,
+*::before {
 -webkit-user-drag: none;
 -webkit-app-region: no-drag;
     outline:none;
@@ -26,27 +26,25 @@ html, body {
     display: flex;
     /*background-color: lavender;*/
     position: relative;
-    height:  100vh;
+    height: 100vh;
     overflow: hidden;
+
+    &-logo {
+        animation: App-logo-spin infinite 20s linear;
+        height: 80px;
+    }
+
+    &-header {
+        background-color: #222;
+        height: 150px;
+        padding: 20px;
+        color: white;
+    }
+
+    &-intro {
+        font-size: large;
+    }
 }
-
-.App-logo {
-    animation: App-logo-spin infinite 20s linear;
-    height: 80px;
-}
-
-.App-header {
-    background-color: #222;
-    height: 150px;
-    padding: 20px;
-    color: white;
-}
-
-.App-intro {
-    font-size: large;
-}
-
-
 
 #working_side {
     display: flex;
