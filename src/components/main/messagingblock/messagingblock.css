@@ -128,7 +128,7 @@
     max-width: 400px;
     line-height: 130%;
     word-wrap: break-word;
-    white-space: pre-wrap;
+    white-space: pre-line;
 }
 
 ul li.outMessage p {

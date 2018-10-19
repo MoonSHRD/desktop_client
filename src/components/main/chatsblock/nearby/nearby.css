@@ -80,7 +80,7 @@
     margin-bottom: 5px;
     border-radius: 70%;
     object-fit: cover;
-
+    width: 100%;
 }
 
 .activeNearby:hover {
