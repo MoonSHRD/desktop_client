@@ -15,6 +15,7 @@ Makefile
 package-lock.json
 yarn.lock
 yarn-error.log
+.eslintrc.json
 
 account.json
 sqlite/data.db

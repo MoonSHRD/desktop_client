@@ -1,15 +1,3 @@
-*,
-*::after,
-*::before {
--webkit-user-drag: none;
--webkit-app-region: no-drag;
-    outline:none;
-}
-
-img{
-    object-fit: cover;
-}
-
 .block{
     -webkit-user-select: none;
     -webkit-user-drag: none;
@@ -17,14 +5,8 @@ img{
     cursor: default;
 }
 
-html, body {
-    margin: 0;
-    padding: 0;
-}
-
 .App {
     display: flex;
-    /*background-color: lavender;*/
     position: relative;
     height: 100vh;
     overflow: hidden;
@@ -53,15 +35,15 @@ html, body {
     width: 100%;
 }
 
-@keyframes App-logo-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
 .twoBlocks {
     display: flex;
     position: relative;
     width: 450px;
+}
+
+@keyframes App-logo-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 

@@ -10,11 +10,16 @@
 /* Slick Carousel - need delete later */
 @import '../../node_modules/slick-carousel/slick/slick.scss';
 @import '../../node_modules/slick-carousel/slick/slick-theme.scss';
-
+/* Mixins Bourbon https://www.bourbon.io/ */
+@import '../../node_modules/bourbon/core/bourbon';
 
 /*=========================*/
 /*====== Our Packages =====*/
 /*=========================*/
+/* Variables */
+@import "variables";
+/* Mixins */
+@import "mixins";
 /* Global Settings */
 @import 'global';
 /* App */

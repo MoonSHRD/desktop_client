@@ -43,7 +43,7 @@
   --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
 
-*,
+*, *:before, *:after,
 *::before,
 *::after {
   box-sizing: border-box; }
@@ -6264,7 +6264,7 @@ a.text-dark:hover, a.text-dark:focus {
   visibility: hidden !important; }
 
 @media print {
-  *,
+  *, *:before, *:after,
   *::before,
   *::after {
     text-shadow: none !important;
@@ -6527,34 +6527,54 @@ a.text-dark:hover, a.text-dark:focus {
       color: black;
       opacity: 0.75; }
 
+/* Mixins Bourbon https://www.bourbon.io/ */
 /*=========================*/
 /*====== Our Packages =====*/
 /*=========================*/
+/* Variables */
+/* Fonts Variebles */
+/* Color Variebles */
+/* Mixins */
+/* Font Mixins */
+/*
+ * Convert font-size from px to rem
+ * How use :
+ *      $fz-px is font-size without px
+ *      SCSS : p { @include fz(20); }
+ *      CSS : p { font-size: 1.25rem; }
+ */
 /* Global Settings */
-/* App */
-*,
-*::after,
-*::before {
+*, *:before, *:after {
+  outline: none !important;
   -webkit-user-drag: none;
-  -webkit-app-region: no-drag;
-  outline: none; }
+  -webkit-app-region: no-drag; }
+
+body,
+html {
+  margin: 0;
+  padding: 0; }
+
+body {
+  font: 16px "Roboto", sans-serif;
+  line-height: 1.4; }
 
 img {
+  max-width: 100%;
+  height: auto;
   object-fit: cover; }
+  img.img-responsive {
+    width: 100%;
+    max-width: none; }
 
+/* App */
 .block {
   -webkit-user-select: none;
   -webkit-user-drag: none;
   -webkit-app-region: no-drag;
   cursor: default; }
 
-html, body {
-  margin: 0;
-  padding: 0; }
-
 .App {
   display: flex;
-  /*background-color: lavender;*/
   position: relative;
   height: 100vh;
   overflow: hidden; }
@@ -6575,13 +6595,13 @@ html, body {
   position: relative;
   width: 100%; }
 
+.twoBlocks {
+  display: flex;
+  position: relative;
+  width: 450px; }
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg); }
   to {
     transform: rotate(360deg); } }
-
-.twoBlocks {
-  display: flex;
-  position: relative;
-  width: 450px; }
