@@ -13,6 +13,7 @@ const AccountModel_1 = require("../../models/AccountModel");
 const Controller_1 = require("../Controller");
 const UserModel_1 = require("../../models/UserModel");
 const loom_1 = require("../../loom/loom");
+const Helpers_1 = require("../Helpers");
 // let {TextDecoder} = require('text-encoding');
 class AuthController extends Controller_1.Controller {
     constructor() {
@@ -50,6 +51,8 @@ class AuthController extends Controller_1.Controller {
                 console.log(identyti_tx);
                 this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
             }
+            let user = yield this.get_self_info();
+            this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
             account.host = this.dxmpp_config.host;
             account.jidhost = this.dxmpp_config.jidhost;
             account.port = this.dxmpp_config.port + this.connection_tries;
@@ -68,14 +71,13 @@ class AuthController extends Controller_1.Controller {
             user.firstname = data.firstname;
             user.lastname = data.lastname;
             user.bio = data.bio;
-            user.avatar = data.avatar;
+            user.avatar = yield Helpers_1.resize_b64_img(data.avatar);
             yield user.save();
             let account = new AccountModel_1.AccountModel();
             account.privKey = loom_data.priv;
             account.passphrase = data.mnemonic;
             account.user = user;
             yield account.save();
-            this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
             yield this.auth(account, true);
         });
     }

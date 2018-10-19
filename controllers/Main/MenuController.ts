@@ -16,6 +16,7 @@ class MenuController extends Controller {
     };
 
     async load_menu(menu) {
+        console.log('load_menu');
         let menu_func = "";
         let account = await AccountModel.findOne(1);
 
@@ -50,6 +51,7 @@ class MenuController extends Controller {
         let html = this.render('main/wallet/wallet.pug', self_info);// +
             // this.render('main/messagingblock/messagingblock.pug');
         this.send_data('change_menu_state', html);
+        console.log('load_menu_wallet');
         await this.controller_register.run_controller('WalletController', 'change_wallet_menu');
     }
 

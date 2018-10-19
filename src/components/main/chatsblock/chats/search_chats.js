@@ -13,3 +13,4 @@ $('.searchInput').bind('input', function (e) {
         $('.chats ul').empty();
     }
 });
+
