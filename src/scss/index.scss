@@ -2,7 +2,7 @@
 /*==== Vendor Packages ====*/
 /*=========================*/
 /* Fonts */
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto');
 /* Animate.css */
 @import url('../../node_modules/animate.css/animate.min.css');
 /* Bootstrap 4 */
@@ -24,3 +24,7 @@
 @import 'global';
 /* App */
 @import "app";
+/* Chat Block */
+@import "chatblock/chats";
+@import "chatblock/chatblock";
+@import "chatblock/nearby";
