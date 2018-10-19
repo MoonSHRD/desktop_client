@@ -1,7 +1,7 @@
 /* Fonts Variebles */
-$ff-g : 'Roboto', sans-serif;
-$fz-num : 16;
-$fz-g : unquote($fz-num + 'px');
+$ff-g : 'Roboto', sans-serif; // Global font-famili
+$fz-num : 16; // Global font-size without unit
+$fz-g : unquote($fz-num + 'px'); // Global font-size px
 
 /* Color Variebles */
 $cf: #fff;

@@ -22,7 +22,7 @@ a.infopanel {
 .infopanel img {
     border-radius:  50px;
     border: 2px solid #2BC2F9;
-
+    max-width: none;
 }
 
 .infopanel_title  {
