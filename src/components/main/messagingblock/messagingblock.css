@@ -61,6 +61,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     margin-top: 40px;
+    padding-bottom: 50px;
 }
 
 @media screen and (max-width: 735px) {
@@ -570,9 +571,19 @@ ul li.inMessage p::after {
     float: right;
     text-align: right;
     margin-right: 45px;
+    /*margin-left: 45px;*/
     position: relative;
 }
-.outMessage .docOutputFile__icon {
+
+.inMessage .docOutputFile {
+    width: 100%;
+    /*float: right;*/
+    /*text-align: right;*/
+    /*margin-right: 45px;*/
+    margin-left: 45px;
+    position: relative;
+}
+.docOutputFile__icon {
   width: 45px;
   margin: 5px 13px;
   position: relative;
@@ -582,7 +593,7 @@ ul li.inMessage p::after {
   text-align: center;
 }
 
-.outMessage .docOutputFile .stop {
+.docOutputFile .stop {
     text-align: center;
     opacity: 0;
     position: absolute;
@@ -595,11 +606,11 @@ ul li.inMessage p::after {
     cursor: pointer;
 }
 
-.outMessage .docOutputFile svg {
+.docOutputFile svg {
     cursor: pointer;
     transition: .2s ease;
 }
-.outMessage .docOutputFile svg.fa-file {
+.docOutputFile svg.fa-file {
   height: 45px;
   position: absolute;
   top: 0;
@@ -607,11 +618,11 @@ ul li.inMessage p::after {
   right: 0;
   left: 0;
 }
-.outMessage .docOutputFile__icon_download svg.fa-file {
+.docOutputFile__icon_download svg.fa-file {
   opacity: 0;
   transition: .2s ease;
 }
-.outMessage .docOutputFile svg.fa-spinner {
+.docOutputFile svg.fa-spinner {
     opacity: 0;
     cursor: pointer;
     position: absolute;
@@ -622,33 +633,34 @@ ul li.inMessage p::after {
     animation: spinLoad 2s linear infinite;
 }
 
-.outMessage .docOutputFile.load .docOutputFile__icon:hover .stop {
+.docOutputFile.load .docOutputFile__icon:hover .stop {
     opacity: 1;
 }
 
-.outMessage .docOutputFile.load svg {
+.docOutputFile.load svg {
     opacity: 0;
 }
 
-.outMessage .docOutputFile.load svg.fa-spinner {
+.docOutputFile.load svg.fa-spinner {
   opacity: 1;
 }
-.outMessage .docOutputFile.complite .docOutputFile__icon_download svg {
+.docOutputFile.complite .docOutputFile__icon_download svg {
   opacity: 0;
 }
-.outMessage .docOutputFile.complite .docOutputFile__icon_download svg.fa-file {
+.docOutputFile.complite .docOutputFile__icon_download svg.fa-file {
   opacity: 1;
 }
 
-.outMessage .docOutputFile svg path {
+.docOutputFile svg path {
     fill: #212529;
 }
+
 @keyframes spinLoad {
   from {
     transform: rotate(0deg);
   } to {
-      transform: rotate(360deg);
-    }
+    transform: rotate(360deg);
+  }
 }
 
 .outMessage .docOutputFile span {
@@ -658,7 +670,7 @@ ul li.inMessage p::after {
 .inMessage .imageOutputFile {
     width: 100%;
     position: relative;
-    top: -15px;
+    /*top: -15px;*/
     left: 50px;
 
 }
@@ -673,7 +685,7 @@ ul li.inMessage p::after {
 .inMessage .docOutputFile {
     width: 100%;
     position: relative;
-    top: -15px;
+    /*top: -15px;*/
 
 }
 

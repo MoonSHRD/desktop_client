@@ -141,48 +141,19 @@ $(document).on('submit', '#profile_form', function (e) {
     ipcRenderer.send('submit_profile', prof);
 });
 
-$(document).on('change', '[name=avatar]', function () {
-    const file = this.files[0];
-    let fileType = file.type;
-    if (file) {
-        let reader = new FileReader();
-        reader.onloadend = function () {
-            var image = new Image();
-            image.src = reader.result;
-            image.onload = function() {
-                var maxWidth = 100,
-                    maxHeight = 100,
-                    imageWidth = image.width,
-                    imageHeight = image.height;
-
-                if (imageWidth > imageHeight) {
-                    if (imageWidth > maxWidth) {
-                        imageHeight *= maxWidth / imageWidth;
-                        imageWidth = maxWidth;
-                    }
-                }
-                else {
-                    if (imageHeight > maxHeight) {
-                        imageWidth *= maxHeight / imageHeight;
-                        imageHeight = maxHeight;
-                    }
-                }
-                var canvas = document.createElement('canvas');
-                canvas.width = imageWidth;
-                canvas.height = imageHeight;
-
-                var ctx = canvas.getContext("2d");
-                ctx.drawImage(this, 0, 0, imageWidth, imageHeight);
-                // The resized file ready for upload
-                var finalFile = canvas.toDataURL(fileType);
-                $('#avatar_preview').attr('src', finalFile);
-                // console.log($("#avatar_preview").);
-                $('#avatar_preview').show();
-            }
-        };
-        reader.readAsDataURL(file);
-    }
-});
+// $(document).on('change', '[name=avatar]', function () {
+//     const file = this.files[0];
+//     let fileType = file.type;
+//     if (file) {
+//         let reader = new FileReader();
+//         reader.onloadend = function () {
+//             // var image = new Image();
+//             // image.src = reader.result;
+//             $('#avatar_preview').attr('src', reader.result);
+//         };
+//         reader.readAsDataURL(file);
+//     }
+// });
 
 
 

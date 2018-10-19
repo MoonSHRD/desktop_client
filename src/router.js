@@ -191,9 +191,6 @@ class Router {
             // console.log('change_wallet_menu');
             yield this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
         }));
-        this.listen_event(this.ipcMain, 'change_menu_state', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            this.controller_register.run_controller('MenuController', 'load_menu', arg);
-        }));
         this.listen_event(this.ipcMain, 'transfer_token', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
         }));
@@ -205,9 +202,6 @@ class Router {
         this.listen_event(this.ipcMain, 'change_settings_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             console.log('change_settings_menu');
             yield this.controller_register.queue_controller('SettingsController', 'change_settings_menu', arg);
-        }));
-        this.listen_event(this.ipcMain, 'change_menu_state', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            this.controller_register.run_controller('MenuController', 'load_menu', arg);
         }));
         /** Menu events **/
         this.listen_event(this.ipcMain, 'change_menu_state', (event, arg) => __awaiter(this, void 0, void 0, function* () {

@@ -4,6 +4,7 @@ import {Controller} from "../Controller";
 import {UserModel} from "../../models/UserModel";
 import {Loom} from "../../loom/loom";
 import {TextEncoder,TextDecoder} from 'text-encoding';
+import {resize_b64_img} from "../Helpers";
 // let {TextDecoder} = require('text-encoding');
 
 class AuthController extends Controller {
@@ -38,6 +39,8 @@ class AuthController extends Controller {
             console.log(identyti_tx);
             this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
         }
+        let user=await this.get_self_info();
+        this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
         account.host = this.dxmpp_config.host;
         account.jidhost = this.dxmpp_config.jidhost;
         account.port = this.dxmpp_config.port+this.connection_tries;
@@ -56,7 +59,7 @@ class AuthController extends Controller {
         user.firstname = data.firstname;
         user.lastname = data.lastname;
         user.bio = data.bio;
-        user.avatar = data.avatar;
+        user.avatar = await resize_b64_img(data.avatar);
         await user.save();
 
         let account = new AccountModel();
@@ -65,7 +68,6 @@ class AuthController extends Controller {
         account.user = user;
         await account.save();
 
-        this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
         await this.auth(account,true);
     };
 }

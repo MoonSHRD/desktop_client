@@ -66,8 +66,7 @@ class MessagesController extends Controller {
 
     private async render_chat_messages(chat_id: string) {
         let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
-
-        for (let num in messages) {
+        for (let num = messages.length - 1; num >= 0; --num) {
             await this.render_message(messages[num], chat_id);
         }
     }

@@ -38,7 +38,14 @@ let MessageModel = MessageModel_1 = class MessageModel extends typeorm_1.BaseEnt
     }
     static get_chat_messages_with_sender_chat_files(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield MessageModel_1.find({ relations: ['sender', 'chat', 'files'], where: { chat: chat_id } });
+            return yield MessageModel_1.find({
+                relations: ['sender', 'chat', 'files'],
+                where: { chat: chat_id },
+                take: 5,
+                order: {
+                    id: "DESC"
+                }
+            });
         });
     }
 };
