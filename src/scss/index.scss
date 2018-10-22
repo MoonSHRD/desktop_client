@@ -25,6 +25,10 @@
 /* App */
 @import "app";
 /* Chat Block */
-@import "chatblock/chats";
-@import "chatblock/chatblock";
-@import "chatblock/nearby";
+@import "main/chatblock/chats";
+@import "main/chatblock/chatblock";
+@import "main/chatblock/nearby";
+@import "main/chatblock/infopanel";
+@import "main/chatblock/onlineLabel";
+/* Coming Soon */
+@import "main/coming_soon/coming_soon";
