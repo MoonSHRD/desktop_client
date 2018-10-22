@@ -30,7 +30,6 @@
 
 #working_side {
     display: flex;
-    /*background-color: lavender;*/
     position: relative;
     width: 100%;
 }
@@ -42,8 +41,7 @@
 }
 
 .ripple {
-    width: 0;
-    height: 0;
+    @include size(0);
     border-radius: 50%;
     background: rgba(0, 171, 228, 0.4);
     transform: scale(0);

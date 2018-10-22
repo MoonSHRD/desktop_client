@@ -32,7 +32,7 @@
     "build_platforms": "npm run package-linux && npm run package-win64",
     "postinstall": "electron-builder install-app-deps",
     "scss": "node-sass --watch src/scss --o src/css",
-    "scss-min": "node-sass --watch src/scss --o src/css --output-style compressed",
+    "scss-min": "node-sass --watch --output-style compressed src/scss/index.scss > src/css/index.min.css --source-map-embed true",
     "dev": "npm run scss | npm start"
   },
   "includeSources": true,
