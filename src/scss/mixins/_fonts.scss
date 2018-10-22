@@ -1,0 +1,11 @@
+/*
+ * Convert font-size from px to rem
+ * How use :
+ *      $fz-px is font-size without px
+ *      SCSS : p { @include fz(20); }
+ *      CSS : p { font-size: 1.25rem; }
+ */
+@mixin fz($fz-px : $fz-num){
+    $fz-rem : $fz-px / $fz-num;
+    font-size: unquote( ($fz-rem) + 'rem' );
+}

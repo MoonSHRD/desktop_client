@@ -1,8 +1,6 @@
 .dialogs {
-
-    width: 300px;
-    background-color: #F3F3F3;
-    height: 100vh;
+    @include size(300px, 100vh);
+    background-color: $brand-gray-100;
     animation-direction: revert;
     border-right: 1px solid #d0d0d0;
     overflow: hidden;
@@ -31,19 +29,14 @@
 }
 
 .chats_block_header_title {
-
     justify-content: center;
-    background-image: url(src/components/chatsblock/infopanel/header.png);
-    background-size: contain;
     height: 100%;
-    background-repeat: no-repeat;
-
+    background: url(#{$img}/chatblock/header.png) no-repeat;
+    background-size: contain;
 }
 
 .chats_block_header_title {
-
-    font-family: 'Open Sans', sans-serif;
-
+    font-family: $ff-1;
 }
 
 .resize1 {
@@ -51,17 +44,11 @@
 }
 
 .showOnMap{
-    background-image: url(./components/main/chatsblock/img/mapPoint.png);
-    background-color: #BDBDBD;
-    background-repeat: no-repeat;
-    background-position: 55px center;
-    border: 0;
-    height: 33px;
+    @include size(100%, 33px);
+    @include fz(12);
+    background: url(#{$img}/chatblock/mapPoint.png) 55px center no-repeat $brand-gray-400;
     background-size: 18px;
-    width: 100%;
+    border: 0;
     border-radius: 10px;
-    color: #fff;
-    font-size: 12px;
-    outline: none;
-    /*cursor: pointer;*/
+    color: $cf;
 }

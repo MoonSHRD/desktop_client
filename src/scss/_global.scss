@@ -1,0 +1,33 @@
+*{
+    outline: none !important;
+    -webkit-user-drag: none;
+    -webkit-app-region: no-drag;
+
+    &:before,
+    &:after{
+        @extend *;
+    }
+}
+
+body,
+html{
+    margin: 0;
+    padding: 0;
+    font-size: $fz-g;
+}
+
+body{
+    font: $fz-g $ff-g;
+    line-height: 1.4;
+}
+
+img{
+    max-width: 100%;
+    //height: auto;
+    object-fit: cover;
+
+    &.img-responsive{
+        width: 100%;
+        max-width: none;
+    }
+}

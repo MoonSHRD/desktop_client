@@ -30,7 +30,10 @@
     "package-win64": "electron-packager . Moonshard --overwrite --asar=false --platform=win32 --arch=x64 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Moonshard\"",
     "rebuild_packages": "./node_modules/.bin/electron-rebuild  -f -w sqlite3",
     "build_platforms": "npm run package-linux && npm run package-win64",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "scss": "node-sass --watch src/scss --o src/css",
+    "scss-min": "node-sass --watch --output-style compressed src/scss/index.scss > src/css/index.min.css --source-map-embed true",
+    "dev": "npm run scss | npm start"
   },
   "includeSources": true,
   "devDependencies": {
@@ -64,6 +67,7 @@
     "better-queue": "^3.8.10",
     "bootstrap": "^4.1.3",
     "bootstrap-notify": "^3.1.3",
+    "bourbon": "^5.1.0",
     "electron-pug": "^2.0.0",
     "gm": "^1.23.1",
     "gm-base64": "^1.1.1",
@@ -75,6 +79,7 @@
     "loom-js": "^1.4.3",
     "loom-truffle-provider": "^0.5.0",
     "moonshard_core": "0.1.53",
+    "node-sass": "^4.9.4",
     "peer-id": "^0.11.0",
     "popper.js": "^1.14.4",
     "pug": "^2.0.3",
