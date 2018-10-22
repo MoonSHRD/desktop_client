@@ -743,6 +743,23 @@ ul {
         width: 100%;
         margin-left: 45px;
         position: relative;
+
+        img {
+            margin: 5px 13px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    }
+    .imageOutputFile {
+        width: 100%;
+        position: relative;
+        left: 50px;
+
+        img {
+            margin: 5px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
     }
 }
 
@@ -845,6 +862,10 @@ ul {
             }
         }
     }
+
+    .outMessage & span {
+        padding-right: 15px;
+    }
 }
 
 @keyframes spinLoad {
@@ -853,39 +874,6 @@ ul {
     } to {
           transform: rotate(360deg);
       }
-}
-
-.outMessage .docOutputFile span {
-    padding-right: 15px;
-}
-
-.inMessage .imageOutputFile {
-    width: 100%;
-    position: relative;
-    /*top: -15px;*/
-    left: 50px;
-
-}
-
-.inMessage .imageOutputFile img {
-    margin: 5px 10px;
-    border-radius: 10px;
-    cursor: pointer;
-
-}
-
-.inMessage .docOutputFile {
-    width: 100%;
-    position: relative;
-    /*top: -15px;*/
-
-}
-
-.inMessage .docOutputFile img {
-    margin: 5px 13px;
-    border-radius: 10px;
-    cursor: pointer;
-
 }
 
 

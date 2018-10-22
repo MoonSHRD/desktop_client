@@ -7800,6 +7800,19 @@ ul li.inMessage p {
   width: 100%;
   margin-left: 45px;
   position: relative; }
+  .inMessage .docOutputFile img {
+    margin: 5px 13px;
+    border-radius: 10px;
+    cursor: pointer; }
+
+.inMessage .imageOutputFile {
+  width: 100%;
+  position: relative;
+  left: 50px; }
+  .inMessage .imageOutputFile img {
+    margin: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer; }
 
 .docOutputFile__icon {
   height: 45px;
@@ -7865,32 +7878,11 @@ ul li.inMessage p {
   .docOutputFile.complite .docOutputFile__icon_download svg.fa-file {
     opacity: 1; }
 
+.outMessage .docOutputFile span {
+  padding-right: 15px; }
+
 @keyframes spinLoad {
   from {
     transform: rotate(0deg); }
   to {
     transform: rotate(360deg); } }
-
-.outMessage .docOutputFile span {
-  padding-right: 15px; }
-
-.inMessage .imageOutputFile {
-  width: 100%;
-  position: relative;
-  /*top: -15px;*/
-  left: 50px; }
-
-.inMessage .imageOutputFile img {
-  margin: 5px 10px;
-  border-radius: 10px;
-  cursor: pointer; }
-
-.inMessage .docOutputFile {
-  width: 100%;
-  position: relative;
-  /*top: -15px;*/ }
-
-.inMessage .docOutputFile img {
-  margin: 5px 13px;
-  border-radius: 10px;
-  cursor: pointer; }
