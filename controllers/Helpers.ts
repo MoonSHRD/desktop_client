@@ -47,7 +47,10 @@ function check_files_dir() {
 
 
 
-
+export function b64img_to_buff(b64img) {
+    b64img=b64img.substr(b64img.indexOf(',') + 1);
+    return new Buffer(b64img, 'base64');
+}
 
 export async function resize_b64_img(b64img){
     console.log(b64img.substr(0,30));

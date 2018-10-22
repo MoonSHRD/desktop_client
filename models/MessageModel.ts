@@ -36,6 +36,7 @@ export class MessageModel extends BaseEntity {
 
     mine:boolean;
     sender_avatar:string;
+    sender_name:string;
 
     static async get_chat_messages_with_sender(chat_id:string):Promise<MessageModel[]>{
         return await MessageModel.find({relations:['sender'],where:{chat:chat_id}})

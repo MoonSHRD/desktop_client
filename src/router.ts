@@ -12,6 +12,8 @@ import {ControllerRegister} from "../controllers/ControllerRegister";
 import {helper} from "./var_helper";
 import {Loom} from "../loom/loom";
 
+
+
 export class Router {
     readonly window: any;
     private paths: any;

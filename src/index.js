@@ -92,7 +92,8 @@ window.onload = function () {
     });
 
     $(document).on('click','.menu a',function () {
-        console.log('menu_click');
+        // console.log('menu_click');
+
         const $this=$(this);
         if ($this.attr('data-id')!=='menu_create_chat' && !$this.hasClass('not_active'))
             $this.addClass('active_menu').siblings().removeClass('active_menu');
@@ -247,6 +248,17 @@ window.onload = function () {
         console.log(obj)
         if ($('.active_dialog').attr('id') === obj.id) {
             $('.messaging_history ul').append(obj.message);
+        } else {
+            let myNotification = new Notification(obj.message.sender_name, {
+                body: obj.message.text,
+                icon: obj.message.sender_avatar
+            });
+
+            myNotification.show();
+
+            // myNotification.onclick = () => {
+            //     console.log('Notification clicked')
+            // };
         }
     });
 
