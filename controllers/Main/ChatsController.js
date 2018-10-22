@@ -171,7 +171,7 @@ class ChatsController extends Controller_1.Controller {
                 message.time = `${buf[0]} ${buf[1]}`;
                 let room_data = { id: message.sender };
                 let sender = { address: message.sender, domain: "localhost" };
-                yield this.controller_register.run_controller("MessagesController", "received_group_message", room_data, message.message, sender, message.time);
+                yield this.controller_register.run_controller("MessagesController", "received_group_message", room_data, message.message, sender, message.time, message.files);
             }));
         });
     }

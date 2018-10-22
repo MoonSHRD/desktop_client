@@ -171,7 +171,7 @@ export class Router {
         });
 
         this.listen_event(this.ipcMain, 'join_channel', async (event, chat) => {
-            console.log('creating group');
+            console.log('join group');
             await this.controller_register.queue_controller('ChatsController', 'join_chat', chat);
         });
 
@@ -203,9 +203,10 @@ export class Router {
 
         /** Messages events **/
 
-        this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, stamp) => {
+        this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, stamp, files) => {
             console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
-            await this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
+            console.log("Files:", files);
+            await this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp, files);
         });
 
         this.listen_event(this.dxmpp, 'chat', async (user, message,file) => {

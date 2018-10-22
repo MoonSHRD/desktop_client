@@ -182,7 +182,7 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_group_message(room_data, message, sender, stamp) {
+    received_group_message(room_data, message, sender, stamp, files) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             if (sender.address == self_info.id)
@@ -204,6 +204,25 @@ class MessagesController extends Controller_1.Controller {
             messageModel.chat = chat;
             messageModel.time = stamp;
             yield messageModel.save();
+            if (files) {
+                console.log(files);
+                for (let num in files) {
+                    yield messageModel.save();
+                    let fileModel = new FileModel_1.FileModel();
+                    // file_info.sender = self_info.id;
+                    fileModel.hash = files[num].hash;
+                    fileModel.chat = chat;
+                    fileModel.message = message;
+                    fileModel.name = files[num].name;
+                    fileModel.type = files[num].type;
+                    fileModel.preview = Helpers_1.check_file_preview(files[num].type);
+                    if (fileModel.preview) {
+                        fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
+                    }
+                    yield fileModel.save();
+                    message.files.push(fileModel);
+                }
+            }
             yield this.render_message(messageModel, chat.id);
         });
     }
