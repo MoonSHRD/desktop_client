@@ -1,0 +1,23 @@
+@keyframes spinLoad {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes reveal {
+    from {
+        transform: scale(0.001);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes slide {
+    to {
+        transform: translateX(1.5em)
+    }
+}

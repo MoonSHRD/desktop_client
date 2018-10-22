@@ -693,21 +693,6 @@ ul {
     }
 }
 
-@keyframes reveal {
-    from {
-        transform: scale(0.001);
-    }
-    to {
-        transform: scale(1);
-    }
-}
-
-@keyframes slide {
-    to {
-        transform: translateX(1.5em)
-    }
-}
-
 .outMessage {
 
     .imageOutputFile {
@@ -866,14 +851,6 @@ ul {
     .outMessage & span {
         padding-right: 15px;
     }
-}
-
-@keyframes spinLoad {
-    from {
-        transform: rotate(0deg);
-    } to {
-          transform: rotate(360deg);
-      }
 }
 
 

@@ -94,9 +94,14 @@ window.onload = function () {
     $(document).on('click','.menu a',function () {
         console.log('menu_click');
         const $this=$(this);
-        if ($this.attr('data-id')!=='menu_create_chat' && !$this.hasClass('not_active'))
-            $this.addClass('active_menu').siblings().removeClass('active_menu');
-        const type = $this.attr('data-id');
+        if ($this.data('id') !== 'menu_create_chat' && !$this.hasClass('not_active')) {
+            $this.addClass('active_menu')
+                .parent()
+                .siblings('li')
+                .children()
+                .removeClass('active_menu');
+        }
+        const type = $this.data('id');
         if (type)
             ipcRenderer.send('change_menu_state', type);
     });
