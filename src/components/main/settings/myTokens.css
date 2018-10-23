@@ -1,11 +1,11 @@
 
-.walletRight{
+.settingsRight{
     flex: 1;
     background-color: #F3F3F3;
     padding: 20px 20px;
 }
 
-.walletRight td, th, thead th {
+.settingsRight td, th, thead th {
     border-top: none!important;
     border-bottom: none!important;
     vertical-align: middle;
@@ -13,41 +13,41 @@
 }
 
 
-.walletRight tbody {
+.settingsRight tbody {
     background-color: white;
     line-height: 1;
 
 }
 
-.walletRight thead tr {
+.settingsRight thead tr {
     line-height: 1;
     font-size: 13px;
 }
 
-.walletRight tr {
+.settingsRight tr {
     /*line-height: 35px;*/
 }
-.walletRight table {
+.settingsRight table {
     border-collapse: separate;
     border-spacing: 0px 15px;
     word-break: break-word;
 
 }
 
-.walletRight table img {
+.settingsRight table img {
    border-radius: 100%;
 }
 
 
-.walletRight tr td:first-child,
-.walletRight tr th:first-child {
+.settingsRight tr td:first-child,
+.settingsRight tr th:first-child {
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
     vertical-align: middle;
 }
 
-.walletRight tr td:last-child,
-.walletRight tr th:last-child {
+.settingsRight tr td:last-child,
+.settingsRight tr th:last-child {
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
 }
@@ -180,4 +180,47 @@
 
 .orange_font {
     color: #F2994A;
+}
+
+.token-avatar {
+    width: 50px;
+}
+
+.table_01 th,.table_02 th,.table_02 td {
+    text-align: center;
+}
+
+.table_02 a {
+    text-decoration: underline;
+    color: #2BC2F9;
+}
+
+.walletInfo table {
+    width: 100%;
+}
+
+.walletInfo td,.walletInfo th {
+    width: 50%;
+}
+
+.walletInfo th {
+    font-weight: 600;
+}
+
+.td-token {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.td-name {
+    padding: 0;
+}
+
+.table_02 a {
+    text-decoration: underline!important;
+    color: #2BC2F9!important;
+}
+
+.myTokens {
+    width: 100%;
 }
