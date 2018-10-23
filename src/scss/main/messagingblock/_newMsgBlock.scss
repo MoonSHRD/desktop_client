@@ -285,36 +285,73 @@ a.join_button {
 
 .send_message {
 
-    &_block {
-        @include size(100%, 100px);
+    &__block {
+        @include size(100%, auto);
         @include position(absolute, null null 0);
         display: flex;
-        justify-content: space-evenly;
+        //justify-content: space-evenly;
         align-items: center;
         overflow: hidden;
-
+        padding: 20px 30px 20px 20px;
     }
 
-    &_input {
-        @include size(60%, 55px);
+    &__img{
+        @include size(0);
+        //margin: 0 15px;
+
+        &.added{
+            @include size(50px);
+        }
+    }
+
+    &__input {
+        @include size(auto, 55px);
         border-radius: 10px;
         border-style: none;
         outline: none;
         padding: 5px 10px;
         resize: none;
+        flex: 1;
+        margin: 0 15px;
 
         &::placeholder {
             color: $brand-blue;
         }
     }
 
-    &_btn {
-        @include size(100px,50px);
+    &__btn {
+        //@include size(100px,50px);
+        padding: 10px 20px;
         background-color: #F3F3F3;
-        color: #2BC2F9;
-        border: 2px solid #2BC2F9; /* Green */
+        color: $brand-blue;
+        border: 2px solid $brand-blue; /* Green */
         border-radius: 5px;
         cursor: pointer;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-left: 15px;
+    }
+
+    &__file,
+    &__voice{
+        padding: 5px 10px;
+        background: none;
+        border: 0;
+        cursor: pointer;
+
+        img{
+            @include size(auto, 25px);
+            //height:  30px;
+            opacity: .8;
+            @include transition(.2s ease);
+        }
+
+        &:hover{
+
+            img{
+                opacity: 1;
+            }
+        }
     }
 }
 
@@ -472,17 +509,22 @@ ul {
 }
 
 .peer_name {
-    margin: 0;
-    margin-left: 20px;
-    color: black;
-    text-decoration: none !important;
+    margin: 0 0 0 20px;
+    color: $c0;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+
+    span{
+        @include fz(18);
+    }
 
     &:hover {
-        text-decoration: none !important;
+        text-decoration: none;
     }
 
     img {
-        border-radius: 50px;
+        margin-right: 10px;
     }
 }
 
@@ -651,8 +693,7 @@ ul {
 }
 
 .showOnMapChannel {
-    background-image: url('#{$img}/chatsblock/img/mapPoint.png');
-
+    background-image: url('#{$img}/chatblock/mapPoint.png');
 }
 
 .calendarChannel {

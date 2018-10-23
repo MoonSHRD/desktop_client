@@ -11,7 +11,7 @@ script
 
     if (role !== "moderator")
 
-        .container.scrollbar#style-10(style='overflow-y: scroll; height: 630px')
+        .scrollbar#style-10(style='overflow-y: scroll; overflow-x: hidden; height: 630px')
             .row.m-0.groupInfoHeader
                 .gradient
                 .col-sm-4.text-left
@@ -69,9 +69,9 @@ script
 
 
 
-            .row.mx-0.my-5.justify-content-around
-                .col-sm-5.p-0.text-center
-                    button.showOnMapChannel.col-sm-12 Show On a Map
+            //.row.mx-0.my-5.justify-content-around
+            //    .col-sm-5.p-0.text-center
+            //        button.showOnMapChannel.col-sm-12 Show On a Map
 
                 //.col-sm-5.p-0
                 //    button.calendarChannel.col-sm-12 Сalendar of events
@@ -164,7 +164,7 @@ script
 
 
     else
-        .container.scrollbar#style-10(style='overflow-y: scroll; height: 630px')
+        .scrollbar#style-10(style='overflow-y: scroll; overflow-x: hidden; height: 630px')
             .row.m-0.groupInfoHeader
                 .gradient
                 .col-sm-4.text-left

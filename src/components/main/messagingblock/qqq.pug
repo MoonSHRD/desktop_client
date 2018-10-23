@@ -1,11 +1,8 @@
 div(class="head_peer" id="head_peer")
-    h4
-        a(class="peer_name" data-event="show_chat_info" href='#')
-            if (id)
-                //img(src=avatar width=44 height=44)
-                |       #{name}
-
-
+    a(class="peer_name" data-event="show_chat_info" href='#')
+        if (id)
+            img.rounded-circle(src=avatar width=44 height=44)
+            span #{name}
 
     if (type === "channel")
         ul.block.nav.nav-tabs.nav-justified(role='tablist')
@@ -22,16 +19,14 @@ div(class="head_peer" id="head_peer")
                 max-height: calc(100% - 155px);
             }
 
-
-
     if (type==="user_chat" )
 
         div.block(class='dropDown_menu')
             ul
-                li
-                    a(data-id="")
-                        div(class='image')
-                            img(src="components/main/messagingblock/img/micr.png")
+                //li
+                //    a(data-id="")
+                //        div(class='image')
+                //            img(src="components/main/messagingblock/img/micr.png")
                 li
                     a(data-id="")
                         div(class='image')
@@ -45,11 +40,11 @@ div(class="head_peer" id="head_peer")
                         div(class='image')
                             img(src="components/main/messagingblock/img/videoCall.png")
                 input(type="file" id="attachFileToChat" style="display:none" multiple)
-                li.attachFileToChat
-
-                    a(data-id="")
-                        div(class='image')
-                            img(src="components/main/messagingblock/img/files.png")
+                //li.attachFileToChat
+                //
+                //    a(data-id="")
+                //        div(class='image')
+                //            img(src="components/main/messagingblock/img/files.png")
                 li
                     a(data-id="")
                         div(class='image')
@@ -153,11 +148,14 @@ div(class="messaging_history" id="messaging_history" )
 
 
 
-div(class="send_message_block")
+div.send_message__block
     if (type === "join_channel" || type === "join_group_chat")
         include join_button
     else if (type === "user_chat" || type === "group" || (type === "channel" && role === "moderator"))
-
-        textarea(class="send_message_input"  placeholder="Write a text message")
-        img#upload_file(src='' alt="" width=50 height=50 style='border-radius: 100%')
-        button(class="send_message_btn" data-translate-key="SEND_MESSAGE") отправить
+        button.send_message__file.attachFileToChat
+            img(src="components/main/messagingblock/img/files.png")
+        textarea(class="send_message__input"  placeholder="Write a text message")
+        img.rounded-circle.send_message__img#upload_file(src='' alt="")
+        button.send_message__voice(data-id="")
+            img(src="components/main/messagingblock/img/micr.png")
+        button(class="send_message__btn" data-translate-key="SEND_MESSAGE") отправить

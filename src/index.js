@@ -70,25 +70,30 @@ window.onload = function () {
 
     function readURL(input) {
 
+        let imgFileMsg = $('#upload_file');
+
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $('#upload_file').attr('src', e.target.result);
-                $('#upload_file').css('cursor', 'pointer');
-
+                imgFileMsg
+                    .addClass('added')
+                    .attr('src', e.target.result)
+                    .css('cursor', 'pointer');
             };
 
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-
     $(document).on('click', '#upload_file', function () {
-        $('#upload_file').attr('src', '');
-        $('#upload_file').css('cursor', 'default');
-        $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
+        let imgFileMsg = $(this);
 
+        imgFileMsg
+            .removeClass('added')
+            .attr('src', '')
+            .css('cursor', 'default');
+        $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
     });
 
     $(document).on('click','.menu a',function () {
