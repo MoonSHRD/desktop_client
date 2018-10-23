@@ -166,47 +166,45 @@
     //    transition: opacity .5s;
     //}
     //
-    //.context-menu {
-    //    position: absolute; /* Задаем абсолютное позиционирование для нашего меню */
-    //    display: none; /* Изначально не показываем его */
-    //    background-color: #fff; /* Цвет фона меню */
-    //    border: 1px solid #ececec;
-    //    width: 165px;
-    //    box-shadow: 0 0 10px rgba(220, 220, 220, 0.38);
-    //    border-radius: 5px;
-    //    z-index: 20;
-    //
-    //}
-    //
-    ///* Добавляем стили для списка которые будет находиться внутри меню и, собственно, содержать его пункты: */
-    //.context-menu ul {
-    //    list-style: none;
-    //    margin: 0;
-    //    padding: 10px 0;
-    //}
-    //
-    //.context-menu ul li {
-    //    margin: 0;
-    //    padding: 0;
-    //    background-color: #fff;
-    //    display: block;
-    //    font-size: 10px;
-    //
-    //}
-    //
-    ///* Стили для ссылок пунктов меню: */
-    //.context-menu ul li a {
-    //    color: #333;
-    //    text-decoration: none;
-    //    font-size: 13px;
-    //    display: block;
-    //    font-family: 'Roboto';
-    //    line-height: 0;
-    //    padding: 17px;
-    //    cursor: default;
-    //}
-    //
-    //.context-menu ul li a:hover {
-    //    background-color: #eee;
-    //}
+}
+
+.context-menu {
+    position: absolute; /* Задаем абсолютное позиционирование для нашего меню */
+    display: none; /* Изначально не показываем его */
+    background-color: $cf; /* Цвет фона меню */
+    border: 1px solid $brand-gray-100;
+    width: 165px;
+    box-shadow: 0 0 10px opacify($brand-gray-700, 0.38);
+    border-radius: 5px;
+    z-index: 20;
+
+    /* Добавляем стили для списка которые будет находиться внутри меню и, собственно, содержать его пункты: */
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 10px 0;
+
+        li {
+            @include fz(10);
+            margin: 0;
+            padding: 0;
+            background-color: $cf;
+            display: block;
+
+            /* Стили для ссылок пунктов меню: */
+            a {
+                @include fz(13);
+                color: lighten($c0,20%);
+                text-decoration: none;
+                display: block;
+                line-height: 0;
+                padding: 17px;
+                cursor: default;
+
+                &:hover {
+                    background-color: darken($cf,7%);
+                }
+            }
+        }
+    }
 }

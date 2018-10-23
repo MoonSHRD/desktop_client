@@ -9,44 +9,81 @@
         margin: 0;
         padding: 20px;
 
-        li {
-            margin-bottom: 2px;
+        //li {
+        //    margin-bottom: 2px;
+        //}
+    }
+}
+
+
+
+.userchat {
+    @include fz(13);
+    height: 57px;
+    display: flex;
+    align-items: center;
+    padding: 5px 15px;
+    color: $c0;
+    text-decoration: none;
+    transition: all 0.1s ease;
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+
+    &__avatar{
+        margin-right: 10px;
+        flex-shrink: 0;
+        position: relative;
+    }
+
+    &__status{
+        @include size(10px);
+        @include position(absolute, null 0 0 null);
+        border-radius: 50%;
+        border: 2px solid $cf;
+
+        &.online {
+            background-color: $brand-blue;
+        }
+
+        &.offline {
+            background-color: $brand-red;
         }
     }
 
-    a {
-        @include fz(13);
-        height: 57px;
+    &__text{
+        overflow: hidden;
+    }
+
+    &__header{
         display: flex;
         align-items: center;
-        padding: 0 20px 0 20px;
-        color: $c0;
-        text-decoration: none;
-        font-family: $ff-1;
-        transition: all 0.1s ease;
-        overflow: hidden;
-        position: relative;
-        z-index: 10;
-
-        p {
-            padding: 0;
-            margin: 0;
-            position: relative;
-            z-index: 0;
-        }
-
-        &:hover {
-            border-radius: 8px;
-            background-color: $brand-blue;
-            color: $cf;
-        }
+        margin: 0 0 .2em;
     }
 
-    img {
-        border-radius: 100px;
-        margin-right: 20px;
-        position: relative;
-        z-index: 0;
+    &__name{
+        font-family: $ff-1;
+        margin: 0 auto 0 0;
+        @include fz(18);
+        @extend .text-truncate;
+    }
+
+    &__lastmessage{
+        @include fz(12);
+        @extend .text-truncate;
+    }
+
+    &__date{
+        @include fz(12);
+        flex-shrink: 0;
+        margin-left: 10px;
+    }
+
+    &:hover {
+        border-radius: 8px;
+        background-color: $brand-blue;
+        color: $cf;
+        text-decoration: none;
     }
 }
 
@@ -121,23 +158,6 @@
         padding: 0;
         color: black;
     }
-}
-
-.stateLabel {
-    @include size(10px);
-    border-radius: 10px;
-    position: absolute;
-    left: 50px;
-    bottom: 10px;
-    border: 2px solid white;
-}
-
-.online {
-    background-color: $brand-blue;
-}
-
-.offline {
-    background-color: $brand-red;
 }
 
 .active_dialog {
