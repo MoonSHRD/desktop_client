@@ -1,9 +1,3 @@
-/**, *::after, *::before {*/
-    /*-webkit-user-select: none;*/
-    /*-webkit-user-drag: none;*/
-    /*-webkit-app-region: no-drag;*/
-    /*!*cursor: default;*!*/
-/*}*/
 
 a.infopanel {
     display: flex;
@@ -13,16 +7,14 @@ a.infopanel {
 
 }
 
-.infopanel:hover   .infopanel > b  {
-    /*text-decoration: underline; !* Добавляем подчеркивание при наведении курсора на ссылку *!*/
+.infopanel:hover .infopanel > b  {
     color: #007bff;
-
 }
 
 .infopanel img {
     border-radius:  50px;
-    border: 2px solid #2BC2F9;
-
+    border: 2px solid $brand-blue;
+    max-width: none;
 }
 
 .infopanel_title  {
@@ -31,7 +23,7 @@ a.infopanel {
     justify-content: space-around;
     flex-direction: column;
     padding-left: 10px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: $ff-1;
     color: black;
 }
 
@@ -39,11 +31,6 @@ a.infopanel {
     text-decoration: none;
     color: black;
 }
-
-/*.infopanel:hover {*/
-    /*!*background-color: white;*!*/
-    /*padding-left: 30px;*/
-/*}*/
 
 
 .overlay {
@@ -53,7 +40,7 @@ a.infopanel {
     left: 0;
     right: 0;
     z-index: 999;
-    background: rgba(0, 0, 0, 0.7);
+    background: opacify($c0, 0.7);
     transition: opacity 500ms;
     visibility: hidden;
     opacity: 0;
@@ -67,7 +54,7 @@ a.infopanel {
 .popup {
     margin: 70px auto;
     padding: 20px;
-    background: #fff;
+    background: $cf;
     border-radius: 5px;
     width: 30%;
     position: relative;
@@ -77,19 +64,17 @@ a.infopanel {
 .popupgroup {
     margin: 70px auto;
     padding: 20px;
-    background: #fff;
+    background: $cf;
     border-radius: 5px;
     width: 60%;
     position: relative;
     transition: all 5s ease-in-out;
 }
 .popupgroup .close {
-    position: absolute;
-    top: 0px;
-    right: 5px;
+    @include position(absolute, 0 5px null null);
+    @include fz(30);
     transition: all 200ms;
-    font-size: 30px;
-    font-weight: bold;
+    font-weight: 700;
     text-decoration: none;
     color: #333;
 }
@@ -99,17 +84,15 @@ a.infopanel {
     font-family: Tahoma, Arial, sans-serif;
 }
 .popup .close {
-    position: absolute;
-    top: 0px;
-    right: 5px;
+    @include position(absolute, 0 5px null null);
+    @include fz(30);
     transition: all 200ms;
-    font-size: 30px;
     font-weight: bold;
     text-decoration: none;
     color: #333;
 }
 .popup .close:hover {
-    color: #06D85F;
+    color: $brand-green;
 }
 .popup .content {
     max-height: 30%;
@@ -173,7 +156,7 @@ input.select-field {
 
 label{
     display: block;
-    margin: 0px 0px 15px 0px;
+    margin: 0 0 15px 0;
 }
 
 label > span{
@@ -185,8 +168,8 @@ label > span{
 }
 
 .acceptButton {
-    background: #EA7B00;
-    color: #fff;
+    background: $brand-orange;
+    color: $cf;
 }
 
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-require("jquery")
+require("jquery");
 import './isNear.css';
 import OwlCarousel from 'react-owl-carousel2';
 

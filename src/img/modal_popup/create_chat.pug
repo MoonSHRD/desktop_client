@@ -1,0 +1,45 @@
+.modal-header
+    h5.modal-title Создать группу
+    button.close(type='button', data-dismiss='modal', aria-label='Close')
+        span(aria-hidden='true') ×
+.modal-body
+    .container
+        .row
+            .col-sm-3
+                label Название группы
+            .col-sm
+                input(class="input-field" name="name" type="text" placeholder="Введите название группы")
+        br
+        .row
+            .col-sm-3
+                label Описание группы
+            .col-sm
+                input(class="input-field" name="description" type="text" placeholder="Введите краткое описание группы" width='60', align='20')
+        br
+        .row
+            .col-sm-3
+                label Тип группы
+            .col-sm
+                select(class ="select-field" name="grouptype")
+                    //option(disabled="true") Выберите тип группы
+                    //option(value="chat") чат
+                    option(value="channel") канал
+        br
+        .row
+            .col-sm-3
+                label Описание группы
+            .col-sm
+                select(class="select-field" name="substype")
+                    //option(disabled="true") Выберите тип подписки
+                    option(value="free") бесплатный
+                    option(value="unfree") платный
+        br
+        .row#token_row(style="display:none")
+            .col-sm-3
+                label Токен
+            .col-sm
+                input(class ="input-field" type="text" placeholder="Введите имя токена")
+        br
+        .row#popup_error(style="color:red; display:none;")
+.modal-footer
+    button(class="btn btn-primary") Создать

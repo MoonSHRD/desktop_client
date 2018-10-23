@@ -1,0 +1,189 @@
+.chats {
+    height: calc(100% - 295px);
+    background: $brand-gray-100;
+    overflow-y: auto;
+    position: relative;
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 20px;
+
+        //li {
+        //    margin-bottom: 2px;
+        //}
+    }
+}
+
+
+
+.userchat {
+    @include fz(13);
+    height: 57px;
+    display: flex;
+    align-items: center;
+    padding: 5px 15px;
+    color: $c0;
+    text-decoration: none;
+    transition: all 0.1s ease;
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+
+    &__avatar{
+        margin-right: 10px;
+        flex-shrink: 0;
+        position: relative;
+    }
+
+    &__status{
+        @include size(10px);
+        @include position(absolute, null 0 0 null);
+        border-radius: 50%;
+        border: 2px solid $cf;
+
+        &.online {
+            background-color: $brand-blue;
+        }
+
+        &.offline {
+            background-color: $brand-red;
+        }
+    }
+
+    &__text{
+        overflow: hidden;
+    }
+
+    &__header{
+        display: flex;
+        align-items: center;
+        margin: 0 0 .2em;
+    }
+
+    &__name{
+        font-family: $ff-1;
+        margin: 0 auto 0 0;
+        @include fz(18);
+        @extend .text-truncate;
+    }
+
+    &__lastmessage{
+        @include fz(12);
+        @extend .text-truncate;
+    }
+
+    &__date{
+        @include fz(12);
+        flex-shrink: 0;
+        margin-left: 10px;
+    }
+
+    &:hover {
+        border-radius: 8px;
+        background-color: $brand-blue;
+        color: $cf;
+        text-decoration: none;
+    }
+}
+
+.search {
+    height: 60px;
+    background-color: $brand-gray-100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+
+    input {
+        @include size(100%, 30px);
+        border-radius: 10px;
+        outline:none;
+        border-style: none;
+        margin: 0 10px 0 25px;
+        padding: 0 10px 0 10px;
+    }
+}
+
+.date {
+    @include position(absolute, null 50px null null);
+    position: absolute;
+    right: 50px;
+}
+
+
+/**  STYLE 11 */
+#style-11 {
+    &::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background: opacify($cf, 0.1);
+        border: 1px solid #ccc;
+    }
+    &::-webkit-scrollbar {
+        width: 2px;
+        background-color: $cf;
+    }
+
+    &:hover{
+        &::-webkit-scrollbar-thumb{
+            border-radius: 10px;
+            background: linear-gradient(left, #fff, #e4e4e4);
+            border: 1px solid #aaa;
+        }
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: linear-gradient(left, #fff, #e4e4e4);
+
+        &:active {
+            background: linear-gradient(left, #22ADD4, #1E98BA);
+        }
+    }
+}
+
+.label {
+    width: 20px;
+    height: 20px;
+    background-color: #2BC2F9;
+    border-radius: 10px;
+    right: 20px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+        margin: 0;
+        font-size: 13px;
+        padding: 0;
+        color: black;
+    }
+}
+
+.active_dialog {
+    background-color: $brand-blue;
+    border-radius: 8px;
+    a {
+        color: $cf;
+    }
+}
+
+.settings {
+    display: flex;
+    justify-content: center;
+}
+
+.submit_searchInput{
+    @include fz(12);
+    @include size(60px, 30px);
+    background: $brand-blue;
+    border: 0;
+    display: inline-block;
+    position: relative;
+    margin-right: 20px !important;
+    margin-left: 0 !important;
+    border-radius: 10px;
+    color: $cf;
+}
+
+

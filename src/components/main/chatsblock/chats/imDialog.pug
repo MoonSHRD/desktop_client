@@ -1,8 +1,11 @@
-style
-    include chats.css
 li(id=id data-domain=domain data-type=type data-contract_address=contract_address class=""+(active?"active_dialog":""))
-    a(href='#/user/'+id)
-        img(src=avatar, width='40', height='40')
-        if type==='user_chat'
-            span(class="stateLabel "+(online?"online":"offline"))
-        p #{name} 12.12.2002 12:55
+    a.userchat(href='#/user/'+id)
+        .userchat__avatar
+            img.rounded-circle(src=avatar, width='40', height='40')
+            if type==='user_chat'
+                span.userchat__status(class="stateLabel "+(online?"online":"offline"))
+        .userchat__text
+            .userchat__header
+                h3.userchat__name #{name}
+                .userchat__date 20.10.18
+            .userchat__lastmessage Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis dignissimos nulla tempora tempore vero! Commodi cumque eius ipsam modi nisi placeat quo tempore. Accusantium cum illum iusto molestias mollitia reprehenderit!

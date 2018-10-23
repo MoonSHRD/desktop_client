@@ -1,0 +1,24 @@
+/* Fonts Variebles */
+$ff-g : 'Roboto', sans-serif; // Global font-family
+$ff-1 : 'Open Sans', sans-serif; // Additional font
+$fz-num : 16; // Global font-size without unit
+$fz-g : unquote($fz-num + 'px'); // Global font-size px
+
+/* Paths */
+$img : '../img';
+
+/* Color Variebles */
+$cf: #fff;
+$c0: #000;
+
+$brand-primary : #272B46;
+$brand-blue : #2BC2F9;
+$brand-gray-100 : #F3F3F3;
+$brand-gray-400 : #BDBDBD;
+$brand-gray-700 : #909090;
+$brand-green : #1AFF7C;
+$brand-orange : #F2994A;
+$brand-purple : #BB6BD9;
+$brand-red : #C70039;
+
+$primary : $brand-primary;

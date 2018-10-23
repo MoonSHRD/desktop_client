@@ -1,0 +1,210 @@
+#menu {
+    &.icon-bar {
+        @include transition(.5s);
+        /*height: 100%;*/
+        z-index: 100;
+        /*min-height: 100%;*/
+        overflow: hidden;
+        width: 70px; /* Set a specific width */
+        min-width: 70px; /* Set a specific width */
+
+        .menu{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            width: 70px; /* Set a specific width */
+            min-width: 70px; /* Set a specific width */
+            background-color: $primary; /* Dark-grey background */
+            height: 100%;
+
+            li{
+                &.exit{
+                    margin-top: auto;
+                }
+
+                > a{
+                    cursor: pointer;
+                }
+            }
+
+            &__item{
+                @include transition(0.3s ease);
+                @include fz(25);
+                display: block;
+
+                //display: inline-flex; /* Make the links appear below each other instead of side-by-side */
+                padding: 15px; /* Add some padding */
+                color: $cf !important; /* White text color */
+                text-decoration: none;
+                box-sizing: border-box;
+                //width: 300px;
+                width: 100%;
+                //align-items: center;
+                text-align: center;
+                position: relative;
+
+                .image {
+                    width: 40px;
+                    //display: flex;
+                    //justify-content: center;
+
+                    svg{
+
+                        path{
+                            stroke: $cf;
+                        }
+                    }
+                }
+                .text {
+                    @include fz(15);
+                    @extend .d-none;
+                    font-size: 15px;
+                    margin-left: 30px;
+                    white-space: nowrap;
+
+                    //display: none;
+                }
+
+                &_exit,
+                &_logo{
+                    //height: 90px;
+                    display: flex;
+                    align-items: center;
+                    padding: 20px 15px;
+                }
+
+                &_logo{
+
+                    .image {
+
+                        svg {
+
+                            path {
+                                stroke: none;
+                            }
+                        }
+                    }
+                }
+
+                &:hover:not(.menu__item_logo) {
+                    background-color: $c0; /* Add a hover color */
+                }
+
+                &.active_menu {
+                    background-color: $c0; /* Add a hover color */
+                }
+
+                &_settings{
+
+                    &:hover {
+
+                        .image {
+                            svg {
+                                animation-name: spinLoad;
+                                animation-duration: 1s;
+                                animation-fill-mode: both;
+                                animation-timing-function: ease-in-out;
+                            }
+                        }
+                    }
+                }
+
+                &_notification{
+
+                    &:hover {
+
+                        .image {
+                            svg {
+                                animation-name: swing;
+                                animation-duration: 1s;
+                                animation-fill-mode: both;
+                                animation-timing-function: ease-in-out;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        input {
+            margin-left: 30px;
+            border-radius: 10px;
+        }
+    }
+
+    //.menu {
+    //    height: calc(100% - 60px);
+    //    display: flex;
+    //    flex-direction: column;
+    //}
+    /*.active {*/
+    /*background-color: #4CAF50; !* Add an active/current color *!*/
+    /*}*/
+
+    //.menuFull {
+    //    background-color: #363C64;
+    //    width: 100%;
+    //    position: absolute;
+    //    top: 0;
+    //    left: 71px;
+    //    z-index: 0;
+    //    height: 100vh;
+    //}
+
+    //.resize {
+    //    width: 300px;
+    //    min-width: 200px;
+    //    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Для Firefox */
+    //    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Для Safari и Chrome */
+    //    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Параметры тени */
+    //    transition: all .5s;
+    //}
+    //
+    //.resize1 {
+    //    transition: opacity .5s;
+    //}
+    //
+}
+
+.context-menu {
+    position: absolute; /* Задаем абсолютное позиционирование для нашего меню */
+    display: none; /* Изначально не показываем его */
+    background-color: $cf; /* Цвет фона меню */
+    border: 1px solid $brand-gray-100;
+    width: 165px;
+    box-shadow: 0 0 10px opacify($brand-gray-700, 0.38);
+    border-radius: 5px;
+    z-index: 20;
+
+    /* Добавляем стили для списка которые будет находиться внутри меню и, собственно, содержать его пункты: */
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 10px 0;
+
+        li {
+            @include fz(10);
+            margin: 0;
+            padding: 0;
+            background-color: $cf;
+            display: block;
+
+            /* Стили для ссылок пунктов меню: */
+            a {
+                @include fz(13);
+                color: lighten($c0,20%);
+                text-decoration: none;
+                display: block;
+                line-height: 0;
+                padding: 17px;
+                cursor: default;
+
+                &:hover {
+                    background-color: darken($cf,7%);
+                }
+            }
+        }
+    }
+}
