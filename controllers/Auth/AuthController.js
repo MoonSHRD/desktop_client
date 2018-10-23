@@ -13,8 +13,13 @@ const AccountModel_1 = require("../../models/AccountModel");
 const Controller_1 = require("../Controller");
 const UserModel_1 = require("../../models/UserModel");
 const loom_1 = require("../../loom/loom");
+const Helpers_1 = require("../Helpers");
 // let {TextDecoder} = require('text-encoding');
 class AuthController extends Controller_1.Controller {
+    constructor() {
+        super(...arguments);
+        this.connection_tries = 0;
+    }
     init_auth() {
         return __awaiter(this, void 0, void 0, function* () {
             let account = yield AccountModel_1.AccountModel.findOne(1);
@@ -31,6 +36,10 @@ class AuthController extends Controller_1.Controller {
     ;
     auth(account, first = false) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (this.connection_tries === 9)
+                this.connection_tries = 0;
+            else
+                this.connection_tries += 1;
             yield this.ipfs.connect();
             console.log('connected');
             console.log(account);
@@ -42,9 +51,11 @@ class AuthController extends Controller_1.Controller {
                 console.log(identyti_tx);
                 this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
             }
+            let user = yield this.get_self_info();
+            this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
             account.host = this.dxmpp_config.host;
             account.jidhost = this.dxmpp_config.jidhost;
-            account.port = this.dxmpp_config.port;
+            account.port = this.dxmpp_config.port + this.connection_tries;
             yield this.dxmpp.connect(account);
         });
     }
@@ -60,14 +71,14 @@ class AuthController extends Controller_1.Controller {
             user.firstname = data.firstname;
             user.lastname = data.lastname;
             user.bio = data.bio;
-            user.avatar = data.avatar;
+            user.avatar = yield Helpers_1.resize_b64_img(data.avatar);
             yield user.save();
             let account = new AccountModel_1.AccountModel();
             account.privKey = loom_data.priv;
             account.passphrase = data.mnemonic;
+            А;
             account.user = user;
             yield account.save();
-            this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
             yield this.auth(account, true);
         });
     }

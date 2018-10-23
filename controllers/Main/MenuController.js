@@ -27,6 +27,7 @@ class MenuController extends Controller_1.Controller {
     ;
     load_menu(menu) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('load_menu');
             let menu_func = "";
             let account = yield AccountModel_1.AccountModel.findOne(1);
             if (typeof this[`load_${menu}`] === 'function')
@@ -64,6 +65,7 @@ class MenuController extends Controller_1.Controller {
             let html = this.render('main/wallet/wallet.pug', self_info); // +
             // this.render('main/messagingblock/messagingblock.pug');
             this.send_data('change_menu_state', html);
+            console.log('load_menu_wallet');
             yield this.controller_register.run_controller('WalletController', 'change_wallet_menu');
         });
     }

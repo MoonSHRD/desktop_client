@@ -4,6 +4,7 @@ import {UserModel} from "./UserModel";
 import {helper} from "../src/var_helper";
 import {AccountModel} from "./AccountModel";
 import {EventModel} from "./EventModel";
+import {FileModel} from "./FileModel";
 
 // helper
 
@@ -36,6 +37,9 @@ export class ChatModel extends BaseEntity {
     @ManyToMany(type => UserModel)
     @JoinTable()
     users: UserModel[];
+
+    @OneToMany(type => FileModel, files => files.chat)
+    files: FileModel[];
 
     active:boolean=false;
     online:boolean=false;

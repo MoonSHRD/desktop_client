@@ -12,6 +12,8 @@ import {ControllerRegister} from "../controllers/ControllerRegister";
 import {helper} from "./var_helper";
 import {Loom} from "../loom/loom";
 
+
+
 export class Router {
     readonly window: any;
     private paths: any;
@@ -21,7 +23,8 @@ export class Router {
     readonly ipcMain: any;
     readonly dxmpp: any;
     private events: any;
-    private connecting: boolean = false;
+    private connection_tries: number=0;
+    // private connecting: boolean = false;
     private types: any;
     private loom: Loom = Loom.getInstance();
 
@@ -94,7 +97,7 @@ export class Router {
             // console.log("Loom reconecting");
             // await this.controller_register.queue_controller("AuthController", "auth");
             await this.controller_register.queue_controller('AuthController', 'init_auth');
-            await sleep(5000);
+            await sleep(10000);
         });
 
         this.listen_event(this.dxmpp, 'online', async (data) => {
@@ -203,8 +206,8 @@ export class Router {
         /** Messages events **/
 
         this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, stamp) => {
-            console.log(`${sender} says ${message} in ${room_data.id} chat on ${stamp}`);
-            await this.controller_register.queue_controller('MessagesController', 'received_channel_message', room_data, message, sender, stamp);
+            console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
+            await this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
         });
 
         this.listen_event(this.dxmpp, 'chat', async (user, message,file) => {
@@ -219,11 +222,15 @@ export class Router {
         });
 
         this.listen_event(this.ipcMain, 'get_chat_msgs', async (event, arg) => {
-            await this.controller_register.queue_controller('MessagesController', 'get_chat_messages', arg);
+            await this.controller_register.run_controller('MessagesController', 'get_chat_messages', arg);
         });
 
         this.listen_event(this.ipcMain, 'send_message', async (event, arg) => {
             await this.controller_register.queue_controller('MessagesController', 'send_message', arg);
+        });
+
+        this.listen_event(this.ipcMain, 'download_file', async (event, arg) => {
+            await this.controller_register.queue_controller('MessagesController', 'download_file', arg);
         });
 
 
@@ -231,17 +238,18 @@ export class Router {
         /** Wallet events **/
 
         this.listen_event(this.ipcMain, 'change_wallet_menu', async (event, arg) => {
-            console.log('change_wallet_menu');
+            // console.log('change_wallet_menu');
 
             await this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
         });
 
-        this.listen_event(this.ipcMain, 'change_menu_state', async (event, arg) => {
-            this.controller_register.run_controller('MenuController', 'load_menu', arg);
-        });
-
         this.listen_event(this.ipcMain, 'transfer_token', async (event, arg) => {
             await this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
+        });
+
+        this.listen_event(this.ipcMain, 'get_contacts', async () => {
+            console.log('get_contacts');
+            await this.controller_register.run_controller('WalletController', 'get_contacts');
         });
 
 
@@ -252,20 +260,12 @@ export class Router {
             await this.controller_register.queue_controller('SettingsController', 'change_settings_menu', arg);
         });
 
-        this.listen_event(this.ipcMain, 'change_menu_state', async (event, arg) => {
-            this.controller_register.run_controller('MenuController', 'load_menu', arg);
-        });
 
-
-        /** get contacts events **/
-
-        this.listen_event(this.ipcMain, 'get_contacts', async () => {
-            console.log('get_contacts');
-            await this.controller_register.run_controller('WalletController', 'change_settings_menu');
-        });
+        /** Menu events **/
 
         this.listen_event(this.ipcMain, 'change_menu_state', async (event, arg) => {
-            this.controller_register.run_controller('MenuController', 'load_menu', arg);
+            console.log('change menu');
+            await this.controller_register.run_controller('MenuController', 'load_menu', arg);
         });
 
 

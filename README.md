@@ -16,25 +16,22 @@ We use:
  [blockchain](https://github.com/loomnetwork/loom-js) 
  connections&events.
 
+## Dev prerequisites
+
+- python 2.7
+- C compiler
+- libssl-dev
+- libgconf-2-4
+- nodejs 10
+- yarn (optional)
+
 ## To Use
 
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
-
-```bash
-# Clone this repository
-git clone https://github.com/MoonSHRD/desktop_client
-# Go into the repository
-cd desktop_client
-# Install dependencies and rebuild sqlite3 
-npm install; ./node_modules/.bin/electron-rebuild  -f -w sqlite3
-# Or use npm scripts *_install
-# Create src/env_config.ts, adjust and compile it
-cp src/example.env_config.ts src/env_config.ts 
-# Run the app
-npm start
-```
-
-Note: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
+- Install dependencies and rebuild node modules 
+    ```npm run yarn_install```
+- Create src/env_config.ts, adjust it as in src/example.env_config.ts and compile to js
+- Run app 
+```npm start```
 
 ## Dealing with Controllers
 

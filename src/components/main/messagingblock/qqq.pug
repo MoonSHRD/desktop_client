@@ -44,7 +44,7 @@ div(class="head_peer" id="head_peer")
 
                         div(class='image')
                             img(src="components/main/messagingblock/img/videoCall.png")
-                input(type="file" id="attachFileToChat" style="display:none")
+                input(type="file" id="attachFileToChat" style="display:none" multiple)
                 li.attachFileToChat
 
                     a(data-id="")
@@ -89,19 +89,11 @@ div(class="head_peer" id="head_peer")
 
 div(class="messaging_history" id="messaging_history" )
 
-
     .tab-content
         #chat.tab-pane.fade.in.active.show(role='tabpanel')
             ul !{messages?messages:""}
             //ul
-            div(class="send_message_block")
-                if (type === "join_channel" || type === "join_group_chat")
-                    include join_button
-                else if (type === "user_chat" || type === "group" || (type === "channel" && role === "moderator"))
 
-                    textarea(class="send_message_input"  placeholder="Write a text message")
-                    img#upload_file(src='' alt="" width=50 height=50 style='border-radius: 100%')
-                    button(class="send_message_btn" data-translate-key="SEND_MESSAGE") отправить
         #buzz.tab-pane.fade(role='tabpanel')
             .notifyBlock
                 if events
@@ -161,3 +153,11 @@ div(class="messaging_history" id="messaging_history" )
 
 
 
+div(class="send_message_block")
+    if (type === "join_channel" || type === "join_group_chat")
+        include join_button
+    else if (type === "user_chat" || type === "group" || (type === "channel" && role === "moderator"))
+
+        textarea(class="send_message_input"  placeholder="Write a text message")
+        img#upload_file(src='' alt="" width=50 height=50 style='border-radius: 100%')
+        button(class="send_message_btn" data-translate-key="SEND_MESSAGE") отправить

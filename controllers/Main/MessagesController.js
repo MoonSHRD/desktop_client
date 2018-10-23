@@ -14,6 +14,12 @@ const Controller_1 = require("../Controller");
 const MessageModel_1 = require("../../models/MessageModel");
 const ChatModel_1 = require("../../models/ChatModel");
 const FileModel_1 = require("../../models/FileModel");
+const Helpers_1 = require("../Helpers");
+const Electron = require("electron");
+var Notification = Electron.Notification;
+var nativeImage = Electron.nativeImage;
+// import * as eNotify from 'electron-notify'
+// let eNotify = require('electron-notify');
 class MessagesController extends Controller_1.Controller {
     load_join_chat(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -40,29 +46,67 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    render_message(message, chat_id) {
+    render_message(message, fresh = false) {
         return __awaiter(this, void 0, void 0, function* () {
+            // console.log(message);
             let self_info = yield this.get_self_info();
             message.mine = message.sender ? (self_info.id === message.sender.id) : false;
             message.sender_avatar = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.avatar : message.chat.avatar;
+            message.sender_name = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.name : message.chat.name;
+            for (let num in message.files) {
+                if (Helpers_1.check_file_preview(message.files[num].type)) {
+                    message.files[num].preview = true;
+                    if (!Helpers_1.read_file(message.files[num])) {
+                        message.files[num].file = (yield this.ipfs.get_file(message.files[num].hash)).file;
+                        Helpers_1.save_file(message.files[num]);
+                    }
+                    console.log(message.files[num]);
+                }
+                else {
+                    if (Helpers_1.check_file_exist(message.files[num]))
+                        message.files[num].downloaded = true;
+                }
+            }
             let html = this.render('main/messagingblock/message.pug', message);
+            // {
+            //         title:userModel.name,
+            //         body:message.text,
+            //         icon:nativeImage.createFromBuffer(b64img_to_buff(message.sender_avatar))
+            //     }
             const data = {
                 id: message.chat.id,
                 message: html,
             };
             this.send_data('received_message', data);
+            // let notif = new Notification({
+            //     title:userModel.name,
+            //     body:message.text,
+            //     icon:nativeImage.createFromBuffer(b64img_to_buff(message.sender_avatar))
+            // });
+            // notif.show();
         });
     }
     render_chat_messages(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let messages = yield MessageModel_1.MessageModel.get_chat_messages_with_sender_chat(chat_id);
-            messages.forEach((message) => __awaiter(this, void 0, void 0, function* () {
-                yield this.render_message(message, chat_id);
-            }));
+            let messages = yield MessageModel_1.MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+            for (let num = messages.length - 1; num >= 0; --num) {
+                yield this.render_message(messages[num]);
+            }
+        });
+    }
+    download_file(file_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let file = yield FileModel_1.FileModel.findOne(file_id);
+            if (!Helpers_1.read_file(file)) {
+                file.file = (yield this.ipfs.get_file(file.hash)).file;
+                Helpers_1.save_file(file);
+            }
+            this.send_data('file_dowloaded', { id: file_id });
         });
     }
     send_message({ id, text, file }) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(file);
             let self_info = yield this.get_self_info();
             let chat = yield ChatModel_1.ChatModel.findOne(id);
             // let date = new Date();
@@ -71,32 +115,36 @@ class MessagesController extends Controller_1.Controller {
             message.text = text;
             message.time = this.dxmpp.take_time();
             message.chat = chat;
+            message.files = [];
             yield message.save();
             let group;
-            let file_send;
+            let fileModel;
             if (file) {
-                message.with_file = true;
-                yield message.save();
-                let preview = false;
-                if ([
-                    'image/jpeg',
-                    'image/png',
-                ].includes(file.type))
-                    preview = true;
-                file_send = { file: file.file, hash: yield this.ipfs.add_file(file), preview: preview, name: file.name };
-                let file_info = new FileModel_1.FileModel();
+                console.log(file);
+                fileModel = new FileModel_1.FileModel();
+                // if ([
+                //     'image/jpeg',
+                //     'image/png',
+                // ].includes(file.type))
+                fileModel.preview = Helpers_1.check_file_preview(file.type);
+                // file_send = {fileModel: file.fileModel, hash: await this.ipfs.add_file(fileModel), preview: preview, name: fileModel.name};
                 // file_info.sender = self_info.id;
-                file_info.link = file_send.hash;
-                file_info.chat_id = chat.id;
-                file_info.message_id = message.id;
-                file_info.filename = file.name;
-                file_info.save();
+                fileModel.hash = yield this.ipfs.add_file(file);
+                fileModel.chat = chat;
+                fileModel.message = message;
+                fileModel.file = file.file;
+                fileModel.name = file.name;
+                fileModel.type = file.type;
+                yield fileModel.save();
+                Helpers_1.save_file(fileModel);
+                message.files = [fileModel];
+                // console.log(fileModel);
                 // console.log("Save file_info")
             }
-            message.file = file_send;
-            yield message.save();
+            // message.fileModel = file_send;
+            // await message.save();
             if (chat.type == this.group_chat_types.channel) {
-                yield this.render_message(message, chat.id);
+                yield this.render_message(message);
             }
             if (chat.type === this.chat_types.user) {
                 yield this.render_message(message, id);
@@ -107,7 +155,19 @@ class MessagesController extends Controller_1.Controller {
                 group = true;
             }
             // this.dxmpp.send(chat, text, group);
-            this.dxmpp.send(chat, text, group, file_send);
+            this.dxmpp.send(chat, text, group, message.files);
+            //
+            // eNotify.setConfig({
+            //     appIcon: self_info.avatar,
+            //     displayTime: 6000
+            // });
+            // eNotify.notify({ title: self_info.name, text: text });
+            let notif = new Notification({
+                title: self_info.name,
+                body: text,
+                icon: nativeImage.createFromBuffer(Helpers_1.b64img_to_buff(self_info.avatar))
+            });
+            notif.show();
             // await this.render_message(message, id);
         });
     }
@@ -120,8 +180,9 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_message(user, text, file) {
+    received_message(user, text, files) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(files);
             let self_info = yield this.get_self_info();
             let userModel = yield UserModel_1.UserModel.findOne(user.id);
             let chat = yield ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id);
@@ -130,35 +191,36 @@ class MessagesController extends Controller_1.Controller {
             message.sender = userModel;
             message.chat = chat;
             message.time = this.dxmpp.take_time();
+            message.files = [];
             yield message.save();
-            let ipfs_file;
-            if (file) {
-                message.with_file = true;
-                yield message.save();
-                let file_info = new FileModel_1.FileModel();
-                // file_info.sender = self_info.id;
-                file_info.link = file.hash;
-                file_info.chat_id = chat.id;
-                file_info.message_id = message.id;
-                file_info.filename = file.name;
-                file_info.save();
-                ipfs_file = yield this.ipfs.get_file(file.hash);
-                message.file = {
-                    file: ipfs_file.file,
-                    preview: file.preview,
-                    type: file.type,
-                    name: file.name,
-                };
-                console.log(ipfs_file);
+            // let ipfs_file;
+            if (files) {
+                for (let num in files) {
+                    yield message.save();
+                    let fileModel = new FileModel_1.FileModel();
+                    // file_info.sender = self_info.id;
+                    fileModel.hash = files[num].hash;
+                    fileModel.chat = chat;
+                    fileModel.message = message;
+                    fileModel.name = files[num].name;
+                    fileModel.type = files[num].type;
+                    fileModel.preview = Helpers_1.check_file_preview(files[num].type);
+                    if (fileModel.preview) {
+                        fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
+                    }
+                    yield fileModel.save();
+                    message.files.push(fileModel);
+                }
             }
-            yield this.render_message(message, chat.id);
+            yield this.render_message(message, true);
         });
     }
     ;
     received_group_message(room_data, message, sender, stamp) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
-            // if (self_info.id === sender) return;
+            if (sender.address == self_info.id)
+                return;
             let userModel;
             if (sender)
                 userModel = yield UserModel_1.UserModel.findOne(sender.address);
@@ -176,29 +238,17 @@ class MessagesController extends Controller_1.Controller {
             messageModel.chat = chat;
             messageModel.time = stamp;
             yield messageModel.save();
-            yield this.render_message(messageModel, chat.id);
+            yield this.render_message(messageModel, true);
+            // await this.render_message(message, chat.id);
+            // message.sender_avatar = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.avatar : message.chat.avatar;
+            // let notif = new Notification({
+            //     title:userModel.name,
+            //     body:message,
+            //     icon:nativeImage.createFromBuffer(b64img_to_buff(userModel.avatar))
+            // });
+            // notif.show();
         });
     }
-    received_channel_message(room_data, message, sender, stamp) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (stamp) {
-                let time = stamp.split(" ")[1].split(":");
-                stamp = `${time[0]}:${time[1]}`;
-            }
-            else {
-                stamp = this.dxmpp.take_time();
-            }
-            let chat = yield ChatModel_1.ChatModel.findOne(room_data.id);
-            let messageModel = new MessageModel_1.MessageModel();
-            messageModel.text = message;
-            messageModel.sender = null;
-            messageModel.chat = chat;
-            messageModel.time = stamp;
-            yield messageModel.save();
-            yield this.render_message(messageModel, chat.id);
-        });
-    }
-    ;
 }
 module.exports = MessagesController;
 //# sourceMappingURL=MessagesController.js.map

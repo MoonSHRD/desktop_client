@@ -21,6 +21,7 @@ var MessageModel_1;
 const typeorm_1 = require("typeorm");
 const UserModel_1 = require("./UserModel");
 const ChatModel_1 = require("./ChatModel");
+const FileModel_1 = require("./FileModel");
 // import {ChatModel} from "./ChatModel";
 let MessageModel = MessageModel_1 = class MessageModel extends typeorm_1.BaseEntity {
     // import {ChatModel} from "./ChatModel";
@@ -29,16 +30,22 @@ let MessageModel = MessageModel_1 = class MessageModel extends typeorm_1.BaseEnt
         this.server_id = 0;
         this.text = '';
         this.time = '';
-        this.with_file = false;
     }
     static get_chat_messages_with_sender(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield MessageModel_1.find({ relations: ['sender'], where: { chat: chat_id } });
         });
     }
-    static get_chat_messages_with_sender_chat(chat_id) {
+    static get_chat_messages_with_sender_chat_files(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield MessageModel_1.find({ relations: ['sender', 'chat'], where: { chat: chat_id } });
+            return yield MessageModel_1.find({
+                relations: ['sender', 'chat', 'files'],
+                where: { chat: chat_id },
+                take: 5,
+                order: {
+                    id: "DESC"
+                }
+            });
         });
     }
 };
@@ -59,10 +66,6 @@ __decorate([
     __metadata("design:type", String)
 ], MessageModel.prototype, "time", void 0);
 __decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", Boolean)
-], MessageModel.prototype, "with_file", void 0);
-__decorate([
     typeorm_1.ManyToOne(type => ChatModel_1.ChatModel, chat => chat.messages),
     typeorm_1.JoinColumn(),
     __metadata("design:type", ChatModel_1.ChatModel)
@@ -72,6 +75,10 @@ __decorate([
     typeorm_1.JoinColumn(),
     __metadata("design:type", UserModel_1.UserModel)
 ], MessageModel.prototype, "sender", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => FileModel_1.FileModel, files => files.message),
+    __metadata("design:type", Array)
+], MessageModel.prototype, "files", void 0);
 MessageModel = MessageModel_1 = __decorate([
     typeorm_1.Entity()
 ], MessageModel);

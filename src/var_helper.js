@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const paths = {
+exports.paths = {
     root: __dirname + '/../',
     src: __dirname,
     components: __dirname + '/components/',
@@ -9,24 +9,27 @@ const paths = {
     storage: __dirname + '/../storage/',
     db: __dirname + '/../storage/data.db',
 };
-const pug_options = {
+exports.pug_options = {
     cache: true,
 };
-const chat_types = {
+exports.files_config = {
+    files_path: './downloads/',
+};
+exports.chat_types = {
     user: 'user_chat',
     group: 'group_chat',
 };
-const chat_to_menu = {
+exports.chat_to_menu = {
     user: 'menu_user_chats',
     group: 'menu_chats',
 };
-const group_chat_types = {
+exports.group_chat_types = {
     group: 'group',
     channel: 'channel',
     join_group: 'join_group',
     join_channel: 'join_channel',
 };
-const event_types = {
+exports.event_types = {
     info: 'info',
     primary: 'primary',
     success: 'success',
@@ -34,7 +37,7 @@ const event_types = {
     warning: 'warning',
 };
 // const menues
-const events = {
+exports.events = {
     change_app_state: "change_app_state",
     change_menu_state: "change_menu_state",
     generate_mnemonic: "generate_mnemonic",
@@ -54,12 +57,12 @@ const events = {
     reload_chat: "reload_chat",
 };
 exports.helper = {
-    paths,
-    chat_types,
-    group_chat_types,
-    chat_to_menu,
-    events,
-    event_types,
-    pug_options
+    paths: exports.paths,
+    chat_types: exports.chat_types,
+    group_chat_types: exports.group_chat_types,
+    chat_to_menu: exports.chat_to_menu,
+    events: exports.events,
+    event_types: exports.event_types,
+    pug_options: exports.pug_options
 };
 //# sourceMappingURL=var_helper.js.map
