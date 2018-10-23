@@ -4,3 +4,7 @@ li(id=id data-domain=domain data-type=type data-contract_address=contract_addres
         if type==='user_chat'
             span(class="stateLabel "+(online?"online":"offline"))
         p #{name}
+        if time
+            p #{time.toLocaleString()}
+        if text
+            p #{text}

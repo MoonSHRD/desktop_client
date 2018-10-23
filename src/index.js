@@ -251,13 +251,16 @@ window.onload = function () {
     ipcRenderer.on('received_message', (event, obj) => {
         if ($('.active_dialog').attr('id') === obj.id) {
             $('.messaging_history ul').append(obj.message);
-        } else {
-            let myNotification = new Notification(obj.message.sender_name, {
-                body: obj.message.text,
-                icon: obj.message.sender_avatar
-            });
+        }
+        else {
+            // new Notification(obj.message.sender_name, {
+            //     body: obj.message.text,
+            //     icon: obj.message.sender_avatar
+            // });
 
-            myNotification.show();
+            // ipcRenderer.send('show_message_notification');
+
+            // myNotification.show();
 
             // myNotification.onclick = () => {
             //     console.log('Notification clicked')

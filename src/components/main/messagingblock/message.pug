@@ -3,7 +3,7 @@ li(class=mine ? "outMessage" : "inMessage")
 
     img.block(src = sender_avatar width = 44 height = 44)
     p  #{text}
-        span.block #{time}
+        span.block #{time.toLocaleString()}
     if files
         each file in files
             if file.preview

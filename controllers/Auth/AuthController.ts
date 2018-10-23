@@ -4,7 +4,8 @@ import {Controller} from "../Controller";
 import {UserModel} from "../../models/UserModel";
 import {Loom} from "../../loom/loom";
 import {TextEncoder,TextDecoder} from 'text-encoding';
-import {resize_b64_img} from "../Helpers";
+import {resize_b64_img, resize_img_from_path} from "../Helpers";
+import {paths} from "../../src/var_helper";
 // let {TextDecoder} = require('text-encoding');
 
 class AuthController extends Controller {
@@ -59,7 +60,7 @@ class AuthController extends Controller {
         user.firstname = data.firstname;
         user.lastname = data.lastname;
         user.bio = data.bio;
-        user.avatar = await resize_b64_img(data.avatar);
+        user.avatar = data.avatar?(await resize_b64_img(data.avatar)):(await resize_img_from_path(this.paths.components+'auth/default-avatar1.jpg'));
         await user.save();
 
         let account = new AccountModel();

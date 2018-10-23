@@ -102,7 +102,7 @@ class MenuController extends Controller_1.Controller {
                 initial_user_chat.users = [self_info, initial_user];
                 yield initial_user_chat.save();
                 initial_user_message = new MessageModel_1.MessageModel();
-                initial_user_message.time = this.dxmpp.take_time();
+                initial_user_message.time = Date.now();
                 initial_user_message.chat = initial_user_chat;
                 initial_user_message.sender = initial_user;
                 initial_user_message.text = 'Hello my friend!';
@@ -128,7 +128,7 @@ class MenuController extends Controller_1.Controller {
                 // initial_user_chat.users = [self_info, initial_user];
                 yield initial_user_chat.save();
                 initial_user_message = new MessageModel_1.MessageModel();
-                initial_user_message.time = this.dxmpp.take_time();
+                initial_user_message.time = Date.now();
                 initial_user_message.chat = initial_user_chat;
                 // initial_user_message.sender = initial_user;
                 initial_user_message.text = 'Welcome to Moonshard!';

@@ -71,7 +71,7 @@ class AuthController extends Controller_1.Controller {
             user.firstname = data.firstname;
             user.lastname = data.lastname;
             user.bio = data.bio;
-            user.avatar = yield Helpers_1.resize_b64_img(data.avatar);
+            user.avatar = data.avatar ? (yield Helpers_1.resize_b64_img(data.avatar)) : (yield Helpers_1.resize_img_from_path(this.paths.components + 'auth/default-avatar1.jpg'));
             yield user.save();
             let account = new AccountModel_1.AccountModel();
             account.privKey = loom_data.priv;
