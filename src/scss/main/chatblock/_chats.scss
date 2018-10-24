@@ -8,6 +8,7 @@
         list-style: none;
         margin: 0;
         padding: 0px;
+        cursor: pointer;
 
         //li {
         //    margin-bottom: 2px;
@@ -29,7 +30,6 @@
     overflow: hidden;
     position: relative;
     z-index: 10;
-    margin-bottom: 2px;
 
     &__avatar{
         margin-right: 10px;
