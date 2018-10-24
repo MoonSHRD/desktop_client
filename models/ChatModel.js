@@ -156,10 +156,10 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
             let qb = yield typeorm_1.getConnection()
                 .createQueryRunner()
                 .query((`select * from 
-                   ((select id,domain,usr.name as name,usr.avatar as avatar, usr.online as online, type
+                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type
                    from chat_model ch
                        inner join (
-                               select name, avatar, id user_id, online
+                               select name, avatar, id user_id, online, domain
                                from user_model 
                                where user_model.id != "${self_info.id}"
                            ) usr 
@@ -169,13 +169,14 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
                    select id,domain,name,avatar, 0 as online, type
                        from chat_model ch1
                        where ch1.type != "${var_helper_1.chat_types.user}") ch2
-                   inner join (
+                   left join (
                            select time, text, chatId
                            from message_model msg
                            group by msg.chatId
                            order by msg.time
                        ) msg
-                       on msg.chatId = ch2.id)`));
+                       on msg.chatId = ch2.id) ch3
+                   order by ch3.time`));
             return qb;
         });
     }

@@ -22,7 +22,9 @@ class ChatsController extends Controller {
         if (chat.type === this.chat_types.user && chat.hasOwnProperty('get_user_chat_meta')) {
             await chat.get_user_chat_meta();
         }
-        chat.time=Helper.formate_date(new Date(chat.time),{locale:'ru',for:'chat'});
+        if (chat.time)
+            chat.time=Helper.formate_date(new Date(chat.time),{locale:'ru',for:'chat'});
+        console.log(chat);
         let html = this.render('main/chatsblock/chats/imDialog.pug', chat);
         this.send_data('buddy', {id: chat.id, type: general_chat_type, html: html})
     }
@@ -35,6 +37,7 @@ class ChatsController extends Controller {
             userModel.online = state === 'online';
             await userModel.save();
             let chat = await ChatModel.get_user_chat(self_info.id, user.id);
+            await chat.get_user_chat_meta();
             await this.load_chat(chat, this.chat_to_menu.user);
         } else {
             userModel = new UserModel();
