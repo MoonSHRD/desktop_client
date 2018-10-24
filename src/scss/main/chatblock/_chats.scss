@@ -29,6 +29,7 @@
     overflow: hidden;
     position: relative;
     z-index: 10;
+    margin-bottom: 2px;
 
     &__avatar{
         margin-right: 10px;
@@ -53,6 +54,7 @@
 
     &__text{
         overflow: hidden;
+        flex: 1;
     }
 
     &__header{
@@ -64,12 +66,8 @@
     &__name{
         font-family: $ff-1;
         margin: 0 auto 0 0;
-        @include fz(18);
-        @extend .text-truncate;
-    }
-
-    &__lastmessage{
-        @include fz(12);
+        font-weight: 700;
+        @include fz(14);
         @extend .text-truncate;
     }
 
@@ -79,11 +77,41 @@
         margin-left: 10px;
     }
 
+    &__body{
+        display: flex;
+        align-items: center;
+
+        .badge{
+            margin-left: auto;
+            background-color: $info;
+            color: $brand-gray-100;
+            @include transition(.2s ease);
+
+            .active_dialog & {
+                background-color: $brand-gray-100;
+                color: $primary-text;
+            }
+        }
+    }
+
+    &__lastmessage{
+        @include fz(12);
+        @extend .text-truncate;
+    }
+
     &:hover {
         border-radius: 0px;
         background-color: rgba(43, 194, 249, 0.2);
         color: #000000;
         text-decoration: none;
+
+        .userchat__body{
+
+            .badge {
+                background-color: $brand-gray-100;
+                color: $primary-text;
+            }
+        }
     }
 }
 
@@ -165,10 +193,11 @@
     border-radius: 0px;
     a {
         color: $cf;
-    }
-    :hover {
+      &:hover {
         color: #fff;
+      }
     }
+
 }
 
 .settings {

@@ -232,33 +232,7 @@ class MessagesController extends Controller {
         message.notificate = true;
         await messageModel.save();
         await this.render_message(messageModel);
-
-        // await this.render_message(message, chat.id);
-        // message.sender_avatar = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.avatar : message.chat.avatar;
-
-        // let notif = new Notification({
-        //     title:userModel.name,
-        //     body:message,
-        //     icon:nativeImage.createFromBuffer(b64img_to_buff(userModel.avatar))
-        // });
-        // notif.show();
     }
-
-    // async received_channel_message(room_data, message, sender, stamp) {
-    //
-    //     if (stamp) {
-    //         let time = stamp.split(" ")[1].split(":");
-    //         stamp = `${time[0]}:${time[1]}`;
-    //     } else {stamp = this.dxmpp.take_time()}
-    //     let chat = await ChatModel.findOne(room_data.id);
-    //     let messageModel = new MessageModel();
-    //     messageModel.text = message;
-    //     messageModel.sender = null;
-    //     messageModel.chat = chat;
-    //     messageModel.time = stamp;
-    //     await messageModel.save();
-    //     await this.render_message(messageModel, chat.id);
-    // };
 }
 
 module.exports = MessagesController;

@@ -242,14 +242,6 @@ class MessagesController extends Controller_1.Controller {
             message.notificate = true;
             yield messageModel.save();
             yield this.render_message(messageModel);
-            // await this.render_message(message, chat.id);
-            // message.sender_avatar = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.avatar : message.chat.avatar;
-            // let notif = new Notification({
-            //     title:userModel.name,
-            //     body:message,
-            //     icon:nativeImage.createFromBuffer(b64img_to_buff(userModel.avatar))
-            // });
-            // notif.show();
         });
     }
 }

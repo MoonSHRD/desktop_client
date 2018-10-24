@@ -233,169 +233,310 @@ a.join_button {
         background: $brand-gray-100;
         overflow: hidden;
     }
-
-    &_history {
-        height: auto;
-        max-height: calc(100% - 195px);
-        overflow-y: scroll;
-        overflow-x: hidden;
-        margin-top: 40px;
-        padding-bottom: 50px;
-
-        @media screen and (max-width: 735px) {
-                max-height: calc(100% - 105px);
-        }
-
-        &::-webkit-scrollbar {
-            width: 8px;
-            background: transparent;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background-color: rgba(0, 0, 0, 0.3);
-        }
-
-        ul {
-            li {
-                display: inline-block;
-                clear: both;
-                float: left;
-                margin: 15px 15px 5px 0;
-                width: calc(100% - 25px);
-                font-size: 0.9em;
-
-                &:nth-last-child(1) {
-                    margin-bottom: 20px;
-                }
-
-                p {
-                    display: inline-block;
-                    padding: 10px 15px;
-                    border-radius: 10px;
-                    font-size: 1.2em;
-                    max-width: 400px;
-                    line-height: 130%;
-                    word-wrap: break-word;
-                    white-space: pre-wrap;
-                }
-            }
-        }
-    }
 }
 
 .send_message {
 
-    &_block {
-        @include size(100%, 100px);
+    &__block {
+        @include size(100%, auto);
         @include position(absolute, null null 0);
         display: flex;
-        justify-content: space-evenly;
+        //justify-content: space-evenly;
         align-items: center;
         overflow: hidden;
-
+        padding: 20px 30px 20px 20px;
     }
 
-    &_input {
-        @include size(60%, 55px);
+    &__img{
+        @include size(0);
+        //margin: 0 15px;
+
+        &.added{
+            @include size(50px);
+        }
+    }
+
+    &__input {
+        @include size(auto, 55px);
         border-radius: 10px;
         border-style: none;
         outline: none;
         padding: 5px 10px;
         resize: none;
+        flex: 1;
+        margin: 0 15px;
 
         &::placeholder {
             color: $brand-blue;
         }
     }
 
-    &_btn {
-        @include size(100px,50px);
+    &__btn {
+        //@include size(100px,50px);
+        padding: 10px 20px;
         background-color: #F3F3F3;
-        color: #2BC2F9;
-        border: 2px solid #2BC2F9; /* Green */
+        color: $brand-blue;
+        border: 2px solid $brand-blue; /* Green */
         border-radius: 5px;
         cursor: pointer;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-left: 15px;
     }
-}
 
-ul {
-    li {
-        &.outMessage {
-            p {
-                float: right;
-                background-color: #2BC2F9;
-                color: white;
-                position: relative;
-                box-shadow: 0 0 13px rgba(0, 123, 255, 0.5);
-                margin-right: 15px;
-                padding-right: 50px;
+    &__file,
+    &__voice{
+        padding: 5px 10px;
+        background: none;
+        border: 0;
+        cursor: pointer;
 
-                > img {
-                    float: left;
-                    margin: 10px 15px;
-                    padding-left: 5px;
-                }
-
-                &::after {
-                    content: '';
-                    @include position(absolute, 12px -12px null null);
-                    border: 5px solid transparent;
-                    border-left: 7px solid #2BC2F9;
-                }
-
-                span {
-                    text-decoration: none;
-                    font-size: 11px;
-                    color: #000000;
-                    /* float: right; */
-                    bottom: -25px;
-                    right: 9px;
-                    position: absolute;
-                }
-            }
-
-            > img {
-                border-radius: 100%;
-                float: right;
-            }
+        img{
+            @include size(auto, 25px);
+            //height:  30px;
+            opacity: .8;
+            @include transition(.2s ease);
         }
 
-        &.inMessage {
+        &:hover{
 
-            > img {
-                border-radius: 100%;
-            }
-
-            p {
-                left: 15px;
-                background-color: #ffffff;
-                color: black;
-                position: relative;
-                box-shadow: 0 0 13px rgba(214, 214, 214, 0.5);
-
-                &::after {
-                    content: '';
-                    position: absolute;
-                    left: -12px;
-                    top: 12px;
-                    border: 5px solid transparent;
-                    border-right: 7px solid #ffffff;
-                }
-
-                span {
-                    text-decoration: none;
-                    font-size: 11px;
-                    padding-left: 10px;
-                    float: right;
-                    color: black;
-                    position: relative;
-                    bottom: -35px;
-                    right: -5px;
-                }
+            img{
+                opacity: 1;
             }
         }
     }
 }
+
+/*
+ * message history
+ */
+.msgHistory{
+    height: auto;
+    max-height: calc(100% - 195px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-top: 40px;
+    padding-bottom: 50px;
+
+    @media screen and (max-width: 735px) {
+        max-height: calc(100% - 105px);
+    }
+
+    &::-webkit-scrollbar {
+        width: 8px;
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    // Список сообщений
+    &__list{
+        padding: 15px 30px;
+    }
+}
+/*
+ * /message history
+ */
+
+/*
+ * message
+ */
+.message {
+    //display: inline-block;
+    //clear: both;
+    //float: left;
+    //margin: 15px 15px 5px 0;
+    margin: 15px 0 15px;
+    //width: calc(100% - 25px);
+    width: 100%;
+    font-size: 0.9em;
+    display: flex;
+    justify-content: flex-start;
+
+    &__avatar{
+        padding: 0 15px 10px;
+    }
+
+    &__bubble {
+        background-color: $cf;
+        box-shadow: 0 0 13px rgba(214, 214, 214, 0.5);
+        position: relative;
+        display: inline-block;
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-size: 1.2em;
+        max-width: 400px;
+        line-height: 1.3;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+
+        &:after{
+            content: '';
+            @include position(absolute, 17px null null -12px);
+            border: 5px solid transparent;
+            border-right: 7px solid #ffffff;
+        }
+
+        .message_out &{
+            background-color: $brand-blue;
+            color: $cf;
+            box-shadow: 0 0 13px rgba(0, 123, 255, 0.5);
+
+            &::after {
+                left: auto;
+                right: -12px;
+                border-right-color: transparent;
+                border-left: 7px solid #2BC2F9;
+            }
+        }
+    }
+
+    &__text{
+        user-select: auto;
+    }
+
+    &__date{
+        @include fz(12);
+        text-align: right;
+        margin-top: 3px;
+        opacity: .8;
+    }
+
+    &_out {
+        flex-direction: row-reverse;
+    }
+
+    &_in {
+    }
+
+    .imageOutputFile {
+        margin-top: 10px;
+        width: 100%;
+        position: relative;
+
+        img {
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    }
+}
+
+.docOutputFile {
+    width: 100%;
+    position: relative;
+    margin-top: 10px;
+    &__icon {
+        @include size(45px);
+        //margin: 5px 13px;
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+        text-align: center;
+
+        &_download {
+
+            svg.fa-file {
+                opacity: 0;
+                transition: .2s ease;
+            }
+        }
+    }
+
+    .stop {
+        @include position(absolute, 50% 50%);
+        @include fz(20);
+        @include transition(.2s ease);
+        text-align: center;
+        opacity: 0;
+        transform: translate(50%, -50%);
+        color: $brand-red;
+        cursor: pointer;
+    }
+
+    svg {
+        cursor: pointer;
+        transition: .2s ease;
+
+        path {
+            fill: #212529;
+
+            .message_out &{
+                fill: $cf
+            }
+        }
+
+        &.fa-file {
+            height: 45px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+        }
+        &.fa-spinner {
+            opacity: 0;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            animation: spinLoad 2s linear infinite;
+        }
+    }
+
+    &.load{
+
+        .docOutputFile {
+
+            &__icon{
+
+                &:hover {
+
+                    .stop {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+
+        svg {
+            opacity: 0;
+
+            &.fa-spinner {
+                opacity: 1;
+            }
+        }
+    }
+
+    &.complite{
+
+        .docOutputFile{
+
+            &__icon{
+
+                &_download{
+                    svg {
+                        opacity: 0;
+
+                        &.fa-file {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .message_out & span {
+        //padding-right: 15px;
+    }
+}
+/*
+ * /message
+ */
 
 .head_peer {
     height: 70px;
@@ -472,17 +613,22 @@ ul {
 }
 
 .peer_name {
-    margin: 0;
-    margin-left: 20px;
-    color: black;
-    text-decoration: none !important;
+    margin: 0 0 0 10px;
+    color: $primary-text;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+
+    span{
+        @include fz(18);
+    }
 
     &:hover {
-        text-decoration: none !important;
+        text-decoration: none;
     }
 
     img {
-        border-radius: 50px;
+        margin-right: 10px;
     }
 }
 
@@ -651,8 +797,7 @@ ul {
 }
 
 .showOnMapChannel {
-    background-image: url('#{$img}/chatsblock/img/mapPoint.png');
-
+    background-image: url('#{$img}/chatblock/mapPoint.png');
 }
 
 .calendarChannel {
@@ -690,166 +835,6 @@ ul {
         left: 3em;
         animation-name: reveal;
         animation-direction: reverse; /* thx @HugoGiraudel */
-    }
-}
-
-.outMessage {
-
-    .imageOutputFile {
-        width: 100%;
-        float: right;
-        text-align: right;
-        margin-right: 45px;
-        position: relative;
-
-        img {
-            margin: 5px 13px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        span {
-            padding-right: 15px;
-        }
-    }
-
-    .docOutputFile {
-        width: 100%;
-        float: right;
-        text-align: right;
-        margin-right: 45px;
-        /*margin-left: 45px;*/
-        position: relative;
-    }
-}
-
-.inMessage {
-    .docOutputFile {
-        width: 100%;
-        margin-left: 45px;
-        position: relative;
-
-        img {
-            margin: 5px 13px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-    }
-    .imageOutputFile {
-        width: 100%;
-        position: relative;
-        left: 50px;
-
-        img {
-            margin: 5px 10px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-    }
-}
-
-.docOutputFile {
-    &__icon {
-        @include size(45px);
-        margin: 5px 13px;
-        position: relative;
-        cursor: pointer;
-        display: inline-block;
-        text-align: center;
-
-        &_download {
-
-            svg.fa-file {
-                opacity: 0;
-                transition: .2s ease;
-            }
-        }
-    }
-
-    .stop {
-        @include position(absolute, 50% 50%);
-        @include fz(20);
-        @include transition(.2s ease);
-        text-align: center;
-        opacity: 0;
-        transform: translate(50%, -50%);
-        color: $brand-red;
-        cursor: pointer;
-    }
-
-    svg {
-        cursor: pointer;
-        transition: .2s ease;
-
-        path {
-            fill: #212529;
-        }
-
-        &.fa-file {
-            height: 45px;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            left: 0;
-        }
-        &.fa-spinner {
-            opacity: 0;
-            cursor: pointer;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            left: 0;
-            animation: spinLoad 2s linear infinite;
-        }
-    }
-
-    &.load{
-
-        .docOutputFile {
-
-            &__icon{
-
-                &:hover {
-
-                    .stop {
-                        opacity: 1;
-                    }
-                }
-            }
-        }
-
-        svg {
-            opacity: 0;
-
-            &.fa-spinner {
-                opacity: 1;
-            }
-        }
-    }
-
-    &.complite{
-
-        .docOutputFile{
-
-            &__icon{
-
-                &_download{
-                    svg {
-                        opacity: 0;
-
-                        &.fa-file {
-                            opacity: 1;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    .outMessage & span {
-        padding-right: 15px;
     }
 }
 

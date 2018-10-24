@@ -11,6 +11,8 @@ $img : '../img';
 $cf: #fff;
 $c0: #000;
 
+$primary-text : #212529;
+
 $brand-primary : #272B46;
 $brand-blue : #2BC2F9;
 $brand-gray-100 : #F3F3F3;
@@ -22,3 +24,6 @@ $brand-purple : #BB6BD9;
 $brand-red : #C70039;
 
 $primary : $brand-primary;
+$info : $brand-blue;
+$danger : $brand-red;
+$success : $brand-green;

@@ -65,7 +65,7 @@ class AuthController extends Controller {
 
         let account = new AccountModel();
         account.privKey = loom_data.priv;
-        account.passphrase = data.mnemonic;А
+        account.passphrase = data.mnemonic;
         account.user = user;
         await account.save();
 

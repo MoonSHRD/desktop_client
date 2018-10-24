@@ -76,7 +76,6 @@ class AuthController extends Controller_1.Controller {
             let account = new AccountModel_1.AccountModel();
             account.privKey = loom_data.priv;
             account.passphrase = data.mnemonic;
-            А;
             account.user = user;
             yield account.save();
             yield this.auth(account, true);
