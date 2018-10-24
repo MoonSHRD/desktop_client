@@ -107,6 +107,10 @@ window.onload = function () {
             ipcRenderer.send('change_menu_state', type);
     });
 
+    $(document).on('click','[data-id=menu_create_chat]',function (e) {
+        ipcRenderer.send('change_menu_state', 'menu_create_chat');
+    });
+
     ipcRenderer.on('change_menu_state', (event, arg) => {
         $('#working_side').html(arg);
     });

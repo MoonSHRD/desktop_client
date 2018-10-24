@@ -41,6 +41,7 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
         this.online = false;
         this.time = null;
         this.text = null;
+        this.senderId = null;
     }
     static get_user_chat_id(self_id, user_id) {
         let sort = [self_id, user_id];
@@ -170,7 +171,7 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
                        from chat_model ch1
                        where ch1.type != "${var_helper_1.chat_types.user}") ch2
                    left join (
-                           select time, text, chatId
+                           select time, text, chatId, senderId
                            from message_model msg
                            group by msg.chatId
                            order by msg.time

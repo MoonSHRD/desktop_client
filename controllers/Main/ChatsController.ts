@@ -19,11 +19,17 @@ class ChatsController extends Controller {
     };
 
     private async load_chat(chat: ChatModel, general_chat_type) {
+        let self_info = await this.get_self_info();
         if (chat.type === this.chat_types.user && chat.hasOwnProperty('get_user_chat_meta')) {
             await chat.get_user_chat_meta();
         }
         if (chat.time)
             chat.time=Helper.formate_date(new Date(chat.time),{locale:'ru',for:'chat'});
+        if (chat.senderId===self_info.id){
+            if (chat.text)
+                chat.text='Вы: '+chat.text;
+        }
+
         console.log(chat);
         let html = this.render('main/chatsblock/chats/imDialog.pug', chat);
         this.send_data('buddy', {id: chat.id, type: general_chat_type, html: html})

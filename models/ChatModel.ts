@@ -46,6 +46,7 @@ export class ChatModel extends BaseEntity {
 
     time:Date=null;
     text:string=null;
+    senderId:string=null;
 
     static get_user_chat_id(self_id:string,user_id:string){
         let sort=[self_id,user_id];
@@ -166,7 +167,7 @@ export class ChatModel extends BaseEntity {
                        from chat_model ch1
                        where ch1.type != "${chat_types.user}") ch2
                    left join (
-                           select time, text, chatId
+                           select time, text, chatId, senderId
                            from message_model msg
                            group by msg.chatId
                            order by msg.time
