@@ -7,6 +7,8 @@
         overflow: hidden;
         width: 70px; /* Set a specific width */
         min-width: 70px; /* Set a specific width */
+        position: absolute;
+        height: 100%;
 
         .menu{
             margin: 0;

@@ -10,7 +10,7 @@
 .chats ul {
     list-style: none;
     margin: 0;
-    padding: 20px;
+    padding: 0px;
     /*margin-top: 45px;*/
 }
 
@@ -42,7 +42,7 @@
 }
 
 .chats a:hover {
-    border-radius: 8px;
+    border-radius: 0px;
     background-color: #2BC2F9;
     color: #ffffff;
 }
@@ -75,8 +75,8 @@
     /*width: calc(100% - 30px);*/
     outline:none;
     border-style: none;
-    margin: 0 10px 0 25px;
-    padding: 0 10px 0 10px;
+    margin: 0 20px;
+    padding: 0 10px;
 }
 
 .date {

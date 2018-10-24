@@ -2,6 +2,12 @@ const {ipcRenderer} = require('electron');
 const dict = require('./langs/lang');
 const slick = require('slick-carousel');
 
+let p = null;
+let d = null;
+let r = null;
+let curr_width = null;
+let unlock = false;
+
 
 window.onload = function () {
 
@@ -545,5 +551,40 @@ window.onload = function () {
     ipcRenderer.on("get_contacts", (event, obj) => {
         $('#browsers').html(obj);
 
+    });
+
+    // var p = $(".dialogs");
+    // var d = $(".messaging_block");
+    // var r = $("#resize01");
+    // var curr_width = p.width()
+    // var unlock = false;
+
+    let p = null;
+    // let d = $(".messaging_block");
+    // let r = $("#resize01");
+    let curr_width = null;
+    let unlock = false;
+
+    $(document).mousemove(function(e) {
+        p = $(".dialogs");
+        let d = $(".messaging_block");
+        let change = curr_width + (e.clientX - curr_width);
+        if(unlock) {
+            if(change > 369 && change < 599) {
+
+                p.css("width", change);
+                d.css("margin-left", change);
+            }
+        }
+    });
+
+    $(document).on('mousedown',"#resize01",function(e) {
+        console.log('resize_clicked');
+        curr_width = p.width();
+        unlock = true;
+    });
+
+    $(document).mouseup(function(e) {
+        unlock = false;
     });
 };
