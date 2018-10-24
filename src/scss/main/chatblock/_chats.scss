@@ -23,7 +23,7 @@
     display: flex;
     align-items: center;
     padding: 5px 15px;
-    color: $c0;
+    color: $primary-text;
     text-decoration: none;
     transition: all 0.1s ease;
     overflow: hidden;
@@ -54,6 +54,7 @@
 
     &__text{
         overflow: hidden;
+        flex: 1;
     }
 
     &__header{
@@ -70,15 +71,32 @@
         @extend .text-truncate;
     }
 
-    &__lastmessage{
-        @include fz(12);
-        @extend .text-truncate;
-    }
-
     &__date{
         @include fz(12);
         flex-shrink: 0;
         margin-left: 10px;
+    }
+
+    &__body{
+        display: flex;
+        align-items: center;
+
+        .badge{
+            margin-left: auto;
+            background-color: $info;
+            color: $brand-gray-100;
+            @include transition(.2s ease);
+
+            .active_dialog & {
+                background-color: $brand-gray-100;
+                color: $primary-text;
+            }
+        }
+    }
+
+    &__lastmessage{
+        @include fz(12);
+        @extend .text-truncate;
     }
 
     &:hover {
@@ -86,6 +104,14 @@
         background-color: $brand-blue;
         color: $cf;
         text-decoration: none;
+
+        .userchat__body{
+
+            .badge {
+                background-color: $brand-gray-100;
+                color: $primary-text;
+            }
+        }
     }
 }
 

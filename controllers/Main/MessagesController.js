@@ -9,12 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
+// import * as fs from "fs";
+// import {AccountModel} from "../../models/AccountModel";
 const UserModel_1 = require("../../models/UserModel");
 const Controller_1 = require("../Controller");
 const MessageModel_1 = require("../../models/MessageModel");
 const ChatModel_1 = require("../../models/ChatModel");
+// import {assertAnyTypeAnnotation} from "babel-types";
 const FileModel_1 = require("../../models/FileModel");
+// import InterceptFileProtocolRequest = Electron.InterceptFileProtocolRequest;
+// import {files_config} from "../../src/var_helper";
 const Helpers_1 = require("../Helpers");
+const Electron = require("electron");
+var Notification = Electron.Notification;
+var nativeImage = Electron.nativeImage;
+// import * as eNotify from 'electron-notify'
+// let eNotify = require('electron-notify');
 class MessagesController extends Controller_1.Controller {
     load_join_chat(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -41,12 +51,14 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    render_message(message, chat_id) {
+    render_message(message, fresh = false) {
         return __awaiter(this, void 0, void 0, function* () {
             // console.log(message);
             let self_info = yield this.get_self_info();
             message.mine = message.sender ? (self_info.id === message.sender.id) : false;
-            message.sender_avatar = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.avatar : message.chat.avatar;
+            // message.sender_avatar = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.avatar : message.chat.avatar;
+            // message.sender_name = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.name : message.chat.name;
+            message.fill_sender_data();
             for (let num in message.files) {
                 if (Helpers_1.check_file_preview(message.files[num].type)) {
                     message.files[num].preview = true;
@@ -61,19 +73,33 @@ class MessagesController extends Controller_1.Controller {
                         message.files[num].downloaded = true;
                 }
             }
+            message.time = Helpers_1.Helper.formate_date(new Date(message.time), { locale: 'ru', for: 'message' });
             let html = this.render('main/messagingblock/message.pug', message);
+            // {
+            //         title:userModel.name,
+            //         body:message.text,
+            //         icon:nativeImage.createFromBuffer(b64img_to_buff(message.sender_avatar))
+            //     }
             const data = {
                 id: message.chat.id,
                 message: html,
             };
             this.send_data('received_message', data);
+            if (fresh) {
+                let notif = new Notification({
+                    title: message.sender_name,
+                    body: message.text,
+                    icon: nativeImage.createFromBuffer(Helpers_1.b64img_to_buff(message.sender_avatar))
+                });
+                notif.show();
+            }
         });
     }
     render_chat_messages(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
             let messages = yield MessageModel_1.MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
             for (let num = messages.length - 1; num >= 0; --num) {
-                yield this.render_message(messages[num], chat_id);
+                yield this.render_message(messages[num]);
             }
         });
     }
@@ -96,7 +122,7 @@ class MessagesController extends Controller_1.Controller {
             let message = new MessageModel_1.MessageModel();
             message.sender = self_info;
             message.text = text;
-            message.time = this.dxmpp.take_time();
+            message.time = Date.now();
             message.chat = chat;
             message.files = [];
             yield message.save();
@@ -127,10 +153,10 @@ class MessagesController extends Controller_1.Controller {
             // message.fileModel = file_send;
             // await message.save();
             if (chat.type == this.group_chat_types.channel) {
-                yield this.render_message(message, chat.id);
+                yield this.render_message(message);
             }
             if (chat.type === this.chat_types.user) {
-                yield this.render_message(message, id);
+                yield this.render_message(message);
                 chat.id = yield chat.get_user_chat_meta();
                 group = false;
             }
@@ -139,10 +165,31 @@ class MessagesController extends Controller_1.Controller {
             }
             // this.dxmpp.send(chat, text, group);
             this.dxmpp.send(chat, text, group, message.files);
+            //
+            // eNotify.setConfig({
+            //     appIcon: self_info.avatar,
+            //     displayTime: 6000
+            // });
+            // eNotify.notify({ title: self_info.name, text: text });
+            // let notif = new Notification({
+            //     title:self_info.name,
+            //     body:text,
+            //     icon:nativeImage.createFromBuffer(b64img_to_buff(self_info.avatar))
+            // });
+            // notif.show();
             // await this.render_message(message, id);
         });
     }
     ;
+    show_message_notification(message_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let message = yield MessageModel_1.MessageModel.find({
+                where: { id: message_id },
+                relations: ['sender', 'chat'],
+            })[0];
+            message.fill_sender_data();
+        });
+    }
     message_delivered(message_d) {
         return __awaiter(this, void 0, void 0, function* () {
             let message = yield MessageModel_1.MessageModel.findOne(message_d.userid);
@@ -161,7 +208,7 @@ class MessagesController extends Controller_1.Controller {
             message.text = text;
             message.sender = userModel;
             message.chat = chat;
-            message.time = this.dxmpp.take_time();
+            message.time = Date.now();
             message.files = [];
             yield message.save();
             // let ipfs_file;
@@ -183,7 +230,7 @@ class MessagesController extends Controller_1.Controller {
                     message.files.push(fileModel);
                 }
             }
-            yield this.render_message(message, chat.id);
+            yield this.render_message(message, true);
         });
     }
     ;
@@ -209,7 +256,15 @@ class MessagesController extends Controller_1.Controller {
             messageModel.chat = chat;
             messageModel.time = stamp;
             yield messageModel.save();
-            yield this.render_message(messageModel, chat.id);
+            yield this.render_message(messageModel, true);
+            // await this.render_message(message, chat.id);
+            // message.sender_avatar = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.avatar : message.chat.avatar;
+            // let notif = new Notification({
+            //     title:userModel.name,
+            //     body:message,
+            //     icon:nativeImage.createFromBuffer(b64img_to_buff(userModel.avatar))
+            // });
+            // notif.show();
         });
     }
 }

@@ -50,14 +50,21 @@ function check_files_dir() {
         fs.mkdirSync(var_helper_1.files_config.files_path);
     }
 }
-function resize_b64_img(b64img) {
+function b64img_to_buff(b64img) {
+    b64img = b64img.substr(b64img.indexOf(',') + 1);
+    return new Buffer(b64img, 'base64');
+}
+exports.b64img_to_buff = b64img_to_buff;
+function resize_img_from_path(imgPath) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(b64img.substr(0, 30));
-        b64img = b64img.substr(b64img.indexOf(',') + 1);
-        console.log(b64img.substr(0, 30));
+        let img = gm(imgPath);
+        return (yield resize_img(img));
+    });
+}
+exports.resize_img_from_path = resize_img_from_path;
+function resize_img(img) {
+    return __awaiter(this, void 0, void 0, function* () {
         let size = 240;
-        let imgFile = new Buffer(b64img, 'base64');
-        let img = gm(imgFile);
         const img_size = util.promisify(img.size).bind(img);
         console.log(yield img_size());
         let { width: x, height: y } = yield img_size();
@@ -79,5 +86,59 @@ function resize_b64_img(b64img) {
         return resized_img;
     });
 }
+function resize_b64_img(b64img) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log(b64img.substr(0, 30));
+        b64img = b64img.substr(b64img.indexOf(',') + 1);
+        console.log(b64img.substr(0, 30));
+        let imgFile = new Buffer(b64img, 'base64');
+        let img = gm(imgFile);
+        return (yield resize_img(img));
+    });
+}
 exports.resize_b64_img = resize_b64_img;
+class Helper {
+    static formate_date(date, options) {
+        let formated_date;
+        let now = new Date();
+        function get_minutes(date) {
+            let minutes = date.getMinutes();
+            return minutes < 10 ? '0' + minutes : minutes;
+        }
+        switch (options.for) {
+            case 'message':
+                formated_date = `${date.getHours()}:${get_minutes(date)}`;
+                return formated_date;
+            case 'chat':
+                let day_diff = date.getDay() - now.getDay();
+                if (date.getFullYear() < now.getFullYear() || date.getMonth() < now.getMonth() || day_diff > 6) {
+                    formated_date = date.getDate();
+                    return formated_date;
+                }
+                if (day_diff > 0) {
+                    formated_date = date.getDay();
+                    return formated_date;
+                }
+                let minutes = date.getMinutes();
+                formated_date = `${date.getHours()}:${get_minutes(date)}`;
+                return formated_date;
+        }
+        return date.toLocaleString(options.locale, this.date_options);
+    }
+}
+Helper.date_options = {
+    era: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long',
+    timezone: 'UTC',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric'
+};
+Helper.day_ru = {
+    1: ''
+};
+exports.Helper = Helper;
 //# sourceMappingURL=Helpers.js.map

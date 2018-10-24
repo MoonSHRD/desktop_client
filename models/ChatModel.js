@@ -39,6 +39,8 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
         this.contract_address = '';
         this.active = false;
         this.online = false;
+        this.time = null;
+        this.text = null;
     }
     static get_user_chat_id(self_id, user_id) {
         let sort = [self_id, user_id];
@@ -114,6 +116,67 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
             this.online = data.online;
             this.domain = data.domain;
             return data.id;
+        });
+    }
+    // static async get_chats_with_last_msgs(){
+    //     return (await getConnection()
+    //         .createQueryBuilder()
+    //         .innerJoin(
+    //             (query) => {
+    //                 return query
+    //                     .select('time')
+    //                     .addSelect('text')
+    //                     .addSelect('chatId')
+    //                     .from(MessageModel, 'message')
+    //                     // .where('message.chatId = ch.id')
+    //                     // .limit(1)
+    //                     .orderBy('message.time', "DESC")
+    //                     .groupBy('chatId')
+    //             },
+    //             'msg',
+    //             'msg.chatId = ch.id',
+    //         )
+    //         .innerJoin(
+    //             (query) => {
+    //                 return query
+    //                     .select('name')
+    //                     .addSelect('avatar')
+    //                     .addSelect('id', 'user_id')
+    //                     .from(UserModel, 'usr')
+    //             },
+    //             'usr',
+    //             `instr(ch.id,user_id) > 0`,
+    //         )
+    //         .from(ChatModel, 'ch')
+    //         .groupBy('id')
+    //         .getRawMany());
+    // }
+    static get_chats_with_last_msgs(self_info) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let qb = yield typeorm_1.getConnection()
+                .createQueryRunner()
+                .query((`select * from 
+                   ((select id,domain,usr.name as name,usr.avatar as avatar, usr.online as online, type
+                   from chat_model ch
+                       inner join (
+                               select name, avatar, id user_id, online
+                               from user_model 
+                               where user_model.id != "${self_info.id}"
+                           ) usr 
+                       on instr(ch.id,user_id) > 0
+                       where ch.type == "${var_helper_1.chat_types.user}"
+                   UNION
+                   select id,domain,name,avatar, 0 as online, type
+                       from chat_model ch1
+                       where ch1.type != "${var_helper_1.chat_types.user}") ch2
+                   inner join (
+                           select time, text, chatId
+                           from message_model msg
+                           group by msg.chatId
+                           order by msg.time
+                       ) msg
+                       on msg.chatId = ch2.id)`));
+            return qb;
         });
     }
 };

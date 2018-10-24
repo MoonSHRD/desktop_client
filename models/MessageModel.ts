@@ -11,6 +11,7 @@ import {
 import {UserModel} from "./UserModel";
 import {ChatModel} from "./ChatModel";
 import {FileModel} from "./FileModel";
+import {group_chat_types} from "../src/var_helper";
 // import {ChatModel} from "./ChatModel";
 
 @Entity()
@@ -23,7 +24,7 @@ export class MessageModel extends BaseEntity {
     @Column()
     text: string = '';
     @Column()
-    time: string = '';
+    time: number;
 
     @ManyToOne(type => ChatModel, chat => chat.messages)
     @JoinColumn()
@@ -36,6 +37,7 @@ export class MessageModel extends BaseEntity {
 
     mine:boolean;
     sender_avatar:string;
+    sender_name:string;
 
     static async get_chat_messages_with_sender(chat_id:string):Promise<MessageModel[]>{
         return await MessageModel.find({relations:['sender'],where:{chat:chat_id}})
@@ -45,10 +47,20 @@ export class MessageModel extends BaseEntity {
         return await MessageModel.find({
             relations:['sender','chat','files'],
             where:{chat:chat_id},
-            take:5,
+            take:30,
             order: {
                 id: "DESC"
             }
         });
+    }
+
+    fill_sender_data(){
+        if (this.sender && (this.chat.type !== group_chat_types.channel || this.mine)) {
+            this.sender_avatar=this.sender.avatar;
+            this.sender_name=this.sender.name;
+        } else {
+            this.sender_avatar=this.chat.avatar;
+            this.sender_name=this.chat.name;
+        }
     }
 }

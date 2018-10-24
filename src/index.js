@@ -97,7 +97,8 @@ window.onload = function () {
     });
 
     $(document).on('click','.menu a',function () {
-        console.log('menu_click');
+        // console.log('menu_click');
+
         const $this=$(this);
         if ($this.data('id') !== 'menu_create_chat' && !$this.hasClass('not_active')) {
             $this.addClass('active_menu')
@@ -119,10 +120,16 @@ window.onload = function () {
         console.log(arg);
     });
 
+    let widthMsgWindow = (target) => {
+        let msgWindow =  document.querySelector(target);
+        console.log(msgWindow.offsetWidth);
+    };
+
     ipcRenderer.on('change_app_state', (event, arg) => {
         console.log('autyh');
         $('#view').html(arg);
         $.html5Translate(dict, 'en');
+        // widthMsgWindow('[data-msgs-window]');
     });
 
     $(document).on('change', '[name=avatar]', function () {
@@ -193,8 +200,10 @@ window.onload = function () {
     });
 
 
-    $(document).on('click', '.send_message_btn', function () {
-        let msg_input = $('.send_message_input');
+    $(document).on('click', '[data-toggle="send-msg"]', function () {
+        let $this = $(this);
+        let $parent = $this.closest('div');
+        let msg_input = $parent.find('[data-msg]');
         if (msg_input.val().trim() === '') {
             msg_input.val('');
             return;
@@ -237,31 +246,47 @@ window.onload = function () {
         // console.log(file);
         msg_input.val('');
         $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
-        $('#upload_file').attr('src', '');
-        $('#upload_file').css('cursor', 'default');
+        $('#upload_file')
+            .attr('src', '')
+            .css('cursor', 'default')
+            .removeClass('added');
 
     });
 
     ipcRenderer.on('add_out_msg', (event, obj) => {
-        $('.messaging_history ul').append(obj);
+        $('[data-msg-list]').append(obj);
 
     });
 
-    let scrollDown = (id) => {
-        let targetBlock = document.getElementById(id);
+    let scrollDown = (target) => {
+        let targetBlock = document.querySelector(target);
         targetBlock.scrollTop = targetBlock.scrollHeight;
     };
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
-        $('.messaging_history ul').append(obj);
-        scrollDown('messaging_history');
+        $('[data-msg-list]').append(obj);
+        scrollDown('[data-msg-history]');
     });
 
     ipcRenderer.on('received_message', (event, obj) => {
         if ($('.active_dialog').attr('id') === obj.id) {
-            $('.messaging_history ul').append(obj.message);
+            $('[data-msg-list]').append(obj.message);
         }
-        scrollDown('messaging_history');
+        else {
+            // new Notification(obj.message.sender_name, {
+            //     body: obj.message.text,
+            //     icon: obj.message.sender_avatar
+            // });
+
+            // ipcRenderer.send('show_message_notification');
+
+            // myNotification.show();
+
+            // myNotification.onclick = () => {
+            //     console.log('Notification clicked')
+            // };
+        }
+        scrollDown('[data-msg-history]');
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
@@ -287,7 +312,7 @@ window.onload = function () {
     });
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
-        $('.messaging_history ul').prepend(obj);
+        $('[data-msg-list]').prepend(obj);
     });
 
     ipcRenderer.on('join_channel_html', (event, obj) => {

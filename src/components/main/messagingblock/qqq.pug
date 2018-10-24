@@ -82,12 +82,11 @@ div(class="head_peer" id="head_peer")
                         li Write a message to administrator
 
 
-div(class="messaging_history" id="messaging_history" )
+div#messaging_history.messaging_history.msgHistory(data-msg-history="")
 
     .tab-content
         #chat.tab-pane.fade.in.active.show(role='tabpanel')
-            ul !{messages?messages:""}
-            //ul
+            div.msgHistory__list.clearfix(data-msg-list="") !{messages?messages:""}
 
         #buzz.tab-pane.fade(role='tabpanel')
             .notifyBlock
@@ -154,8 +153,8 @@ div.send_message__block
     else if (type === "user_chat" || type === "group" || (type === "channel" && role === "moderator"))
         button.send_message__file.attachFileToChat
             img(src="components/main/messagingblock/img/files.png")
-        textarea(class="send_message__input"  placeholder="Write a text message")
+        textarea.send_message__input(placeholder="Write a text message" data-msg)
         img.rounded-circle.send_message__img#upload_file(src='' alt="")
         button.send_message__voice(data-id="")
             img(src="components/main/messagingblock/img/micr.png")
-        button(class="send_message__btn" data-translate-key="SEND_MESSAGE") отправить
+        button.send_message__btn(data-translate-key="SEND_MESSAGE" data-toggle="send-msg") отправить

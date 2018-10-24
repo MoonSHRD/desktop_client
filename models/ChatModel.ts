@@ -1,7 +1,7 @@
-import {Entity, In, PrimaryColumn, Column, BaseEntity, OneToMany, ManyToMany, JoinTable} from "typeorm";
+import {Entity, In, PrimaryColumn, Column, BaseEntity, OneToMany, ManyToMany, JoinTable, getConnection} from "typeorm";
 import {MessageModel} from "./MessageModel";
 import {UserModel} from "./UserModel";
-import {helper} from "../src/var_helper";
+import {chat_types, helper} from "../src/var_helper";
 import {AccountModel} from "./AccountModel";
 import {EventModel} from "./EventModel";
 import {FileModel} from "./FileModel";
@@ -43,6 +43,9 @@ export class ChatModel extends BaseEntity {
 
     active:boolean=false;
     online:boolean=false;
+
+    time:Date=null;
+    text:string=null;
 
     static get_user_chat_id(self_id:string,user_id:string){
         let sort=[self_id,user_id];
@@ -108,5 +111,68 @@ export class ChatModel extends BaseEntity {
         this.online=data.online;
         this.domain=data.domain;
         return data.id
+    }
+
+    // static async get_chats_with_last_msgs(){
+    //     return (await getConnection()
+    //         .createQueryBuilder()
+    //         .innerJoin(
+    //             (query) => {
+    //                 return query
+    //                     .select('time')
+    //                     .addSelect('text')
+    //                     .addSelect('chatId')
+    //                     .from(MessageModel, 'message')
+    //                     // .where('message.chatId = ch.id')
+    //                     // .limit(1)
+    //                     .orderBy('message.time', "DESC")
+    //                     .groupBy('chatId')
+    //             },
+    //             'msg',
+    //             'msg.chatId = ch.id',
+    //         )
+    //         .innerJoin(
+    //             (query) => {
+    //                 return query
+    //                     .select('name')
+    //                     .addSelect('avatar')
+    //                     .addSelect('id', 'user_id')
+    //                     .from(UserModel, 'usr')
+    //             },
+    //             'usr',
+    //             `instr(ch.id,user_id) > 0`,
+    //         )
+    //         .from(ChatModel, 'ch')
+    //         .groupBy('id')
+    //         .getRawMany());
+    // }
+
+    static async get_chats_with_last_msgs(self_info){
+        let qb = await getConnection()
+            .createQueryRunner()
+            .query(
+                 (`select * from 
+                   ((select id,domain,usr.name as name,usr.avatar as avatar, usr.online as online, type
+                   from chat_model ch
+                       inner join (
+                               select name, avatar, id user_id, online
+                               from user_model 
+                               where user_model.id != "${self_info.id}"
+                           ) usr 
+                       on instr(ch.id,user_id) > 0
+                       where ch.type == "${chat_types.user}"
+                   UNION
+                   select id,domain,name,avatar, 0 as online, type
+                       from chat_model ch1
+                       where ch1.type != "${chat_types.user}") ch2
+                   inner join (
+                           select time, text, chatId
+                           from message_model msg
+                           group by msg.chatId
+                           order by msg.time
+                       ) msg
+                       on msg.chatId = ch2.id)`)
+            );
+        return qb;
     }
 }
