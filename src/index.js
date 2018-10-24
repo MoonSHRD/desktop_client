@@ -194,7 +194,7 @@ window.onload = function () {
         obj = {id: active_dialog.attr('id'), text: msg_input.val().trim()};
         // console.log(obj);
         let files = $('#attachFileToChat').prop('files');
-        if (files) {
+        if (files && files[0]) {
             let file = files[0];
             console.log(file);
             let reader = new FileReader();

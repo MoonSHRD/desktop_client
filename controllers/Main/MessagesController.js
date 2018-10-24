@@ -218,7 +218,7 @@ class MessagesController extends Controller_1.Controller {
     ;
     received_group_message(room_data, message, sender, stamp, files) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(files);
+            console.log('Files: ', files);
             console.log(stamp);
             let self_info = yield this.get_self_info();
             if (sender.address == self_info.id)
@@ -226,13 +226,12 @@ class MessagesController extends Controller_1.Controller {
             let userModel;
             if (sender)
                 userModel = yield UserModel_1.UserModel.findOne(sender.address);
-            if (stamp) {
-                let time = stamp.split(" ")[1].split(":");
-                stamp = `${time[0]}:${time[1]}`;
-            }
-            else {
-                stamp = this.dxmpp.take_time();
-            }
+            // if (stamp) {
+            //     let time = stamp.split(" ")[1].split(":");
+            //     stamp = `${time[0]}:${time[1]}`;
+            // } else {
+            //     stamp = this.dxmpp.take_time()
+            // }
             let chat = yield ChatModel_1.ChatModel.findOne(room_data.id);
             let messageModel = new MessageModel_1.MessageModel();
             messageModel.text = message;
