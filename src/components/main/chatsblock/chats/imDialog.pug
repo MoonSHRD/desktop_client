@@ -7,8 +7,6 @@ li(id=id data-domain=domain data-type=type data-contract_address=contract_addres
         .userchat__text
             .userchat__header
                 h3.userchat__name #{name}
-                if time && time !== 1
-                    .userchat__date(data-name="chat_last_time") #{time}
-            if text
-                .userchat__lastmessage(data-name="chat_last_text") #{text}
+                .userchat__date(data-name="chat_last_time") #{time && time !== 1?time:''}
+            .userchat__lastmessage(data-name="chat_last_text") #{text?text:''}
             .badge.badge-pill 99+

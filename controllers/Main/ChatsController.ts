@@ -20,9 +20,9 @@ class ChatsController extends Controller {
 
     private async load_chat(chat: ChatModel, general_chat_type) {
         let self_info = await this.get_self_info();
-        if (chat.type === this.chat_types.user && chat.hasOwnProperty('get_user_chat_meta')) {
-            await chat.get_user_chat_meta();
-        }
+        // if (chat.type === this.chat_types.user && chat.hasOwnProperty('get_user_chat_meta')) {
+        //     await chat.get_user_chat_meta();
+        // }
         if (chat.time)
             chat.time=Helper.formate_date(new Date(chat.time),{locale:'ru',for:'chat'});
         if (chat.senderId===self_info.id){
@@ -42,8 +42,8 @@ class ChatsController extends Controller {
         if (userModel) {
             userModel.online = state === 'online';
             await userModel.save();
-            let chat = await ChatModel.get_user_chat(self_info.id, user.id);
-            await chat.get_user_chat_meta();
+            let chat = await ChatModel.get_user_chat_raw(self_info.id, user.id);
+            // await chat.get_user_chat_meta();
             await this.load_chat(chat, this.chat_to_menu.user);
         } else {
             userModel = new UserModel();
@@ -133,6 +133,7 @@ class ChatsController extends Controller {
         await user.save();
         user.type = this.chat_types.user;
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
+        await chat.get_user_chat_meta();
         await this.load_chat(chat, this.chat_to_menu.user);
     }
 

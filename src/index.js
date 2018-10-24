@@ -238,6 +238,7 @@ window.onload = function () {
                 chat.find('[data-name=chat_last_time]').text(obj.message.time);
                 chat.find('[data-name=chat_last_text]').text(obj.message.text);
             }
+            chat.prependTo($('.chats ul')[0]);
         }
 
         if ($('.active_dialog').attr('id') === obj.id) {
@@ -553,6 +554,13 @@ window.onload = function () {
         console.log('resize_clicked');
         curr_width = p.width();
         unlock = true;
+    });
+
+    $(document).on('click',"[data-id=add_new_user]",function(e) {
+        let input = $('[data-name=group_search]');
+        let data={id:input.val(),domain:'localhost'};
+        input.val('');
+        ipcRenderer.send("send_subscribe", data);
     });
 
     $(document).mouseup(function(e) {
