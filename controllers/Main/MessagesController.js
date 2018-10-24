@@ -218,6 +218,8 @@ class MessagesController extends Controller_1.Controller {
     ;
     received_group_message(room_data, message, sender, stamp, files) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(files);
+            console.log(stamp);
             let self_info = yield this.get_self_info();
             if (sender.address == self_info.id)
                 return;
@@ -236,7 +238,7 @@ class MessagesController extends Controller_1.Controller {
             messageModel.text = message;
             messageModel.sender = userModel;
             messageModel.chat = chat;
-            messageModel.time = stamp;
+            messageModel.time = Date.now();
             messageModel.files = [];
             messageModel.fresh = true;
             messageModel.notificate = true;

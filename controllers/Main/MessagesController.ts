@@ -210,6 +210,8 @@ class MessagesController extends Controller {
     };
 
     async received_group_message(room_data, message, sender, stamp, files) {
+        console.log(files);
+        console.log(stamp);
         let self_info = await this.get_self_info();
         if (sender.address == self_info.id) return;
         let userModel: UserModel;
@@ -226,7 +228,7 @@ class MessagesController extends Controller {
         messageModel.text = message;
         messageModel.sender = userModel;
         messageModel.chat = chat;
-        messageModel.time = stamp;
+        messageModel.time = Date.now();
         messageModel.files = [];
         messageModel.fresh = true;
         messageModel.notificate = true;
