@@ -143,7 +143,8 @@ class Router {
             yield this.controller_register.queue_controller('ChatsController', 'create_group', group_name);
         }));
         this.listen_event(this.ipcMain, 'join_channel', (event, chat) => __awaiter(this, void 0, void 0, function* () {
-            console.log('creating group');
+            console.log('joining group');
+            console.log(chat);
             yield this.controller_register.queue_controller('ChatsController', 'join_chat', chat);
         }));
         this.listen_event(this.dxmpp, 'find_groups', (result) => __awaiter(this, void 0, void 0, function* () {

@@ -3,6 +3,8 @@ import {UserModel} from "../../models/UserModel";
 import {Controller} from "../Controller";
 import {ChatModel} from "../../models/ChatModel";
 import {MessageModel} from "../../models/MessageModel";
+import {getConnection} from "typeorm";
+import {Helper} from "../Helpers";
 
 class ChatsController extends Controller {
 
@@ -17,9 +19,10 @@ class ChatsController extends Controller {
     };
 
     private async load_chat(chat: ChatModel, general_chat_type) {
-        if (chat.type === this.chat_types.user) {
+        if (chat.type === this.chat_types.user && chat.hasOwnProperty('get_user_chat_meta')) {
             await chat.get_user_chat_meta();
         }
+        chat.time=Helper.formate_date(new Date(chat.time),{locale:'ru',for:'chat'});
         let html = this.render('main/chatsblock/chats/imDialog.pug', chat);
         this.send_data('buddy', {id: chat.id, type: general_chat_type, html: html})
     }
@@ -70,7 +73,9 @@ class ChatsController extends Controller {
         console.log('load_chats');
         let self_info = await this.get_self_info();
 
-        let chats = await ChatModel.get_chats_by_type(type);
+        let chats = await ChatModel.get_chats_with_last_msgs(self_info);
+
+        console.log(chats);
         let menu_chat: string;
         if (type === this.chat_types.user) {
             menu_chat = this.chat_to_menu.user;
@@ -142,7 +147,7 @@ class ChatsController extends Controller {
         chat.domain = room_data.domain;
         chat.avatar = room_data.avatar;
         chat.name = room_data.name;
-        chat.type = room_data.channel?this.group_chat_types.channel:this.group_chat_types.group;
+        chat.type = room_data.channel ? this.group_chat_types.channel : this.group_chat_types.group;
         chat.role = room_data.role;
         if (room_data.bio)
             chat.bio = room_data.bio;
@@ -173,8 +178,8 @@ class ChatsController extends Controller {
 
     }
 
-    async create_group(group_name: string, group_type:string=this.group_chat_types.channel) {
-        let group = {name: group_name, domain: "localhost", type: (group_type!==this.chat_types.user)};
+    async create_group(group_name: string, group_type: string = this.group_chat_types.channel) {
+        let group = {name: group_name, domain: "localhost", type: (group_type !== this.chat_types.user)};
         this.dxmpp.register_channel(group, '');
     }
 

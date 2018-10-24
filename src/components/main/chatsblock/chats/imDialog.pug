@@ -1,5 +1,5 @@
 li(id=id data-domain=domain data-type=type data-contract_address=contract_address class=""+(active?"active_dialog":""))
-    a.userchat(href='#/user/'+id)
+    a.userchat
         .userchat__avatar
             img.rounded-circle(src=avatar, width='40', height='40')
             if type==='user_chat'
@@ -7,5 +7,5 @@ li(id=id data-domain=domain data-type=type data-contract_address=contract_addres
         .userchat__text
             .userchat__header
                 h3.userchat__name #{name}
-                .userchat__date 20.10.18
-            .userchat__lastmessage Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis dignissimos nulla tempora tempore vero! Commodi cumque eius ipsam modi nisi placeat quo tempore. Accusantium cum illum iusto molestias mollitia reprehenderit!
+                .userchat__date(data-name="chat_last_time") #{time}
+            .userchat__lastmessage(data-name="chat_last_text") #{text}

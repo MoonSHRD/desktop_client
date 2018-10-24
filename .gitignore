@@ -19,3 +19,5 @@ yarn-error.log
 
 account.json
 sqlite/data.db
+
+not_for_git/

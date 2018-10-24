@@ -136,7 +136,9 @@ $(document).on('submit', '#profile_form', function (e) {
     obj.forEach(function (elem) {
         prof[elem.name] = elem.value;
     });
-    prof.avatar = $("#avatar_preview").attr("src");
+    prof.avatar = null;
+    if ($('[name=avatar]').prop('files').length)
+        prof.avatar = $("#avatar_preview").attr("src");
     console.log("Msg1", prof);
     ipcRenderer.send('submit_profile', prof);
 });

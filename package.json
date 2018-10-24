@@ -17,7 +17,7 @@
   },
   "scripts": {
     "pack": "electron-builder --dir",
-    "dist": "electron-builder",
+    "dist": "electron-builder && electron-builder install-app-deps",
     "dist-win": "electron-builder --win",
     "start": "electron .",
     "npm_install": "npm install; ./node_modules/.bin/electron-rebuild  -f -w sqlite3",
@@ -30,7 +30,6 @@
     "package-win64": "electron-packager . Moonshard --overwrite --asar=false --platform=win32 --arch=x64 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Moonshard\"",
     "rebuild_packages": "./node_modules/.bin/electron-rebuild  -f -w sqlite3",
     "build_platforms": "npm run package-linux && npm run package-win64",
-    "postinstall": "electron-builder install-app-deps",
 
     "prebuild:css": "node-sass --include-path scss src/scss/index.scss src/css/index.css --source-map-embed true",
     "build:css": "postcss --use autoprefixer -b 'last 2 versions' < src/css/index.css | postcss --use cssnano > src/css/index.min.css"

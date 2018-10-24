@@ -13,7 +13,7 @@ app.on('ready', async () => {
         let pug = await setupPug({pretty: true}, locals);
         pug.on('error', err => console.error('electron-pug error', err))
     } catch (err) {
-        // Could not initiate 'electron-pug'
+        console.log(`Could not initiate 'electron-pug'`);
     }
 
     let mainWindow = new BrowserWindow({ width: 1600, minWidth: 1280, height: 800, resizable: true, show: false, webPreferences: {

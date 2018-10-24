@@ -12,6 +12,8 @@ import {ControllerRegister} from "../controllers/ControllerRegister";
 import {helper} from "./var_helper";
 import {Loom} from "../loom/loom";
 
+
+
 export class Router {
     readonly window: any;
     private paths: any;
@@ -171,7 +173,8 @@ export class Router {
         });
 
         this.listen_event(this.ipcMain, 'join_channel', async (event, chat) => {
-            console.log('creating group');
+            console.log('joining group');
+            console.log(chat);
             await this.controller_register.queue_controller('ChatsController', 'join_chat', chat);
         });
 

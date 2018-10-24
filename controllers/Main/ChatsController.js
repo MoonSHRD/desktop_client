@@ -12,6 +12,7 @@ require("reflect-metadata");
 const UserModel_1 = require("../../models/UserModel");
 const Controller_1 = require("../Controller");
 const ChatModel_1 = require("../../models/ChatModel");
+const Helpers_1 = require("../Helpers");
 class ChatsController extends Controller_1.Controller {
     init_chats() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -25,9 +26,10 @@ class ChatsController extends Controller_1.Controller {
     ;
     load_chat(chat, general_chat_type) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (chat.type === this.chat_types.user) {
+            if (chat.type === this.chat_types.user && chat.hasOwnProperty('get_user_chat_meta')) {
                 yield chat.get_user_chat_meta();
             }
+            chat.time = Helpers_1.Helper.formate_date(new Date(chat.time), { locale: 'ru', for: 'chat' });
             let html = this.render('main/chatsblock/chats/imDialog.pug', chat);
             this.send_data('buddy', { id: chat.id, type: general_chat_type, html: html });
         });
@@ -77,7 +79,8 @@ class ChatsController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('load_chats');
             let self_info = yield this.get_self_info();
-            let chats = yield ChatModel_1.ChatModel.get_chats_by_type(type);
+            let chats = yield ChatModel_1.ChatModel.get_chats_with_last_msgs(self_info);
+            console.log(chats);
             let menu_chat;
             if (type === this.chat_types.user) {
                 menu_chat = this.chat_to_menu.user;
