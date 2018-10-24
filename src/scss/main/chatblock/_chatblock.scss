@@ -1,11 +1,46 @@
+//.dialogs {
+//
+//    width: 300px;
+//    background-color: #F3F3F3;
+//    height: 100vh;
+//    animation-direction: revert;
+//    border-right: 1px solid #d0d0d0;
+//    overflow: hidden;
+//
+//
+//}
+
+
 .dialogs {
-    @include size(300px, 100vh);
-    background-color: $brand-gray-100;
+
+    min-width: 370px;
+    max-width: 600px;
+    position: absolute;
+    top: 0; left: 0;
+    bottom: 0;
+    width: 300px;
+    background-color: #F3F3F3;
+    height: 100vh;
     animation-direction: revert;
     border-right: 1px solid #d0d0d0;
     overflow: hidden;
+}
 
+.messaging_block {
+    margin-left: 370px;
+}
 
+#resize01 {
+    float: right;
+    margin-right: 0;
+    width: 5px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 1;
+    cursor: e-resize;
+    top: 0;
+    position: absolute;
+    right: 0;
 }
 
 .dialogsHeader {

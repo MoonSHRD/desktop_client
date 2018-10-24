@@ -7,7 +7,7 @@
     ul {
         list-style: none;
         margin: 0;
-        padding: 20px;
+        padding: 0px;
 
         //li {
         //    margin-bottom: 2px;
@@ -22,7 +22,7 @@
     height: 57px;
     display: flex;
     align-items: center;
-    padding: 5px 15px;
+    padding: 5px 20px;
     color: $c0;
     text-decoration: none;
     transition: all 0.1s ease;
@@ -80,9 +80,9 @@
     }
 
     &:hover {
-        border-radius: 8px;
-        background-color: $brand-blue;
-        color: $cf;
+        border-radius: 0px;
+        background-color: rgba(43, 194, 249, 0.2);
+        color: #000000;
         text-decoration: none;
     }
 }
@@ -100,8 +100,8 @@
         border-radius: 10px;
         outline:none;
         border-style: none;
-        margin: 0 10px 0 25px;
-        padding: 0 10px 0 10px;
+        margin: 0 20px;
+        padding: 0 10px;
     }
 }
 
@@ -162,9 +162,12 @@
 
 .active_dialog {
     background-color: $brand-blue;
-    border-radius: 8px;
+    border-radius: 0px;
     a {
         color: $cf;
+    }
+    :hover {
+        color: #fff;
     }
 }
 
@@ -186,4 +189,6 @@
     color: $cf;
 }
 
-
+.dialogsHeader,.im_dialogs_col_wrap {
+    margin-left: 70px;
+}
