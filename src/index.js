@@ -203,6 +203,7 @@ window.onload = function () {
     };
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
+
         $('.messaging_history ul').append(obj);
         scrollDown('messaging_history');
     });

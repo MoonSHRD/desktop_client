@@ -12,6 +12,7 @@ style
             li.active
             li
             li
+            li
         // fieldsets
         fieldset
             h2.fs-title Step 1
@@ -23,14 +24,22 @@ style
             input.next.action-button(type='button', name='next', id='input_mnemonic_next')
         fieldset
             h2.fs-title Step 2
+            h3.fs-subtitle Confirm your 12 words.
+            textarea.invalid(rows='4', name='confirm_mnemonic', placeholder='Enter any 12 words in a space, or click the "Generate" button' id='confirm_input_mnemonic' required=true )
+            div.words
+
+            h2.next-step-title Step 3
+            input.next.action-button(type='button', name='next', id='')
+        fieldset
+            h2.fs-title Step 3
             h3.fs-subtitle How we can call you?
             input.invalid(name='firstname', placeholder='Firstname', type='text' required=true)
             input(name='lastname', placeholder='Lastname', type='text' )
             textarea(rows='5', name='bio', placeholder='Enter bio')
-            h2.next-step-title Step 3
+            h2.next-step-title Step 4
             input.next.action-button(type='button', name='next')
         fieldset
-            h2.fs-title Step 3
+            h2.fs-title Step 4
             h3.fs-subtitle You can upload your photo
             .avatar_preview
                 img.rounded-circle(id='avatar_preview' src='components/auth/default-avatar1.jpg')
