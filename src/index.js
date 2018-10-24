@@ -176,7 +176,7 @@ window.onload = function () {
     });
 
     function send_message(){
-        let msg_input = $('.send_message_input');
+        let msg_input = $('.send_message__input');
         if (msg_input.val().trim() === '') {
             msg_input.val('');
             return;
@@ -193,8 +193,9 @@ window.onload = function () {
 
         obj = {id: active_dialog.attr('id'), text: msg_input.val().trim()};
         // console.log(obj);
-        let file = $('#attachFileToChat').prop('files')[0];
-        if (file) {
+        let files = $('#attachFileToChat').prop('files');
+        if (files) {
+            let file = files[0];
             console.log(file);
             let reader = new FileReader();
             reader.readAsDataURL(file);

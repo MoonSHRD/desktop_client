@@ -190,7 +190,6 @@ class MessagesController extends Controller {
         // let ipfs_file;
         if (files) {
             for (let num in files){
-                await message.save();
                 let fileModel = new FileModel();
                 // file_info.sender = self_info.id;
                 fileModel.hash = files[num].hash;
@@ -229,8 +228,8 @@ class MessagesController extends Controller {
         messageModel.chat = chat;
         messageModel.time = stamp;
         messageModel.files = [];
-        message.fresh = true;
-        message.notificate = true;
+        messageModel.fresh = true;
+        messageModel.notificate = true;
         await messageModel.save();
 
         if (files) {
