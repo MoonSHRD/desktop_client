@@ -190,7 +190,6 @@ class MessagesController extends Controller {
         // let ipfs_file;
         if (files) {
             for (let num in files){
-                await message.save();
                 let fileModel = new FileModel();
                 // file_info.sender = self_info.id;
                 fileModel.hash = files[num].hash;
@@ -211,26 +210,28 @@ class MessagesController extends Controller {
     };
 
     async received_group_message(room_data, message, sender, stamp, files) {
+        console.log('Files: ',files);
+        console.log(stamp);
         let self_info = await this.get_self_info();
         if (sender.address == self_info.id) return;
         let userModel: UserModel;
         if (sender)
             userModel = await UserModel.findOne(sender.address);
-        if (stamp) {
-            let time = stamp.split(" ")[1].split(":");
-            stamp = `${time[0]}:${time[1]}`;
-        } else {
-            stamp = this.dxmpp.take_time()
-        }
+        // if (stamp) {
+        //     let time = stamp.split(" ")[1].split(":");
+        //     stamp = `${time[0]}:${time[1]}`;
+        // } else {
+        //     stamp = this.dxmpp.take_time()
+        // }
         let chat = await ChatModel.findOne(room_data.id);
         let messageModel = new MessageModel();
         messageModel.text = message;
         messageModel.sender = userModel;
         messageModel.chat = chat;
-        messageModel.time = stamp;
+        messageModel.time = Date.now();
         messageModel.files = [];
-        message.fresh = true;
-        message.notificate = true;
+        messageModel.fresh = true;
+        messageModel.notificate = true;
         await messageModel.save();
 
         if (files) {
