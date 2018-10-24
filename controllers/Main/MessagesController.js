@@ -203,16 +203,16 @@ class MessagesController extends Controller_1.Controller {
             messageModel.sender = userModel;
             messageModel.chat = chat;
             messageModel.time = stamp;
+            messageModel.files = [];
             yield messageModel.save();
             if (files) {
-                console.log(files);
                 for (let num in files) {
                     yield messageModel.save();
                     let fileModel = new FileModel_1.FileModel();
                     // file_info.sender = self_info.id;
                     fileModel.hash = files[num].hash;
                     fileModel.chat = chat;
-                    fileModel.message = message;
+                    fileModel.message = messageModel;
                     fileModel.name = files[num].name;
                     fileModel.type = files[num].type;
                     fileModel.preview = Helpers_1.check_file_preview(files[num].type);
@@ -220,7 +220,7 @@ class MessagesController extends Controller_1.Controller {
                         fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
                     }
                     yield fileModel.save();
-                    message.files.push(fileModel);
+                    messageModel.files.push(fileModel);
                 }
             }
             yield this.render_message(messageModel, chat.id);

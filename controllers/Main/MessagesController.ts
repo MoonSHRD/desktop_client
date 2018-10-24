@@ -196,6 +196,7 @@ class MessagesController extends Controller {
         messageModel.sender = userModel;
         messageModel.chat = chat;
         messageModel.time = stamp;
+        messageModel.files = [];
         await messageModel.save();
 
         if (files) {
@@ -205,7 +206,7 @@ class MessagesController extends Controller {
                 // file_info.sender = self_info.id;
                 fileModel.hash = files[num].hash;
                 fileModel.chat = chat;
-                fileModel.message = message;
+                fileModel.message = messageModel;
                 fileModel.name = files[num].name;
                 fileModel.type = files[num].type;
                 fileModel.preview = check_file_preview(files[num].type);
@@ -213,7 +214,7 @@ class MessagesController extends Controller {
                     fileModel.file = (await this.ipfs.get_file(fileModel.hash)).file;
                 }
                 await fileModel.save();
-                message.files.push(fileModel);
+                messageModel.files.push(fileModel);
             }
         }
 
