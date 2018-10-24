@@ -210,7 +210,7 @@ class MessagesController extends Controller {
         await this.render_message(message);
     };
 
-    async received_group_message(room_data, message, sender, stamp) {
+    async received_group_message(room_data, message, sender, stamp, files) {
         let self_info = await this.get_self_info();
         if (sender.address == self_info.id) return;
         let userModel: UserModel;
@@ -228,9 +228,30 @@ class MessagesController extends Controller {
         messageModel.sender = userModel;
         messageModel.chat = chat;
         messageModel.time = stamp;
+        messageModel.files = [];
         message.fresh = true;
         message.notificate = true;
         await messageModel.save();
+
+        if (files) {
+            for (let num in files){
+                await messageModel.save();
+                let fileModel = new FileModel();
+                // file_info.sender = self_info.id;
+                fileModel.hash = files[num].hash;
+                fileModel.chat = chat;
+                fileModel.message = messageModel;
+                fileModel.name = files[num].name;
+                fileModel.type = files[num].type;
+                fileModel.preview = check_file_preview(files[num].type);
+                if (fileModel.preview) {
+                    fileModel.file = (await this.ipfs.get_file(fileModel.hash)).file;
+                }
+                await fileModel.save();
+                messageModel.files.push(fileModel);
+            }
+        }
+
         await this.render_message(messageModel);
     }
 }

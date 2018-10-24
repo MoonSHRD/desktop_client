@@ -233,6 +233,7 @@ function validate_firstname(val) {
 }
 
 function validate_confirm_mnemonic(val) {
+    // return true;
     if (val.trim() == mnemonic_text) {
         console.log(val)
         console.log(mnemonic_text)

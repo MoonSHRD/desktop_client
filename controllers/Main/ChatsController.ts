@@ -164,25 +164,15 @@ class ChatsController extends Controller {
             chat.contract_address = room_data.contractaddress;
 
         await chat.save();
-        messages.forEach(async (message) => {
-            let room_data = {id: message.sender};
-            await this.controller_register.queue_controller(
-                "MessagesController", "received_channel_message",
-                room_data, message.message, message.sender, message.time);
-            // let _message = new MessageModel();
-            // _message.time = message.time;
-            // _message.text = message.message;
-            // _message.sender = message.sender;
-            // _message.chat = message.sender;
-            // await  _message.save();
-        });
 
         await this.load_chat(chat, this.chat_to_menu.group);
         messages.forEach(async (message) => {
             // console.log(message.time);
             let buf = message.time.split(" ");
             message.time = `${buf[0]} ${buf[1]}`;
-            await this.controller_register.run_controller("MessagesController", "received_channel_message", message.message, message.sender, message.time);
+            let room_data = {id: message.sender};
+            let sender = {address: message.sender, domain: "localhost"};
+            await this.controller_register.run_controller("MessagesController", "received_group_message", room_data, message.message, sender, message.time, message.files);
         });
 
     }

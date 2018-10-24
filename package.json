@@ -17,7 +17,7 @@
   },
   "scripts": {
     "pack": "electron-builder --dir",
-    "dist": "electron-builder && electron-builder install-app-deps",
+    "dist": "electron-builder",
     "dist-win": "electron-builder --win",
     "start": "electron .",
     "npm_install": "npm install; ./node_modules/.bin/electron-rebuild  -f -w sqlite3",
@@ -81,7 +81,7 @@
     "l20n": "^5.0.0",
     "loom-js": "^1.4.3",
     "loom-truffle-provider": "^0.5.0",
-    "moonshard_core": "0.1.53",
+    "moonshard_core": "^0.1.55",
     "node-sass": "^4.9.4",
     "peer-id": "^0.11.0",
     "popper.js": "^1.14.4",
