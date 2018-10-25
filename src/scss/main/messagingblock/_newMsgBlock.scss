@@ -390,6 +390,13 @@ a.join_button {
                 right: -12px;
                 border-right-color: transparent;
                 border-left: 7px solid #2BC2F9;
+
+                .messaging_block_lg &{
+                    left: -12px;
+                    right: auto;
+                    border-left-color: transparent;
+                    border-right: 7px solid #2BC2F9;
+                }
             }
         }
     }
@@ -407,6 +414,10 @@ a.join_button {
 
     &_out {
         flex-direction: row-reverse;
+
+        .messaging_block_lg &{
+            flex-direction: row;
+        }
     }
 
     &_in {
@@ -425,8 +436,8 @@ a.join_button {
     }
 
     span{
-        display: inline-block;
-        max-width: 200px;
+        display: block;
+        //max-width: 200px;
     }
 }
 
@@ -543,8 +554,8 @@ a.join_button {
     }
 
     span{
-        display: inline-block;
-        max-width: 200px;
+        display: block;
+        //max-width: 200px;
     }
 }
 /*
