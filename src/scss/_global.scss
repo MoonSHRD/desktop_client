@@ -2,15 +2,16 @@
     outline: none !important;
     -webkit-user-drag: none;
     -webkit-app-region: no-drag;
+    user-select: none;
 
     &:before,
     &:after{
         @extend *;
     }
+}
 
-    &:not(.message__text){
-        user-select: none;
-    }
+.select-true{
+    user-select: auto;
 }
 
 body,

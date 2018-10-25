@@ -14,17 +14,38 @@ window.onload = function () {
     };
 
     $(document).on('click','.copyButton',function () {
-        if (document.selection) {
-            var range = document.body.createTextRange();
-            range.moveToElementText(document.getElementById('copyTo'));
-            range.select().createTextRange();
-            document.execCommand("Copy");
+        // if (document.selection) {
+        //     var range = document.body.createTextRange();
+        //     range.moveToElementText(document.getElementById('copyTo'));
+        //     range.select().createTextRange();
+        //     document.execCommand("Copy");
+        //
+        // } else if (window.getSelection) {
+        //     var range = document.createRange();
+        //     range.selectNode(document.getElementById('copyTo'));
+        //     window.getSelection().addRange(range);
+        //     document.execCommand("Copy");
+        let elem = document.getElementById('copyTo');
+        let body = document.body, range, sel;
 
-        } else if (window.getSelection) {
-            var range = document.createRange();
-            range.selectNode(document.getElementById('copyTo'));
-            window.getSelection().addRange(range);
-            document.execCommand("Copy");
+        if(document.createRange && window.getSelection) {
+            range = document.createRange();
+            sel = window.getSelection();
+            sel.removeAllRanges();
+            try {
+                range.selectNodeContents(elem);
+                sel.addRange(range)
+            } catch (e) {
+                range.selectNode(elem);
+                sel.addRange(range)
+            }
+        } else if (body.createTextRange) {
+            range = body.createTextRange();
+            range.moveToElementText(elem);
+            range.select();
+        }
+        document.execCommand('copy');
+        console.log(range, sel, elem);
 
             $.notify('address copied \n' + range, {
 
@@ -40,7 +61,7 @@ window.onload = function () {
                 offset: 20,
                 spacing: 10
             });
-        }
+        // }
     });
 
     $(document).on('click','.attachFileToChat',function () {
