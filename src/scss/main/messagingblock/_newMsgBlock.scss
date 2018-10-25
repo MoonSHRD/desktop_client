@@ -232,6 +232,9 @@ a.join_button {
         position: relative;
         background: $brand-gray-100;
         overflow: hidden;
+        background-size: auto 110%;
+        background-image: linear-gradient(180deg,hsla(0,0%,95.3%,.9) 0,hsla(0,0%,95.3%,.9)),url(https://st4.depositphotos.com/4502047/21136/v/1600/depositphotos_211361238-stock-illustration-social-media-minimalist-seamless-pattern.jpg);
+
     }
 }
 
@@ -244,7 +247,8 @@ a.join_button {
         //justify-content: space-evenly;
         align-items: center;
         overflow: hidden;
-        padding: 20px 30px 20px 20px;
+        //padding: 20px 30px 20px 20px;
+        background-color: $cf;
     }
 
     &__img{
@@ -257,11 +261,11 @@ a.join_button {
     }
 
     &__input {
-        @include size(auto, 55px);
+        @include size(auto, auto);
         border-radius: 10px;
         border-style: none;
         outline: none;
-        padding: 5px 10px;
+        padding: 15px 10px;
         resize: none;
         flex: 1;
         margin: 0 15px;
@@ -273,15 +277,19 @@ a.join_button {
 
     &__btn {
         //@include size(100px,50px);
-        padding: 10px 20px;
-        background-color: #F3F3F3;
-        color: $brand-blue;
-        border: 2px solid $brand-blue; /* Green */
-        border-radius: 5px;
+        margin: 0px 18px;
+        padding: 13px;
+        background-color: #ffffff;
+        /* color: #2bc2f9; */
+        border: none;
+        /* border-radius: 5px; */
         cursor: pointer;
         text-transform: uppercase;
-        font-weight: 700;
+        /* font-weight: 700; */
         margin-left: 15px;
+        background-repeat: no-repeat;
+        background-image: url(http://cdn.onlinewebfonts.com/svg/img_85498.png);
+        background-size: contain;
     }
 
     &__file,
@@ -390,6 +398,13 @@ a.join_button {
                 right: -12px;
                 border-right-color: transparent;
                 border-left: 7px solid #2BC2F9;
+
+                .messaging_block_lg &{
+                    left: -12px;
+                    right: auto;
+                    border-left-color: transparent;
+                    border-right: 7px solid #2BC2F9;
+                }
             }
         }
     }
@@ -407,6 +422,10 @@ a.join_button {
 
     &_out {
         flex-direction: row-reverse;
+
+        .messaging_block_lg &{
+            flex-direction: row;
+        }
     }
 
     &_in {
@@ -425,8 +444,8 @@ a.join_button {
     }
 
     span{
-        display: inline-block;
-        max-width: 200px;
+        display: block;
+        //max-width: 200px;
     }
 }
 
@@ -543,8 +562,8 @@ a.join_button {
     }
 
     span{
-        display: inline-block;
-        max-width: 200px;
+        display: block;
+        //max-width: 200px;
     }
 }
 /*
@@ -554,12 +573,13 @@ a.join_button {
 .head_peer {
     height: 70px;
     width: 100%;
-    /*background: red;*/
+    background-color: $cf;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px;
     border-bottom: 1px solid #c3c3c3;
+
 
     h3 {
         margin: 0;

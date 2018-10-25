@@ -1,0 +1,20 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://github.com/MoonSHRD/desktop_client.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[branch "branch-35"]
+	remote = origin
+	merge = refs/heads/branch-35
+[branch "branch-53"]
+	remote = origin
+	merge = refs/heads/branch-53
+[branch "branch-64"]
+	remote = origin
+	merge = refs/heads/branch-64

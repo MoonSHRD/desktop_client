@@ -1,6 +1,6 @@
 .chats {
     height: calc(100% - 295px);
-    background: $brand-gray-100;
+    background: $cf;
     overflow-y: auto;
     position: relative;
 
@@ -83,14 +83,14 @@
 
         .badge{
             margin-left: auto;
-            background-color: $info;
-            color: $brand-gray-100;
+            background-color: $brand-gray-700;
+            color: $primary-text;
             @include transition(.2s ease);
 
-            .active_dialog & {
-                background-color: $brand-gray-100;
-                color: $primary-text;
-            }
+            //.active_dialog & {
+            //    background-color: $brand-gray-100;
+            //    color: $primary-text;
+            //}
         }
     }
 
@@ -102,22 +102,22 @@
     &:hover {
         border-radius: 0px;
         background-color: rgba(43, 194, 249, 0.2);
-        color: #000000;
+        color: $primary-text;
         text-decoration: none;
 
-        .userchat__body{
-
-            .badge {
-                background-color: $brand-gray-100;
-                color: $primary-text;
-            }
-        }
+        //.userchat__body{
+        //
+        //    .badge {
+        //        background-color: $brand-gray-100;
+        //        color: $primary-text;
+        //    }
+        //}
     }
 }
 
 .search {
     height: 60px;
-    background-color: $brand-gray-100;
+    background-color: $cf;
     display: flex;
     justify-content: center;
     align-items: center;
