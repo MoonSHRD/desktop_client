@@ -19,7 +19,7 @@
     top: 0; left: 0;
     bottom: 0;
     width: 300px;
-    background-color: #F3F3F3;
+    background-color: $cf;
     height: 100vh;
     animation-direction: revert;
     border-right: 1px solid #d0d0d0;
@@ -28,7 +28,7 @@
 
 .messaging_block {
     margin-left: 370px;
-}
+    }
 
 #resize01 {
     float: right;

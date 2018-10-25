@@ -1,6 +1,6 @@
 .chats {
     height: calc(100% - 295px);
-    background: $brand-gray-100;
+    background: $cf;
     overflow-y: auto;
     position: relative;
 
@@ -117,7 +117,7 @@
 
 .search {
     height: 60px;
-    background-color: $brand-gray-100;
+    background-color: $cf;
     display: flex;
     justify-content: center;
     align-items: center;
