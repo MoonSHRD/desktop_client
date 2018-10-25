@@ -209,7 +209,7 @@ class MessagesController extends Controller {
         await this.render_message(message);
     };
 
-    async received_group_message({room_data, message, sender, files, stamp}) {
+    async received_group_message({room_data, message, sender, files, stamp, fresh}) {
         console.log('Files: ',files);
         console.log(stamp);
         let self_info = await this.get_self_info();
