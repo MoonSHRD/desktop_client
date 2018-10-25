@@ -196,7 +196,7 @@ window.onload = function () {
     });
 
 
-    $(document).on('keydown', '.send_message_input', function () {
+    $(document).on('keydown', '[data-msg="data-msg"]', function () {
         if (event.ctrlKey && event.keyCode === 13) {
             send_message();
         }
@@ -210,6 +210,8 @@ window.onload = function () {
         let msg_input = $('.send_message__input');
         msg_input.attr('rows', 1)
         if (msg_input.val().trim() === '') {
+            msg_input.attr('rows', 1)
+
             msg_input.val('');
             return;
         }
@@ -222,11 +224,14 @@ window.onload = function () {
             text: msg_input.val().trim(),
             group: $('.active_dialog').attr('data-type') === 'channel',
         };
+        msg_input.attr('rows', 1)
 
         obj = {id: active_dialog.attr('id'), text: msg_input.val().trim()};
         // console.log(obj);
         let files = $('#attachFileToChat').prop('files');
         if (files && files[0]) {
+            msg_input.attr('rows', 1)
+
             let file = files[0];
             console.log(file);
             let reader = new FileReader();
@@ -601,8 +606,8 @@ window.onload = function () {
     });
 
     $(document).on('keyup',".send_message__input",function(e) {
-        console.log('hello!')
-        ResizeTextArea(this,1)
+        // console.log('hello!')
+        ResizeTextArea(this,0)
     });
 
     function countLines(strtocount, cols) {
@@ -613,6 +618,7 @@ window.onload = function () {
             hard_lines ++;
             /* if ( hard_lines == 35) break; */
             if ( last == -1 ) break;
+            console.log('hi')
         }
         var soft_lines = Math.ceil(strtocount.length / (cols-1));
         var hard = eval("hard_lines " + unescape("%3e") + "soft_lines;");
@@ -622,7 +628,7 @@ window.onload = function () {
 
 // функция вызывается при каждом нажатии клавиши в области ввода текста
     function ResizeTextArea(the_form,min_rows) {
-        the_form.rows = Math.max(min_rows,countLines(the_form.value,the_form.cols) );
+        the_form.rows = Math.max(min_rows, countLines(the_form.value,the_form.cols) );
     }
 
 
