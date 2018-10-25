@@ -165,9 +165,9 @@ export class Router {
             await this.controller_register.queue_controller('ChatsController', 'find_groups', group_name);
         });
 
-        this.listen_event(this.ipcMain, 'create_group', async (event, group_name) => {
+        this.listen_event(this.ipcMain, 'create_group', async (event, group_data) => {
             console.log('creating group');
-            await this.controller_register.queue_controller('ChatsController', 'create_group', group_name);
+            await this.controller_register.queue_controller('ChatsController', 'create_group', group_data);
         });
 
         this.listen_event(this.ipcMain, 'join_channel', async (event, chat) => {

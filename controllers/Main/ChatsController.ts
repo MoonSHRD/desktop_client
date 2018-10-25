@@ -189,9 +189,22 @@ class ChatsController extends Controller {
 
     }
 
-    async create_group(group_name: string, group_type: string = this.group_chat_types.channel) {
-        let group = {name: group_name, domain: "localhost", type: (group_type !== this.chat_types.user)};
-        this.dxmpp.register_channel(group, '');
+    async create_group(group_data) {
+        console.log(group_data);
+        // let group_type=group_data.type?group_data.type:this.group_chat_types.channel;
+        if (group_data.substype=='unfree'){
+            // let price=64;
+            let rate = 1/group_data.token_price;
+            let decimals=18;
+            if (rate<1){
+                decimals += rate.toString().match(/[0.]*[1-9]/)[0].length-2;
+            } else {
+                decimals -= (Math.floor(rate).toString().length-1);
+            }
+            console.log('rate: ',rate,' decimals: ',decimals);
+        }
+        // let group = {name: group_data.name, domain: "localhost", type: (group_type !== this.chat_types.user)};
+        // this.dxmpp.register_channel(group, '');
     }
 
     async find_groups(group_name: string) {
