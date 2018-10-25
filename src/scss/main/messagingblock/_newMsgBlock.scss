@@ -48,6 +48,8 @@
             }
         }
 
+
+
         .messages {
             height: auto;
             min-height: calc(100% - 93px);
@@ -233,7 +235,7 @@ a.join_button {
         background: $brand-gray-100;
         overflow: hidden;
         background-size: auto 110%;
-        background-image: linear-gradient(180deg,hsla(0,0%,95.3%,.9) 0,hsla(0,0%,95.3%,.9)),url(https://st4.depositphotos.com/4502047/21136/v/1600/depositphotos_211361238-stock-illustration-social-media-minimalist-seamless-pattern.jpg);
+        background-image: linear-gradient(180deg,hsla(0,0%,95.3%,.9) 0,hsla(0,0%,95.3%,.9)),url(('#{$img}/messBlockBg.jpg'));
 
     }
 }
@@ -249,6 +251,7 @@ a.join_button {
         overflow: hidden;
         //padding: 20px 30px 20px 20px;
         background-color: $cf;
+        border-top: 1px solid $brand-gray-100;
     }
 
     &__img{
@@ -278,7 +281,7 @@ a.join_button {
     &__btn {
         //@include size(100px,50px);
         margin: 0px 18px;
-        padding: 13px;
+        //padding: 13px;
         background-color: #ffffff;
         /* color: #2bc2f9; */
         border: none;
@@ -288,7 +291,7 @@ a.join_button {
         /* font-weight: 700; */
         margin-left: 15px;
         background-repeat: no-repeat;
-        background-image: url(http://cdn.onlinewebfonts.com/svg/img_85498.png);
+        //background-image: url(http://cdn.onlinewebfonts.com/svg/img_85498.png);
         background-size: contain;
     }
 
@@ -325,6 +328,20 @@ a.join_button {
     overflow-x: hidden;
     margin-top: 40px;
     padding-bottom: 50px;
+
+    #dialogDate {
+        text-align: center;
+        p {
+            background: rgba(0, 0, 0, 0.34);
+            display: inline-block;
+            padding: 2px 15px;
+            border-radius: 15px;
+            color: white;
+            font-weight: 800;
+            font-size: 14px;
+            font-family: Roboto, sans-serif;
+        }
+    }
 
     @media screen and (max-width: 735px) {
         max-height: calc(100% - 105px);
