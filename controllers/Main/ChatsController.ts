@@ -167,20 +167,44 @@ class ChatsController extends Controller {
         await chat.save();
 
         await this.load_chat(chat, this.chat_to_menu.group);
+        let count = messages.length;
+        for (let num in messages){
+            let message=messages[num];
+            let buf = message.time.split(" ");
+            message.time = `${buf[0]} ${buf[1]}`;
+            let room_data = {id: message.sender};
+            let sender = {address: message.sender, domain: "localhost"};
+            await this.controller_register.run_controller("MessagesController", "received_group_message",
+                {room_data, message:message.message, sender, stamp:message.time, files:message.files, fresh:(num==(count-1))});
+        }
         messages.forEach(async (message) => {
             // console.log(message.time);
             let buf = message.time.split(" ");
             message.time = `${buf[0]} ${buf[1]}`;
             let room_data = {id: message.sender};
             let sender = {address: message.sender, domain: "localhost"};
-            await this.controller_register.run_controller("MessagesController", "received_group_message", room_data, message.message, sender, message.time, message.files);
+            await this.controller_register.run_controller("MessagesController", "received_group_message",
+                {room_data, message:message.message, sender, stamp:message.time, files:message.files, });
         });
 
     }
 
-    async create_group(group_name: string, group_type: string = this.group_chat_types.channel) {
-        let group = {name: group_name, domain: "localhost", type: (group_type !== this.chat_types.user)};
-        this.dxmpp.register_channel(group, '');
+    async create_group(group_data) {
+        console.log(group_data);
+        // let group_type=group_data.type?group_data.type:this.group_chat_types.channel;
+        if (group_data.substype=='unfree'){
+            // let price=64;
+            let rate = 1/group_data.token_price;
+            let decimals=18;
+            if (rate<1){
+                decimals += rate.toString().match(/[0.]*[1-9]/)[0].length-2;
+            } else {
+                decimals -= (Math.floor(rate).toString().length-1);
+            }
+            console.log('rate: ',rate,' decimals: ',decimals);
+        }
+        // let group = {name: group_data.name, domain: "localhost", type: (group_type !== this.chat_types.user)};
+        // this.dxmpp.register_channel(group, '');
     }
 
     async find_groups(group_name: string) {

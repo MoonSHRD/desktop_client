@@ -10,9 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const var_helper_1 = require("../src/var_helper");
-let gm = require('gm').subClass({ imageMagick: true });
-const util = require("util");
-require('gm-base64');
+const Electron = require("electron");
+var nativeImage = Electron.nativeImage;
+// require ('gm-base64');
 function save_file(file) {
     check_files_dir();
     let base64file = file.file.split(';base64,').pop();
@@ -57,45 +57,72 @@ function b64img_to_buff(b64img) {
 exports.b64img_to_buff = b64img_to_buff;
 function resize_img_from_path(imgPath) {
     return __awaiter(this, void 0, void 0, function* () {
-        let img = gm(imgPath);
-        return (yield resize_img(img));
+        let img = nativeImage.createFromPath(imgPath);
+        img = yield resize_img(img);
+        return 'data:image/png;base64,' + img.toJPEG(100).toString('base64');
     });
 }
 exports.resize_img_from_path = resize_img_from_path;
 function resize_img(img) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let size = 240;
-        const img_size = util.promisify(img.size).bind(img);
-        console.log(yield img_size());
-        let { width: x, height: y } = yield img_size();
-        let new_size;
-        if (x > y) {
-            new_size = 'x' + size;
-            let range_x = size * (x / y);
-            img = img.geometry(new_size);
-            img = img.crop(size, size, Math.round((range_x - size) / 2), 0);
-        }
-        else {
-            new_size = size + 'x';
-            let range_y = size * (y / x);
-            img = img.geometry(new_size);
-            img = img.crop(size, size, 0, Math.round((range_y - size) / 2));
-        }
-        const img_b64 = util.promisify(img.toBase64).bind(img);
-        // const img_buf = util.promisify(img.toBuffer).bind(img);
-        // let round_img
-        let resized_img = yield img_b64('jpg', true);
-        return resized_img;
-    });
+    let size = 240;
+    let { width: x, height: y } = img.getSize();
+    if (x > y) {
+        let range_x = size * (x / y);
+        img = img.resize({ height: size });
+        let rect = {
+            x: Math.round((range_x - size) / 2),
+            y: 0,
+            width: size,
+            height: size
+        };
+        img = img.crop(rect);
+    }
+    else {
+        let range_y = size * (y / x);
+        img = img.resize({ width: size });
+        let rect = {
+            y: Math.round((range_y - size) / 2),
+            x: 0,
+            width: size,
+            height: size
+        };
+        img = img.crop(rect);
+        // new_size=size+'x';
+        // let range_y=size*(y/x);
+        // img=img.geometry(new_size);
+        // img=img.crop(size,size,0,Math.round((range_y-size)/2));
+    }
+    // const img_size = util.promisify(img.size).bind(img);
+    // console.log(await img_size());
+    // let {width:x,height:y} = await img_size();
+    // let new_size:string;
+    // if (x>y){
+    //     new_size='x'+size;
+    //     let range_x=size*(x/y);
+    //     img=img.geometry(new_size);
+    //     img=img.crop(size,size,Math.round((range_x-size)/2),0);
+    // } else {
+    //     new_size=size+'x';
+    //     let range_y=size*(y/x);
+    //     img=img.geometry(new_size);
+    //     img=img.crop(size,size,0,Math.round((range_y-size)/2));
+    // }
+    // const img_b64 = util.promisify(img.toBase64).bind(img);
+    // const img_buf = util.promisify(img.toBuffer).bind(img);
+    // let round_img
+    // let resized_img=await img_b64('jpg', true);
+    return img;
 }
 function resize_b64_img(b64img) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(b64img.substr(0, 30));
+        // console.log(b64img.substr(0,30));
+        // let to_paste = b64img.substr(0,b64img.indexOf(',') + 1);
         b64img = b64img.substr(b64img.indexOf(',') + 1);
-        console.log(b64img.substr(0, 30));
+        // console.log(b64img.substr(0,30));
         let imgFile = new Buffer(b64img, 'base64');
-        let img = gm(imgFile);
-        return (yield resize_img(img));
+        let img = nativeImage.createFromBuffer(imgFile);
+        img = resize_img(img);
+        return 'data:image/png;base64,' + img.toJPEG(50).toString('base64');
     });
 }
 exports.resize_b64_img = resize_b64_img;

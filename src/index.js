@@ -164,6 +164,7 @@ window.onload = function () {
         console.log('autyh');
         $('#view').html(arg);
         $.html5Translate(dict, 'en');
+        // todo: fix some console errors with this func
         widthMsgWindow('[data-msgs-window]');
     });
 
@@ -415,14 +416,9 @@ window.onload = function () {
             obj[elem.name] = elem.value;
         });
 
-        switch (obj.substype) {
-            case 'free':
-                ipcRenderer.send('create_group', obj.name);
-                $('#AppModal').modal('toggle');
-                break;
-            case 'unfree':
-                break;
-        }
+        ipcRenderer.send('create_group', obj);
+        console.log(obj);
+        $('#AppModal').modal('toggle');
     });
 
     $(document).on('click', '[data-event=show_chat_info]', function () {
