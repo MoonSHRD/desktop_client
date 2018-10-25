@@ -27,9 +27,9 @@ class ChatsController extends Controller_1.Controller {
     load_chat(chat, general_chat_type) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
-            if (chat.type === this.chat_types.user && chat.hasOwnProperty('get_user_chat_meta')) {
-                yield chat.get_user_chat_meta();
-            }
+            // if (chat.type === this.chat_types.user && chat.hasOwnProperty('get_user_chat_meta')) {
+            //     await chat.get_user_chat_meta();
+            // }
             if (chat.time)
                 chat.time = Helpers_1.Helper.formate_date(new Date(chat.time), { locale: 'ru', for: 'chat' });
             if (chat.senderId === self_info.id) {
@@ -49,8 +49,8 @@ class ChatsController extends Controller_1.Controller {
             if (userModel) {
                 userModel.online = state === 'online';
                 yield userModel.save();
-                let chat = yield ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id);
-                yield chat.get_user_chat_meta();
+                let chat = yield ChatModel_1.ChatModel.get_user_chat_raw(self_info.id, user.id);
+                // await chat.get_user_chat_meta();
                 yield this.load_chat(chat, this.chat_to_menu.user);
             }
             else {
@@ -143,6 +143,7 @@ class ChatsController extends Controller_1.Controller {
             yield user.save();
             user.type = this.chat_types.user;
             let chat = yield ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id);
+            yield chat.get_user_chat_meta();
             yield this.load_chat(chat, this.chat_to_menu.user);
         });
     }
@@ -176,13 +177,22 @@ class ChatsController extends Controller_1.Controller {
                 chat.contract_address = room_data.contractaddress;
             yield chat.save();
             yield this.load_chat(chat, this.chat_to_menu.group);
+            let count = messages.length;
+            for (let num in messages) {
+                let message = messages[num];
+                let buf = message.time.split(" ");
+                message.time = `${buf[0]} ${buf[1]}`;
+                let room_data = { id: message.sender };
+                let sender = { address: message.sender, domain: "localhost" };
+                yield this.controller_register.run_controller("MessagesController", "received_group_message", { room_data, message: message.message, sender, stamp: message.time, files: message.files, fresh: (num == (count - 1)) });
+            }
             messages.forEach((message) => __awaiter(this, void 0, void 0, function* () {
                 // console.log(message.time);
                 let buf = message.time.split(" ");
                 message.time = `${buf[0]} ${buf[1]}`;
                 let room_data = { id: message.sender };
                 let sender = { address: message.sender, domain: "localhost" };
-                yield this.controller_register.run_controller("MessagesController", "received_group_message", room_data, message.message, sender, message.time, message.files);
+                yield this.controller_register.run_controller("MessagesController", "received_group_message", { room_data, message: message.message, sender, stamp: message.time, files: message.files, });
             }));
         });
     }

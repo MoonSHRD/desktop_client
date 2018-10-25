@@ -20,17 +20,38 @@ window.onload = function () {
     };
 
     $(document).on('click','.copyButton',function () {
-        if (document.selection) {
-            var range = document.body.createTextRange();
-            range.moveToElementText(document.getElementById('copyTo'));
-            range.select().createTextRange();
-            document.execCommand("Copy");
+        // if (document.selection) {
+        //     var range = document.body.createTextRange();
+        //     range.moveToElementText(document.getElementById('copyTo'));
+        //     range.select().createTextRange();
+        //     document.execCommand("Copy");
+        //
+        // } else if (window.getSelection) {
+        //     var range = document.createRange();
+        //     range.selectNode(document.getElementById('copyTo'));
+        //     window.getSelection().addRange(range);
+        //     document.execCommand("Copy");
+        let elem = document.getElementById('copyTo');
+        let body = document.body, range, sel;
 
-        } else if (window.getSelection) {
-            var range = document.createRange();
-            range.selectNode(document.getElementById('copyTo'));
-            window.getSelection().addRange(range);
-            document.execCommand("Copy");
+        if(document.createRange && window.getSelection) {
+            range = document.createRange();
+            sel = window.getSelection();
+            sel.removeAllRanges();
+            try {
+                range.selectNodeContents(elem);
+                sel.addRange(range)
+            } catch (e) {
+                range.selectNode(elem);
+                sel.addRange(range)
+            }
+        } else if (body.createTextRange) {
+            range = body.createTextRange();
+            range.moveToElementText(elem);
+            range.select();
+        }
+        document.execCommand('copy');
+        console.log(range, sel, elem);
 
             $.notify('address copied \n' + range, {
 
@@ -46,7 +67,7 @@ window.onload = function () {
                 offset: 20,
                 spacing: 10
             });
-        }
+        // }
     });
 
     $(document).on('click','.attachFileToChat',function () {
@@ -132,13 +153,23 @@ window.onload = function () {
 
     let widthMsgWindow = (target) => {
         let msgWindow =  document.querySelector(target);
-        console.log(msgWindow.offsetWidth);
+        if (msgWindow.offsetWidth > 800){
+            msgWindow.classList.add('messaging_block_lg');
+        } else {
+            msgWindow.classList.remove('messaging_block_lg');
+        }
     };
 
     ipcRenderer.on('change_app_state', (event, arg) => {
         console.log('autyh');
         $('#view').html(arg);
         $.html5Translate(dict, 'en');
+        widthMsgWindow('[data-msgs-window]');
+    });
+
+    window.addEventListener('resize', function(e){
+        widthMsgWindow('[data-msgs-window]');
+        e.preventDefault();
     });
 
     $(document).on('change', '[name=avatar]', function () {
@@ -177,6 +208,7 @@ window.onload = function () {
 
     function send_message(){
         let msg_input = $('.send_message__input');
+        msg_input.attr('rows', 1)
         if (msg_input.val().trim() === '') {
             msg_input.val('');
             return;
@@ -238,11 +270,12 @@ window.onload = function () {
                 chat.find('[data-name=chat_last_time]').text(obj.message.time);
                 chat.find('[data-name=chat_last_text]').text(obj.message.text);
             }
+            chat.prependTo($('.chats ul')[0]);
         }
 
         if ($('.active_dialog').attr('id') === obj.id) {
             $('[data-msg-list]').append(obj.html);
-            scrollDown('messaging_history');
+            scrollDown('[data-msg-history]');
         } else {
             // fawfaw
         }
@@ -540,6 +573,7 @@ window.onload = function () {
         p = $(".dialogs");
         let d = $(".messaging_block");
         let change = curr_width + (e.clientX - curr_width);
+        widthMsgWindow('[data-msgs-window]');
         if(unlock) {
             if(change > 369 && change < 599) {
 
@@ -555,7 +589,41 @@ window.onload = function () {
         unlock = true;
     });
 
+    $(document).on('click',"[data-id=add_new_user]",function(e) {
+        let input = $('[data-name=group_search]');
+        let data={id:input.val(),domain:'localhost'};
+        input.val('');
+        ipcRenderer.send("send_subscribe", data);
+    });
+
     $(document).mouseup(function(e) {
         unlock = false;
     });
+
+    $(document).on('keyup',".send_message__input",function(e) {
+        console.log('hello!')
+        ResizeTextArea(this,1)
+    });
+
+    function countLines(strtocount, cols) {
+        var hard_lines = 1;
+        var last = 0;
+        while ( true ) {
+            last = strtocount.indexOf("\n", last+1);
+            hard_lines ++;
+            /* if ( hard_lines == 35) break; */
+            if ( last == -1 ) break;
+        }
+        var soft_lines = Math.ceil(strtocount.length / (cols-1));
+        var hard = eval("hard_lines " + unescape("%3e") + "soft_lines;");
+        if ( hard ) soft_lines = hard_lines;
+        return soft_lines;
+    }
+
+// функция вызывается при каждом нажатии клавиши в области ввода текста
+    function ResizeTextArea(the_form,min_rows) {
+        the_form.rows = Math.max(min_rows,countLines(the_form.value,the_form.cols) );
+    }
+
+
 };
