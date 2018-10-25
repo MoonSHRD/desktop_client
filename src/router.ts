@@ -206,7 +206,7 @@ export class Router {
         this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, stamp, files) => {
             console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
             // console.log("Files:", files);
-            await this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, files, stamp);
+            await this.controller_register.queue_controller('MessagesController', 'received_group_message', {room_data, message, sender, files, stamp});
         });
 
         this.listen_event(this.dxmpp, 'chat', async (user, message,file) => {

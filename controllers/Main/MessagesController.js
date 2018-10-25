@@ -216,7 +216,7 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_group_message(room_data, message, sender, stamp, files) {
+    received_group_message({ room_data, message, sender, files, stamp }) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('Files: ', files);
             console.log(stamp);
