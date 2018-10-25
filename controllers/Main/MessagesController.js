@@ -46,7 +46,7 @@ class MessagesController extends Controller_1.Controller {
                     break;
             }
             let html = this.render('main/messagingblock/qqq.pug', chat);
-            this.send_data('reload_chat', html);
+            yield this.send_data('reload_chat', html);
             yield this.render_chat_messages(chat_id);
         });
     }
@@ -108,7 +108,7 @@ class MessagesController extends Controller_1.Controller {
                 file.file = (yield this.ipfs.get_file(file.hash)).file;
                 Helpers_1.save_file(file);
             }
-            this.send_data('file_dowloaded', { id: file_id });
+            this.send_data('file_downloaded', { id: file_id });
         });
     }
     send_message({ id, text, file }) {

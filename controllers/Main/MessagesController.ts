@@ -38,7 +38,7 @@ class MessagesController extends Controller {
                 break;
         }
         let html = this.render('main/messagingblock/qqq.pug', chat);
-        this.send_data('reload_chat', html);
+        await this.send_data('reload_chat', html);
 
         await this.render_chat_messages(chat_id);
     };
@@ -99,7 +99,7 @@ class MessagesController extends Controller {
             file.file = (await this.ipfs.get_file(file.hash)).file;
             save_file(file);
         }
-        this.send_data('file_dowloaded',{id:file_id});
+        this.send_data('file_downloaded',{id:file_id});
     }
 
     async send_message({id, text, file}) {

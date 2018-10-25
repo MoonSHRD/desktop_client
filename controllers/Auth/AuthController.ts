@@ -10,7 +10,7 @@ import {paths} from "../../src/var_helper";
 
 class AuthController extends Controller {
 
-    private connection_tries:number=0;
+    private connection_tries:number=-1;
 
     async init_auth() {
         let account = await AccountModel.findOne(1);

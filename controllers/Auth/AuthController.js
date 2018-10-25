@@ -18,7 +18,7 @@ const Helpers_1 = require("../Helpers");
 class AuthController extends Controller_1.Controller {
     constructor() {
         super(...arguments);
-        this.connection_tries = 0;
+        this.connection_tries = -1;
     }
     init_auth() {
         return __awaiter(this, void 0, void 0, function* () {
