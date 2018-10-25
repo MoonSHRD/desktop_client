@@ -19,10 +19,18 @@ class ChatsController extends Controller {
     };
 
     private async load_chat(chat: ChatModel, general_chat_type) {
-        if (chat.type === this.chat_types.user && chat.hasOwnProperty('get_user_chat_meta')) {
-            await chat.get_user_chat_meta();
+        let self_info = await this.get_self_info();
+        // if (chat.type === this.chat_types.user && chat.hasOwnProperty('get_user_chat_meta')) {
+        //     await chat.get_user_chat_meta();
+        // }
+        if (chat.time)
+            chat.time=Helper.formate_date(new Date(chat.time),{locale:'ru',for:'chat'});
+        if (chat.senderId===self_info.id){
+            if (chat.text)
+                chat.text='Вы: '+chat.text;
         }
-        chat.time=Helper.formate_date(new Date(chat.time),{locale:'ru',for:'chat'});
+
+        console.log(chat);
         let html = this.render('main/chatsblock/chats/imDialog.pug', chat);
         this.send_data('buddy', {id: chat.id, type: general_chat_type, html: html})
     }
@@ -34,7 +42,8 @@ class ChatsController extends Controller {
         if (userModel) {
             userModel.online = state === 'online';
             await userModel.save();
-            let chat = await ChatModel.get_user_chat(self_info.id, user.id);
+            let chat = await ChatModel.get_user_chat_raw(self_info.id, user.id);
+            // await chat.get_user_chat_meta();
             await this.load_chat(chat, this.chat_to_menu.user);
         } else {
             userModel = new UserModel();
@@ -124,6 +133,7 @@ class ChatsController extends Controller {
         await user.save();
         user.type = this.chat_types.user;
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
+        await chat.get_user_chat_meta();
         await this.load_chat(chat, this.chat_to_menu.user);
     }
 
@@ -155,25 +165,15 @@ class ChatsController extends Controller {
             chat.contract_address = room_data.contractaddress;
 
         await chat.save();
-        messages.forEach(async (message) => {
-            let room_data = {id: message.sender};
-            await this.controller_register.queue_controller(
-                "MessagesController", "received_channel_message",
-                room_data, message.message, message.sender, message.time);
-            // let _message = new MessageModel();
-            // _message.time = message.time;
-            // _message.text = message.message;
-            // _message.sender = message.sender;
-            // _message.chat = message.sender;
-            // await  _message.save();
-        });
 
         await this.load_chat(chat, this.chat_to_menu.group);
         messages.forEach(async (message) => {
             // console.log(message.time);
             let buf = message.time.split(" ");
             message.time = `${buf[0]} ${buf[1]}`;
-            await this.controller_register.run_controller("MessagesController", "received_channel_message", message.message, message.sender, message.time);
+            let room_data = {id: message.sender};
+            let sender = {address: message.sender, domain: "localhost"};
+            await this.controller_register.run_controller("MessagesController", "received_group_message", room_data, message.message, sender, message.time, message.files);
         });
 
     }

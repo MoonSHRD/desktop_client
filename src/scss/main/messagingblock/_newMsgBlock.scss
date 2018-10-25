@@ -357,6 +357,7 @@ a.join_button {
 
     &__avatar{
         padding: 0 15px 10px;
+        flex-shrink : 0;
     }
 
     &__bubble {
@@ -410,23 +411,30 @@ a.join_button {
 
     &_in {
     }
+}
 
-    .imageOutputFile {
-        margin-top: 10px;
-        width: 100%;
-        position: relative;
+.imageOutputFile {
+    margin-top: 10px;
+    //width: 100%;
+    position: relative;
+    max-width: 200px;
 
-        img {
-            border-radius: 10px;
-            cursor: pointer;
-        }
+    img {
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    span{
+        display: inline-block;
+        max-width: 200px;
     }
 }
 
 .docOutputFile {
-    width: 100%;
+    //width: 100%;
     position: relative;
     margin-top: 10px;
+    max-width: 200px;
     &__icon {
         @include size(45px);
         //margin: 5px 13px;
@@ -532,6 +540,11 @@ a.join_button {
 
     .message_out & span {
         //padding-right: 15px;
+    }
+
+    span{
+        display: inline-block;
+        max-width: 200px;
     }
 }
 /*

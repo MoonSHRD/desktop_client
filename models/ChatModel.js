@@ -41,6 +41,7 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
         this.online = false;
         this.time = null;
         this.text = null;
+        this.senderId = null;
     }
     static get_user_chat_id(self_id, user_id) {
         let sort = [self_id, user_id];
@@ -52,6 +53,32 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
             return yield ChatModel_1.findOne(ChatModel_1.get_user_chat_id(self_id, user_id));
         });
     }
+    static get_user_chat_raw(self_id, user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let chat_id = ChatModel_1.get_user_chat_id(self_id, user_id);
+            return (yield typeorm_1.getConnection()
+                .createQueryRunner()
+                .query(`select * from 
+                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type
+                   from chat_model ch
+                       inner join (
+                               select name, avatar, id user_id, online, domain
+                               from user_model 
+                               where user_model.id == "${user_id}"
+                           ) usr 
+                       on instr(ch.id,user_id) > 0
+                       where ch.id == "${chat_id}") ch2
+                   left join (
+                           select time, text, chatId, senderId
+                           from message_model msg
+                           group by msg.chatId
+                           order by msg.time
+                       ) msg
+                       on msg.chatId = ch2.id) ch3
+                   order by ch3.time`))[0];
+        });
+    }
+    ;
     static get_chat_with_events(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
             return (yield ChatModel_1.find({ relations: ['events'], where: { id: chat_id } }))[0];
@@ -118,48 +145,15 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
             return data.id;
         });
     }
-    // static async get_chats_with_last_msgs(){
-    //     return (await getConnection()
-    //         .createQueryBuilder()
-    //         .innerJoin(
-    //             (query) => {
-    //                 return query
-    //                     .select('time')
-    //                     .addSelect('text')
-    //                     .addSelect('chatId')
-    //                     .from(MessageModel, 'message')
-    //                     // .where('message.chatId = ch.id')
-    //                     // .limit(1)
-    //                     .orderBy('message.time', "DESC")
-    //                     .groupBy('chatId')
-    //             },
-    //             'msg',
-    //             'msg.chatId = ch.id',
-    //         )
-    //         .innerJoin(
-    //             (query) => {
-    //                 return query
-    //                     .select('name')
-    //                     .addSelect('avatar')
-    //                     .addSelect('id', 'user_id')
-    //                     .from(UserModel, 'usr')
-    //             },
-    //             'usr',
-    //             `instr(ch.id,user_id) > 0`,
-    //         )
-    //         .from(ChatModel, 'ch')
-    //         .groupBy('id')
-    //         .getRawMany());
-    // }
     static get_chats_with_last_msgs(self_info) {
         return __awaiter(this, void 0, void 0, function* () {
-            let qb = yield typeorm_1.getConnection()
+            return (yield typeorm_1.getConnection()
                 .createQueryRunner()
-                .query((`select * from 
-                   ((select id,domain,usr.name as name,usr.avatar as avatar, usr.online as online, type
+                .query(`select * from 
+                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type
                    from chat_model ch
                        inner join (
-                               select name, avatar, id user_id, online
+                               select name, avatar, id user_id, online, domain
                                from user_model 
                                where user_model.id != "${self_info.id}"
                            ) usr 
@@ -169,14 +163,14 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
                    select id,domain,name,avatar, 0 as online, type
                        from chat_model ch1
                        where ch1.type != "${var_helper_1.chat_types.user}") ch2
-                   inner join (
-                           select time, text, chatId
+                   left join (
+                           select time, text, chatId, senderId
                            from message_model msg
                            group by msg.chatId
                            order by msg.time
                        ) msg
-                       on msg.chatId = ch2.id)`));
-            return qb;
+                       on msg.chatId = ch2.id) ch3
+                   order by ch3.time`));
         });
     }
 };

@@ -12,8 +12,6 @@ import {ControllerRegister} from "../controllers/ControllerRegister";
 import {helper} from "./var_helper";
 import {Loom} from "../loom/loom";
 
-
-
 export class Router {
     readonly window: any;
     private paths: any;
@@ -173,8 +171,7 @@ export class Router {
         });
 
         this.listen_event(this.ipcMain, 'join_channel', async (event, chat) => {
-            console.log('joining group');
-            console.log(chat);
+            console.log('join group');
             await this.controller_register.queue_controller('ChatsController', 'join_chat', chat);
         });
 
@@ -206,9 +203,10 @@ export class Router {
 
         /** Messages events **/
 
-        this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, stamp) => {
+        this.listen_event(this.dxmpp, 'groupchat', async (room_data, message, sender, stamp, files) => {
             console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
-            await this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
+            // console.log("Files:", files);
+            await this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, files, stamp);
         });
 
         this.listen_event(this.dxmpp, 'chat', async (user, message,file) => {
@@ -239,8 +237,7 @@ export class Router {
         /** Wallet events **/
 
         this.listen_event(this.ipcMain, 'change_wallet_menu', async (event, arg) => {
-            // console.log('change_wallet_menu');
-
+            console.log('change_wallet_menu');
             await this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
         });
 

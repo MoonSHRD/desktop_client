@@ -43,7 +43,7 @@ class MessagesController extends Controller {
         await this.render_chat_messages(chat_id);
     };
 
-    private async render_message(message: MessageModel, fresh:boolean=false) {
+    private async render_message(message: MessageModel) {
         // console.log(message);
         let self_info = await this.get_self_info();
         message.mine = message.sender ? (self_info.id === message.sender.id) : false;
@@ -65,19 +65,18 @@ class MessagesController extends Controller {
         }
         message.time=Helper.formate_date(new Date(message.time),{locale:'ru',for:'message'});
         let html = this.render('main/messagingblock/message.pug', message);
-        // {
-        //         title:userModel.name,
-        //         body:message.text,
-        //         icon:nativeImage.createFromBuffer(b64img_to_buff(message.sender_avatar))
-        //     }
+
+        if (message.mine)
+            message.text='Вы: '+message.text;
+
         const data = {
             id: message.chat.id,
-            message: html,
-            // notif:
+            html: html,
+            message:message,
         };
         this.send_data('received_message', data);
 
-        if (fresh){
+        if (message.notificate){
             let notif = new Notification({
                 title:message.sender_name,
                 body:message.text,
@@ -114,6 +113,7 @@ class MessagesController extends Controller {
         message.time = Date.now();
         message.chat = chat;
         message.files=[];
+        message.fresh = true;
         await message.save();
         let group: boolean;
 
@@ -140,8 +140,6 @@ class MessagesController extends Controller {
             save_file(fileModel);
 
             message.files=[fileModel];
-            // console.log(fileModel);
-            // console.log("Save file_info")
         }
 
         // message.fileModel = file_send;
@@ -157,33 +155,16 @@ class MessagesController extends Controller {
         } else if (Object.values(this.group_chat_types).includes(chat.type)) {
             group = true;
         }
-        // this.dxmpp.send(chat, text, group);
         this.dxmpp.send(chat, text, group, message.files);
-        //
-        // eNotify.setConfig({
-        //     appIcon: self_info.avatar,
-        //     displayTime: 6000
-        // });
-        // eNotify.notify({ title: self_info.name, text: text });
-
-        // let notif = new Notification({
-        //     title:self_info.name,
-        //     body:text,
-        //     icon:nativeImage.createFromBuffer(b64img_to_buff(self_info.avatar))
-        // });
-        // notif.show();
-
-        // await this.render_message(message, id);
     };
 
-    async show_message_notification(message_id:string){
-        let message = await MessageModel.find({
-            where:{id:message_id},
-            relations:['sender','chat'],
-        })[0];
-        message.fill_sender_data();
-
-    }
+    // async show_message_notification(message_id:string){
+    //     let message = await MessageModel.find({
+    //         where:{id:message_id},
+    //         relations:['sender','chat'],
+    //     })[0];
+    //     message.fill_sender_data();
+    // }
 
     async message_delivered(message_d) {
         let message = await MessageModel.findOne(message_d.userid);
@@ -201,13 +182,14 @@ class MessagesController extends Controller {
         message.sender = userModel;
         message.chat = chat;
         message.time = Date.now();
+        message.fresh = true;
+        message.notificate = true;
         message.files=[];
         await message.save();
 
         // let ipfs_file;
         if (files) {
             for (let num in files){
-                await message.save();
                 let fileModel = new FileModel();
                 // file_info.sender = self_info.id;
                 fileModel.hash = files[num].hash;
@@ -224,56 +206,55 @@ class MessagesController extends Controller {
             }
         }
 
-        await this.render_message(message, true);
+        await this.render_message(message);
     };
 
-    async received_group_message(room_data, message, sender, stamp) {
+    async received_group_message(room_data, message, sender, stamp, files) {
+        console.log('Files: ',files);
+        console.log(stamp);
         let self_info = await this.get_self_info();
         if (sender.address == self_info.id) return;
         let userModel: UserModel;
         if (sender)
             userModel = await UserModel.findOne(sender.address);
-        if (stamp) {
-            let time = stamp.split(" ")[1].split(":");
-            stamp = `${time[0]}:${time[1]}`;
-        } else {
-            stamp = this.dxmpp.take_time()
-        }
+        // if (stamp) {
+        //     let time = stamp.split(" ")[1].split(":");
+        //     stamp = `${time[0]}:${time[1]}`;
+        // } else {
+        //     stamp = this.dxmpp.take_time()
+        // }
         let chat = await ChatModel.findOne(room_data.id);
         let messageModel = new MessageModel();
         messageModel.text = message;
         messageModel.sender = userModel;
         messageModel.chat = chat;
-        messageModel.time = stamp;
+        messageModel.time = Date.now();
+        messageModel.files = [];
+        messageModel.fresh = true;
+        messageModel.notificate = true;
         await messageModel.save();
-        await this.render_message(messageModel, true);
 
-        // await this.render_message(message, chat.id);
-        // message.sender_avatar = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.avatar : message.chat.avatar;
+        if (files) {
+            for (let num in files){
+                await messageModel.save();
+                let fileModel = new FileModel();
+                // file_info.sender = self_info.id;
+                fileModel.hash = files[num].hash;
+                fileModel.chat = chat;
+                fileModel.message = messageModel;
+                fileModel.name = files[num].name;
+                fileModel.type = files[num].type;
+                fileModel.preview = check_file_preview(files[num].type);
+                if (fileModel.preview) {
+                    fileModel.file = (await this.ipfs.get_file(fileModel.hash)).file;
+                }
+                await fileModel.save();
+                messageModel.files.push(fileModel);
+            }
+        }
 
-        // let notif = new Notification({
-        //     title:userModel.name,
-        //     body:message,
-        //     icon:nativeImage.createFromBuffer(b64img_to_buff(userModel.avatar))
-        // });
-        // notif.show();
+        await this.render_message(messageModel);
     }
-
-    // async received_channel_message(room_data, message, sender, stamp) {
-    //
-    //     if (stamp) {
-    //         let time = stamp.split(" ")[1].split(":");
-    //         stamp = `${time[0]}:${time[1]}`;
-    //     } else {stamp = this.dxmpp.take_time()}
-    //     let chat = await ChatModel.findOne(room_data.id);
-    //     let messageModel = new MessageModel();
-    //     messageModel.text = message;
-    //     messageModel.sender = null;
-    //     messageModel.chat = chat;
-    //     messageModel.time = stamp;
-    //     await messageModel.save();
-    //     await this.render_message(messageModel, chat.id);
-    // };
 }
 
 module.exports = MessagesController;

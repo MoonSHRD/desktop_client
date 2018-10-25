@@ -2,6 +2,12 @@ const {ipcRenderer} = require('electron');
 const dict = require('./langs/lang');
 const slick = require('slick-carousel');
 
+let p = null;
+let d = null;
+let r = null;
+let curr_width = null;
+let unlock = false;
+
 
 window.onload = function () {
 
@@ -133,6 +139,10 @@ window.onload = function () {
             ipcRenderer.send('change_menu_state', type);
     });
 
+    $(document).on('click','[data-id=menu_create_chat]',function (e) {
+        ipcRenderer.send('change_menu_state', 'menu_create_chat');
+    });
+
     ipcRenderer.on('change_menu_state', (event, arg) => {
         $('#working_side').html(arg);
     });
@@ -150,7 +160,6 @@ window.onload = function () {
         console.log('autyh');
         $('#view').html(arg);
         $.html5Translate(dict, 'en');
-        // widthMsgWindow('[data-msgs-window]');
     });
 
     $(document).on('change', '[name=avatar]', function () {
@@ -178,53 +187,17 @@ window.onload = function () {
 
 
     $(document).on('keydown', '.send_message_input', function () {
-
         if (event.ctrlKey && event.keyCode === 13) {
-            let msg_input = $('.send_message_input');
-            if (msg_input.val().trim() === '') {
-                msg_input.val('');
-                return;
-            }
-            let active_dialog = $('.active_dialog');
-            let obj = {
-                user: {
-                    id: active_dialog.attr('id'),
-                    domain: active_dialog.attr('data-domain'),
-                },
-                text: msg_input.val().trim(),
-                group: $('.active_dialog').attr('data-type') === 'channel',
-            };
-
-            obj = {id: active_dialog.attr('id'), text: msg_input.val().trim()};
-            // console.log(obj);
-            let file = $('#attachFileToChat').prop('files')[0];
-            if (file) {
-                console.log(file);
-                let reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onloadend = function () {
-                    obj.file = {file: reader.result, type: file.type, name: file.name};
-                    // console.log(obj);
-                    ipcRenderer.send("send_message", obj);
-                };
-            } else {
-                ipcRenderer.send("send_message", obj);
-            }
-            // console.log(file);
-            msg_input.val('');
-            $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
-            $('#upload_file').attr('src', '');
-            $('#upload_file').css('cursor', 'default');
-
+            send_message();
         }
-
     });
 
-
     $(document).on('click', '[data-toggle="send-msg"]', function () {
-        let $this = $(this);
-        let $parent = $this.closest('div');
-        let msg_input = $parent.find('[data-msg]');
+        send_message();
+    });
+
+    function send_message(){
+        let msg_input = $('.send_message__input');
         if (msg_input.val().trim() === '') {
             msg_input.val('');
             return;
@@ -238,27 +211,18 @@ window.onload = function () {
             text: msg_input.val().trim(),
             group: $('.active_dialog').attr('data-type') === 'channel',
         };
-        obj.id = active_dialog.attr('id');
-        obj.text = msg_input.val().trim();
+
+        obj = {id: active_dialog.attr('id'), text: msg_input.val().trim()};
         // console.log(obj);
-        let file;
-        console.log("obj", obj.group);
-        if (obj.group) {
-            file = $('#attachFileToGroup').prop('files');
-            if (file.length === 0) {
-                file = null;
-            } else {
-                file = file[0];
-            }
-        } else {
-            file = $('#attachFileToChat').prop('files')[0];
-        }
-        if (file) {
+        let files = $('#attachFileToChat').prop('files');
+        if (files && files[0]) {
+            let file = files[0];
             console.log(file);
             let reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onloadend = function () {
                 obj.file = {file: reader.result, type: file.type, name: file.name};
+                // console.log(obj);
                 ipcRenderer.send("send_message", obj);
             };
         } else {
@@ -271,12 +235,10 @@ window.onload = function () {
             .attr('src', '')
             .css('cursor', 'default')
             .removeClass('added');
-
-    });
+    }
 
     ipcRenderer.on('add_out_msg', (event, obj) => {
         $('[data-msg-list]').append(obj);
-
     });
 
     let scrollDown = (target) => {
@@ -290,24 +252,22 @@ window.onload = function () {
     });
 
     ipcRenderer.on('received_message', (event, obj) => {
+
+        if (obj.message.fresh) {
+            let chat = $('#'+obj.id);
+            if (chat) {
+                chat.find('[data-name=chat_last_time]').text(obj.message.time);
+                chat.find('[data-name=chat_last_text]').text(obj.message.text);
+            }
+            chat.prependTo($('.chats ul')[0]);
+        }
+
         if ($('.active_dialog').attr('id') === obj.id) {
-            $('[data-msg-list]').append(obj.message);
+            $('[data-msg-list]').append(obj.html);
+            scrollDown('[data-msg-history]');
+        } else {
+            // fawfaw
         }
-        else {
-            // new Notification(obj.message.sender_name, {
-            //     body: obj.message.text,
-            //     icon: obj.message.sender_avatar
-            // });
-
-            // ipcRenderer.send('show_message_notification');
-
-            // myNotification.show();
-
-            // myNotification.onclick = () => {
-            //     console.log('Notification clicked')
-            // };
-        }
-        scrollDown('[data-msg-history]');
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
@@ -584,5 +544,47 @@ window.onload = function () {
     ipcRenderer.on("get_contacts", (event, obj) => {
         $('#browsers').html(obj);
 
+    });
+
+    // var p = $(".dialogs");
+    // var d = $(".messaging_block");
+    // var r = $("#resize01");
+    // var curr_width = p.width()
+    // var unlock = false;
+
+    let p = null;
+    // let d = $(".messaging_block");
+    // let r = $("#resize01");
+    let curr_width = null;
+    let unlock = false;
+
+    $(document).mousemove(function(e) {
+        p = $(".dialogs");
+        let d = $(".messaging_block");
+        let change = curr_width + (e.clientX - curr_width);
+        if(unlock) {
+            if(change > 369 && change < 599) {
+
+                p.css("width", change);
+                d.css("margin-left", change);
+            }
+        }
+    });
+
+    $(document).on('mousedown',"#resize01",function(e) {
+        console.log('resize_clicked');
+        curr_width = p.width();
+        unlock = true;
+    });
+
+    $(document).on('click',"[data-id=add_new_user]",function(e) {
+        let input = $('[data-name=group_search]');
+        let data={id:input.val(),domain:'localhost'};
+        input.val('');
+        ipcRenderer.send("send_subscribe", data);
+    });
+
+    $(document).mouseup(function(e) {
+        unlock = false;
     });
 };

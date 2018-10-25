@@ -143,8 +143,7 @@ class Router {
             yield this.controller_register.queue_controller('ChatsController', 'create_group', group_name);
         }));
         this.listen_event(this.ipcMain, 'join_channel', (event, chat) => __awaiter(this, void 0, void 0, function* () {
-            console.log('joining group');
-            console.log(chat);
+            console.log('join group');
             yield this.controller_register.queue_controller('ChatsController', 'join_chat', chat);
         }));
         this.listen_event(this.dxmpp, 'find_groups', (result) => __awaiter(this, void 0, void 0, function* () {
@@ -165,9 +164,10 @@ class Router {
             yield this.controller_register.queue_controller('EventsController', 'user_joined_room', user, room_data);
         }));
         /** Messages events **/
-        this.listen_event(this.dxmpp, 'groupchat', (room_data, message, sender, stamp) => __awaiter(this, void 0, void 0, function* () {
+        this.listen_event(this.dxmpp, 'groupchat', (room_data, message, sender, stamp, files) => __awaiter(this, void 0, void 0, function* () {
             console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
-            yield this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, stamp);
+            // console.log("Files:", files);
+            yield this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, files, stamp);
         }));
         this.listen_event(this.dxmpp, 'chat', (user, message, file) => __awaiter(this, void 0, void 0, function* () {
             console.log(`user ${user.id} subscribed`);
@@ -189,7 +189,7 @@ class Router {
         }));
         /** Wallet events **/
         this.listen_event(this.ipcMain, 'change_wallet_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            // console.log('change_wallet_menu');
+            console.log('change_wallet_menu');
             yield this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
         }));
         this.listen_event(this.ipcMain, 'transfer_token', (event, arg) => __awaiter(this, void 0, void 0, function* () {

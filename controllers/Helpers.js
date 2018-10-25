@@ -82,6 +82,8 @@ function resize_img(img) {
             img = img.crop(size, size, 0, Math.round((range_y - size) / 2));
         }
         const img_b64 = util.promisify(img.toBase64).bind(img);
+        // const img_buf = util.promisify(img.toBuffer).bind(img);
+        // let round_img
         let resized_img = yield img_b64('jpg', true);
         return resized_img;
     });
@@ -101,25 +103,23 @@ class Helper {
     static formate_date(date, options) {
         let formated_date;
         let now = new Date();
-        function get_minutes(date) {
-            let minutes = date.getMinutes();
-            return minutes < 10 ? '0' + minutes : minutes;
-        }
         switch (options.for) {
             case 'message':
                 formated_date = `${date.getHours()}:${get_minutes(date)}`;
                 return formated_date;
             case 'chat':
-                let day_diff = date.getDay() - now.getDay();
+                let day_diff = now.getDate() - date.getDate();
+                console.log(`year ${date.getFullYear()} - ${now.getFullYear()}`);
+                console.log(`month ${date.getMonth()} - ${now.getMonth()}`);
+                console.log(`day ${date.getDate()} - ${now.getDate()}`);
                 if (date.getFullYear() < now.getFullYear() || date.getMonth() < now.getMonth() || day_diff > 6) {
-                    formated_date = date.getDate();
+                    formated_date = `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
                     return formated_date;
                 }
                 if (day_diff > 0) {
-                    formated_date = date.getDay();
+                    formated_date = this.day_to_locale[options.locale][date.getDay()];
                     return formated_date;
                 }
-                let minutes = date.getMinutes();
                 formated_date = `${date.getHours()}:${get_minutes(date)}`;
                 return formated_date;
         }
@@ -137,8 +137,20 @@ Helper.date_options = {
     minute: 'numeric',
     second: 'numeric'
 };
-Helper.day_ru = {
-    1: ''
+Helper.day_to_locale = {
+    ru: {
+        1: 'Пн',
+        2: 'Вт',
+        3: 'Ср',
+        4: 'Чт',
+        5: 'Пт',
+        6: 'Сб',
+        7: 'Вс'
+    },
 };
 exports.Helper = Helper;
+function get_minutes(date) {
+    let minutes = date.getMinutes();
+    return minutes < 10 ? '0' + minutes : minutes;
+}
 //# sourceMappingURL=Helpers.js.map
