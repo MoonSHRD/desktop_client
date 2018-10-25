@@ -153,13 +153,23 @@ window.onload = function () {
 
     let widthMsgWindow = (target) => {
         let msgWindow =  document.querySelector(target);
-        console.log(msgWindow.offsetWidth);
+        if (msgWindow.offsetWidth > 800){
+            msgWindow.classList.add('messaging_block_lg');
+        } else {
+            msgWindow.classList.remove('messaging_block_lg');
+        }
     };
 
     ipcRenderer.on('change_app_state', (event, arg) => {
         console.log('autyh');
         $('#view').html(arg);
         $.html5Translate(dict, 'en');
+        widthMsgWindow('[data-msgs-window]');
+    });
+
+    window.addEventListener('resize', function(e){
+        widthMsgWindow('[data-msgs-window]');
+        e.preventDefault();
     });
 
     $(document).on('change', '[name=avatar]', function () {
@@ -563,6 +573,7 @@ window.onload = function () {
         p = $(".dialogs");
         let d = $(".messaging_block");
         let change = curr_width + (e.clientX - curr_width);
+        widthMsgWindow('[data-msgs-window]');
         if(unlock) {
             if(change > 369 && change < 599) {
 
