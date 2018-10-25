@@ -1,6 +1,0 @@
-0000000000000000000000000000000000000000 209e2d2f58dd3010ec42941e55f5787ffdd498d8 Alexandr Vigriyanov <lexnnov2009@gmail.com> 1540208116 +0300	branch: Created from HEAD
-209e2d2f58dd3010ec42941e55f5787ffdd498d8 d83661631733a0d43d1129583fa9f9bce6464a30 Alexandr Vigriyanov <lexnnov2009@gmail.com> 1540377208 +0300	commit: добавлено подтверждение 12ти слов при авторизации
-d83661631733a0d43d1129583fa9f9bce6464a30 6af2edcd771678a65a6683b9455ea936af55061c Alexandr Vigriyanov <lexnnov2009@gmail.com> 1540377832 +0300	merge remotes/origin/branch-64: Fast-forward
-6af2edcd771678a65a6683b9455ea936af55061c f1606ae88e9e27f4d184e12ac3e582517c49f407 Alexandr Vigriyanov <lexnnov2009@gmail.com> 1540384889 +0300	merge remotes/origin/branch-64: Fast-forward
-f1606ae88e9e27f4d184e12ac3e582517c49f407 b3d32814bf8d7657e7d9477d366517f2d0fd8e0a Alexandr Vigriyanov <lexnnov2009@gmail.com> 1540455988 +0300	merge remotes/origin/branch-67: Fast-forward
-b3d32814bf8d7657e7d9477d366517f2d0fd8e0a 9e9e61502d79c53aefe1eff87d98eb29046aab3e Alexandr Vigriyanov <lexnnov2009@gmail.com> 1540463441 +0300	commit: добавлена подложка, изменен дизвйн блока отправки сообщений
