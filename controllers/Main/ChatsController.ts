@@ -44,6 +44,11 @@ class ChatsController extends Controller {
             await userModel.save();
             let chat = await ChatModel.get_user_chat_raw(self_info.id, user.id);
             // await chat.get_user_chat_meta();
+            /** todo
+             *  При релоаде чата, если диалог активный, оставить активным!
+             *  Может произойти при выходе/входе из онлайна пользователя, при вступлении в группу и тд.
+             *  Решение: сделать удаление/добавление класса active_dialog вместо замены html
+             */
             await this.load_chat(chat, this.chat_to_menu.user);
         } else {
             userModel = new UserModel();
@@ -202,9 +207,9 @@ class ChatsController extends Controller {
                 decimals -= (Math.floor(rate).toString().length-1);
             }
             console.log('rate: ',rate,' decimals: ',decimals);
+        } else {
+            this.dxmpp.register_channel(group_data, '');
         }
-        // let group = {name: group_data.name, domain: "localhost", type: (group_type !== this.chat_types.user)};
-        // this.dxmpp.register_channel(group, '');
     }
 
     async find_groups(group_name: string) {

@@ -96,8 +96,10 @@ class MessagesController extends Controller_1.Controller {
     render_chat_messages(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
             let messages = yield MessageModel_1.MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+            let last_time;
             for (let num = messages.length - 1; num >= 0; --num) {
-                yield this.render_message(messages[num]);
+                if (last_time !== new Date(messages[num].time))
+                    yield this.render_message(messages[num]);
             }
         });
     }
