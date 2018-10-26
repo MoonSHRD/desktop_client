@@ -187,6 +187,7 @@ class MessagesController extends Controller_1.Controller {
     ;
     received_message(user, text, stamp, files) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("Sssssss", stamp);
             stamp = Number(stamp);
             // console.log("Files:", files);
             let self_info = yield this.get_self_info();
@@ -229,6 +230,7 @@ class MessagesController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             // console.log('Files: ',files);
             // console.log('Stamp: ',stamp);
+            stamp = Number(stamp);
             let self_info = yield this.get_self_info();
             if (sender.address == self_info.id)
                 return;

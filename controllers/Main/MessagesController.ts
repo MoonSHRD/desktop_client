@@ -180,6 +180,7 @@ class MessagesController extends Controller {
     };
 
     async received_message(user, text, stamp, files) {
+        console.log("Sssssss", stamp);
         stamp = Number(stamp);
         // console.log("Files:", files);
         let self_info = await this.get_self_info();
@@ -222,6 +223,7 @@ class MessagesController extends Controller {
     async received_group_message({room_data, message, sender, files, stamp, fresh=null}) {
         // console.log('Files: ',files);
         // console.log('Stamp: ',stamp);
+        stamp = Number(stamp);
         let self_info = await this.get_self_info();
         if (sender.address == self_info.id) return;
         let userModel: UserModel;
