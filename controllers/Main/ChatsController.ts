@@ -164,8 +164,8 @@ class ChatsController extends Controller {
             let count = (messages.length).toString();
             for (let num in messages){
                 let message=messages[num];
-                let buf = message.time.split(" ");
-                message.time = `${buf[0]} ${buf[1]}`;
+                // let buf = message.time.split(" ");
+                // message.time = `${buf[0]} ${buf[1]}`;
                 let room_data = {id: message.sender};
                 let sender = {address: message.sender, domain: "localhost"};
                 await this.controller_register.run_controller("MessagesController", "received_group_message",

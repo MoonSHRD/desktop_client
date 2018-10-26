@@ -49,7 +49,6 @@ class MessagesController extends Controller_1.Controller {
             let html = this.render('main/messagingblock/qqq.pug', chat);
             yield chat.save();
             yield this.send_data('reload_chat', html);
-            yield this.send_data('reload_chat', html);
             yield this.render_chat_messages(chat_id);
         });
     }
@@ -186,9 +185,9 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_message(user, text, files) {
+    received_message(user, text, stamp, files) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(files);
+            console.log("Files:", files);
             let self_info = yield this.get_self_info();
             let userModel = yield UserModel_1.UserModel.findOne(user.id);
             let chat = yield ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id);
@@ -198,13 +197,14 @@ class MessagesController extends Controller_1.Controller {
             message.text = text;
             message.sender = userModel;
             message.chat = chat;
-            message.time = Date.now();
+            message.time = stamp;
             message.fresh = true;
             message.notificate = true;
             message.files = [];
             yield message.save();
             // let ipfs_file;
             if (files) {
+                console.log("Files2:", files);
                 for (let num in files) {
                     let fileModel = new FileModel_1.FileModel();
                     // file_info.sender = self_info.id;
@@ -248,7 +248,7 @@ class MessagesController extends Controller_1.Controller {
             messageModel.text = message;
             messageModel.sender = userModel;
             messageModel.chat = chat;
-            messageModel.time = new Date(stamp).getTime();
+            messageModel.time = stamp;
             messageModel.files = [];
             messageModel.fresh = fresh === false;
             messageModel.notificate = fresh === null;

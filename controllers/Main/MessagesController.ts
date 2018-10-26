@@ -42,7 +42,6 @@ class MessagesController extends Controller {
         await chat.save();
         await this.send_data('reload_chat', html);
 
-        await this.send_data('reload_chat', html);
         await this.render_chat_messages(chat_id);
     };
 
@@ -180,8 +179,8 @@ class MessagesController extends Controller {
         await message.save();
     };
 
-    async received_message(user, text, files) {
-        console.log(files);
+    async received_message(user, text, stamp, files) {
+        console.log("Files:", files);
         let self_info = await this.get_self_info();
         let userModel = await UserModel.findOne(user.id);
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
@@ -191,7 +190,7 @@ class MessagesController extends Controller {
         message.text = text;
         message.sender = userModel;
         message.chat = chat;
-        message.time = Date.now();
+        message.time = stamp;
         message.fresh = true;
         message.notificate = true;
         message.files=[];
@@ -199,6 +198,8 @@ class MessagesController extends Controller {
 
         // let ipfs_file;
         if (files) {
+            console.log("Files2:", files);
+
             for (let num in files){
                 let fileModel = new FileModel();
                 // file_info.sender = self_info.id;
@@ -240,7 +241,7 @@ class MessagesController extends Controller {
         messageModel.text = message;
         messageModel.sender = userModel;
         messageModel.chat = chat;
-        messageModel.time = new Date(stamp).getTime();
+        messageModel.time = stamp;
         messageModel.files = [];
         messageModel.fresh = fresh===false;
         messageModel.notificate = fresh===null;

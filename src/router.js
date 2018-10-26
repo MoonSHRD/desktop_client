@@ -169,10 +169,10 @@ class Router {
             // console.log("Files:", files);
             yield this.controller_register.queue_controller('MessagesController', 'received_group_message', { room_data, message, sender, files, stamp });
         }));
-        this.listen_event(this.dxmpp, 'chat', (user, message, file) => __awaiter(this, void 0, void 0, function* () {
+        this.listen_event(this.dxmpp, 'chat', (user, message, stamp, file) => __awaiter(this, void 0, void 0, function* () {
             console.log(`user ${user.id} send you message`);
             console.log(file);
-            yield this.controller_register.queue_controller('MessagesController', 'received_message', user, message, file);
+            yield this.controller_register.queue_controller('MessagesController', 'received_message', user, message, stamp, file);
         }));
         this.listen_event(this.dxmpp, 'confirmation', (message) => __awaiter(this, void 0, void 0, function* () {
             console.log(`message ${message.userid} delivered`);
