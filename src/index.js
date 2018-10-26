@@ -203,7 +203,16 @@ window.onload = function () {
         }
     });
 
+    $(document).on('keyup', '[data-msg="data-msg"]', function () {
+        if (event.ctrlKey && event.keyCode === 13 ) {
+            $(this).attr('rows', 1)
+        }
+
+
+    });
+
     $(document).on('click', '[data-toggle="send-msg"]', function () {
+        $('[data-msg="data-msg"]').focus()
         send_message();
     });
 
@@ -211,7 +220,6 @@ window.onload = function () {
         let msg_input = $('.send_message__input');
         msg_input.attr('rows', 1);
         if (msg_input.val().trim() === '') {
-            msg_input.attr('rows', 1)
 
             msg_input.val('');
             return;
@@ -225,7 +233,6 @@ window.onload = function () {
             text: msg_input.val().trim(),
             group: $('.active_dialog').attr('data-type') === 'channel',
         };
-        msg_input.attr('rows', 1)
 
         obj = {id: active_dialog.attr('id'), text: msg_input.val().trim()};
         // console.log(obj);
@@ -605,9 +612,15 @@ window.onload = function () {
         unlock = false;
     });
 
-    $(document).on('keyup',".send_message__input",function(e) {
+    $(document).on('keydown',".send_message__input",function(e) {
         // console.log('hello!')
-        ResizeTextArea(this,0)
+        if($(this).val() === '' && event.keyCode == 13) {
+            event.preventDefault();
+        };
+
+        if ( event.keyCode === 13 && $(this).val()!=='') {
+            ResizeTextArea(this,0)
+        }
     });
 
     function countLines(strtocount, cols) {
