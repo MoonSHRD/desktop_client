@@ -27,18 +27,18 @@ div(class="head_peer" id="head_peer")
                 //    a(data-id="")
                 //        div(class='image')
                 //            img(src="components/main/messagingblock/img/micr.png")
-                li
-                    a(data-id="")
-                        div(class='image')
-                            img(src="components/main/messagingblock/img/call.png")
-
-                li
-
-                    a(data-id="")
-
-
-                        div(class='image')
-                            img(src="components/main/messagingblock/img/videoCall.png")
+                //li
+                //    a(data-id="")
+                //        div(class='image')
+                //            img(src="components/main/messagingblock/img/call.png")
+                //
+                //li
+                //
+                //    a(data-id="")
+                //
+                //
+                //        div(class='image')
+                //            img(src="components/main/messagingblock/img/videoCall.png")
                 input(type="file" id="attachFileToChat" style="display:none" multiple)
                 //li.attachFileToChat
                 //
@@ -59,18 +59,18 @@ div(class="head_peer" id="head_peer")
 
         div(class='dropDown_menu')
             ul
-                li
-                    a(data-id="")
-                        div(class='image')
-                            img(src="components/main/messagingblock/img/micr.png")
+                //li
+                //    a(data-id="")
+                //        div(class='image')
+                //            img(src="components/main/messagingblock/img/micr.png")
                 input(type="file" id="attachFileToChat" style="display:none")
-                li.attachFileToGroup
-
-                    a(data-id="" )
-                        //input(type="file" id="attachFile" style="display:none;")
-
-                        div(class='image')
-                            img(src="components/main/messagingblock/img/files.png")
+                //li.attachFileToGroup
+                //
+                //    a(data-id="" )
+                //        //input(type="file" id="attachFile" style="display:none;")
+                //
+                //        div(class='image')
+                //            img(src="components/main/messagingblock/img/files.png")
                 li
                     a(href='#')
                         div(class='image')
@@ -83,10 +83,10 @@ div(class="head_peer" id="head_peer")
 
 
 div#messaging_history.messaging_history.msgHistory(data-msg-history="")
+    div.msgHistory__list.clearfix(data-msg-list="") !{messages ? messages : ""}
 
-    .tab-content
+    .tab-content(style='display: none')
         #chat.tab-pane.fade.in.active.show(role='tabpanel')
-            div.msgHistory__list.clearfix(data-msg-list="") !{messages?messages:""}
 
         #buzz.tab-pane.fade(role='tabpanel')
             .notifyBlock
@@ -158,5 +158,5 @@ div.send_message__block
         button.send_message__voice(data-id="")
             img(src="components/main/messagingblock/img/micr.png")
         button.send_message__btn(data-translate-key="SEND_MESSAGE" data-toggle="send-msg")
-            img(src="components/main/messagingblock/img/send.png" width='25px')
+            img(src="components/main/messagingblock/img/send.svg" width='25px')
 

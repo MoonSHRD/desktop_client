@@ -323,11 +323,11 @@ a.join_button {
  */
 .msgHistory{
     height: auto;
-    max-height: calc(100% - 195px);
+    max-height: calc(100% - 120px);
     overflow-y: scroll;
     overflow-x: hidden;
-    margin-top: 40px;
-    padding-bottom: 50px;
+    //margin-top: 40px;
+    padding-bottom: 10px;
 
     #dialogDate {
         text-align: center;

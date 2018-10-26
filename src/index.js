@@ -558,6 +558,7 @@ window.onload = function () {
     });
 
     ipcRenderer.on("get_contacts", (event, obj) => {
+        // console.log('1234567')
         $('#browsers').html(obj);
 
     });
