@@ -1,0 +1,56 @@
+.modal{
+
+    &-header{
+        position: relative;
+        border-bottom: 0;
+
+        &_img{
+            flex-direction: column;
+            align-items: center;
+            padding-top: 50px;
+        }
+
+        &__img{
+            @include size(80px);
+            @include gradient-y($brand-blue, $brand-blue-100);
+            @include position(absolute, 0 null null null);
+            line-height: 73px;
+            border-radius: 50%;
+            text-align: center;
+            transform: translate(0,-50%);
+            box-shadow: 2px 2px 20px $brand-blue;
+        }
+
+        &__name{
+            .form-control{
+                text-align: center;
+                &::placeholder{
+                    text-align: center;
+                }
+            }
+        }
+
+        &__category{
+        }
+    }
+    &-body{
+        padding-left: 2rem;
+        padding-top: 2rem;
+
+        #token_row{
+            label{
+                @include fz(18);
+                font-family: $ff-1;
+                font-weight: 500;
+            }
+        }
+    }
+    &-footer{
+        border-top: none;
+        justify-content: center;
+        .btn{
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+    }
+}
