@@ -31,6 +31,7 @@ class MessagesController extends Controller {
 
         if (!chat)
             return this.load_join_chat(chat_id);
+        this.reading_messages(chat.id);
 
         switch (chat.type) {
             case this.chat_types.user:
@@ -38,8 +39,10 @@ class MessagesController extends Controller {
                 break;
         }
         let html = this.render('main/messagingblock/qqq.pug', chat);
-        this.send_data('reload_chat', html);
+        await chat.save();
+        await this.send_data('reload_chat', html);
 
+        await this.send_data('reload_chat', html);
         await this.render_chat_messages(chat_id);
     };
 
@@ -73,8 +76,11 @@ class MessagesController extends Controller {
             id: message.chat.id,
             html: html,
             message:message,
+            unread_messages:message.chat.unread_messages
         };
         this.send_data('received_message', data);
+        // this.controller_register.run_controller("ChatsController", "load_chat", message.chat, this.chat_types.user);
+
 
         if (message.notificate){
             let notif = new Notification({
@@ -88,7 +94,9 @@ class MessagesController extends Controller {
 
     private async render_chat_messages(chat_id: string) {
         let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+        let last_time;
         for (let num = messages.length - 1; num >= 0; --num) {
+            if (last_time!==new Date(messages[num].time))
             await this.render_message(messages[num]);
         }
     }
@@ -99,7 +107,7 @@ class MessagesController extends Controller {
             file.file = (await this.ipfs.get_file(file.hash)).file;
             save_file(file);
         }
-        this.send_data('file_dowloaded',{id:file_id});
+        this.send_data('file_downloaded',{id:file_id});
     }
 
     async send_message({id, text, file}) {
@@ -177,6 +185,8 @@ class MessagesController extends Controller {
         let self_info = await this.get_self_info();
         let userModel = await UserModel.findOne(user.id);
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
+        chat.unread_messages += 1;
+        await chat.save();
         let message = new MessageModel();
         message.text = text;
         message.sender = userModel;
@@ -209,9 +219,9 @@ class MessagesController extends Controller {
         await this.render_message(message);
     };
 
-    async received_group_message({room_data, message, sender, files, stamp, fresh}) {
+    async received_group_message({room_data, message, sender, files, stamp, fresh=null}) {
         console.log('Files: ',files);
-        console.log(stamp);
+        console.log('Stamp: ',stamp);
         let self_info = await this.get_self_info();
         if (sender.address == self_info.id) return;
         let userModel: UserModel;
@@ -224,14 +234,16 @@ class MessagesController extends Controller {
         //     stamp = this.dxmpp.take_time()
         // }
         let chat = await ChatModel.findOne(room_data.id);
+        chat.unread_messages += 1;
+        await chat.save();
         let messageModel = new MessageModel();
         messageModel.text = message;
         messageModel.sender = userModel;
         messageModel.chat = chat;
-        messageModel.time = Date.now();
+        messageModel.time = new Date(stamp).getTime();
         messageModel.files = [];
-        messageModel.fresh = true;
-        messageModel.notificate = true;
+        messageModel.fresh = fresh===false;
+        messageModel.notificate = fresh===null;
         await messageModel.save();
 
         if (files) {
@@ -254,6 +266,12 @@ class MessagesController extends Controller {
         }
 
         await this.render_message(messageModel);
+    }
+
+    async reading_messages(chat_id) {
+        let chat = await ChatModel.get_chat_with_events(chat_id);
+        chat.unread_messages = 0;
+        await chat.save();
     }
 }
 

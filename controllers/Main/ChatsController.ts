@@ -44,6 +44,11 @@ class ChatsController extends Controller {
             await userModel.save();
             let chat = await ChatModel.get_user_chat_raw(self_info.id, user.id);
             // await chat.get_user_chat_meta();
+            /** todo
+             *  При релоаде чата, если диалог активный, оставить активным!
+             *  Может произойти при выходе/входе из онлайна пользователя, при вступлении в группу и тд.
+             *  Решение: сделать удаление/добавление класса active_dialog вместо замены html
+             */
             await this.load_chat(chat, this.chat_to_menu.user);
         } else {
             userModel = new UserModel();
@@ -63,20 +68,6 @@ class ChatsController extends Controller {
             this.dxmpp.get_vcard(user)
         }
     }
-
-    // async load_chats_by_menu(menu_to_chat:string){
-    //     let type:string;
-    //     switch (menu_to_chat) {
-    //         case this.chat_to_menu.user:
-    //             type=this.chat_types.user;
-    //             break;
-    //         case this.chat_to_menu.group:
-    //             type=this.chat_types.group;
-    //             break;
-    //     }
-    //     if (type)
-    //         await this.load_chats(type);
-    // }
 
     async load_chats(type: string, first: boolean = false) {
         console.log('load_chats');
@@ -166,27 +157,22 @@ class ChatsController extends Controller {
 
         await chat.save();
 
-        await this.load_chat(chat, this.chat_to_menu.group);
-        let count = messages.length;
-        for (let num in messages){
-            let message=messages[num];
-            let buf = message.time.split(" ");
-            message.time = `${buf[0]} ${buf[1]}`;
-            let room_data = {id: message.sender};
-            let sender = {address: message.sender, domain: "localhost"};
-            await this.controller_register.run_controller("MessagesController", "received_group_message",
-                {room_data, message:message.message, sender, stamp:message.time, files:message.files, fresh:(num==(count-1))});
+        if (room_data.role==='moderator'){
+            await this.load_chat(chat,this.chat_types.group)
+        } else {
+            // await this.load_chat(chat, this.chat_to_menu.group);
+            let count = (messages.length).toString();
+            for (let num in messages){
+                let message=messages[num];
+                let buf = message.time.split(" ");
+                message.time = `${buf[0]} ${buf[1]}`;
+                let room_data = {id: message.sender};
+                let sender = {address: message.sender, domain: "localhost"};
+                await this.controller_register.run_controller("MessagesController", "received_group_message",
+                    {room_data, message:message.message, sender, stamp:message.time, files:message.files, fresh:(num===count)});
+            }
+            await this.controller_register.run_controller("MessagesController", "get_chat_messages", room_data.id)
         }
-        messages.forEach(async (message) => {
-            // console.log(message.time);
-            let buf = message.time.split(" ");
-            message.time = `${buf[0]} ${buf[1]}`;
-            let room_data = {id: message.sender};
-            let sender = {address: message.sender, domain: "localhost"};
-            await this.controller_register.run_controller("MessagesController", "received_group_message",
-                {room_data, message:message.message, sender, stamp:message.time, files:message.files, });
-        });
-
     }
 
     async create_group(group_data) {
@@ -202,9 +188,9 @@ class ChatsController extends Controller {
                 decimals -= (Math.floor(rate).toString().length-1);
             }
             console.log('rate: ',rate,' decimals: ',decimals);
+        } else {
+            this.dxmpp.register_channel(group_data, '');
         }
-        // let group = {name: group_data.name, domain: "localhost", type: (group_type !== this.chat_types.user)};
-        // this.dxmpp.register_channel(group, '');
     }
 
     async find_groups(group_name: string) {

@@ -209,7 +209,7 @@ window.onload = function () {
 
     function send_message(){
         let msg_input = $('.send_message__input');
-        msg_input.attr('rows', 1)
+        msg_input.attr('rows', 1);
         if (msg_input.val().trim() === '') {
             msg_input.val('');
             return;
@@ -264,9 +264,9 @@ window.onload = function () {
     });
 
     ipcRenderer.on('received_message', (event, obj) => {
+        let chat = $('#'+obj.id);
 
         if (obj.message.fresh) {
-            let chat = $('#'+obj.id);
             if (chat) {
                 chat.find('[data-name=chat_last_time]').text(obj.message.time);
                 chat.find('[data-name=chat_last_text]').text(obj.message.text);
@@ -275,20 +275,22 @@ window.onload = function () {
         }
 
         if ($('.active_dialog').attr('id') === obj.id) {
+            chat.find("[data-name=unread_messages]").text(0);
+            ipcRenderer.send('reading_messages', obj.id);
             $('[data-msg-list]').append(obj.html);
             scrollDown('[data-msg-history]');
         } else {
-            // fawfaw
+            chat.find("[data-name=unread_messages]").text(obj.unread_messages);
         }
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
-        if (
-            !$(`[data-id=${obj.type}]`).hasClass('active_menu') ||
-            (obj.type === "menu_chats" && $('.searchInput').val())
-        ) {
-            return;
-        }
+        // if (
+        //     !$(`[data-id=${obj.type}]`).hasClass('active_menu') ||
+        //     (obj.type === "menu_chats" && $('.searchInput').val())
+        // ) {
+        //     return;
+        // }
         const chat_box = $('.chats ul');
         const user = chat_box.find('#' + obj.id);
         if (user.length) {
@@ -315,13 +317,14 @@ window.onload = function () {
     $(document).on('click', '[data-name=join_channel]', function () {
         $(this).attr('disabled', 'disabled');
         let active_dialog = $('.active_dialog');
+        let input = $('[data-name=group_search]');
+        input.val('');
         ipcRenderer.send('join_channel', {
             id: active_dialog.attr('id'),
             domain: active_dialog.attr('data-domain'),
             contract_address: active_dialog.attr('data-contract_address')
         });
-        $('#style-11').empty();
-        $(this).fadeOut();
+        ipcRenderer.send('load_chats', 'menu_chats');
     });
 
     function click_anim(e){
@@ -356,10 +359,11 @@ window.onload = function () {
         let chat = $this.attr('id');
 
         if(!($this.hasClass("active_dialog") && $this.hasClass("have_history"))) {
-
+            console.log("Worked!");
             ipcRenderer.send('get_chat_msgs', chat);
             $this.addClass('have_history');
         }
+        $this.find("[data-name=unread_messages]").text("0");
     });
 
     $(document).on('click', '.walletMenu li', function (e) {
@@ -536,7 +540,7 @@ window.onload = function () {
         ipcRenderer.send('download_file', $(this).attr('data-id'));
     });
 
-    ipcRenderer.on("file_dowloaded", (event, obj) => {
+    ipcRenderer.on("file_downloaded", (event, obj) => {
         let file=$(`[data-id=${obj.id}]`);
         if (file.hasClass('load'))
             file.removeClass('load').addClass('complite');
@@ -586,7 +590,7 @@ window.onload = function () {
     });
 
     $(document).on('click',"[data-id=add_new_user]",function(e) {
-        let input = $('[data-name=group_search]');
+        let input = $('[data-name=user_search]');
         let data={id:input.val(),domain:'localhost'};
         input.val('');
         ipcRenderer.send("send_subscribe", data);

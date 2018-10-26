@@ -1,15 +1,23 @@
 div(class='men')
     form#search_user_form(class='search' action="javascript:void(0);")
-        case state
-            when "menu_chats"
-                input(class='searchInput', placeholder='поиск групп', data-name='group_search' name="search_chat")
-                script
-                    include search_chats.js
-            default
-                input(class='searchInput', placeholder='поиск людей', data-name='group_search' name="search_user")
-                //input(type="submit" class='submit_searchInput' value="add")
-                script
-                    include search_users.js
+        div
+            input(class='searchInput', placeholder='поиск людей', data-name='user_search' name="search_user")
+        div
+            input(class='searchInput', placeholder='поиск групп', data-name='group_search' name="search_chat")
+        script
+            include search_chats.js
+            include search_users.js
+        //case state
+        //    when "menu_chats"
+        //        input(class='searchInput', placeholder='поиск групп', data-name='group_search' name="search_chat")
+        //        script
+        //            include search_chats.js
+        //    default
+        //        input(class='searchInput', placeholder='поиск людей', data-name='group_search' name="search_user")
+        //        input(class='searchInput', placeholder='поиск групп', data-name='group_search' name="search_chat")
+        //        //input(type="submit" class='submit_searchInput' value="add")
+        //        script
+        //            include search_users.js
     div(class='chats scrollbar' id="style-11")
         ul !{chats?chats:""}
 

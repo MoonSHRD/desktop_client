@@ -27,6 +27,8 @@ export class ChatModel extends BaseEntity {
     type: string = '';
     @Column()
     contract_address: string = '';
+    @Column()
+    unread_messages: number = 0;
 
     @OneToMany(type => MessageModel, messages => messages.chat)
     messages: MessageModel[];
@@ -64,7 +66,7 @@ export class ChatModel extends BaseEntity {
             .createQueryRunner()
             .query(
                 `select * from 
-                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type
+                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type, unread_messages
                    from chat_model ch
                        inner join (
                                select name, avatar, id user_id, online, domain
@@ -145,7 +147,7 @@ export class ChatModel extends BaseEntity {
             .createQueryRunner()
             .query(
                  `select * from 
-                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type
+                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type, unread_messages
                    from chat_model ch
                        inner join (
                                select name, avatar, id user_id, online, domain
@@ -155,7 +157,7 @@ export class ChatModel extends BaseEntity {
                        on instr(ch.id,user_id) > 0
                        where ch.type == "${chat_types.user}"
                    UNION
-                   select id,domain,name,avatar, 0 as online, type
+                   select id,domain,name,avatar, 0 as online, type, unread_messages
                        from chat_model ch1
                        where ch1.type != "${chat_types.user}") ch2
                    left join (

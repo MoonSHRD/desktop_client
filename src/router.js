@@ -170,7 +170,7 @@ class Router {
             yield this.controller_register.queue_controller('MessagesController', 'received_group_message', { room_data, message, sender, files, stamp });
         }));
         this.listen_event(this.dxmpp, 'chat', (user, message, file) => __awaiter(this, void 0, void 0, function* () {
-            console.log(`user ${user.id} subscribed`);
+            console.log(`user ${user.id} send you message`);
             console.log(file);
             yield this.controller_register.queue_controller('MessagesController', 'received_message', user, message, file);
         }));
@@ -186,6 +186,10 @@ class Router {
         }));
         this.listen_event(this.ipcMain, 'download_file', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('MessagesController', 'download_file', arg);
+        }));
+        this.listen_event(this.ipcMain, "reading_messages", (event, chat_id) => __awaiter(this, void 0, void 0, function* () {
+            console.log("Reading msg from", chat_id);
+            yield this.controller_register.run_controller("MessagesController", "reading_messages", chat_id);
         }));
         /** Wallet events **/
         this.listen_event(this.ipcMain, 'change_wallet_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {
