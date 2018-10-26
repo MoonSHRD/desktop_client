@@ -31,7 +31,7 @@ class MessagesController extends Controller {
 
         if (!chat)
             return this.load_join_chat(chat_id);
-        this.reading_messages(chat.id);
+        await this.reading_messages(chat.id);
 
         switch (chat.type) {
             case this.chat_types.user:
@@ -180,7 +180,6 @@ class MessagesController extends Controller {
     };
 
     async received_message(user, text, stamp, files) {
-        console.log("Sssssss", stamp);
         stamp = Number(stamp);
         // console.log("Files:", files);
         let self_info = await this.get_self_info();
@@ -220,7 +219,7 @@ class MessagesController extends Controller {
         await this.render_message(message);
     };
 
-    async received_group_message({room_data, message, sender, files, stamp, fresh=null}) {
+    async received_group_message({room_data, message, sender, files, stamp, fresh=true, notificate=true}) {
         // console.log('Files: ',files);
         // console.log('Stamp: ',stamp);
         stamp = Number(stamp);
@@ -244,8 +243,8 @@ class MessagesController extends Controller {
         messageModel.chat = chat;
         messageModel.time = stamp;
         messageModel.files = [];
-        messageModel.fresh = fresh===false;
-        messageModel.notificate = fresh===null;
+        messageModel.fresh = fresh;
+        messageModel.notificate = notificate;
         await messageModel.save();
 
         if (files) {

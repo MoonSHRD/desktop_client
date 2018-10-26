@@ -40,7 +40,7 @@ class MessagesController extends Controller_1.Controller {
             let chat = yield ChatModel_1.ChatModel.get_chat_with_events(chat_id);
             if (!chat)
                 return this.load_join_chat(chat_id);
-            this.reading_messages(chat.id);
+            yield this.reading_messages(chat.id);
             switch (chat.type) {
                 case this.chat_types.user:
                     yield chat.get_user_chat_meta();
@@ -187,7 +187,6 @@ class MessagesController extends Controller_1.Controller {
     ;
     received_message(user, text, stamp, files) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("Sssssss", stamp);
             stamp = Number(stamp);
             // console.log("Files:", files);
             let self_info = yield this.get_self_info();
@@ -226,7 +225,7 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_group_message({ room_data, message, sender, files, stamp, fresh = null }) {
+    received_group_message({ room_data, message, sender, files, stamp, fresh = true, notificate = true }) {
         return __awaiter(this, void 0, void 0, function* () {
             // console.log('Files: ',files);
             // console.log('Stamp: ',stamp);
@@ -252,8 +251,8 @@ class MessagesController extends Controller_1.Controller {
             messageModel.chat = chat;
             messageModel.time = stamp;
             messageModel.files = [];
-            messageModel.fresh = fresh === false;
-            messageModel.notificate = fresh === null;
+            messageModel.fresh = fresh;
+            messageModel.notificate = notificate;
             yield messageModel.save();
             if (files) {
                 for (let num in files) {
