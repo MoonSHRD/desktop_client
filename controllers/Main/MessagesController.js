@@ -46,7 +46,7 @@ class MessagesController extends Controller_1.Controller {
                     break;
             }
             let html = this.render('main/messagingblock/qqq.pug', chat);
-            this.send_data('reload_chat', html);
+            yield this.send_data('reload_chat', html);
             yield this.render_chat_messages(chat_id);
         });
     }
@@ -96,8 +96,10 @@ class MessagesController extends Controller_1.Controller {
     render_chat_messages(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
             let messages = yield MessageModel_1.MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+            let last_time;
             for (let num = messages.length - 1; num >= 0; --num) {
-                yield this.render_message(messages[num]);
+                if (last_time !== new Date(messages[num].time))
+                    yield this.render_message(messages[num]);
             }
         });
     }
@@ -108,7 +110,7 @@ class MessagesController extends Controller_1.Controller {
                 file.file = (yield this.ipfs.get_file(file.hash)).file;
                 Helpers_1.save_file(file);
             }
-            this.send_data('file_dowloaded', { id: file_id });
+            this.send_data('file_downloaded', { id: file_id });
         });
     }
     send_message({ id, text, file }) {
@@ -216,10 +218,10 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_group_message({ room_data, message, sender, files, stamp, fresh }) {
+    received_group_message({ room_data, message, sender, files, stamp, fresh = null }) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('Files: ', files);
-            console.log(stamp);
+            console.log('Stamp: ', stamp);
             let self_info = yield this.get_self_info();
             if (sender.address == self_info.id)
                 return;
@@ -237,10 +239,10 @@ class MessagesController extends Controller_1.Controller {
             messageModel.text = message;
             messageModel.sender = userModel;
             messageModel.chat = chat;
-            messageModel.time = Date.now();
+            messageModel.time = new Date(stamp).getTime();
             messageModel.files = [];
-            messageModel.fresh = true;
-            messageModel.notificate = true;
+            messageModel.fresh = fresh === false;
+            messageModel.notificate = fresh === null;
             yield messageModel.save();
             if (files) {
                 for (let num in files) {

@@ -124,13 +124,14 @@
     z-index: 1;
 
     input {
-        @include size(100%, 30px);
+        @include size(100%, 38px);
         border-radius: 10px;
         outline:none;
-        margin: 0 20px;
-        padding: 0 10px;
+        margin: 0 15px 0 20px;
+        padding: 0 10px 0 10px;
         border: 1px solid rgba(0, 208, 255, 0.2);
         box-shadow: 2px 2px 20px rgba(43, 194, 249, 0.1);
+        font-size: 14px;
     }
 }
 

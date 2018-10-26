@@ -1,29 +1,17 @@
 div(class='men')
     form#search_user_form(class='search' action="javascript:void(0);")
-        case state
-            when "menu_chats"
-                input(class='searchInput', placeholder='поиск групп', data-name='group_search' name="search_chat")
-                script
-                    include search_chats.js
-            default
-                input(class='searchInput', placeholder='Search', data-name='group_search' name="search_user")
-                //input(type="submit" class='submit_searchInput' value="add")
-                button.btn.btn-add-old(data-id="add_new_user") add
-                .switch-btn(data-id="#bl-1" style="margin: 10px;")
-                #bl-1.bl-hide(style="height: 20px; margin: 10px; background: orange;")
-                script
-                    include switch-btn.js
-                //span.switch.switch-sm
-                //    input.switch#switch-sm(type="checkbox")
-                //    label(for="switch-sm")
-
-                script
-                    include search_users.js
-
-
-
-
-    .btn_create_chat(data-id="menu_create_chat")
+        input.bl-hide.searchInput(placeholder='Search user', data-name='user_search' name="search_user")
+        input.bl-hide-1.searchInput(placeholder='Search channels', data-name='group_search' name="search_chat")
+        .btn-add-old.bl-hide(data-id="add_new_user")
+        .btn-add-old.bl-hide-1
+        .switch-div
+            //.switch-text Сontacts/Channels
+            .switch-btn
+        script
+            include search_chats.js
+            include search_users.js
+            include switch-btn.js
+    .btn_create_chat.bl-hide-1(data-id="menu_create_chat")
         .btn_create +
         .btn_create_chat_text Create channel
     div(class='chats scrollbar' id="style-11")

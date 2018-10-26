@@ -51,6 +51,11 @@ class ChatsController extends Controller_1.Controller {
                 yield userModel.save();
                 let chat = yield ChatModel_1.ChatModel.get_user_chat_raw(self_info.id, user.id);
                 // await chat.get_user_chat_meta();
+                /** todo
+                 *  При релоаде чата, если диалог активный, оставить активным!
+                 *  Может произойти при выходе/входе из онлайна пользователя, при вступлении в группу и тд.
+                 *  Решение: сделать удаление/добавление класса active_dialog вместо замены html
+                 */
                 yield this.load_chat(chat, this.chat_to_menu.user);
             }
             else {
@@ -70,19 +75,6 @@ class ChatsController extends Controller_1.Controller {
             }
         });
     }
-    // async load_chats_by_menu(menu_to_chat:string){
-    //     let type:string;
-    //     switch (menu_to_chat) {
-    //         case this.chat_to_menu.user:
-    //             type=this.chat_types.user;
-    //             break;
-    //         case this.chat_to_menu.group:
-    //             type=this.chat_types.group;
-    //             break;
-    //     }
-    //     if (type)
-    //         await this.load_chats(type);
-    // }
     load_chats(type, first = false) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('load_chats');
@@ -176,30 +168,43 @@ class ChatsController extends Controller_1.Controller {
             if (room_data.contractaddress)
                 chat.contract_address = room_data.contractaddress;
             yield chat.save();
-            yield this.load_chat(chat, this.chat_to_menu.group);
-            let count = messages.length;
-            for (let num in messages) {
-                let message = messages[num];
-                let buf = message.time.split(" ");
-                message.time = `${buf[0]} ${buf[1]}`;
-                let room_data = { id: message.sender };
-                let sender = { address: message.sender, domain: "localhost" };
-                yield this.controller_register.run_controller("MessagesController", "received_group_message", { room_data, message: message.message, sender, stamp: message.time, files: message.files, fresh: (num == (count - 1)) });
+            if (room_data.role === 'moderator') {
+                yield this.load_chat(chat, this.chat_types.group);
             }
-            messages.forEach((message) => __awaiter(this, void 0, void 0, function* () {
-                // console.log(message.time);
-                let buf = message.time.split(" ");
-                message.time = `${buf[0]} ${buf[1]}`;
-                let room_data = { id: message.sender };
-                let sender = { address: message.sender, domain: "localhost" };
-                yield this.controller_register.run_controller("MessagesController", "received_group_message", { room_data, message: message.message, sender, stamp: message.time, files: message.files, });
-            }));
+            else {
+                // await this.load_chat(chat, this.chat_to_menu.group);
+                let count = (messages.length).toString();
+                for (let num in messages) {
+                    let message = messages[num];
+                    // let buf = message.time.split(" ");
+                    // message.time = `${buf[0]} ${buf[1]}`;
+                    let room_data = { id: message.sender };
+                    let sender = { address: message.sender, domain: "localhost" };
+                    yield this.controller_register.run_controller("MessagesController", "received_group_message", { room_data, message: message.message, sender, stamp: message.time, files: message.files, fresh: (num === count) });
+                }
+                yield this.controller_register.run_controller("MessagesController", "get_chat_messages", room_data.id);
+            }
         });
     }
-    create_group(group_name, group_type = this.group_chat_types.channel) {
+    create_group(group_data) {
         return __awaiter(this, void 0, void 0, function* () {
-            let group = { name: group_name, domain: "localhost", type: (group_type !== this.chat_types.user) };
-            this.dxmpp.register_channel(group, '');
+            console.log(group_data);
+            // let group_type=group_data.type?group_data.type:this.group_chat_types.channel;
+            if (group_data.substype == 'unfree') {
+                // let price=64;
+                let rate = 1 / group_data.token_price;
+                let decimals = 18;
+                if (rate < 1) {
+                    decimals += rate.toString().match(/[0.]*[1-9]/)[0].length - 2;
+                }
+                else {
+                    decimals -= (Math.floor(rate).toString().length - 1);
+                }
+                console.log('rate: ', rate, ' decimals: ', decimals);
+            }
+            else {
+                this.dxmpp.register_channel(group_data, '');
+            }
         });
     }
     find_groups(group_name) {

@@ -164,6 +164,7 @@ window.onload = function () {
         console.log('autyh');
         $('#view').html(arg);
         $.html5Translate(dict, 'en');
+        // todo: fix some console errors with this func
         widthMsgWindow('[data-msgs-window]');
     });
 
@@ -196,7 +197,7 @@ window.onload = function () {
     });
 
 
-    $(document).on('keydown', '.send_message_input', function () {
+    $(document).on('keydown', '[data-msg="data-msg"]', function () {
         if (event.ctrlKey && event.keyCode === 13) {
             send_message();
         }
@@ -208,8 +209,10 @@ window.onload = function () {
 
     function send_message(){
         let msg_input = $('.send_message__input');
-        msg_input.attr('rows', 1)
+        msg_input.attr('rows', 1);
         if (msg_input.val().trim() === '') {
+            msg_input.attr('rows', 1)
+
             msg_input.val('');
             return;
         }
@@ -222,11 +225,14 @@ window.onload = function () {
             text: msg_input.val().trim(),
             group: $('.active_dialog').attr('data-type') === 'channel',
         };
+        msg_input.attr('rows', 1)
 
         obj = {id: active_dialog.attr('id'), text: msg_input.val().trim()};
         // console.log(obj);
         let files = $('#attachFileToChat').prop('files');
         if (files && files[0]) {
+            msg_input.attr('rows', 1)
+
             let file = files[0];
             console.log(file);
             let reader = new FileReader();
@@ -282,12 +288,12 @@ window.onload = function () {
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
-        if (
-            !$(`[data-id=${obj.type}]`).hasClass('active_menu') ||
-            (obj.type === "menu_chats" && $('.searchInput').val())
-        ) {
-            return;
-        }
+        // if (
+        //     !$(`[data-id=${obj.type}]`).hasClass('active_menu') ||
+        //     (obj.type === "menu_chats" && $('.searchInput').val())
+        // ) {
+        //     return;
+        // }
         const chat_box = $('.chats ul');
         const user = chat_box.find('#' + obj.id);
         if (user.length) {
@@ -314,13 +320,14 @@ window.onload = function () {
     $(document).on('click', '[data-name=join_channel]', function () {
         $(this).attr('disabled', 'disabled');
         let active_dialog = $('.active_dialog');
+        let input = $('[data-name=group_search]');
+        input.val('');
         ipcRenderer.send('join_channel', {
             id: active_dialog.attr('id'),
             domain: active_dialog.attr('data-domain'),
             contract_address: active_dialog.attr('data-contract_address')
         });
-        $('#style-11').empty();
-        $(this).fadeOut();
+        ipcRenderer.send('load_chats', 'menu_chats');
     });
 
     function click_anim(e){
@@ -410,14 +417,9 @@ window.onload = function () {
             obj[elem.name] = elem.value;
         });
 
-        switch (obj.substype) {
-            case 'free':
-                ipcRenderer.send('create_group', obj.name);
-                $('#AppModal').modal('toggle');
-                break;
-            case 'unfree':
-                break;
-        }
+        ipcRenderer.send('create_group', obj);
+        console.log(obj);
+        $('#AppModal').modal('toggle');
     });
 
     $(document).on('click', '[data-event=show_chat_info]', function () {
@@ -540,7 +542,7 @@ window.onload = function () {
         ipcRenderer.send('download_file', $(this).attr('data-id'));
     });
 
-    ipcRenderer.on("file_dowloaded", (event, obj) => {
+    ipcRenderer.on("file_downloaded", (event, obj) => {
         let file=$(`[data-id=${obj.id}]`);
         if (file.hasClass('load'))
             file.removeClass('load').addClass('complite');
@@ -553,6 +555,7 @@ window.onload = function () {
     });
 
     ipcRenderer.on("get_contacts", (event, obj) => {
+        // console.log('1234567')
         $('#browsers').html(obj);
 
     });
@@ -570,6 +573,8 @@ window.onload = function () {
     let unlock = false;
 
     $(document).mousemove(function(e) {
+        if (!$('[data-id="menu_chats"]').hasClass('active_menu'))
+            return;
         p = $(".dialogs");
         let d = $(".messaging_block");
         let change = curr_width + (e.clientX - curr_width);
@@ -590,7 +595,7 @@ window.onload = function () {
     });
 
     $(document).on('click',"[data-id=add_new_user]",function(e) {
-        let input = $('[data-name=group_search]');
+        let input = $('[data-name=user_search]');
         let data={id:input.val(),domain:'localhost'};
         input.val('');
         ipcRenderer.send("send_subscribe", data);
@@ -601,8 +606,8 @@ window.onload = function () {
     });
 
     $(document).on('keyup',".send_message__input",function(e) {
-        console.log('hello!')
-        ResizeTextArea(this,1)
+        // console.log('hello!')
+        ResizeTextArea(this,0)
     });
 
     function countLines(strtocount, cols) {
@@ -613,6 +618,7 @@ window.onload = function () {
             hard_lines ++;
             /* if ( hard_lines == 35) break; */
             if ( last == -1 ) break;
+            console.log('hi')
         }
         var soft_lines = Math.ceil(strtocount.length / (cols-1));
         var hard = eval("hard_lines " + unescape("%3e") + "soft_lines;");
@@ -622,7 +628,7 @@ window.onload = function () {
 
 // функция вызывается при каждом нажатии клавиши в области ввода текста
     function ResizeTextArea(the_form,min_rows) {
-        the_form.rows = Math.max(min_rows,countLines(the_form.value,the_form.cols) );
+        the_form.rows = Math.max(min_rows, countLines(the_form.value,the_form.cols) );
     }
 
 

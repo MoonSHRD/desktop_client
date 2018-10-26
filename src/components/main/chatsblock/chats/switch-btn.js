@@ -8,9 +8,14 @@ $(function () {
         }
     });
     $('.switch-btn').on('on.switch', function () {
-        $($(this).attr('data-id')).removeClass('bl-hide');
+            $('.bl-hide').css('display', 'block');
+            $('.bl-hide-1').css('display', 'none');
+            $('.chats').css('height', 'calc(100% - 153px)');
+
     });
     $('.switch-btn').on('off.switch', function () {
-        $($(this).attr('data-id')).addClass('bl-hide');
+        $('.bl-hide').css('display', 'none');
+        $('.bl-hide-1').css('display', 'block');
+        $('.chats').css('height', 'calc(100% - 200px)');
     });
 });
