@@ -99,7 +99,7 @@
 }
 
 .btn_create{
-    width: 42px;
+    width: 40px;
     height: 40px;
     display: inline-block;
     vertical-align: middle;
@@ -120,199 +120,65 @@
 }
 
 .btn-add-old{
-    margin-right: 20px;
-    background: $cf;
-    border: 1px solid $brand-blue;
-    border-radius: 8px;
-    padding: 2px 11px;
-    color: $brand-blue;
-}
-
-
-
-
-
-
-
-//
-// Switches for Bootstrap 4.
-//
-// - Fully customizable with Sass variables
-// - No JavaScript required
-// - Fully accessible
-//
-
-//
-// IMPORTANT: These Sass variables are defined in Bootstrap's variables.scss. You should import that file first, then remove these.
-//
-$font-size-base: 1rem;
-$font-size-lg: ($font-size-base * 1.25);
-$font-size-sm: ($font-size-base * .875);
-$input-height: 2.375rem;
-$input-height-sm: 1.9375rem;
-$input-height-lg: 3rem;
-$input-btn-focus-width: .2rem;
-$custom-control-indicator-bg: #dee2e6;
-$custom-control-indicator-disabled-bg: #e9ecef;
-$custom-control-description-disabled-color: #868e96;
-$white: white;
-$theme-colors: (
-        'primary': #08d
-);
-
-//
-// These variables can be used to customize the switch component.
-//
-$switch-height: calc(#{$input-height} * .8) !default;
-$switch-height-sm: calc(#{$input-height-sm} * .8) !default;
-$switch-height-lg: calc(#{$input-height-lg} * .8) !default;
-$switch-border-radius: $switch-height !default;
-$switch-bg: $custom-control-indicator-bg !default;
-$switch-checked-bg: map-get($theme-colors, 'primary') !default;
-$switch-disabled-bg: $custom-control-indicator-disabled-bg !default;
-$switch-disabled-color: $custom-control-description-disabled-color !default;
-$switch-thumb-bg: $white !default;
-$switch-thumb-border-radius: 50% !default;
-$switch-thumb-padding: 2px !default;
-$switch-focus-box-shadow: 0 0 0 $input-btn-focus-width rgba(map-get($theme-colors, 'primary'), .25);
-$switch-transition: .2s all !default;
-
-.switch {
-  font-size: $font-size-base;
-  position: relative;
-
-  input {
+    background: url('#{$img}/chatblock/search.svg') no-repeat;
+    width: 30px;
+    height: 27px;
     position: absolute;
-    height: 1px;
-    width: 1px;
-    background: none;
-    border: 0;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    overflow: hidden;
-    padding: 0;
-
-    + label {
-      position: relative;
-      min-width: calc(#{$switch-height} * 2);
-      border-radius: $switch-border-radius;
-      height: $switch-height;
-      line-height: $switch-height;
-      display: inline-block;
-      cursor: pointer;
-      outline: none;
-      user-select: none;
-      vertical-align: middle;
-      text-indent: calc(calc(#{$switch-height} * 2) + .5rem);
-    }
-
-    + label::before,
-    + label::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: calc(#{$switch-height} * 2);
-      bottom: 0;
-      display: block;
-    }
-
-    + label::before {
-      right: 0;
-      background-color: $switch-bg;
-      border-radius: $switch-border-radius;
-      transition: $switch-transition;
-    }
-
-    + label::after {
-      top: $switch-thumb-padding;
-      left: $switch-thumb-padding;
-      width: calc(#{$switch-height} - calc(#{$switch-thumb-padding} * 2));
-      height: calc(#{$switch-height} - calc(#{$switch-thumb-padding} * 2));
-      border-radius: $switch-thumb-border-radius;
-      background-color: $switch-thumb-bg;
-      transition: $switch-transition;
-    }
-
-    &:checked + label::before {
-      background-color: $switch-checked-bg;
-    }
-
-    &:checked + label::after {
-      margin-left: $switch-height;
-    }
-
-    &:focus + label::before {
-      outline: none;
-
-    }
-
-    &:disabled + label {
-      color: $switch-disabled-color;
-      cursor: not-allowed;
-    }
-
-    &:disabled + label::before {
-      background-color: $switch-disabled-bg;
-    }
-  }
-
-  // Small variation
-  &.switch-sm {
-    font-size: $font-size-sm;
-
-    input {
-      + label {
-        min-width: calc(#{$switch-height-sm} * 2);
-        height: $switch-height-sm;
-        line-height: $switch-height-sm;
-        text-indent: calc(calc(#{$switch-height-sm} * 2) + .5rem);
-      }
-
-      + label::before {
-        width: calc(#{$switch-height-sm} * 2);
-      }
-
-      + label::after {
-        width: calc(#{$switch-height-sm} - calc(#{$switch-thumb-padding} * 2));
-        height: calc(#{$switch-height-sm} - calc(#{$switch-thumb-padding} * 2));
-      }
-
-      &:checked + label::after {
-        margin-left: $switch-height-sm;
-      }
-    }
-  }
-
-  // Large variation
-  &.switch-lg {
-    font-size: $font-size-lg;
-
-    input {
-      + label {
-        min-width: calc(#{$switch-height-lg} * 2);
-        height: $switch-height-lg;
-        line-height: $switch-height-lg;
-        text-indent: calc(calc(#{$switch-height-lg} * 2) + .5rem);
-      }
-
-      + label::before {
-        width: calc(#{$switch-height-lg} * 2);
-      }
-
-      + label::after {
-        width: calc(#{$switch-height-lg} - calc(#{$switch-thumb-padding} * 2));
-        height: calc(#{$switch-height-lg} - calc(#{$switch-thumb-padding} * 2));
-      }
-
-      &:checked + label::after {
-        margin-left: $switch-height-lg;
-      }
-    }
-  }
-
-  + .switch {
-    margin-left: 1rem;
-  }
+    right: 82px;
+    cursor: pointer;
 }
 
+
+.switch-btn {
+  display: inline-block;
+  width: 40px; /* ширина переключателя */
+  height: 20px; /* высота переключателя */
+  border-radius: 12px; /* радиус скругления */
+  background: $cf; /* цвет фона */
+  z-index: 0;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  transition-duration: 300ms; /* анимация */
+  border: 1px solid rgba(1,1,1,.3);
+  box-shadow: 4px 4px 20px rgba(43,194,249,.2);
+}
+
+.switch-btn::after {
+  content: "";
+  height: 12px; /* высота кнопки */
+  width: 12px; /* ширина кнопки */
+  border-radius: 18px; /* радиус кнопки */
+  background: $cf; /* цвет кнопки */
+  top: 3px; /* положение кнопки по вертикали относительно основы */
+  left: 3px; /* положение кнопки по горизонтали относительно основы */
+  transition-duration: 300ms; /* анимация */
+  box-shadow: 0 0 10px 0 #999999; /* тень */
+  position: absolute;
+  z-index: 1;
+  background: $brand-blue;
+}
+
+.switch-on {
+  background: #fff;
+  box-shadow: 4px 4px 20px rgba(43, 194, 249,.2); /* тень */
+}
+
+.switch-on::after {
+  left: 22px;
+  background: $brand-blue;
+}
+
+.bl-hide {
+  display: none;
+}
+
+.switch-div{
+  margin-right: 20px;
+}
+
+.switch-btn {
+  display: table;
+  margin: auto;
+}
