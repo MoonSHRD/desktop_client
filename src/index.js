@@ -207,9 +207,44 @@ window.onload = function () {
         if (event.ctrlKey && event.keyCode === 13 ) {
             $(this).attr('rows', 1)
         }
+    });
 
+    $(document).on('keydown',".send_message__input",function(e) {
+        if($(this).val() === '') {
+            $(this).attr('rows', 1)
+        };
+        if($(this).val() === '' && event.keyCode == 13) {
+            event.preventDefault();
+        };
+
+        if ( event.keyCode === 13 && $(this).val()!=='') {
+            ResizeTextArea(this,0)
+        }
+    });
+
+    $(document).on('input',".send_message__input",function(e) {
+        // console.log('hello!')
+        if($(this).val() === '') {
+            $(this).attr('rows', 1)
+        };
 
     });
+
+    $(document).on('paste',".send_message__input",function(e) {
+        console.log('paste!')
+        var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
+        if($(this).val()!=='')
+        {
+            $(this).attr('rows', $(this).attr('rows'))
+
+        }else {
+            ResizeTextArea(this,10)
+
+        }
+        console.log(text);
+
+    });
+
 
     $(document).on('click', '[data-toggle="send-msg"]', function () {
         $('[data-msg="data-msg"]').focus();
@@ -628,16 +663,7 @@ window.onload = function () {
         unlock = false;
     });
 
-    $(document).on('keydown',".send_message__input",function(e) {
-        // console.log('hello!')
-        if($(this).val() === '' && event.keyCode == 13) {
-            event.preventDefault();
-        };
 
-        if ( event.keyCode === 13 && $(this).val()!=='') {
-            ResizeTextArea(this,0)
-        }
-    });
 
     function countLines(strtocount, cols) {
         var hard_lines = 1;
@@ -645,9 +671,10 @@ window.onload = function () {
         while ( true ) {
             last = strtocount.indexOf("\n", last+1);
             hard_lines ++;
-            /* if ( hard_lines == 35) break; */
+            // if ( hard_lines == 10) break;
             if ( last == -1 ) break;
-            console.log('hi')
+            // console.log('hi')
+            // console.log(hard_lines)
         }
         var soft_lines = Math.ceil(strtocount.length / (cols-1));
         var hard = eval("hard_lines " + unescape("%3e") + "soft_lines;");
