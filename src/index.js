@@ -567,6 +567,8 @@ window.onload = function () {
     let unlock = false;
 
     $(document).mousemove(function(e) {
+        if (!$('[data-id="menu_chats"]').hasClass('active_menu'))
+            return;
         p = $(".dialogs");
         let d = $(".messaging_block");
         let change = curr_width + (e.clientX - curr_width);
