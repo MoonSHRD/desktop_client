@@ -77,8 +77,8 @@ class MessagesController extends Controller {
             message:message,
             unread_messages:message.chat.unread_messages
         };
-        this.send_data('received_message', data);
-        // this.controller_register.run_controller("ChatsController", "load_chat", message.chat, this.chat_types.user);
+        await this.send_data('received_message', data);
+        // this.controller_register.run_controller("ChatsController", "load_chat", message.chat, "menu_chats");
 
 
         if (message.notificate){
@@ -180,7 +180,8 @@ class MessagesController extends Controller {
     };
 
     async received_message(user, text, stamp, files) {
-        console.log("Files:", files);
+        stamp = Number(stamp);
+        // console.log("Files:", files);
         let self_info = await this.get_self_info();
         let userModel = await UserModel.findOne(user.id);
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
@@ -219,8 +220,8 @@ class MessagesController extends Controller {
     };
 
     async received_group_message({room_data, message, sender, files, stamp, fresh=null}) {
-        console.log('Files: ',files);
-        console.log('Stamp: ',stamp);
+        // console.log('Files: ',files);
+        // console.log('Stamp: ',stamp);
         let self_info = await this.get_self_info();
         if (sender.address == self_info.id) return;
         let userModel: UserModel;

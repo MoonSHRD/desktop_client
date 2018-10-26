@@ -75,7 +75,7 @@ class ChatsController extends Controller {
 
         let chats = await ChatModel.get_chats_with_last_msgs(self_info);
 
-        console.log(chats);
+        // console.log(chats);
         let menu_chat: string;
         if (type === this.chat_types.user) {
             menu_chat = this.chat_to_menu.user;

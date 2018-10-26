@@ -80,7 +80,7 @@ class ChatsController extends Controller_1.Controller {
             console.log('load_chats');
             let self_info = yield this.get_self_info();
             let chats = yield ChatModel_1.ChatModel.get_chats_with_last_msgs(self_info);
-            console.log(chats);
+            // console.log(chats);
             let menu_chat;
             if (type === this.chat_types.user) {
                 menu_chat = this.chat_to_menu.user;

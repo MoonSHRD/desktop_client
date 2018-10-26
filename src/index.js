@@ -203,7 +203,16 @@ window.onload = function () {
         }
     });
 
+    $(document).on('keyup', '[data-msg="data-msg"]', function () {
+        if (event.ctrlKey && event.keyCode === 13 ) {
+            $(this).attr('rows', 1)
+        }
+
+
+    });
+
     $(document).on('click', '[data-toggle="send-msg"]', function () {
+        $('[data-msg="data-msg"]').focus();
         send_message();
     });
 
@@ -211,7 +220,6 @@ window.onload = function () {
         let msg_input = $('.send_message__input');
         msg_input.attr('rows', 1);
         if (msg_input.val().trim() === '') {
-            msg_input.attr('rows', 1)
 
             msg_input.val('');
             return;
@@ -225,7 +233,6 @@ window.onload = function () {
             text: msg_input.val().trim(),
             group: $('.active_dialog').attr('data-type') === 'channel',
         };
-        msg_input.attr('rows', 1)
 
         obj = {id: active_dialog.attr('id'), text: msg_input.val().trim()};
         // console.log(obj);
@@ -275,18 +282,22 @@ window.onload = function () {
             if (chat) {
                 chat.find('[data-name=chat_last_time]').text(obj.message.time);
                 chat.find('[data-name=chat_last_text]').text(obj.message.text);
+                console.log(obj);
+
+                chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
+                chat.find("[data-name=unread_messages]").show();
             }
             chat.prependTo($('.chats ul')[0]);
         }
-
         if ($('.active_dialog').attr('id') === obj.id) {
-            chat.find("[data-name=unread_messages]").text(0);
+            chat.find("[data-name=unread_messages]").hide();
             ipcRenderer.send('reading_messages', obj.id);
             $('[data-msg-list]').append(obj.html);
             scrollDown('[data-msg-history]');
         } else {
             chat.find("[data-name=unread_messages]").text(obj.unread_messages);
         }
+        // ipcRenderer.send('load_chats', 'menu_chats');
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
@@ -363,12 +374,14 @@ window.onload = function () {
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
         let chat = $this.attr('id');
 
+        $this.find("[data-name=unread_messages]").hide();
+        $this.find("[data-name=unread_messages]").text("0");
+
         if(!($this.hasClass("active_dialog") && $this.hasClass("have_history"))) {
-            console.log("Worked!");
             ipcRenderer.send('get_chat_msgs', chat);
             $this.addClass('have_history');
         }
-        $this.find("[data-name=unread_messages]").text("0");
+
     });
 
     $(document).on('click', '.walletMenu li', function (e) {
@@ -608,9 +621,15 @@ window.onload = function () {
         unlock = false;
     });
 
-    $(document).on('keyup',".send_message__input",function(e) {
+    $(document).on('keydown',".send_message__input",function(e) {
         // console.log('hello!')
-        ResizeTextArea(this,0)
+        if($(this).val() === '' && event.keyCode == 13) {
+            event.preventDefault();
+        };
+
+        if ( event.keyCode === 13 && $(this).val()!=='') {
+            ResizeTextArea(this,0)
+        }
     });
 
     function countLines(strtocount, cols) {
