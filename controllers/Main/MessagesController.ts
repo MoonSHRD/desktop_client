@@ -38,7 +38,7 @@ class MessagesController extends Controller {
                 break;
         }
         let html = this.render('main/messagingblock/qqq.pug', chat);
-        this.send_data('reload_chat', html);
+        await this.send_data('reload_chat', html);
 
         await this.render_chat_messages(chat_id);
     };
@@ -88,7 +88,9 @@ class MessagesController extends Controller {
 
     private async render_chat_messages(chat_id: string) {
         let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+        let last_time;
         for (let num = messages.length - 1; num >= 0; --num) {
+            if (last_time!==new Date(messages[num].time))
             await this.render_message(messages[num]);
         }
     }
@@ -99,7 +101,7 @@ class MessagesController extends Controller {
             file.file = (await this.ipfs.get_file(file.hash)).file;
             save_file(file);
         }
-        this.send_data('file_dowloaded',{id:file_id});
+        this.send_data('file_downloaded',{id:file_id});
     }
 
     async send_message({id, text, file}) {
@@ -209,7 +211,7 @@ class MessagesController extends Controller {
         await this.render_message(message);
     };
 
-    async received_group_message({room_data, message, sender, files, stamp, fresh}) {
+    async received_group_message({room_data, message, sender, files, stamp, fresh=null}) {
         console.log('Files: ',files);
         console.log(stamp);
         let self_info = await this.get_self_info();
@@ -230,8 +232,8 @@ class MessagesController extends Controller {
         messageModel.chat = chat;
         messageModel.time = Date.now();
         messageModel.files = [];
-        messageModel.fresh = true;
-        messageModel.notificate = true;
+        messageModel.fresh = fresh===false;
+        messageModel.notificate = fresh===null;
         await messageModel.save();
 
         if (files) {
