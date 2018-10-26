@@ -9,11 +9,19 @@ div(class='men')
                 input(class='searchInput', placeholder='Search', data-name='group_search' name="search_user")
                 //input(type="submit" class='submit_searchInput' value="add")
                 button.btn.btn-add-old(data-id="add_new_user") add
+                .switch-btn(data-id="#bl-1" style="margin: 10px;")
+                #bl-1.bl-hide(style="height: 20px; margin: 10px; background: orange;")
+                script
+                    include switch-btn.js
                 //span.switch.switch-sm
                 //    input.switch#switch-sm(type="checkbox")
                 //    label(for="switch-sm")
+
                 script
                     include search_users.js
+
+
+
 
     .btn_create_chat(data-id="menu_create_chat")
         .btn_create +
