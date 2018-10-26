@@ -46,7 +46,7 @@ class MessagesController extends Controller_1.Controller {
                     break;
             }
             let html = this.render('main/messagingblock/qqq.pug', chat);
-            this.send_data('reload_chat', html);
+            yield this.send_data('reload_chat', html);
             yield this.render_chat_messages(chat_id);
         });
     }
@@ -110,7 +110,7 @@ class MessagesController extends Controller_1.Controller {
                 file.file = (yield this.ipfs.get_file(file.hash)).file;
                 Helpers_1.save_file(file);
             }
-            this.send_data('file_dowloaded', { id: file_id });
+            this.send_data('file_downloaded', { id: file_id });
         });
     }
     send_message({ id, text, file }) {
@@ -218,7 +218,7 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_group_message({ room_data, message, sender, files, stamp, fresh }) {
+    received_group_message({ room_data, message, sender, files, stamp, fresh = null }) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('Files: ', files);
             console.log(stamp);
@@ -241,8 +241,8 @@ class MessagesController extends Controller_1.Controller {
             messageModel.chat = chat;
             messageModel.time = Date.now();
             messageModel.files = [];
-            messageModel.fresh = true;
-            messageModel.notificate = true;
+            messageModel.fresh = fresh === false;
+            messageModel.notificate = fresh === null;
             yield messageModel.save();
             if (files) {
                 for (let num in files) {

@@ -283,12 +283,12 @@ window.onload = function () {
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
-        if (
-            !$(`[data-id=${obj.type}]`).hasClass('active_menu') ||
-            (obj.type === "menu_chats" && $('.searchInput').val())
-        ) {
-            return;
-        }
+        // if (
+        //     !$(`[data-id=${obj.type}]`).hasClass('active_menu') ||
+        //     (obj.type === "menu_chats" && $('.searchInput').val())
+        // ) {
+        //     return;
+        // }
         const chat_box = $('.chats ul');
         const user = chat_box.find('#' + obj.id);
         if (user.length) {
@@ -315,13 +315,17 @@ window.onload = function () {
     $(document).on('click', '[data-name=join_channel]', function () {
         $(this).attr('disabled', 'disabled');
         let active_dialog = $('.active_dialog');
+        let input = $('[data-name=group_search]');
+        input.val('');
         ipcRenderer.send('join_channel', {
             id: active_dialog.attr('id'),
             domain: active_dialog.attr('data-domain'),
             contract_address: active_dialog.attr('data-contract_address')
         });
-        $('#style-11').empty();
-        $(this).fadeOut();
+        // $('#style-11').empty();
+        // $(this).fadeOut();
+
+
     });
 
     function click_anim(e){
@@ -536,7 +540,7 @@ window.onload = function () {
         ipcRenderer.send('download_file', $(this).attr('data-id'));
     });
 
-    ipcRenderer.on("file_dowloaded", (event, obj) => {
+    ipcRenderer.on("file_downloaded", (event, obj) => {
         let file=$(`[data-id=${obj.id}]`);
         if (file.hasClass('load'))
             file.removeClass('load').addClass('complite');

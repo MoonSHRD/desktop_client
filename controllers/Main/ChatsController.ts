@@ -69,20 +69,6 @@ class ChatsController extends Controller {
         }
     }
 
-    // async load_chats_by_menu(menu_to_chat:string){
-    //     let type:string;
-    //     switch (menu_to_chat) {
-    //         case this.chat_to_menu.user:
-    //             type=this.chat_types.user;
-    //             break;
-    //         case this.chat_to_menu.group:
-    //             type=this.chat_types.group;
-    //             break;
-    //     }
-    //     if (type)
-    //         await this.load_chats(type);
-    // }
-
     async load_chats(type: string, first: boolean = false) {
         console.log('load_chats');
         let self_info = await this.get_self_info();
@@ -171,8 +157,8 @@ class ChatsController extends Controller {
 
         await chat.save();
 
-        await this.load_chat(chat, this.chat_to_menu.group);
-        let count = messages.length;
+        // await this.load_chat(chat, this.chat_to_menu.group);
+        let count = (messages.length).toString();
         for (let num in messages){
             let message=messages[num];
             let buf = message.time.split(" ");
@@ -180,18 +166,9 @@ class ChatsController extends Controller {
             let room_data = {id: message.sender};
             let sender = {address: message.sender, domain: "localhost"};
             await this.controller_register.run_controller("MessagesController", "received_group_message",
-                {room_data, message:message.message, sender, stamp:message.time, files:message.files, fresh:(num==(count-1))});
+                {room_data, message:message.message, sender, stamp:message.time, files:message.files, fresh:(num===count)});
         }
-        messages.forEach(async (message) => {
-            // console.log(message.time);
-            let buf = message.time.split(" ");
-            message.time = `${buf[0]} ${buf[1]}`;
-            let room_data = {id: message.sender};
-            let sender = {address: message.sender, domain: "localhost"};
-            await this.controller_register.run_controller("MessagesController", "received_group_message",
-                {room_data, message:message.message, sender, stamp:message.time, files:message.files, });
-        });
-
+        await this.controller_register.run_controller("MessagesController", "get_chat_messages", room_data.id)
     }
 
     async create_group(group_data) {
