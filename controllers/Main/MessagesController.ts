@@ -174,7 +174,7 @@ class MessagesController extends Controller {
         await message.save();
     };
 
-    async received_message(user, text, files) {
+    async received_message(user, text, stamp, files) {
         console.log(files);
         let self_info = await this.get_self_info();
         let userModel = await UserModel.findOne(user.id);
@@ -190,7 +190,7 @@ class MessagesController extends Controller {
         await message.save();
 
         // let ipfs_file;
-        if (files) {
+        if (files && files.length) {
             for (let num in files){
                 let fileModel = new FileModel();
                 // file_info.sender = self_info.id;

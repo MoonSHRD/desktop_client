@@ -181,7 +181,7 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_message(user, text, files) {
+    received_message(user, text, stamp, files) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(files);
             let self_info = yield this.get_self_info();
@@ -197,7 +197,7 @@ class MessagesController extends Controller_1.Controller {
             message.files = [];
             yield message.save();
             // let ipfs_file;
-            if (files) {
+            if (files && files.length) {
                 for (let num in files) {
                     let fileModel = new FileModel_1.FileModel();
                     // file_info.sender = self_info.id;
