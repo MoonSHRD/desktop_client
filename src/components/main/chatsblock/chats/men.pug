@@ -6,10 +6,18 @@ div(class='men')
                 script
                     include search_chats.js
             default
-                input(class='searchInput', placeholder='поиск людей', data-name='group_search' name="search_user")
+                input(class='searchInput', placeholder='Search', data-name='group_search' name="search_user")
                 //input(type="submit" class='submit_searchInput' value="add")
+                button.btn.btn-add-old(data-id="add_new_user") add
+                //span.switch.switch-sm
+                //    input.switch#switch-sm(type="checkbox")
+                //    label(for="switch-sm")
                 script
                     include search_users.js
+
+    .btn_create_chat(data-id="menu_create_chat")
+        .btn_create +
+        .btn_create_chat_text Create channel
     div(class='chats scrollbar' id="style-11")
         ul !{chats?chats:""}
 
