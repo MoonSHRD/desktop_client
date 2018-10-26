@@ -10,11 +10,13 @@ div(class='men')
         script
             include search_chats.js
             include search_users.js
-            include switch-btn.js
     .btn_create_chat.bl-hide-1(data-id="menu_create_chat")
         .btn_create +
         .btn_create_chat_text Create channel
     div(class='chats scrollbar' id="style-11")
         ul !{chats?chats:""}
+
+    script
+        include switch-btn.js
 
 
