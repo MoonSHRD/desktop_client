@@ -197,9 +197,7 @@ class MessagesController extends Controller {
         await message.save();
 
         // let ipfs_file;
-        if (files) {
-            console.log("Files2:", files);
-
+        if (files && files.length) {
             for (let num in files){
                 let fileModel = new FileModel();
                 // file_info.sender = self_info.id;
