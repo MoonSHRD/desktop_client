@@ -209,7 +209,7 @@ window.onload = function () {
 
     function send_message(){
         let msg_input = $('.send_message__input');
-        msg_input.attr('rows', 1)
+        msg_input.attr('rows', 1);
         if (msg_input.val().trim() === '') {
             msg_input.val('');
             return;
@@ -322,10 +322,7 @@ window.onload = function () {
             domain: active_dialog.attr('data-domain'),
             contract_address: active_dialog.attr('data-contract_address')
         });
-        // $('#style-11').empty();
-        // $(this).fadeOut();
-
-
+        ipcRenderer.send('load_chats', 'menu_chats');
     });
 
     function click_anim(e){
@@ -590,7 +587,7 @@ window.onload = function () {
     });
 
     $(document).on('click',"[data-id=add_new_user]",function(e) {
-        let input = $('[data-name=group_search]');
+        let input = $('[data-name=user_search]');
         let data={id:input.val(),domain:'localhost'};
         input.val('');
         ipcRenderer.send("send_subscribe", data);

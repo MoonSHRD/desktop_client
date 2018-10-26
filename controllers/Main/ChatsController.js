@@ -168,17 +168,22 @@ class ChatsController extends Controller_1.Controller {
             if (room_data.contractaddress)
                 chat.contract_address = room_data.contractaddress;
             yield chat.save();
-            // await this.load_chat(chat, this.chat_to_menu.group);
-            let count = (messages.length).toString();
-            for (let num in messages) {
-                let message = messages[num];
-                let buf = message.time.split(" ");
-                message.time = `${buf[0]} ${buf[1]}`;
-                let room_data = { id: message.sender };
-                let sender = { address: message.sender, domain: "localhost" };
-                yield this.controller_register.run_controller("MessagesController", "received_group_message", { room_data, message: message.message, sender, stamp: message.time, files: message.files, fresh: (num === count) });
+            if (room_data.role === 'moderator') {
+                yield this.load_chat(chat, this.chat_types.group);
             }
-            yield this.controller_register.run_controller("MessagesController", "get_chat_messages", room_data.id);
+            else {
+                // await this.load_chat(chat, this.chat_to_menu.group);
+                let count = (messages.length).toString();
+                for (let num in messages) {
+                    let message = messages[num];
+                    let buf = message.time.split(" ");
+                    message.time = `${buf[0]} ${buf[1]}`;
+                    let room_data = { id: message.sender };
+                    let sender = { address: message.sender, domain: "localhost" };
+                    yield this.controller_register.run_controller("MessagesController", "received_group_message", { room_data, message: message.message, sender, stamp: message.time, files: message.files, fresh: (num === count) });
+                }
+                yield this.controller_register.run_controller("MessagesController", "get_chat_messages", room_data.id);
+            }
         });
     }
     create_group(group_data) {
