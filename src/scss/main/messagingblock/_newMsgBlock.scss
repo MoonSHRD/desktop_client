@@ -272,9 +272,14 @@ a.join_button {
         resize: none;
         flex: 1;
         margin: 0 15px;
+        max-height: 200px;
 
         &::placeholder {
             color: $brand-blue;
+        }
+
+        &::-webkit-scrollbar {
+            width: 0;
         }
     }
 
