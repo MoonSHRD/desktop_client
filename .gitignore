@@ -21,3 +21,4 @@ account.json
 sqlite/data.db
 
 not_for_git/
+.git-old/

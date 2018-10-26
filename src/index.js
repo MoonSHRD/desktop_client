@@ -153,7 +153,7 @@ window.onload = function () {
 
     let widthMsgWindow = (target) => {
         let msgWindow =  document.querySelector(target);
-        if (msgWindow.offsetWidth > 800){
+        if (msgWindow.offsetWidth > 900){
             msgWindow.classList.add('messaging_block_lg');
         } else {
             msgWindow.classList.remove('messaging_block_lg');
@@ -400,6 +400,13 @@ window.onload = function () {
             $("#token_row").hide();
         }
     });
+    $(document).on("change", '[name="open-private"]', function () {
+        if ($(this).attr('id') === 'private') {
+            $("#token_row").show();
+        } else {
+            $("#token_row").hide();
+        }
+    });
 
     $(document).on('submit', '.modal-content', function (e) {
         e.preventDefault();
@@ -624,6 +631,18 @@ window.onload = function () {
     function ResizeTextArea(the_form,min_rows) {
         the_form.rows = Math.max(min_rows,countLines(the_form.value,the_form.cols) );
     }
+
+    $(document).on('click', '[data-toggle="switcher"]', function(e) {
+        let $this = $(this);
+        let $thisPosition = $this.data('switcher');
+        let $thisSwitcherToggle = $this.data('switcher-toggle');
+        let target = $this.data('target');
+        let $parent = $this.closest('.control-switcher');
+
+        $(target).attr('class', 'custom-control-switcher custom-control-switcher_' + $thisPosition);
+    });
+
+    $('[data-toggle="collapse"]').collapse('toggle');
 
 
 };
