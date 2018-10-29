@@ -11,20 +11,39 @@ $img : '../img';
 $cf: #fff;
 $c0: #000;
 
-$brand-primary : #272B46;
-$brand-blue-100 : #BFEAF9;
-$brand-blue : #2BC2F9;
-$brand-gray-100 : #F3F3F3;
-$brand-gray-400 : #BDBDBD;
-$brand-gray-700 : #909090;
-$brand-green : #1AFF7C;
-$brand-orange : #F2994A;
-$brand-purple : #BB6BD9;
-$brand-red : #C70039;
+$brand-primary : #272B46 !default;
+$brand-blue-100 : #BFEAF9 !default;
+$brand-blue : #2BC2F9 !default;
+$brand-gray-100 : #F3F3F3 !default;
+$brand-gray-400 : #BDBDBD !default;
+$brand-gray-700 : #909090 !default;
+$brand-green : #1AFF7C !default;
+$brand-orange : #F2994A !default;
+$brand-purple : #BB6BD9 !default;
+$brand-red : #C70039 !default;
 
-$primary : $brand-primary;
-$info : $brand-blue;
-$danger : $brand-red;
-$success : $brand-green;
+//$primary : $brand-blue!default;
+//$secondary : $brand-gray-400!default;
+//$danger : $brand-red!default;
+//$success : $brand-green!default;
+//$dark : $brand-primary!default;
+//$warning : $brand-orange!default;
 
 $primary-text : $brand-primary;
+
+
+$brand-colors: () !default;
+// stylelint-disable-next-line scss/dollar-variable-default
+$brand-colors: map-merge(
+    (
+        "primary":    $brand-blue,
+        "secondary":  $brand-gray-400,
+        "success":    $brand-green,
+        "info":       $brand-blue-100,
+        "warning":    $brand-orange,
+        "danger":     $brand-red,
+        "light":      $brand-gray-100,
+        "dark":       $brand-primary
+    ),
+    $brand-colors
+);

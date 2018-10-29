@@ -164,6 +164,7 @@ window.onload = function () {
         console.log('autyh');
         $('#view').html(arg);
         $.html5Translate(dict, 'en');
+        // todo: fix some console errors with this func
         widthMsgWindow('[data-msgs-window]');
     });
 
@@ -196,20 +197,65 @@ window.onload = function () {
     });
 
 
-    $(document).on('keydown', '.send_message_input', function () {
+    $(document).on('keydown', '[data-msg="data-msg"]', function () {
         if (event.ctrlKey && event.keyCode === 13) {
             send_message();
         }
     });
 
+    $(document).on('keyup', '[data-msg="data-msg"]', function () {
+        if (event.ctrlKey && event.keyCode === 13 ) {
+            $(this).attr('rows', 1)
+        }
+    });
+
+    $(document).on('keydown',".send_message__input",function(e) {
+        if($(this).val() === '') {
+            $(this).attr('rows', 1)
+        };
+        if($(this).val() === '' && event.keyCode == 13) {
+            event.preventDefault();
+        };
+
+        if ( event.keyCode === 13 && $(this).val()!=='') {
+            ResizeTextArea(this,0)
+        }
+    });
+
+    $(document).on('input',".send_message__input",function(e) {
+        // console.log('hello!')
+        if($(this).val() === '') {
+            $(this).attr('rows', 1)
+        };
+
+    });
+
+    $(document).on('paste',".send_message__input",function(e) {
+        console.log('paste!')
+        var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
+        if($(this).val()!=='')
+        {
+            $(this).attr('rows', $(this).attr('rows'))
+
+        }else {
+            ResizeTextArea(this,10)
+
+        }
+        console.log(text);
+
+    });
+
+
     $(document).on('click', '[data-toggle="send-msg"]', function () {
+        $('[data-msg="data-msg"]').focus();
         send_message();
     });
 
     function send_message(){
         let msg_input = $('.send_message__input');
-        msg_input.attr('rows', 1)
+        msg_input.attr('rows', 1);
         if (msg_input.val().trim() === '') {
+
             msg_input.val('');
             return;
         }
@@ -227,6 +273,8 @@ window.onload = function () {
         // console.log(obj);
         let files = $('#attachFileToChat').prop('files');
         if (files && files[0]) {
+            msg_input.attr('rows', 1)
+
             let file = files[0];
             console.log(file);
             let reader = new FileReader();
@@ -263,31 +311,37 @@ window.onload = function () {
     });
 
     ipcRenderer.on('received_message', (event, obj) => {
+        let chat = $('#'+obj.id);
 
         if (obj.message.fresh) {
-            let chat = $('#'+obj.id);
             if (chat) {
                 chat.find('[data-name=chat_last_time]').text(obj.message.time);
                 chat.find('[data-name=chat_last_text]').text(obj.message.text);
+                console.log(obj);
+
+                chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
+                chat.find("[data-name=unread_messages]").show();
             }
             chat.prependTo($('.chats ul')[0]);
         }
-
         if ($('.active_dialog').attr('id') === obj.id) {
+            chat.find("[data-name=unread_messages]").hide();
+            ipcRenderer.send('reading_messages', obj.id);
             $('[data-msg-list]').append(obj.html);
             scrollDown('[data-msg-history]');
         } else {
-            // fawfaw
+            chat.find("[data-name=unread_messages]").text(obj.unread_messages);
         }
+        // ipcRenderer.send('load_chats', 'menu_chats');
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
-        if (
-            !$(`[data-id=${obj.type}]`).hasClass('active_menu') ||
-            (obj.type === "menu_chats" && $('.searchInput').val())
-        ) {
-            return;
-        }
+        // if (
+        //     !$(`[data-id=${obj.type}]`).hasClass('active_menu') ||
+        //     (obj.type === "menu_chats" && $('.searchInput').val())
+        // ) {
+        //     return;
+        // }
         const chat_box = $('.chats ul');
         const user = chat_box.find('#' + obj.id);
         if (user.length) {
@@ -314,13 +368,14 @@ window.onload = function () {
     $(document).on('click', '[data-name=join_channel]', function () {
         $(this).attr('disabled', 'disabled');
         let active_dialog = $('.active_dialog');
+        let input = $('[data-name=group_search]');
+        input.val('');
         ipcRenderer.send('join_channel', {
             id: active_dialog.attr('id'),
             domain: active_dialog.attr('data-domain'),
             contract_address: active_dialog.attr('data-contract_address')
         });
-        $('#style-11').empty();
-        $(this).fadeOut();
+        ipcRenderer.send('load_chats', 'menu_chats');
     });
 
     function click_anim(e){
@@ -354,11 +409,14 @@ window.onload = function () {
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
         let chat = $this.attr('id');
 
-        if(!($this.hasClass("active_dialog") && $this.hasClass("have_history"))) {
+        $this.find("[data-name=unread_messages]").hide();
+        $this.find("[data-name=unread_messages]").text("0");
 
+        if(!($this.hasClass("active_dialog") && $this.hasClass("have_history"))) {
             ipcRenderer.send('get_chat_msgs', chat);
             $this.addClass('have_history');
         }
+
     });
 
     $(document).on('click', '.walletMenu li', function (e) {
@@ -417,14 +475,9 @@ window.onload = function () {
             obj[elem.name] = elem.value;
         });
 
-        switch (obj.substype) {
-            case 'free':
-                ipcRenderer.send('create_group', obj.name);
-                $('#AppModal').modal('toggle');
-                break;
-            case 'unfree':
-                break;
-        }
+        ipcRenderer.send('create_group', obj);
+        console.log(obj);
+        $('#AppModal').modal('toggle');
     });
 
     $(document).on('click', '[data-event=show_chat_info]', function () {
@@ -547,7 +600,7 @@ window.onload = function () {
         ipcRenderer.send('download_file', $(this).attr('data-id'));
     });
 
-    ipcRenderer.on("file_dowloaded", (event, obj) => {
+    ipcRenderer.on("file_downloaded", (event, obj) => {
         let file=$(`[data-id=${obj.id}]`);
         if (file.hasClass('load'))
             file.removeClass('load').addClass('complite');
@@ -560,6 +613,7 @@ window.onload = function () {
     });
 
     ipcRenderer.on("get_contacts", (event, obj) => {
+        // console.log('1234567')
         $('#browsers').html(obj);
 
     });
@@ -577,6 +631,8 @@ window.onload = function () {
     let unlock = false;
 
     $(document).mousemove(function(e) {
+        if (!$('[data-id="menu_chats"]').hasClass('active_menu'))
+            return;
         p = $(".dialogs");
         let d = $(".messaging_block");
         let change = curr_width + (e.clientX - curr_width);
@@ -597,7 +653,7 @@ window.onload = function () {
     });
 
     $(document).on('click',"[data-id=add_new_user]",function(e) {
-        let input = $('[data-name=group_search]');
+        let input = $('[data-name=user_search]');
         let data={id:input.val(),domain:'localhost'};
         input.val('');
         ipcRenderer.send("send_subscribe", data);
@@ -607,10 +663,7 @@ window.onload = function () {
         unlock = false;
     });
 
-    $(document).on('keyup',".send_message__input",function(e) {
-        console.log('hello!')
-        ResizeTextArea(this,1)
-    });
+
 
     function countLines(strtocount, cols) {
         var hard_lines = 1;
@@ -618,8 +671,10 @@ window.onload = function () {
         while ( true ) {
             last = strtocount.indexOf("\n", last+1);
             hard_lines ++;
-            /* if ( hard_lines == 35) break; */
+            // if ( hard_lines == 10) break;
             if ( last == -1 ) break;
+            // console.log('hi')
+            // console.log(hard_lines)
         }
         var soft_lines = Math.ceil(strtocount.length / (cols-1));
         var hard = eval("hard_lines " + unescape("%3e") + "soft_lines;");
@@ -629,7 +684,7 @@ window.onload = function () {
 
 // функция вызывается при каждом нажатии клавиши в области ввода текста
     function ResizeTextArea(the_form,min_rows) {
-        the_form.rows = Math.max(min_rows,countLines(the_form.value,the_form.cols) );
+        the_form.rows = Math.max(min_rows, countLines(the_form.value,the_form.cols) );
     }
 
     $(document).on('click', '[data-toggle="switcher"]', function(e) {
@@ -643,6 +698,7 @@ window.onload = function () {
     });
 
     $('[data-toggle="collapse"]').collapse('toggle');
+
 
 
 };

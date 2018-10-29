@@ -37,6 +37,7 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
         this.role = '';
         this.type = '';
         this.contract_address = '';
+        this.unread_messages = 0;
         this.active = false;
         this.online = false;
         this.time = null;
@@ -59,7 +60,7 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
             return (yield typeorm_1.getConnection()
                 .createQueryRunner()
                 .query(`select * from 
-                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type
+                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type, unread_messages
                    from chat_model ch
                        inner join (
                                select name, avatar, id user_id, online, domain
@@ -150,7 +151,7 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
             return (yield typeorm_1.getConnection()
                 .createQueryRunner()
                 .query(`select * from 
-                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type
+                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type, unread_messages
                    from chat_model ch
                        inner join (
                                select name, avatar, id user_id, online, domain
@@ -160,7 +161,7 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
                        on instr(ch.id,user_id) > 0
                        where ch.type == "${var_helper_1.chat_types.user}"
                    UNION
-                   select id,domain,name,avatar, 0 as online, type
+                   select id,domain,name,avatar, 0 as online, type, unread_messages
                        from chat_model ch1
                        where ch1.type != "${var_helper_1.chat_types.user}") ch2
                    left join (
@@ -206,6 +207,10 @@ __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
 ], ChatModel.prototype, "contract_address", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Number)
+], ChatModel.prototype, "unread_messages", void 0);
 __decorate([
     typeorm_1.OneToMany(type => MessageModel_1.MessageModel, messages => messages.chat),
     __metadata("design:type", Array)

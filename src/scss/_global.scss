@@ -67,6 +67,8 @@ img{
     font-family: $ff-1;
     color: $primary-text;
     text-decoration: none;
+    padding-left: 0;
+    padding-right: 0;
 
     &:hover,
     &:focus,
@@ -228,5 +230,47 @@ img{
             box-shadow: none;
             transition: .15s ease-in-out;
         }
+    }
+}
+
+//.btn{
+//
+//    &-primary{
+//        @include btn-shadow($primary);
+//        background-color: $primary;
+//        color: $cf;
+//    }
+//    &-secondary {
+//        @include btn-shadow($secondary);
+//        background-color: $secondary;
+//        color: $primary-text;
+//    }
+//}
+
+
+
+//
+// Alternate buttons
+//
+
+@each $color, $value in $brand-colors {
+    .btn-#{$color} {
+        @include button-variant($value, $value);
+    }
+}
+
+@each $color, $value in $brand-colors {
+    .btn-outline-#{$color} {
+        @include button-outline-variant($value);
+    }
+}
+
+.btn{
+    @include fz(14);
+    border-radius: .85em;
+    padding: .525rem 1.5rem;
+
+    &-primary{
+        color: $cf;
     }
 }

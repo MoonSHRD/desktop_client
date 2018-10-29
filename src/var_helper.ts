@@ -66,6 +66,7 @@ export const events = {
     received_vcard: "received_vcard",
     get_my_vcard: "get_my_vcard",
     reload_chat: "reload_chat",
+    reading_messages: "reading_messages",
 };
 
 export const helper = {

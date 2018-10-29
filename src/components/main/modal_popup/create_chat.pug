@@ -24,7 +24,7 @@
                 span Private channel
 .modal-body
     .form-group
-        button.btn.btn-link.collapsed(data-toggle="collapse" data-target="#crowdsale" aria-expanded="false" aria-controls="crowdsale")
+        button.btn.btn-link.collapsed(type="button" data-toggle="collapse" data-target="#crowdsale" aria-expanded="false" aria-controls="crowdsale")
             span Token & crowdsale
             include ../../../img/modal_popup/angle.svg
         .collapse#crowdsale
@@ -42,5 +42,5 @@
     .form-group#popup_error(style="color:red; display:none;")
 .modal-footer
     .text-center
-        button(class="btn btn-primary") Создать
+        button(type="submit" class="btn btn-primary") Создать
         button.btn.btn-secondary(type="button" data-dismiss="modal") Close

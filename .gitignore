@@ -19,6 +19,7 @@ yarn-error.log
 
 account.json
 sqlite/data.db
+yarn-error.log
 
 not_for_git/
 .git-old/

@@ -138,9 +138,9 @@ class Router {
             console.log('finding groups');
             yield this.controller_register.queue_controller('ChatsController', 'find_groups', group_name);
         }));
-        this.listen_event(this.ipcMain, 'create_group', (event, group_name) => __awaiter(this, void 0, void 0, function* () {
+        this.listen_event(this.ipcMain, 'create_group', (event, group_data) => __awaiter(this, void 0, void 0, function* () {
             console.log('creating group');
-            yield this.controller_register.queue_controller('ChatsController', 'create_group', group_name);
+            yield this.controller_register.queue_controller('ChatsController', 'create_group', group_data);
         }));
         this.listen_event(this.ipcMain, 'join_channel', (event, chat) => __awaiter(this, void 0, void 0, function* () {
             console.log('join group');
@@ -167,12 +167,12 @@ class Router {
         this.listen_event(this.dxmpp, 'groupchat', (room_data, message, sender, stamp, files) => __awaiter(this, void 0, void 0, function* () {
             console.log(`${sender.address} says ${message} in ${room_data.id} chat on ${stamp}`);
             // console.log("Files:", files);
-            yield this.controller_register.queue_controller('MessagesController', 'received_group_message', room_data, message, sender, files, stamp);
+            yield this.controller_register.queue_controller('MessagesController', 'received_group_message', { room_data, message, sender, files, stamp });
         }));
-        this.listen_event(this.dxmpp, 'chat', (user, message, file) => __awaiter(this, void 0, void 0, function* () {
-            console.log(`user ${user.id} subscribed`);
+        this.listen_event(this.dxmpp, 'chat', (user, message, stamp, file) => __awaiter(this, void 0, void 0, function* () {
+            console.log(`user ${user.id} send you message`);
             console.log(file);
-            yield this.controller_register.queue_controller('MessagesController', 'received_message', user, message, file);
+            yield this.controller_register.queue_controller('MessagesController', 'received_message', user, message, stamp, file);
         }));
         this.listen_event(this.dxmpp, 'confirmation', (message) => __awaiter(this, void 0, void 0, function* () {
             console.log(`message ${message.userid} delivered`);
@@ -186,6 +186,10 @@ class Router {
         }));
         this.listen_event(this.ipcMain, 'download_file', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('MessagesController', 'download_file', arg);
+        }));
+        this.listen_event(this.ipcMain, "reading_messages", (event, chat_id) => __awaiter(this, void 0, void 0, function* () {
+            console.log("Reading msg from", chat_id);
+            yield this.controller_register.run_controller("MessagesController", "reading_messages", chat_id);
         }));
         /** Wallet events **/
         this.listen_event(this.ipcMain, 'change_wallet_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {
