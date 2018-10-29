@@ -61,6 +61,41 @@ img{
     }
 }
 
+[data-toggle="collapse"] {
+    @include fz(18);
+    font-weight: 500;
+    font-family: $ff-1;
+    color: $primary-text;
+    text-decoration: none;
+
+    &:hover,
+    &:focus,
+    &:active{
+        color: $primary-text;
+        text-decoration: none;
+    }
+    svg {
+        margin-left: 1.5rem;
+        transform: rotate(90deg);
+        transition: .2s ease;
+        path {
+            stroke: $brand-blue
+        }
+    }
+    &.collapsed {
+        svg{
+            transform: rotate(0deg);
+        }
+    }
+}
+
+.card{
+    background-color: $cf;
+    border: none;
+    box-shadow: 2px 2px 20px rgba($brand-blue,.1);
+    border-radius: 10px;
+}
+
 .control-switcher{
     display: flex;
     align-items: center;

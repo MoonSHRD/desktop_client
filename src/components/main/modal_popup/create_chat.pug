@@ -23,9 +23,10 @@
                     include ../../../img/modal_popup/private.svg
                 span Private channel
 .modal-body
-    .form-group.d-none
-        button.btn.btn-link(data-toggle="collapse" data-target="#crowdsale" aria-expanded="false" aria-controls="crowdsale")
-            | Token & crowdsale
+    .form-group
+        button.btn.btn-link.collapsed(data-toggle="collapse" data-target="#crowdsale" aria-expanded="false" aria-controls="crowdsale")
+            span Token & crowdsale
+            include ../../../img/modal_popup/angle.svg
         .collapse#crowdsale
             .card.card-body
                 | Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
