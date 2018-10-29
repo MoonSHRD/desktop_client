@@ -1,0 +1,45 @@
+style
+    include myTokens.css
+div.myTokens
+    div.myTokensHeader
+        span 1 names of token
+        input.searchTokens.float-right(placeholder='search servce')
+
+    table.table.table_01.table_01_sub
+        thead
+            tr
+                th(scope='col')
+                th.th_ser_c(scope='col') Channel
+                th.th_ser_k(scope='col') Kind of Service
+                th.th_ser_sp(scope='col') Spent
+                th.th_ser_st(scope='col') Status
+                th.th_ser_m(scope='col') More
+                th(scope='col')
+        tbody
+            tr.table_02.table_02_sub.t02
+                td
+                    img(src='components/main/wallet/img/ava1.png', width='40', height='40')
+                td #{name} Alexandr Gordon
+                td.td_history_time #{category} Monthly subscription
+                td.td_history_time #{tokens} 0,0000001 ETH
+                td.green_font #{status} Paid for
+                td.blue_font #{info} Show info
+                td X
+            tr.table_02.table_02_sub.t02
+                td
+                    img(src='components/main/wallet/img/ava1.png', width='40', height='40')
+                td #{name} Crafting beer lovers chat
+                td.td_history_time #{category} Token purchase
+                td.td_history_time #{tokens} 0.000000025 ETH
+                td.green_font #{status} Paid for a month
+                td.blue_font #{info} Show info
+                td X
+            tr.table_02.table_02_sub.t02
+                td
+                    img(src='components/main/wallet/img/ava1.png', width='40', height='40')
+                td #{name} The Morning News
+                td.td_history_time #{category} Publication payment
+                td.td_history_time #{tokens} 2 Mrn
+                td.orange_font #{status} Awaiting Confirmation
+                td.blue_font #{info} Show info
+                td X

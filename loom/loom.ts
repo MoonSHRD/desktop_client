@@ -1,4 +1,4 @@
-import {config} from "../src/env_config";
+import {config, loom_config} from "../src/env_config";
 import {LocalAddress, CryptoUtils} from 'loom-js';
 
 const LoomTruffleProvider = require('loom-truffle-provider');
@@ -35,13 +35,13 @@ export class Loom {
         this.addr = LocalAddress.fromPublicKey(this.pub).toString();
         const loomTruffleProvider = new LoomTruffleProvider(
             "default",
-            `http://${config.loom_host}:${config.loom_port}/rpc`,
-            `http://${config.loom_host}:${config.loom_port}/query`,
+            `http://${loom_config.host}:${loom_config.port}/rpc`,
+            `http://${loom_config.host}:${loom_config.port}/query`,
             this.priv,
         );
         this.provider = loomTruffleProvider.getProviderEngine();
         this.web3 = new Web3(this.provider);
-        this.NetRegContract = new this.web3.eth.Contract(network_abi, config.net_reg_addr, {from: this.addr});
+        this.NetRegContract = new this.web3.eth.Contract(network_abi, loom_config.net_reg_addr, {from: this.addr});
         this.token_addr = await this.get_token_addr();
         this.MoonshardTokenContract = new this.web3.eth.Contract(token_abi, this.token_addr, {from: this.addr});
         this.token_decimals = await await this.MoonshardTokenContract.methods.decimals().call();

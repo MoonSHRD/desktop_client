@@ -1,9 +1,14 @@
 const sqlite3 = require('sqlite3');
 const fs = require('fs');
 let dir = './sqlite';
+let files = './downloads';
 
 if (!fs.existsSync(dir)){
     fs.mkdirSync(dir);
+}
+
+if (!fs.existsSync(files)){
+    fs.mkdirSync(files);
 }
 let db = new sqlite3.Database('./sqlite/data.db');
 let qbox = require('qbox');
@@ -62,6 +67,12 @@ class Sqlite {
                 chat_id:[],
                 text:[],
                 type:[],
+            },
+            files: {
+                id:["integer","primary key","autoincrement"],
+                username:[],
+                chat_id:[],
+                link:[],
             }
         };
 
@@ -72,7 +83,8 @@ class Sqlite {
             // buddy_msgs : "buddy_msgs",
             chat : "chat",
             chat_users : "chat_users",
-            notifications: "notifications"
+            notifications: "notifications",
+            files: "files"
         };
 
         let i = 0;

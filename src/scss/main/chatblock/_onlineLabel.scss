@@ -1,0 +1,16 @@
+.label {
+    @include size(20px);
+    @include position(absolute, null 20px null null);
+    background-color: $brand-blue;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+        @include fz(13);
+        margin: 0;
+        padding: 0;
+        color: $c0;
+    }
+}

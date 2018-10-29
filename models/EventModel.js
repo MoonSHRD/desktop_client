@@ -12,6 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const ChatModel_1 = require("./ChatModel");
 let EventModel = class EventModel extends typeorm_1.BaseEntity {
+    constructor() {
+        super(...arguments);
+        this.date = "";
+    }
 };
 __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
@@ -29,6 +33,10 @@ __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
 ], EventModel.prototype, "type", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], EventModel.prototype, "date", void 0);
 __decorate([
     typeorm_1.ManyToOne(type => ChatModel_1.ChatModel, chat => chat.events),
     typeorm_1.JoinColumn(),

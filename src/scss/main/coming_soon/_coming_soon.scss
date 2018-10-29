@@ -1,0 +1,225 @@
+.com_son{
+    //font-family:'Oswald', Arial;
+    @include size(100%);
+    color:$cf;
+    background:url('#{$img}/coming_soon/bg_coming_soon.jpg') 0 50% no-repeat $c0;
+    z-index: 1;
+}
+
+.overlay{
+    background: rgba(11, 21, 41, 0.85);
+    @include position(absolute, 0 0 0 0);
+    @include size(100%);
+    z-index:1;
+    overflow:hidden;
+}
+
+@media (min-width: 1200px){
+    .container {
+        width:1170px;
+    }
+}
+
+#cs_wrap{
+    width:100%;
+    /*height:100%;*/
+    display:table;
+    position:relative;
+    z-index:10000;
+}
+
+#defaultCountdown{
+    z-index:2;
+    margin:0 auto;
+    display:table;
+    position:relative;
+}
+
+.countdown-row {
+    margin:0 auto;
+    width:100%;
+    display:table;
+    text-align:center;
+}
+
+.countdown-section {
+    display: block;
+    float: left;
+    text-align: center;
+    @include size(120px);
+    border-radius:50%;
+    -webkit-border-radius:50%;
+    -moz-border-radius:50%;
+    border:solid 1px $cf;
+    margin:40px 20px;
+}
+
+.countdown-amount {
+    @include fz(60);
+    font-weight:700;
+    line-height:2;
+}
+.countdown-period {
+    @include fz(18);
+    line-height: 3.4;
+    display: block;
+    color:$brand-orange;
+    font-weight:100;
+}
+.image-align{
+    margin:0 auto;
+    text-align:center;
+    display:block;
+    padding-top: 100px;
+}
+.cs_title{
+    @include fz(56);
+    font-weight:300;
+    text-align:center;
+}
+
+/*.cs_title span{*/
+/*font-size:32px;*/
+/*}*/
+
+.yellow{
+    @include fz(56);
+    color: #17d0ff;
+}
+
+.cs_p{
+    @include fz(16);
+    line-height: 1.875;
+    text-align:center;
+    font-weight:100;
+}
+
+.cs_f{
+    margin:0 auto;
+    display:table;
+    margin-top:50px;
+}
+
+.select-field{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    border: 1px solid #C2C2C2;
+    box-shadow: 1px 1px 4px #EBEBEB;
+    -moz-box-shadow: 1px 1px 4px #EBEBEB;
+    -webkit-box-shadow: 1px 1px 4px #EBEBEB;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    padding: 7px;
+    outline: none;
+}
+
+input.input-field {
+    width: 250px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    border: 1px solid #C2C2C2;
+    box-shadow: 1px 1px 4px #EBEBEB;
+    -moz-box-shadow: 1px 1px 4px #EBEBEB;
+    -webkit-box-shadow: 1px 1px 4px #EBEBEB;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    padding: 7px;
+    outline: none;
+}
+
+input.select-field {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    border: 1px solid #C2C2C2;
+    box-shadow: 1px 1px 4px #EBEBEB;
+    -moz-box-shadow: 1px 1px 4px #EBEBEB;
+    -webkit-box-shadow: 1px 1px 4px #EBEBEB;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    padding: 7px;
+    outline: none;
+}
+/*------------------------------------------------*/
+/* Responsive styles */
+/*------------------------------------------------*/
+
+@media (min-width: 561px) and (max-width: 720px) {
+
+    .countdown-section {
+        margin:5px;
+    }
+
+}
+
+@media (max-width: 600px){
+
+    .countdown-section {
+        display: block;
+        float: left;
+        text-align: center;
+        width:75px;
+        height:75px;
+        margin:6px;
+    }
+
+    .countdown-amount {
+        font-size: 32px;
+        font-weight:700;
+        line-height:74px;
+    }
+
+}
+
+@media (max-width: 420px){
+
+    .countdown-section {
+        display: block;
+        float: left;
+        text-align: center;
+        width:56px;
+        height:56px;
+        margin:2px;
+    }
+
+    .countdown-amount {
+        font-size: 24px;
+        font-weight:700;
+        line-height:58px;
+    }
+
+    .image-align{
+        padding-top: 20px;
+        width:30%;
+    }
+
+    .yellow{
+        font-size:32px;
+    }
+
+
+    .cs_title{
+        font-size:32px;
+    }
+
+    .cs_title span{
+        font-size:18px;
+    }
+
+    input[type="text"]{
+        width:150px;
+        font-size:14px;
+        padding-left:5px;
+    }
+
+    input[type="submit"]{
+        left:-3px;
+        top:5px;
+    }
+
+}

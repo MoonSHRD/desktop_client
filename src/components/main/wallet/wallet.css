@@ -2,7 +2,10 @@
     width: 300px;
     min-width: 300px;
     padding: 20px;
-    background-color: #F3F3F3;
+    background-color: #FFFFFF;
+    border-right: 1px solid #d0d0d0;
+    margin-left: 70px;
+
 }
 
 .walletInfo {
@@ -11,7 +14,7 @@
 .walletMenu ul {
     list-style: none;
     margin: 0;
-    padding: 20px 10px;
+    padding: 20px 0;
 }
 
 .walletMenu  a {
@@ -31,9 +34,22 @@
 .walletMenu ul li p {
     margin: 0;
     padding: 0 10px;
+    position: relative;
+    z-index: 10;
 }
+.walletMenu ul li img {
+    position: relative;
+    z-index: 10;
+}
+
 .active_wallet  a{
     color: white !important;
+}
+
+.walletMenu a:hover {
+    border-radius: 8px;
+    background-color: #2BC2F9;
+    color: #ffffff;
 }
 
 .walletMenu a:hover {
@@ -49,9 +65,9 @@
     padding: 6px 30px;
 }
 
-.userBar img {
-    border: 1px solid  #2BC2F9 ;
-    border-radius: 100%;
+
+.walletMenu ul li {
+    margin-bottom: 2px;
 }
 
 .userBar span{
@@ -156,4 +172,43 @@
     100% {
         transform: rotate(360deg);
     }
+}
+
+.token-avatar {
+    width: 50px;
+}
+
+.table_01 th,.table_02 th,.table_02 td {
+    text-align: center;
+}
+
+.table_02 a {
+    text-decoration: underline;
+    color: #2BC2F9;
+}
+
+.walletInfo table {
+    width: 100%;
+}
+
+.walletInfo td,.walletInfo th {
+    width: 50%;
+}
+
+.walletInfo th {
+    font-weight: 600;
+}
+
+.td-token {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.td-name {
+    padding: 0;
+}
+
+.table_02 a {
+    text-decoration: underline!important;
+    color: #2BC2F9!important;
 }

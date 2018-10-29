@@ -1,4 +1,4 @@
-$('.searchInput').bind('input', function (e) {
+$('[data-name=group_search]').bind('input', function (e) {
     // let menu = 'menu_chats';
     let group = $(this).val();
     if (!group) {
@@ -13,3 +13,4 @@ $('.searchInput').bind('input', function (e) {
         $('.chats ul').empty();
     }
 });
+

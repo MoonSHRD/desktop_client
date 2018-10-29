@@ -24,6 +24,7 @@ const UserModel_1 = require("./UserModel");
 const var_helper_1 = require("../src/var_helper");
 const AccountModel_1 = require("./AccountModel");
 const EventModel_1 = require("./EventModel");
+const FileModel_1 = require("./FileModel");
 // helper
 let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
     // helper
@@ -36,8 +37,12 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
         this.role = '';
         this.type = '';
         this.contract_address = '';
+        this.unread_messages = 0;
         this.active = false;
         this.online = false;
+        this.time = null;
+        this.text = null;
+        this.senderId = null;
     }
     static get_user_chat_id(self_id, user_id) {
         let sort = [self_id, user_id];
@@ -49,6 +54,32 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
             return yield ChatModel_1.findOne(ChatModel_1.get_user_chat_id(self_id, user_id));
         });
     }
+    static get_user_chat_raw(self_id, user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let chat_id = ChatModel_1.get_user_chat_id(self_id, user_id);
+            return (yield typeorm_1.getConnection()
+                .createQueryRunner()
+                .query(`select * from 
+                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type, unread_messages
+                   from chat_model ch
+                       inner join (
+                               select name, avatar, id user_id, online, domain
+                               from user_model 
+                               where user_model.id == "${user_id}"
+                           ) usr 
+                       on instr(ch.id,user_id) > 0
+                       where ch.id == "${chat_id}") ch2
+                   left join (
+                           select time, text, chatId, senderId
+                           from message_model msg
+                           group by msg.chatId
+                           order by msg.time
+                       ) msg
+                       on msg.chatId = ch2.id) ch3
+                   order by ch3.time`))[0];
+        });
+    }
+    ;
     static get_chat_with_events(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
             return (yield ChatModel_1.find({ relations: ['events'], where: { id: chat_id } }))[0];
@@ -115,6 +146,34 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
             return data.id;
         });
     }
+    static get_chats_with_last_msgs(self_info) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return (yield typeorm_1.getConnection()
+                .createQueryRunner()
+                .query(`select * from 
+                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type, unread_messages
+                   from chat_model ch
+                       inner join (
+                               select name, avatar, id user_id, online, domain
+                               from user_model 
+                               where user_model.id != "${self_info.id}"
+                           ) usr 
+                       on instr(ch.id,user_id) > 0
+                       where ch.type == "${var_helper_1.chat_types.user}"
+                   UNION
+                   select id,domain,name,avatar, 0 as online, type, unread_messages
+                       from chat_model ch1
+                       where ch1.type != "${var_helper_1.chat_types.user}") ch2
+                   left join (
+                           select time, text, chatId, senderId
+                           from message_model msg
+                           group by msg.chatId
+                           order by msg.time
+                       ) msg
+                       on msg.chatId = ch2.id) ch3
+                   order by ch3.time`));
+        });
+    }
 };
 __decorate([
     typeorm_1.PrimaryColumn(),
@@ -149,6 +208,10 @@ __decorate([
     __metadata("design:type", String)
 ], ChatModel.prototype, "contract_address", void 0);
 __decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Number)
+], ChatModel.prototype, "unread_messages", void 0);
+__decorate([
     typeorm_1.OneToMany(type => MessageModel_1.MessageModel, messages => messages.chat),
     __metadata("design:type", Array)
 ], ChatModel.prototype, "messages", void 0);
@@ -161,6 +224,10 @@ __decorate([
     typeorm_1.JoinTable(),
     __metadata("design:type", Array)
 ], ChatModel.prototype, "users", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => FileModel_1.FileModel, files => files.chat),
+    __metadata("design:type", Array)
+], ChatModel.prototype, "files", void 0);
 ChatModel = ChatModel_1 = __decorate([
     typeorm_1.Entity()
 ], ChatModel);

@@ -1,45 +1,45 @@
-.modal-header
-    h5.modal-title Создать группу
-    button.close(type='button', data-dismiss='modal', aria-label='Close')
-        span(aria-hidden='true') ×
+.modal-header.modal-header_img
+    .modal-header__img
+        include ../../../img/modal_popup/icon.svg
+    .modal-header__name
+        input.form-control(name="name" type="text" placeholder="Название группы")
+    .modal-header__category.text-center
+        .custom-control-vertical.custom-control-inline.custom-radio.d-none
+            input.custom-control-input#group(type="radio" name="open-private")
+            label.custom-control-label.custom-control-label_icon(for="group")
+                div.icon
+                    include ../../../img/modal_popup/group.svg
+                span Group Chat
+        .custom-control-vertical.custom-control-inline.custom-radio
+            input.custom-control-input#free(type="radio" name="open-private" checked)
+            label.custom-control-label.custom-control-label_icon(for="free")
+                div.icon
+                    include ../../../img/modal_popup/free.svg
+                span Free channel
+        .custom-control-vertical.custom-control-inline.custom-radio
+            input.custom-control-input#private(type="radio" name="open-private")
+            label.custom-control-label.custom-control-label_icon(for="private")
+                div.icon
+                    include ../../../img/modal_popup/private.svg
+                span Private channel
 .modal-body
-    .container
-        .row
-            .col-sm-3
-                label Название группы
-            .col-sm
-                input(class="input-field" name="name" type="text" placeholder="Введите название группы")
-        br
-        .row
-            .col-sm-3
-                label Описание группы
-            .col-sm
-                input(class="input-field" name="description" type="text" placeholder="Введите краткое описание группы" width='60', align='20')
-        br
-        .row
-            .col-sm-3
-                label Тип группы
-            .col-sm
-                select(class ="select-field" name="grouptype")
-                    //option(disabled="true") Выберите тип группы
-                    //option(value="chat") чат
-                    option(value="channel") канал
-        br
-        .row
-            .col-sm-3
-                label Описание группы
-            .col-sm
-                select(class="select-field" name="substype")
-                    //option(disabled="true") Выберите тип подписки
-                    option(value="free") бесплатный
-                    option(value="unfree") платный
-        br
-        .row#token_row(style="display:none")
-            .col-sm-3
-                label Токен
-            .col-sm
-                input(class ="input-field" type="text" placeholder="Введите имя токена")
-        br
-        .row#popup_error(style="color:red; display:none;")
+    .form-group.d-none
+        button.btn.btn-link(data-toggle="collapse" data-target="#crowdsale" aria-expanded="false" aria-controls="crowdsale")
+            | Token & crowdsale
+        .collapse#crowdsale
+            .card.card-body
+                | Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+    .form-group#token_row(style="display:none")
+        label(for="price") Set subscription price
+        .row.align-items-center
+            .col-5
+                input#price.form-control(type="text")
+            .col-4
+                strong MnShrd
+            .col
+                span *1$=1MnShrd
+    .form-group#popup_error(style="color:red; display:none;")
 .modal-footer
-    button(class="btn btn-primary") Создать
+    .text-center
+        button(class="btn btn-primary") Создать
+        button.btn.btn-secondary(type="button" data-dismiss="modal") Close

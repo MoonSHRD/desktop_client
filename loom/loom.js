@@ -30,10 +30,10 @@ class Loom {
             this.priv = Loom.from_b64(private_key);
             this.pub = loom_js_1.CryptoUtils.publicKeyFromPrivateKey(this.priv);
             this.addr = loom_js_1.LocalAddress.fromPublicKey(this.pub).toString();
-            const loomTruffleProvider = new LoomTruffleProvider("default", `http://${env_config_1.config.loom_host}:${env_config_1.config.loom_port}/rpc`, `http://${env_config_1.config.loom_host}:${env_config_1.config.loom_port}/query`, this.priv);
+            const loomTruffleProvider = new LoomTruffleProvider("default", `http://${env_config_1.loom_config.host}:${env_config_1.loom_config.port}/rpc`, `http://${env_config_1.loom_config.host}:${env_config_1.loom_config.port}/query`, this.priv);
             this.provider = loomTruffleProvider.getProviderEngine();
             this.web3 = new Web3(this.provider);
-            this.NetRegContract = new this.web3.eth.Contract(network_abi, env_config_1.config.net_reg_addr, { from: this.addr });
+            this.NetRegContract = new this.web3.eth.Contract(network_abi, env_config_1.loom_config.net_reg_addr, { from: this.addr });
             this.token_addr = yield this.get_token_addr();
             this.MoonshardTokenContract = new this.web3.eth.Contract(token_abi, this.token_addr, { from: this.addr });
             this.token_decimals = yield yield this.MoonshardTokenContract.methods.decimals().call();

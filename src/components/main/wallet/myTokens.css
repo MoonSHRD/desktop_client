@@ -3,6 +3,9 @@
     flex: 1;
     background-color: #F3F3F3;
     padding: 20px 20px;
+    overflow: hidden;
+    background-size: auto 110%;
+    background-image: linear-gradient(180deg,hsla(0,0%,95.3%,.9) 0,hsla(0,0%,95.3%,.9)),url(img/messBlockBg.jpg);
 }
 
 .walletRight td, th, thead th {
@@ -129,4 +132,55 @@
 .dot4 {
     animation-name: reveal;
     animation-direction: reverse; /* thx @HugoGiraudel */
+}
+
+.td-token {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 140px;
+}
+
+.td_namb {
+    width: 60px;
+}
+
+.table_02_history {
+    line-height: 35px;
+}
+
+.td_history_time {
+    line-height: 20px;
+}
+
+.grey_font {
+    color: rgba(39, 43, 70, 0.5);
+}
+
+.blue_font {
+    color: #2BC2F9;
+}
+
+.green_font {
+    color: #1AFF7C;
+}
+
+.t02 {
+    box-shadow: 2px 2px 20px rgba(43, 194, 249, 0.1);
+    border-radius: 10px;
+}
+
+.th_sub_s,.th_sub_c,.th_ser_sp,.th_ser_st,.th_ser_k,.th_ser_c {
+    min-width: 120px;
+}
+
+.th_sub_n,.th_sub_t {
+    min-width: 100px;
+}
+
+.th_sub_d,.th_ser_m {
+    min-width: 65px;
+}
+
+.orange_font {
+    color: #F2994A;
 }

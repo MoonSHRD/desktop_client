@@ -2,25 +2,21 @@ style
     include wallet.css
 div.walletLeft
     div.userBar
-        a(href="#")
-            div
-                img.userBarAvatat(src=avatar, width='50' height='50')
-                span.userBarName(class="stateLabel") #{name}
-
+        include infopanel.pug
     div.walletInfo
-        .row
-            .col-md-6
-                | Total ETH
-                br
-                | ETH in tokens
-                br
-                | Free ETH
-            .col-md-6
-                b 10000
-                br
-                b 23
-                br
-                b 123
+        table
+            tbody
+                tr
+                    td Total ETH
+                    th 10000
+                tr
+                    td ETH in tokens
+                    th 23
+                tr
+                    td Free ETH
+                    th 123
+
+
     div.addToBalance.text-center
         .btn.badge-primary.balanceBtn Add to Balance
 
@@ -34,15 +30,15 @@ div.walletLeft
                 a(href='#')
                     img(src='components/main/wallet/img/second.png', width='40', height='40')
                     p Transfer
-            li
+            li(data-name="wallet_history")
                 a(href='#')
                     img(src='components/main/wallet/img/third.png', width='40', height='40')
                     p Transaction history
-            li
+            li(data-name="wallet_subscriptions")
                 a(href='#')
                     img(src='components/main/wallet/img/fourth.png', width='40', height='40')
                     p My subscriptions
-            li
+            li(data-name="wallet_services")
                 a(href='#')
                     img(src='components/main/wallet/img/fifth.png', width='40', height='40')
                     p Services

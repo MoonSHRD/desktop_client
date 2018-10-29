@@ -1,9 +1,10 @@
-import {Entity, In, PrimaryColumn, Column, BaseEntity, OneToMany, ManyToMany, JoinTable} from "typeorm";
+import {Entity, In, PrimaryColumn, Column, BaseEntity, OneToMany, ManyToMany, JoinTable, getConnection} from "typeorm";
 import {MessageModel} from "./MessageModel";
 import {UserModel} from "./UserModel";
-import {helper} from "../src/var_helper";
+import {chat_types, helper} from "../src/var_helper";
 import {AccountModel} from "./AccountModel";
 import {EventModel} from "./EventModel";
+import {FileModel} from "./FileModel";
 
 // helper
 
@@ -26,6 +27,8 @@ export class ChatModel extends BaseEntity {
     type: string = '';
     @Column()
     contract_address: string = '';
+    @Column()
+    unread_messages: number = 0;
 
     @OneToMany(type => MessageModel, messages => messages.chat)
     messages: MessageModel[];
@@ -37,8 +40,15 @@ export class ChatModel extends BaseEntity {
     @JoinTable()
     users: UserModel[];
 
+    @OneToMany(type => FileModel, files => files.chat)
+    files: FileModel[];
+
     active:boolean=false;
     online:boolean=false;
+
+    time:Date=null;
+    text:string=null;
+    senderId:string=null;
 
     static get_user_chat_id(self_id:string,user_id:string){
         let sort=[self_id,user_id];
@@ -49,6 +59,32 @@ export class ChatModel extends BaseEntity {
     static async get_user_chat(self_id:string,user_id:string){
         return await ChatModel.findOne(ChatModel.get_user_chat_id(self_id,user_id));
     }
+
+    static async get_user_chat_raw(self_id:string,user_id:string){
+        let chat_id=ChatModel.get_user_chat_id(self_id,user_id);
+        return (await getConnection()
+            .createQueryRunner()
+            .query(
+                `select * from 
+                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type, unread_messages
+                   from chat_model ch
+                       inner join (
+                               select name, avatar, id user_id, online, domain
+                               from user_model 
+                               where user_model.id == "${user_id}"
+                           ) usr 
+                       on instr(ch.id,user_id) > 0
+                       where ch.id == "${chat_id}") ch2
+                   left join (
+                           select time, text, chatId, senderId
+                           from message_model msg
+                           group by msg.chatId
+                           order by msg.time
+                       ) msg
+                       on msg.chatId = ch2.id) ch3
+                   order by ch3.time`
+            ))[0];
+    };
 
     static async get_chat_with_events(chat_id:string){
         return (await ChatModel.find({relations:['events'], where:{id:chat_id}}))[0];
@@ -104,5 +140,34 @@ export class ChatModel extends BaseEntity {
         this.online=data.online;
         this.domain=data.domain;
         return data.id
+    }
+
+    static async get_chats_with_last_msgs(self_info){
+        return (await getConnection()
+            .createQueryRunner()
+            .query(
+                 `select * from 
+                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type, unread_messages
+                   from chat_model ch
+                       inner join (
+                               select name, avatar, id user_id, online, domain
+                               from user_model 
+                               where user_model.id != "${self_info.id}"
+                           ) usr 
+                       on instr(ch.id,user_id) > 0
+                       where ch.type == "${chat_types.user}"
+                   UNION
+                   select id,domain,name,avatar, 0 as online, type, unread_messages
+                       from chat_model ch1
+                       where ch1.type != "${chat_types.user}") ch2
+                   left join (
+                           select time, text, chatId, senderId
+                           from message_model msg
+                           group by msg.chatId
+                           order by msg.time
+                       ) msg
+                       on msg.chatId = ch2.id) ch3
+                   order by ch3.time`
+            ));
     }
 }

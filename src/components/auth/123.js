@@ -4,6 +4,54 @@ let current_fs, next_fs, previous_fs; //fieldsets
 let left, opacity, scale; //fieldset properties which we will animate
 let animating; //flag to prevent quick multi-click glitches
 let data = {}; //flag to prevent quick multi-click glitches
+let mnemonic_text = '';
+let array_mnemonic_text = [];
+
+
+// $(document).on('keydown', '#generate_mnemonic', function () {
+//
+//     if (event.keyCode === 13) {
+//         if (check_fields($(this).closest('fieldset'))) return;
+//
+//         if(animating) return false;
+//         animating = true;
+//
+//         current_fs = $(this).parent();
+//         next_fs = $(this).parent().next();
+//
+//         //activate next step on progressbar using the index of next_fs
+//         $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+//
+//         //show the next fieldset
+//         next_fs.show();
+//         //hide the current fieldset with style
+//         current_fs.animate({opacity: 0}, {
+//             step: function(now, mx) {
+//                 //as the opacity of current_fs reduces to 0 - stored in "now"
+//                 //1. scale current_fs down to 80%
+//                 scale = 1 - (1 - now) * 0.2;
+//                 //2. bring next_fs from the right(50%)
+//                 left = (now * 50)+"%";
+//                 //3. increase opacity of next_fs to 1 as it moves in
+//                 opacity = 1 - now;
+//                 current_fs.css({
+//                     'transform': 'scale('+scale+')',
+//                     'position': 'absolute'
+//                 });
+//                 next_fs.css({'left': left, 'opacity': opacity});
+//             },
+//             duration: 800,
+//             complete: function(){
+//                 current_fs.hide();
+//                 animating = false;
+//             },
+//             //this comes from the custom easing plugin
+//             easing: 'easeInOutBack'
+//         });
+//
+//     }
+//
+// });
 
 $(".next").click(function(){
     if (check_fields($(this).closest('fieldset'))) return;
@@ -89,53 +137,26 @@ $(document).on('submit', '#profile_form', function (e) {
     obj.forEach(function (elem) {
         prof[elem.name] = elem.value;
     });
-    prof.avatar = $("#avatar_preview").attr("src");
+    prof.avatar = null;
+    if ($('[name=avatar]').prop('files').length)
+        prof.avatar = $("#avatar_preview").attr("src");
     console.log("Msg1", prof);
     ipcRenderer.send('submit_profile', prof);
 });
 
-$(document).on('change', '[name=avatar]', function () {
-    const file = this.files[0];
-    let fileType = file.type;
-    if (file) {
-        let reader = new FileReader();
-        reader.onloadend = function () {
-            var image = new Image();
-            image.src = reader.result;
-            image.onload = function() {
-                var maxWidth = 100,
-                    maxHeight = 100,
-                    imageWidth = image.width,
-                    imageHeight = image.height;
-
-                if (imageWidth > imageHeight) {
-                    if (imageWidth > maxWidth) {
-                        imageHeight *= maxWidth / imageWidth;
-                        imageWidth = maxWidth;
-                    }
-                }
-                else {
-                    if (imageHeight > maxHeight) {
-                        imageWidth *= maxHeight / imageHeight;
-                        imageHeight = maxHeight;
-                    }
-                }
-                var canvas = document.createElement('canvas');
-                canvas.width = imageWidth;
-                canvas.height = imageHeight;
-
-                var ctx = canvas.getContext("2d");
-                ctx.drawImage(this, 0, 0, imageWidth, imageHeight);
-                // The resized file ready for upload
-                var finalFile = canvas.toDataURL(fileType);
-                $('#avatar_preview').attr('src', finalFile);
-                // console.log($("#avatar_preview").);
-                $('#avatar_preview').show();
-            }
-        };
-        reader.readAsDataURL(file);
-    }
-});
+// $(document).on('change', '[name=avatar]', function () {
+//     const file = this.files[0];
+//     let fileType = file.type;
+//     if (file) {
+//         let reader = new FileReader();
+//         reader.onloadend = function () {
+//             // var image = new Image();
+//             // image.src = reader.result;
+//             $('#avatar_preview').attr('src', reader.result);
+//         };
+//         reader.readAsDataURL(file);
+//     }
+// });
 
 
 
@@ -164,16 +185,22 @@ function check_fields(fieldset) {
     // console.log($(fieldset).serializeArray());
     // let els = $(fieldset).find('[required=required]');
     let els = $this.serializeArray();
+    // console.log($this)
     // console.log(els);
     if (els.length===0) return err;
     // else if (els.length===1) els=[els];
 
 
     console.log(els);
+    // mnemonic_text = els[0].value;
+
+    console.log(array_mnemonic_text)
+    console.log(mnemonic_text)
     els.forEach(function (elem) {
-        console.log(window['validate_'+elem.name]);
+        // console.log(window['validate_'+elem.name]);
         if (window['validate_'+elem.name]!==undefined){
             const $element = $this.find(`[name=${elem.name}]`);
+            // console.log($element)
             if (!window['validate_'+elem.name](elem.value)){
                 $element.addClass('invalid');
                 err = true;
@@ -182,8 +209,8 @@ function check_fields(fieldset) {
             }
         }
         data[elem.name] = elem.value;
-    });
 
+    });
 
     // els.forEach(function (element) {
     //     const $element=$(element);
@@ -203,6 +230,16 @@ function check_fields(fieldset) {
 
 function validate_firstname(val) {
     return (val);
+}
+
+function validate_confirm_mnemonic(val) {
+    // return true;
+    if (val.trim() == mnemonic_text) {
+        console.log(val)
+        console.log(mnemonic_text)
+        return (val);
+    }
+
 }
 
 // function validate_mnemonic(mnem) {
@@ -226,16 +263,30 @@ $('textarea[name=mnemonic]').bind('input', function (e) {
     // console.log($(this).val());
     if (!validate_mnemonic($(this).val())) $(this).addClass('invalid');
     else $(this).removeClass('invalid');
+
 });
 
+$('textarea[name=confirm_mnemonic]').bind('input', function (e) {
+    console.log($(this).val());
+    if (!validate_confirm_mnemonic($(this).val()) === mnemonic_text + ' ') $(this).addClass('invalid');
+    else $(this).removeClass('invalid');
+
+});
+
+
 $(document).on('click', '#generate_mnemonic', function () {
+
     ipcRenderer.send('generate_mnemonic');
+    $( "#input_mnemonic_next" ).focus();
+
+
 });
 
 ipcRenderer.on('generate_mnemonic', (event, arg) => {
     const mnemonic = $('#input_mnemonic');
     mnemonic.val(arg);
     mnemonic.removeClass('invalid');
+
 });
 
 
@@ -304,20 +355,77 @@ function validate_mnemonic(mnem) {
 }
 
 
-$('input[name=firstname]').bind('input', function (e) {
-    console.log($(this).val());
-    if (!$(this).val()) $(this).addClass('invalid');
-    else $(this).removeClass('invalid');
-});
+// $('input[name=firstname]').bind('input', function (e) {
+//     console.log($(this).val());
+//     if (!$(this).val()) $(this).addClass('invalid');
+//     else $(this).removeClass('invalid');
+// });
 
-$('textarea[name=mnemonic]').bind('input', function (e) {
-    console.log($(this).val());
-    if (!validate_mnemonic($(this).val())) $(this).addClass('invalid');
-    else $(this).removeClass('invalid');
-});
+// $('textarea[name=mnemonic]').bind('input', function (e) {
+//     console.log($(this).val());
+//     if (!validate_mnemonic($(this).val())) $(this).addClass('invalid');
+//     else $(this).removeClass('invalid');
+// });
+
+// $('textarea[name=confirm_mnemonic]').bind('input', function (e) {
+//     console.log($(this).val());
+//     if (!validate_mnemonic($(this).val())) $(this).addClass('invalid');
+//     else $(this).removeClass('invalid');
+// });
+
 
 $(document).on('click', '#generate_mnemonic', function () {
     ipcRenderer.send('generate_mnemonic');
+
+});
+
+$(document).on('click', '#input_mnemonic_next', function () {
+
+    // if (!($('#input_mnemonic').hasClass('invalid')))
+        // console.log(mnemonic_text)
+    mnemonic_text  = $('#input_mnemonic').val()
+    array_mnemonic_text = mnemonic_text.split(' ')
+    console.log(array_mnemonic_text)
+
+    array_mnemonic_text.sort().map(function (item) {
+
+        $('.words').prepend(`<a style="display: inline-flex; padding: 5px 10px; margin: 2px;">${item}</a>`)
+
+    })
+});
+
+
+$(document).on('click', '.words a', function () {
+    let $this = $(this);
+    let text = $('#confirm_input_mnemonic').val();
+
+    if(!$this.hasClass('use')){
+
+        text += ($this.text() + ' ')
+        $('#confirm_input_mnemonic').val(text)
+    }else {
+
+    }
+    $this.addClass('use')
+    console.log(text)
+    console.log(mnemonic_text)
+    if(text == mnemonic_text + ' '){
+        $('#confirm_input_mnemonic').removeClass('invalid')
+    }
+});
+
+$(document).on('click', '.words .use', function () {
+    let $this = $(this);
+    let text = $('#confirm_input_mnemonic').val().replace($this.text() + ' ','');
+
+    $('#confirm_input_mnemonic').val(text)
+    $this.removeClass('use')
+    console.log(text)
+
+    if(!(text == mnemonic_text + ' ')){
+        $('#confirm_input_mnemonic').addClass('invalid')
+    }
+
 });
 
 ipcRenderer.on('generate_mnemonic', (event, arg) => {
@@ -325,3 +433,15 @@ ipcRenderer.on('generate_mnemonic', (event, arg) => {
     mnemonic.val(arg);
     mnemonic.removeClass('invalid');
 });
+
+$('#confirm_input_mnemonic').keydown(function(e){
+    // $('p').html($('p').html() + ' ' + (e.key));
+    e.preventDefault();
+});
+
+$('#confirm_input_mnemonic').on('focus', function() {
+
+        $(this).blur()
+
+});
+

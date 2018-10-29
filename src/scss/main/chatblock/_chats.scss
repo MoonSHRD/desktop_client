@@ -1,0 +1,225 @@
+.chats {
+    height: calc(100% - 200px);
+    background: $cf;
+    overflow-y: auto;
+    position: relative;
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0px;
+        cursor: pointer;
+
+        //li {
+        //    margin-bottom: 2px;
+        //}
+    }
+}
+
+
+
+.userchat {
+    @include fz(13);
+    height: 57px;
+    display: flex;
+    align-items: center;
+    padding: 5px 20px;
+    color: $c0;
+    text-decoration: none;
+    transition: all 0.1s ease;
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+
+    &__avatar{
+        margin-right: 10px;
+        flex-shrink: 0;
+        position: relative;
+    }
+
+    &__status{
+        @include size(10px);
+        @include position(absolute, null 0 0 null);
+        border-radius: 50%;
+        border: 2px solid $cf;
+
+        &.online {
+            background-color: $brand-blue;
+        }
+
+        &.offline {
+            background-color: $brand-red;
+        }
+    }
+
+    &__text{
+        overflow: hidden;
+        flex: 1;
+    }
+
+    &__header{
+        display: flex;
+        align-items: center;
+        margin: 0 0 .2em;
+    }
+
+    &__name{
+        font-family: $ff-1;
+        margin: 0 auto 0 0;
+        font-weight: 700;
+        @include fz(14);
+        @extend .text-truncate;
+    }
+
+    &__date{
+        @include fz(12);
+        flex-shrink: 0;
+        margin-left: 10px;
+    }
+
+    &__body{
+        display: flex;
+        align-items: center;
+
+        .badge{
+            margin-left: auto;
+            background-color: $brand-blue;
+            color: $primary-text;
+            @include transition(.2s ease);
+
+            //.active_dialog & {
+            //    background-color: $brand-gray-100;
+            //    color: $primary-text;
+            //}
+        }
+    }
+
+    &__lastmessage{
+        @include fz(12);
+        @extend .text-truncate;
+    }
+
+    &:hover {
+        border-radius: 0px;
+        background-color: rgba(43, 194, 249, 0.2);
+        color: $primary-text;
+        text-decoration: none;
+
+        //.userchat__body{
+        //
+        //    .badge {
+        //        background-color: $brand-gray-100;
+        //        color: $primary-text;
+        //    }
+        //}
+    }
+}
+
+.search {
+    height: 60px;
+    background-color: $cf;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+
+    input {
+        @include size(100%, 38px);
+        border-radius: 10px;
+        outline:none;
+        margin: 0 15px 0 20px;
+        padding: 0 40px 0 10px;
+        border: 1px solid rgba(0, 208, 255, 0.2);
+        box-shadow: 2px 2px 20px rgba(43, 194, 249, 0.1);
+        font-size: 14px;
+    }
+}
+
+.date {
+    @include position(absolute, null 50px null null);
+    position: absolute;
+    right: 50px;
+}
+
+
+/**  STYLE 11 */
+#style-11 {
+    &::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background: opacify($cf, 0.1);
+        border: 1px solid #ccc;
+    }
+    &::-webkit-scrollbar {
+        width: 2px;
+        background-color: $cf;
+    }
+
+    &:hover{
+        &::-webkit-scrollbar-thumb{
+            border-radius: 10px;
+            background: linear-gradient(left, #fff, #e4e4e4);
+            border: 1px solid #aaa;
+        }
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: linear-gradient(left, #fff, #e4e4e4);
+
+        &:active {
+            background: linear-gradient(left, #22ADD4, #1E98BA);
+        }
+    }
+}
+
+.label {
+    width: 20px;
+    height: 20px;
+    background-color: #2BC2F9;
+    border-radius: 10px;
+    right: 20px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+        margin: 0;
+        font-size: 13px;
+        padding: 0;
+        color: black;
+    }
+}
+
+.active_dialog {
+    background-color: $brand-blue;
+    border-radius: 0px;
+    a {
+        color: $cf;
+      &:hover {
+        color: #fff;
+      }
+    }
+
+}
+
+.settings {
+    display: flex;
+    justify-content: center;
+}
+
+.submit_searchInput{
+    @include fz(12);
+    @include size(60px, 30px);
+    background: $brand-blue;
+    border: 0;
+    display: inline-block;
+    position: relative;
+    margin-right: 20px !important;
+    margin-left: 0 !important;
+    border-radius: 10px;
+    color: $cf;
+}
+
+.dialogsHeader,.im_dialogs_col_wrap {
+    margin-left: 70px;
+}

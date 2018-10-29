@@ -1,0 +1,226 @@
+
+.settingsRight{
+    flex: 1;
+    background-color: #F3F3F3;
+    padding: 20px 20px;
+}
+
+.settingsRight td, th, thead th {
+    border-top: none!important;
+    border-bottom: none!important;
+    vertical-align: middle;
+
+}
+
+
+.settingsRight tbody {
+    background-color: white;
+    line-height: 1;
+
+}
+
+.settingsRight thead tr {
+    line-height: 1;
+    font-size: 13px;
+}
+
+.settingsRight tr {
+    /*line-height: 35px;*/
+}
+.settingsRight table {
+    border-collapse: separate;
+    border-spacing: 0px 15px;
+    word-break: break-word;
+
+}
+
+.settingsRight table img {
+   border-radius: 100%;
+}
+
+
+.settingsRight tr td:first-child,
+.settingsRight tr th:first-child {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    vertical-align: middle;
+}
+
+.settingsRight tr td:last-child,
+.settingsRight tr th:last-child {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.searchTokens{
+    background-image: url(components/main/modal_popup/img/search.png);
+    background-repeat: no-repeat;
+    background-position: 15px center;
+    border: 0;
+    height: 35px;
+    box-shadow: 0 0 27px rgba(97, 97, 97, 0.1);
+    border: none;
+    border-radius: 29px;
+    padding-left: 55px;
+    outline: none;
+    width: 375px;
+}
+
+.myTokensHeader{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.myTokensHeader span {
+    color: #909090;
+    font-size: 14px;
+}
+
+
+
+.loader {
+    font-size: 10px;
+    position: relative;
+    width: 4em;
+    height: 1em;
+    margin: 100px auto;
+}
+
+.dot {
+    width: 1em;
+    height: 1em;
+    border-radius: 0.5em;
+    background: #333;
+    position: absolute;
+    animation-duration: 0.5s;
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
+}
+
+.dot1, .dot2 {
+    left: 0;
+}
+
+.dot3 { left: 1.5em; }
+
+.dot4 { left: 3em; }
+
+@keyframes reveal {
+    from { transform: scale(0.001); }
+    to { transform: scale(1); }
+}
+
+@keyframes slide {
+    to { transform: translateX(1.5em) }
+}
+
+
+.dot1 {
+    /*animation-name: reveal;*/
+    /*-webkit-animation-name: reveal;*/
+}
+
+.dot2, .dot3 {
+    animation-name: slide;
+}
+
+.dot4 {
+    animation-name: reveal;
+    animation-direction: reverse; /* thx @HugoGiraudel */
+}
+
+.td-token {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 140px;
+}
+
+.td_namb {
+    width: 60px;
+}
+
+.table_02_history {
+    line-height: 35px;
+}
+
+.td_history_time {
+    line-height: 20px;
+}
+
+.grey_font {
+    color: rgba(39, 43, 70, 0.5);
+}
+
+.blue_font {
+    color: #2BC2F9;
+}
+
+.green_font {
+    color: #1AFF7C;
+}
+
+.t02 {
+    box-shadow: 2px 2px 20px rgba(43, 194, 249, 0.1);
+    border-radius: 10px;
+}
+
+.th_sub_s,.th_sub_c,.th_ser_sp,.th_ser_st,.th_ser_k,.th_ser_c {
+    min-width: 120px;
+}
+
+.th_sub_n,.th_sub_t {
+    min-width: 100px;
+}
+
+.th_sub_d,.th_ser_m {
+    min-width: 65px;
+}
+
+.orange_font {
+    color: #F2994A;
+}
+
+.token-avatar {
+    width: 50px;
+}
+
+.table_01 th,.table_02 th,.table_02 td {
+    text-align: center;
+}
+
+.table_02 a {
+    text-decoration: underline;
+    color: #2BC2F9;
+}
+
+.walletInfo table {
+    width: 100%;
+}
+
+.walletInfo td,.walletInfo th {
+    width: 50%;
+}
+
+.walletInfo th {
+    font-weight: 600;
+}
+
+.td-token {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.td-name {
+    padding: 0;
+}
+
+.table_02 a {
+    text-decoration: underline!important;
+    color: #2BC2F9!important;
+}
+
+.myTokens {
+    width: 100%;
+}

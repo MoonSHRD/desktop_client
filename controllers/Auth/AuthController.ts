@@ -4,9 +4,13 @@ import {Controller} from "../Controller";
 import {UserModel} from "../../models/UserModel";
 import {Loom} from "../../loom/loom";
 import {TextEncoder,TextDecoder} from 'text-encoding';
+import {resize_b64_img, resize_img_from_path} from "../Helpers";
+import {paths} from "../../src/var_helper";
 // let {TextDecoder} = require('text-encoding');
 
 class AuthController extends Controller {
+
+    private connection_tries:number=-1;
 
     async init_auth() {
         let account = await AccountModel.findOne(1);
@@ -21,7 +25,13 @@ class AuthController extends Controller {
     };
 
     private async auth(account: AccountModel,first:boolean=false) {
+        if (this.connection_tries === 9)
+            this.connection_tries=0;
+        else
+            this.connection_tries+=1;
         await this.ipfs.connect();
+        console.log('connected');
+        console.log(account);
         // await this.ipfs.ipfs_info();
         await this.loom.connect(account.privKey);
         console.log('loom connected');
@@ -30,9 +40,11 @@ class AuthController extends Controller {
             console.log(identyti_tx);
             this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
         }
+        let user=await this.get_self_info();
+        this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
         account.host = this.dxmpp_config.host;
         account.jidhost = this.dxmpp_config.jidhost;
-        account.port = this.dxmpp_config.port;
+        account.port = this.dxmpp_config.port+this.connection_tries;
         await this.dxmpp.connect(account)
     }
 
@@ -48,7 +60,7 @@ class AuthController extends Controller {
         user.firstname = data.firstname;
         user.lastname = data.lastname;
         user.bio = data.bio;
-        user.avatar = data.avatar;
+        user.avatar = data.avatar?(await resize_b64_img(data.avatar)):(await resize_img_from_path(this.paths.components+'auth/default-avatar1.jpg'));
         await user.save();
 
         let account = new AccountModel();
@@ -57,7 +69,6 @@ class AuthController extends Controller {
         account.user = user;
         await account.save();
 
-        this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
         await this.auth(account,true);
     };
 }

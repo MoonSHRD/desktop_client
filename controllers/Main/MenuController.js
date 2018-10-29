@@ -27,6 +27,7 @@ class MenuController extends Controller_1.Controller {
     ;
     load_menu(menu) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('load_menu');
             let menu_func = "";
             let account = yield AccountModel_1.AccountModel.findOne(1);
             if (typeof this[`load_${menu}`] === 'function')
@@ -64,7 +65,18 @@ class MenuController extends Controller_1.Controller {
             let html = this.render('main/wallet/wallet.pug', self_info); // +
             // this.render('main/messagingblock/messagingblock.pug');
             this.send_data('change_menu_state', html);
+            console.log('load_menu_wallet');
             yield this.controller_register.run_controller('WalletController', 'change_wallet_menu');
+        });
+    }
+    load_menu_settings(account) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let self_info = yield this.get_self_info();
+            self_info.state = this.chat_to_menu.user;
+            let html = this.render('main/settings/settings.pug', self_info); // +
+            // this.render('main/messagingblock/messagingblock.pug');
+            this.send_data('change_menu_state', html);
+            yield this.controller_register.run_controller('SettingsController', 'change_settings_menu');
         });
     }
     generate_initial_chats() {
@@ -90,7 +102,7 @@ class MenuController extends Controller_1.Controller {
                 initial_user_chat.users = [self_info, initial_user];
                 yield initial_user_chat.save();
                 initial_user_message = new MessageModel_1.MessageModel();
-                initial_user_message.time = this.dxmpp.take_time();
+                initial_user_message.time = Date.now();
                 initial_user_message.chat = initial_user_chat;
                 initial_user_message.sender = initial_user;
                 initial_user_message.text = 'Hello my friend!';
@@ -116,7 +128,7 @@ class MenuController extends Controller_1.Controller {
                 // initial_user_chat.users = [self_info, initial_user];
                 yield initial_user_chat.save();
                 initial_user_message = new MessageModel_1.MessageModel();
-                initial_user_message.time = this.dxmpp.take_time();
+                initial_user_message.time = Date.now();
                 initial_user_message.chat = initial_user_chat;
                 // initial_user_message.sender = initial_user;
                 initial_user_message.text = 'Welcome to Moonshard!';

@@ -1,55 +1,50 @@
 div(class="head_peer" id="head_peer")
-    h4
-        a(class="peer_name" data-event="show_chat_info" href='#')
-            if (id)
-                //img(src=avatar width=44 height=44)
-                |       #{name}
+    a(class="peer_name" data-event="show_chat_info" href='#')
+        if (id)
+            img.rounded-circle(src=avatar width=44 height=44)
+            span #{name}
 
-
-
-    if (type === "channel")
-        ul.block.nav.nav-tabs.nav-justified(role='tablist')
-            li.nav-item
-                a.nav-link.active(href='#chat', role='tab', data-toggle='tab') Chat
-            li.nav-item
-                a.nav-link(href='#references', role='tab', data-toggle='tab') Channel info
-            li.nav-item
-                a.nav-link(href='#buzz', role='tab', data-toggle='tab') Notifications
-    else
-        style(type='text/css').
-            .messaging_history {
-               margin-top: 0;
-                max-height: calc(100% - 155px);
-            }
-
-
+    //if (type === "channel")
+    //    ul.block.nav.nav-tabs.nav-justified(role='tablist')
+    //        li.nav-item
+    //            a.nav-link.active(href='#chat', role='tab', data-toggle='tab') Chat
+    //        li.nav-item
+    //            a.nav-link(href='#references', role='tab', data-toggle='tab') Channel info
+    //        li.nav-item
+    //            a.nav-link(href='#buzz', role='tab', data-toggle='tab') Notifications
+    //else
+    //    style(type='text/css').
+    //        .messaging_history {
+    //           margin-top: 0;
+    //            max-height: calc(100% - 155px);
+    //        }
 
     if (type==="user_chat" )
 
         div.block(class='dropDown_menu')
             ul
-                li
-                    a(data-id="")
-                        div(class='image')
-                            img(src="components/main/messagingblock/img/micr.png")
-                li
-                    a(data-id="")
-                        div(class='image')
-                            img(src="components/main/messagingblock/img/call.png")
-
-                li
-
-                    a(data-id="")
-
-
-                        div(class='image')
-                            img(src="components/main/messagingblock/img/videoCall.png")
-                input(type="file" id="attachFileToChat" style="display:none")
-                li.attachFileToChat
-
-                    a(data-id="")
-                        div(class='image')
-                            img(src="components/main/messagingblock/img/files.png")
+                //li
+                //    a(data-id="")
+                //        div(class='image')
+                //            img(src="components/main/messagingblock/img/micr.png")
+                //li
+                //    a(data-id="")
+                //        div(class='image')
+                //            img(src="components/main/messagingblock/img/call.png")
+                //
+                //li
+                //
+                //    a(data-id="")
+                //
+                //
+                //        div(class='image')
+                //            img(src="components/main/messagingblock/img/videoCall.png")
+                input(type="file" id="attachFileToChat" style="display:none" multiple)
+                //li.attachFileToChat
+                //
+                //    a(data-id="")
+                //        div(class='image')
+                //            img(src="components/main/messagingblock/img/files.png")
                 li
                     a(data-id="")
                         div(class='image')
@@ -64,44 +59,35 @@ div(class="head_peer" id="head_peer")
 
         div(class='dropDown_menu')
             ul
-                li
-                    a(data-id="")
-                        div(class='image')
-                            img(src="components/main/messagingblock/img/micr.png")
-                input(type="file" id="attachFileToGroup" style="display:none")
-                li.attachFileToGroup
-
-                    a(data-id="" )
-                        //input(type="file" id="attachFile" style="display:none;")
-
-                        div(class='image')
-                            img(src="components/main/messagingblock/img/files.png")
+                //li
+                //    a(data-id="")
+                //        div(class='image')
+                //            img(src="components/main/messagingblock/img/micr.png")
+                input(type="file" id="attachFileToChat" style="display:none")
+                //li.attachFileToGroup
+                //
+                //    a(data-id="" )
+                //        //input(type="file" id="attachFile" style="display:none;")
+                //
+                //        div(class='image')
+                //            img(src="components/main/messagingblock/img/files.png")
                 li
                     a(href='#')
                         div(class='image')
                             img(src="components/main/messagingblock/img/dropDown_menu.png")
                     ul.dropdownDoth
                         li(data-event="show_chat_info") Info
-                        li Leave a channel
-                        li Switch off notifications
-                        li Write a message to administrator
+                        //li Leave a channel
+                        //li Switch off notifications
+                        //li Write a message to administrator
 
 
-div(class="messaging_history" id="messaging_history" )
+div#messaging_history.messaging_history.msgHistory(data-msg-history="")
+    div.msgHistory__list.clearfix(data-msg-list="") !{messages ? messages : ""}
 
-
-    .tab-content
+    .tab-content(style='display: none')
         #chat.tab-pane.fade.in.active.show(role='tabpanel')
-            ul !{messages?messages:""}
-            //ul
-            div(class="send_message_block")
-                if (type === "join_channel" || type === "join_group_chat")
-                    include join_button
-                else if (type === "user_chat" || type === "group" || (type === "channel" && role === "moderator"))
 
-                    textarea(class="send_message_input"  placeholder="Write a text message")
-                    img#upload_file(src='' alt="" width=50 height=50 style='border-radius: 100%')
-                    button(class="send_message_btn" data-translate-key="SEND_MESSAGE") отправить
         #buzz.tab-pane.fade(role='tabpanel')
             .notifyBlock
                 if events
@@ -160,4 +146,17 @@ div(class="messaging_history" id="messaging_history" )
                                 button(class='btn btn-primary col-sm-12' data-name="submit_suggest_to_channel") Suggest publication
 
 
+
+div.send_message__block
+    if (type === "join_channel" || type === "join_group_chat")
+        include join_button
+    else if (type === "user_chat" || type === "group" || (type === "channel" && role === "moderator"))
+        button.send_message__file.attachFileToChat
+            img(src="components/main/messagingblock/img/files.png")
+        textarea.send_message__input(placeholder="Write a text message" rows='1' data-msg)
+        img.rounded-circle.send_message__img#upload_file(src='' alt="")
+        button.send_message__voice(data-id="")
+            img(src="components/main/messagingblock/img/micr.png")
+        button.send_message__btn(data-translate-key="SEND_MESSAGE" data-toggle="send-msg")
+            img(src="components/main/messagingblock/img/send.svg" width='25px')
 

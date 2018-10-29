@@ -1,9 +1,12 @@
-// const router = new Navigo(null, true, '#!');
-
 const {ipcRenderer} = require('electron');
-// const {events,chat_types} = require('./events&types.js');
 const dict = require('./langs/lang');
 const slick = require('slick-carousel');
+
+let p = null;
+let d = null;
+let r = null;
+let curr_width = null;
+let unlock = false;
 
 
 window.onload = function () {
@@ -15,25 +18,41 @@ window.onload = function () {
         });
 
     };
-    // var div =  $('.messaging_history');
-    //
-    // div.scrollTop(div.prop('scrollHeight'));
-
-
 
     $(document).on('click','.copyButton',function () {
-        if (document.selection) {
-            var range = document.body.createTextRange();
-            range.moveToElementText(document.getElementById('copyTo'));
-            range.select().createTextRange();
-            document.execCommand("Copy");
+        // if (document.selection) {
+        //     var range = document.body.createTextRange();
+        //     range.moveToElementText(document.getElementById('copyTo'));
+        //     range.select().createTextRange();
+        //     document.execCommand("Copy");
+        //
+        // } else if (window.getSelection) {
+        //     var range = document.createRange();
+        //     range.selectNode(document.getElementById('copyTo'));
+        //     window.getSelection().addRange(range);
+        //     document.execCommand("Copy");
+        let elem = document.getElementById('copyTo');
+        let body = document.body, range, sel;
 
-        } else if (window.getSelection) {
-            var range = document.createRange();
-            range.selectNode(document.getElementById('copyTo'));
-            window.getSelection().addRange(range);
-            document.execCommand("Copy");
-            console.log(range)
+        if(document.createRange && window.getSelection) {
+            range = document.createRange();
+            sel = window.getSelection();
+            sel.removeAllRanges();
+            try {
+                range.selectNodeContents(elem);
+                sel.addRange(range)
+            } catch (e) {
+                range.selectNode(elem);
+                sel.addRange(range)
+            }
+        } else if (body.createTextRange) {
+            range = body.createTextRange();
+            range.moveToElementText(elem);
+            range.select();
+        }
+        document.execCommand('copy');
+        console.log(range, sel, elem);
+
             $.notify('address copied \n' + range, {
 
                 placement: {
@@ -48,64 +67,80 @@ window.onload = function () {
                 offset: 20,
                 spacing: 10
             });
-            // alert("text copied")
-        }
-    })
+        // }
+    });
 
     $(document).on('click','.attachFileToChat',function () {
         $("input[id='attachFileToChat']").trigger('click');
-        // e.preventDefault();
-    })
+    });
 
     $(document).on('click','.attachFileToGroup',function () {
         $("input[id='attachFileToGroup']").trigger('click');
-        // e.preventDefault();
-    })
-
-
-    $(document).on('change','input[id="attachFileToChat"], input[id="attachFileToGroup"]',function () {
-        console.log('Selected file: ' + this.value);
-    })
-
-
-    $(document).on('click','[data-id=menu_user_chats]',function () {
-        const type = $(this).attr('data-id');
-        ipcRenderer.send('change_state',type);
     });
 
 
     $(document).on('change','input[id="attachFileToChat"], input[id="attachFileToGroup"]',function () {
+        console.log('Selected files', this.files);
+    });
+
+
+    $(document).on('click', '[data-id=menu_user_chats]', function () {
+        const type = $(this).attr('data-id');
+        ipcRenderer.send('change_state', type);
+    });
+
+
+    $(document).on('change', 'input[id="attachFileToChat"], input[id="attachFileToGroup"]', function () {
         readURL(this);
     });
 
 
     function readURL(input) {
 
+        let imgFileMsg = $('#upload_file');
+
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
-            reader.onload = function(e) {
-                $('#upload_file').attr('src', e.target.result);
-                $('#upload_file').css('cursor', 'pointer');
-
-            }
+            reader.onload = function (e) {
+                imgFileMsg
+                    .addClass('added')
+                    .attr('src', e.target.result)
+                    .css('cursor', 'pointer');
+            };
 
             reader.readAsDataURL(input.files[0]);
-        }    }
+        }
+    }
 
+    $(document).on('click', '#upload_file', function () {
+        let imgFileMsg = $(this);
 
-    $(document).on('click','#upload_file',function () {
-        $('#upload_file').attr('src', '');
-        $('#upload_file').css('cursor', 'default');
+        imgFileMsg
+            .removeClass('added')
+            .attr('src', '')
+            .css('cursor', 'default');
+        $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
     });
 
     $(document).on('click','.menu a',function () {
+        // console.log('menu_click');
+
         const $this=$(this);
-        if ($this.attr('data-id')!=='menu_create_chat')
-            $this.addClass('active_menu').siblings().removeClass('active_menu');
-        const type = $this.attr('data-id');
+        if ($this.data('id') !== 'menu_create_chat' && !$this.hasClass('not_active')) {
+            $this.addClass('active_menu')
+                .parent()
+                .siblings('li')
+                .children()
+                .removeClass('active_menu');
+        }
+        const type = $this.data('id');
         if (type)
-            ipcRenderer.send('change_menu_state',type);
+            ipcRenderer.send('change_menu_state', type);
+    });
+
+    $(document).on('click','[data-id=menu_create_chat]',function (e) {
+        ipcRenderer.send('change_menu_state', 'menu_create_chat');
     });
 
     ipcRenderer.on('change_menu_state', (event, arg) => {
@@ -113,134 +148,40 @@ window.onload = function () {
     });
 
     ipcRenderer.on('online', (event, arg) => {
-        console.log(arg); // prints "ping"
-        // alert(arg); // prints "ping"
+        console.log(arg);
     });
+
+    let widthMsgWindow = (target) => {
+        let msgWindow =  document.querySelector(target);
+        if (msgWindow.offsetWidth > 900){
+            msgWindow.classList.add('messaging_block_lg');
+        } else {
+            msgWindow.classList.remove('messaging_block_lg');
+        }
+    };
 
     ipcRenderer.on('change_app_state', (event, arg) => {
         console.log('autyh');
         $('#view').html(arg);
         $.html5Translate(dict, 'en');
-        // setTimeout(()=>{
-        //     console.log('click');
-        //     console.log($('#0x0000000000000000000000000000000000000000').attr('data-domain'));
-        //     $('#0x0000000000000000000000000000000000000000').trigger("click");
-        // },100);
+        // todo: fix some console errors with this func
+        widthMsgWindow('[data-msgs-window]');
     });
 
-    // $(document).on('click', '#generate_mnemonic', function () {
-    //     ipcRenderer.send('generate_mnemonic');
-    // });
-    //
-    // $(document).on('click', '#submit_mnemonic', function () {
-    //     const mnem = $('#input_mnemonic').val();
-    //     //todo: validate >=12 words
-    //     ipcRenderer.send('submit_mnemonic', mnem);
-    // });
-    //
-    // ipcRenderer.on('generate_mnemonic', (event, arg) => {
-    //     $('#input_mnemonic').val(arg);
-    // });
-
-    // function validate_mnemonic(mnem){
-    //     if (!mnem) return false;
-    //     const words_count=mnem.split(/\s+/).length;
-    //     const err=mnem.substr(-1,1)===" ";
-    //     return (words_count === 12 && !err);
-    // }
-
-    // $(document).on('submit', '#profile_form', function (e) {
-    //     e.preventDefault();
-    //     const $this = $(this);
-    //     let obj = $(this).serializeArray();
-    //     let prof = {};
-    //     let err = {};
-    //
-    //     obj.forEach(function (elem) {
-    //         $this.find(`[name=${elem.name}]`).removeClass('invalid');
-    //         switch (elem.name) {
-    //             case "mnemonic":
-    //                 if (!validate_mnemonic(elem.value)) err[elem.name]=true;
-    //                 break;
-    //             case "firstname":
-    //                 if (!elem.value) err[elem.name]=true;
-    //                 break;
-    //         }
-    //         prof[elem.name] = elem.value;
-    //     });
-    //
-    //     if (Object.keys(err).length !== 0){
-    //         for (let el in err){
-    //             $this.find(`[name=${el}]`).addClass('invalid');
-    //         }
-    //         console.log(err);
-    //         return;
-    //     }
-    //
-    //     const file = $(this).find('[name=avatar]').prop('files')[0];
-    //     if (file) {
-    //         let reader = new FileReader();
-    //         reader.onloadend = function () {
-    //             prof.avatar = reader.result;
-    //             ipcRenderer.send('submit_profile', prof);
-    //         };
-    //         reader.readAsDataURL(file);
-    //     } else {
-    //         ipcRenderer.send('submit_profile', prof);
-    //     }
-    // });
-
-    // $(document).on('change', '[name=avatar]', function () {
-    //     const file = this.files[0];
-    //     if (file) {
-    //         let reader = new FileReader();
-    //         reader.onloadend = function () {
-    //             // console.log(reader.result);
-    //             $('#avatar_preview').attr('src', reader.result);
-    //             $('#avatar_preview').show();
-    //         };
-    //         reader.readAsDataURL(file);
-    //     }
-    // });
+    window.addEventListener('resize', function(e){
+        widthMsgWindow('[data-msgs-window]');
+        e.preventDefault();
+    });
 
     $(document).on('change', '[name=avatar]', function () {
         const file = this.files[0];
         let fileType = file.type;
         if (file) {
             let reader = new FileReader();
-             reader.onloadend = function () {
-                var image = new Image();
-                image.src = reader.result;
-                image.onload = function() {
-                    var maxWidth = 100,
-                        maxHeight = 100,
-                        imageWidth = image.width,
-                        imageHeight = image.height;
-
-                    if (imageWidth > imageHeight) {
-                        if (imageWidth > maxWidth) {
-                            imageHeight *= maxWidth / imageWidth;
-                            imageWidth = maxWidth;
-                        }
-                    }
-                    else {
-                        if (imageHeight > maxHeight) {
-                            imageWidth *= maxHeight / imageHeight;
-                            imageHeight = maxHeight;
-                        }
-                    }
-                    var canvas = document.createElement('canvas');
-                    canvas.width = imageWidth;
-                    canvas.height = imageHeight;
-
-                    var ctx = canvas.getContext("2d");
-                    ctx.drawImage(this, 0, 0, imageWidth, imageHeight);
-                    // The resized file ready for upload
-                    var finalFile = canvas.toDataURL(fileType);
-                    $('#avatar_preview').attr('src', finalFile);
-                    // console.log($("#avatar_preview").);
-                    $('#avatar_preview').show();
-                }
+            reader.onloadend = function () {
+                // var image = new Image();
+                // image.src = reader.result;
+                $('#avatar_preview').attr('src', reader.result);
             };
             reader.readAsDataURL(file);
         }
@@ -256,57 +197,91 @@ window.onload = function () {
     });
 
 
-    $(document).on('keydown', '.send_message_input', function () {
-
+    $(document).on('keydown', '[data-msg="data-msg"]', function () {
         if (event.ctrlKey && event.keyCode === 13) {
-            let msg_input = $('.send_message_input');
-            if (msg_input.val().trim() === ''){
-                msg_input.val('');
-                return;
-            }
-            let active_dialog = $('.active_dialog');
-            let obj = {
-                user:{
-                    id: active_dialog.attr('id'),
-                    domain: active_dialog.attr('data-domain'),
-                },
-                text: msg_input.val().trim(),
-                group: $('.active_dialog').attr('data-type')==='channel',
-            };
-
-            obj={id: active_dialog.attr('id'),text: msg_input.val().trim()};
-            // console.log(obj);
-            ipcRenderer.send("send_message", obj);
-            msg_input.val('');
+            send_message();
         }
+    });
+
+    $(document).on('keyup', '[data-msg="data-msg"]', function () {
+        if (event.ctrlKey && event.keyCode === 13 ) {
+            $(this).attr('rows', 1)
+        }
+    });
+
+    $(document).on('keydown',".send_message__input",function(e) {
+        if($(this).val() === '') {
+            $(this).attr('rows', 1)
+        };
+        if($(this).val() === '' && event.keyCode == 13) {
+            event.preventDefault();
+        };
+
+        if ( event.keyCode === 13 && $(this).val()!=='') {
+            ResizeTextArea(this,0)
+        }
+    });
+
+    $(document).on('input',".send_message__input",function(e) {
+        // console.log('hello!')
+        if($(this).val() === '') {
+            $(this).attr('rows', 1)
+        };
 
     });
 
-    $(document).on('click', '.send_message_btn', function () {
-        let msg_input = $('.send_message_input');
-        if (msg_input.val().trim() === ''){
+    $(document).on('paste',".send_message__input",function(e) {
+        console.log('paste!')
+        var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
+        if($(this).val()!=='')
+        {
+            $(this).attr('rows', $(this).attr('rows'))
+
+        }else {
+            ResizeTextArea(this,10)
+
+        }
+        console.log(text);
+
+    });
+
+
+    $(document).on('click', '[data-toggle="send-msg"]', function () {
+        $('[data-msg="data-msg"]').focus();
+        send_message();
+    });
+
+    function send_message(){
+        let msg_input = $('.send_message__input');
+        msg_input.attr('rows', 1);
+        if (msg_input.val().trim() === '') {
+
             msg_input.val('');
             return;
         }
         let active_dialog = $('.active_dialog');
         let obj = {
-            user:{
+            user: {
                 id: active_dialog.attr('id'),
                 domain: active_dialog.attr('data-domain'),
             },
             text: msg_input.val().trim(),
-            group: $('.active_dialog').attr('data-type')==='channel',
+            group: $('.active_dialog').attr('data-type') === 'channel',
         };
 
-        obj={id: active_dialog.attr('id'),text: msg_input.val().trim()};
+        obj = {id: active_dialog.attr('id'), text: msg_input.val().trim()};
         // console.log(obj);
-        let file = $('#attachFileToChat').prop('files')[0];
-        if (file) {
+        let files = $('#attachFileToChat').prop('files');
+        if (files && files[0]) {
+            msg_input.attr('rows', 1)
+
+            let file = files[0];
             console.log(file);
             let reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onloadend = function () {
-                obj.file={file:reader.result,type:file.type,name:file.name};
+                obj.file = {file: reader.result, type: file.type, name: file.name};
+                // console.log(obj);
                 ipcRenderer.send("send_message", obj);
             };
         } else {
@@ -314,41 +289,63 @@ window.onload = function () {
         }
         // console.log(file);
         msg_input.val('');
-    });
+        $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
+        $('#upload_file')
+            .attr('src', '')
+            .css('cursor', 'default')
+            .removeClass('added');
+    }
 
     ipcRenderer.on('add_out_msg', (event, obj) => {
-        $('.messaging_history ul').append(obj);
-
+        $('[data-msg-list]').append(obj);
     });
 
-    ipcRenderer.on('get_chat_msgs', (event, obj) => {
-        $('.messaging_history').scrollBottom();
+    let scrollDown = (target) => {
+        let targetBlock = document.querySelector(target);
+        targetBlock.scrollTop = targetBlock.scrollHeight;
+    };
 
-        $('.messaging_history ul').append(obj);
+    ipcRenderer.on('get_chat_msgs', (event, obj) => {
+        $('[data-msg-list]').append(obj);
+        scrollDown('[data-msg-history]');
     });
 
     ipcRenderer.on('received_message', (event, obj) => {
-        console.log(obj)
-        if ($('.active_dialog').attr('id') === obj.id) {
-            $('.messaging_history ul').append(obj.message);
+        let chat = $('#'+obj.id);
+
+        if (obj.message.fresh) {
+            if (chat) {
+                chat.find('[data-name=chat_last_time]').text(obj.message.time);
+                chat.find('[data-name=chat_last_text]').text(obj.message.text);
+                console.log(obj);
+
+                chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
+                chat.find("[data-name=unread_messages]").show();
+            }
+            chat.prependTo($('.chats ul')[0]);
         }
+        if ($('.active_dialog').attr('id') === obj.id) {
+            chat.find("[data-name=unread_messages]").hide();
+            ipcRenderer.send('reading_messages', obj.id);
+            $('[data-msg-list]').append(obj.html);
+            scrollDown('[data-msg-history]');
+        } else {
+            chat.find("[data-name=unread_messages]").text(obj.unread_messages);
+        }
+        // ipcRenderer.send('load_chats', 'menu_chats');
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
-        // console.log(obj);
-        // console.log('got user');
-        // console.log($(`[data-id=${obj.type}]`).hasClass('active_menu'));
-        // console.log(obj);
-        if (
-            !$(`[data-id=${obj.type}]`).hasClass('active_menu') ||
-            (obj.type === "menu_chats" && $('.searchInput').val())
-        ){
-            return;
-        }
+        // if (
+        //     !$(`[data-id=${obj.type}]`).hasClass('active_menu') ||
+        //     (obj.type === "menu_chats" && $('.searchInput').val())
+        // ) {
+        //     return;
+        // }
         const chat_box = $('.chats ul');
         const user = chat_box.find('#' + obj.id);
         if (user.length) {
-            user.replaceWith(obj.html)
+            user.replaceWith(obj.html);
         } else {
             chat_box.prepend(obj.html);
         }
@@ -357,10 +354,11 @@ window.onload = function () {
 
     ipcRenderer.on('reload_chat', (event, obj) => {
         $('#messaging_block').html(obj);
+        $(".send_message_input").focus();
     });
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
-        $('.messaging_history ul').prepend(obj);
+        $('[data-msg-list]').prepend(obj);
     });
 
     ipcRenderer.on('join_channel_html', (event, obj) => {
@@ -368,57 +366,69 @@ window.onload = function () {
     });
 
     $(document).on('click', '[data-name=join_channel]', function () {
-        $(this).attr('disabled','disabled');
+        $(this).attr('disabled', 'disabled');
         let active_dialog = $('.active_dialog');
-        // console.log({id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
+        let input = $('[data-name=group_search]');
+        input.val('');
         ipcRenderer.send('join_channel', {
-            id:active_dialog.attr('id'),
-            domain:active_dialog.attr('data-domain'),
-            contract_address:active_dialog.attr('data-contract_address')
+            id: active_dialog.attr('id'),
+            domain: active_dialog.attr('data-domain'),
+            contract_address: active_dialog.attr('data-contract_address')
         });
-        $('#style-11').empty();
-        $(this).fadeOut();
+        ipcRenderer.send('load_chats', 'menu_chats');
     });
 
-    $(document).on('click', '.chats li', function () {
+    function click_anim(e){
+        $(".ripple").remove();
+        var posX = $(this).offset().left,
+            posY = $(this).offset().top,
+            buttonWidth = $(this).width(),
+            buttonHeight =  $(this).height();
+        $(this).children('a').prepend("<span class='ripple'></span>");
+        if(buttonWidth >= buttonHeight) {
+            buttonHeight = buttonWidth;
+        } else {
+            buttonWidth = buttonHeight;
+        }
+        var x = e.pageX - posX - buttonWidth / 2;
+        var y = e.pageY - posY - buttonHeight / 2;
+        $(".ripple").css({
+            width: buttonWidth,
+            height: buttonHeight,
+            top: y + 'px',
+            left: x + 'px'
+        }).addClass("rippleEffect");
+    }
 
-        const $this=$(this);
+
+    $(document).on('click', '.chats li', function (e) {
+        console.log('chat_clicked');
+        const $this = $(this);
+
+        $this.siblings().removeClass('have_history');
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
-        $('.messaging_history ul').empty();
         let chat = $this.attr('id');
-        ipcRenderer.send('get_chat_msgs', chat);
+
+        $this.find("[data-name=unread_messages]").hide();
+        $this.find("[data-name=unread_messages]").text("0");
+
+        if(!($this.hasClass("active_dialog") && $this.hasClass("have_history"))) {
+            ipcRenderer.send('get_chat_msgs', chat);
+            $this.addClass('have_history');
+        }
 
     });
 
-    $(document).on('click', '.walletMenu li', function () {
-
-        const $this=$(this);
+    $(document).on('click', '.walletMenu li', function (e) {
+        const $this = $(this);
         $this.addClass('active_wallet').siblings().removeClass('active_wallet');
-
-
     });
 
+    $(document).on('click', '.settingsMenu li', function (e) {
 
-    //
-    //
-    // $(document).on('change', '.searchInput', function () {
-    //     if ($('.active_menu').attr('data-id')!=='menu_chats') return;
-    //     let group = $('input').val();
-    //     if (!group){
-    //         ipcRenderer.send('load_chats');
-    //     }
-    //     if (group.length > 2) {
-    //         ipcRenderer.send('find_groups', group);
-    //     }
-    // });
-    //
-    // $(document).on('click', '.submit_searchInput', function () {
-    //     if ($('.active_menu').attr('data-id')!=='menu_user_chats') return;
-    //     // (data-id="menu_user_chats" class='active_menu')
-    //     let text = $('.searchInput').val() + "@localhost";
-    //     ipcRenderer.send("send_subscribe", text);
-    //     console.log(text)
-    // });
+        const $this = $(this);
+        $this.addClass('active_settings').siblings().removeClass('active_settings');
+    });
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
         $('.modal-content').html(data);
@@ -430,12 +440,10 @@ window.onload = function () {
         $('#AppModal').modal('toggle');
         $('#AppModal1').modal('toggle');
         $('.modal-content1').html(data);
-        // $('#AppModal').modal('show');
 
     });
 
     ipcRenderer.on('found_chats', (event, data) => {
-        // console.log(data);
         $('.chats ul').append(data);
     });
 
@@ -444,8 +452,14 @@ window.onload = function () {
     });
 
     $(document).on("change", '.modal-content select[name=substype]', function () {
-        // console.log($(this).find(":selected").val());
-        if ($(this).find(":selected").val()==='unfree') {
+        if ($(this).find(":selected").val() === 'unfree') {
+            $("#token_row").show();
+        } else {
+            $("#token_row").hide();
+        }
+    });
+    $(document).on("change", '[name="open-private"]', function () {
+        if ($(this).attr('id') === 'private') {
             $("#token_row").show();
         } else {
             $("#token_row").hide();
@@ -454,31 +468,24 @@ window.onload = function () {
 
     $(document).on('submit', '.modal-content', function (e) {
         e.preventDefault();
-        // $('#popup_error').html("Can't connect to&nbsp;<a href='#'>node1.moonshrd.io</a>, please try again later.");
-        // $('#popup_error').show();
         // return;
-        const data=$(this).serializeArray();
+        const data = $(this).serializeArray();
         let obj = {};
         data.forEach(function (elem) {
             obj[elem.name] = elem.value;
         });
 
-        switch (obj.substype) {
-            case 'free':
-                ipcRenderer.send('create_group', obj.name);
-                $('#AppModal').modal('toggle');
-                break;
-            case 'unfree':
-                break;
-        }
+        ipcRenderer.send('create_group', obj);
+        console.log(obj);
+        $('#AppModal').modal('toggle');
     });
 
     $(document).on('click', '[data-event=show_chat_info]', function () {
         const active_dialog = $('.active_dialog');
         const id = active_dialog.attr('id');
-        const type=active_dialog.attr('data-type');
+        const type = active_dialog.attr('data-type');
         // let data = $this.attr('href');
-        ipcRenderer.send('show_popup', {id,type});
+        ipcRenderer.send('show_popup', {id, type});
     });
 
     // $(document).on('click', '[data-name=submit_suggest_to_channel]', function () {
@@ -501,7 +508,7 @@ window.onload = function () {
     //     });
     // });
 
-    function bot_notif(text){
+    function bot_notif(text) {
         $.notify(text, {
 
             placement: {
@@ -544,7 +551,7 @@ window.onload = function () {
         if ($('.active_dialog').attr('id') === obj.id) {
             $('.notifyBlock').append((obj.html));
         }
-    })
+    });
 
     // Context menu
     $(document).mousedown(function (event) {
@@ -552,53 +559,51 @@ window.onload = function () {
             $('.context-menu').remove();
 
         }
-    })
+    });
 
 
-    $(document).on('mousedown','.chats li',function(event) {
-
-
-        // Убираем css класс selected-html-element у абсолютно всех элементов на странице с помощью селектора "*":
+    $(document).on('mousedown', '.chats li', function (e) {
         $('*').removeClass('selected-html-element');
-        // Удаляем предыдущие вызванное контекстное меню:
         $('.context-menu').remove();
-
-        // Проверяем нажата ли именно правая кнопка мыши:
-
-
-        if (event.which === 3)  {
-            // alert('dsfdsf')
-            // Получаем элемент на котором был совершен клик:
-            var target = $(event.target);
-
-            // Добавляем класс selected-html-element что бы наглядно показать на чем именно мы кликнули (исключительно для тестирования):
+        if (e.which === 3) {
+            var target = $(e.target);
             target.addClass('selected-html-element');
-
-            // Создаем меню:
             $('<div/>', {
-                class: 'context-menu' // Присваиваем блоку наш css класс контекстного меню:
+                class: 'context-menu'
             })
                 .css({
-                    left: event.pageX+'px', // Задаем позицию меню на X
-                    top: event.pageY+'px' // Задаем позицию меню по Y
+                    left: e.pageX + 'px',
+                    top: e.pageY + 'px'
                 })
-                .appendTo('body') // Присоединяем наше меню к body документа:
-                .append( // Добавляем пункты меню:
+                .appendTo('body')
+                .append(
                     $('<ul/>').append('<li><a href="#">Remove element</a></li>')
                         .append('<li><a href="#">Add element</a></li>')
                         .append('<li><a href="#">Element style</a></li>')
                 )
-                // .show('fast')
-                .fadeIn(300); // Показываем меню с небольшим стандартным эффектом jQuery. Как раз очень хорошо подходит для меню
+                .fadeIn(300);
         }
     });
 
-    $(document).on('click','.dropDown_menu > ul > li ',function(e) {
-        $(this).children('ul').toggleClass('d-block')
+    $(document).on('click', '.dropDown_menu > ul > li ', function (e) {
+        $(this).children('ul').toggleClass('d-block');
     });
 
-    $(document).on('click','.offerPublication',function(e) {
+    $(document).on('click', '.offerPublication', function (e) {
         ipcRenderer.send('channel_suggestion', {});
+    });
+
+    $(document).on('click', '[data-type=file][data-subtype=file]', function (e) {
+        // todo: возможность отменить закачку файла
+        if (!$(this).hasClass('load'))
+            $(this).addClass('load');
+        ipcRenderer.send('download_file', $(this).attr('data-id'));
+    });
+
+    ipcRenderer.on("file_downloaded", (event, obj) => {
+        let file=$(`[data-id=${obj.id}]`);
+        if (file.hasClass('load'))
+            file.removeClass('load').addClass('complite');
     });
 
     ipcRenderer.on("wallet_token_table", (event, obj) => {
@@ -607,17 +612,93 @@ window.onload = function () {
         $('.myTokens').append(obj);
     });
 
+    ipcRenderer.on("get_contacts", (event, obj) => {
+        // console.log('1234567')
+        $('#browsers').html(obj);
+
+    });
+
+    // var p = $(".dialogs");
+    // var d = $(".messaging_block");
+    // var r = $("#resize01");
+    // var curr_width = p.width()
+    // var unlock = false;
+
+    let p = null;
+    // let d = $(".messaging_block");
+    // let r = $("#resize01");
+    let curr_width = null;
+    let unlock = false;
+
+    $(document).mousemove(function(e) {
+        if (!$('[data-id="menu_chats"]').hasClass('active_menu'))
+            return;
+        p = $(".dialogs");
+        let d = $(".messaging_block");
+        let change = curr_width + (e.clientX - curr_width);
+        widthMsgWindow('[data-msgs-window]');
+        if(unlock) {
+            if(change > 369 && change < 599) {
+
+                p.css("width", change);
+                d.css("margin-left", change);
+            }
+        }
+    });
+
+    $(document).on('mousedown',"#resize01",function(e) {
+        console.log('resize_clicked');
+        curr_width = p.width();
+        unlock = true;
+    });
+
+    $(document).on('click',"[data-id=add_new_user]",function(e) {
+        let input = $('[data-name=user_search]');
+        let data={id:input.val(),domain:'localhost'};
+        input.val('');
+        ipcRenderer.send("send_subscribe", data);
+    });
+
+    $(document).mouseup(function(e) {
+        unlock = false;
+    });
 
 
 
-    // $(document).on('change','#attachFileToChat',function (e) {
-    //     const file = this.files[0];
-    //     if (file) {
-    //         let reader = new FileReader();
-    //         reader.onloadend = function () {
-    //             console.log('read file');
-    //         };
-    //         reader.readAsDataURL(file);
-    //     }
-    // })
+    function countLines(strtocount, cols) {
+        var hard_lines = 1;
+        var last = 0;
+        while ( true ) {
+            last = strtocount.indexOf("\n", last+1);
+            hard_lines ++;
+            // if ( hard_lines == 10) break;
+            if ( last == -1 ) break;
+            // console.log('hi')
+            // console.log(hard_lines)
+        }
+        var soft_lines = Math.ceil(strtocount.length / (cols-1));
+        var hard = eval("hard_lines " + unescape("%3e") + "soft_lines;");
+        if ( hard ) soft_lines = hard_lines;
+        return soft_lines;
+    }
+
+// функция вызывается при каждом нажатии клавиши в области ввода текста
+    function ResizeTextArea(the_form,min_rows) {
+        the_form.rows = Math.max(min_rows, countLines(the_form.value,the_form.cols) );
+    }
+
+    $(document).on('click', '[data-toggle="switcher"]', function(e) {
+        let $this = $(this);
+        let $thisPosition = $this.data('switcher');
+        let $thisSwitcherToggle = $this.data('switcher-toggle');
+        let target = $this.data('target');
+        let $parent = $this.closest('.control-switcher');
+
+        $(target).attr('class', 'custom-control-switcher custom-control-switcher_' + $thisPosition);
+    });
+
+    $('[data-toggle="collapse"]').collapse('toggle');
+
+
+
 };

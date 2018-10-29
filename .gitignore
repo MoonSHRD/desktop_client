@@ -9,11 +9,17 @@ src/env_config.js.map
 .idea
 .npmignore
 dist/
+downloads/
 release-builds/
 Makefile
 package-lock.json
 yarn.lock
 yarn-error.log
+.eslintrc.json
 
 account.json
 sqlite/data.db
+yarn-error.log
+
+not_for_git/
+.git-old/

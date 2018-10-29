@@ -5,15 +5,18 @@ style
 div.myTokens.transfer
     table.table(style='    ')
         thead
-            tr
+            tr.trasfer_th
                 th(scope='col') Send Moonshard tokens to
                 th(scope='col') Value
                 th(scope='col') Info
                 th(scope='col') Send to All
         tbody
-            tr
+            tr.trasfer_in.t02
                 th(scope='row')
-                    input(placeholder='Enter the name or address' name='address')
+                    input#sendTokenTo(placeholder='Enter the name or address' name='address' list="browsers" )
+                    datalist#browsers
+                        //input !{chats?chats:""}
+
                 td
                     input(placeholder='How much?' name='amount')
                 td

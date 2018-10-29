@@ -1,0 +1,197 @@
+*{
+    outline: none !important;
+    -webkit-user-drag: none;
+    -webkit-app-region: no-drag;
+    user-select: none;
+
+    &:before,
+    &:after{
+        @extend *;
+    }
+}
+
+.select-true{
+    user-select: auto;
+}
+
+body,
+html{
+    margin: 0;
+    padding: 0;
+    font-size: $fz-g;
+}
+
+body{
+    font: $fz-g $ff-g;
+    color: $primary-text;
+    line-height: 1.4;
+}
+
+img{
+    max-width: 100%;
+    //height: auto;
+    object-fit: cover;
+
+    &.img-responsive{
+        width: 100%;
+        max-width: none;
+    }
+}
+
+.form{
+
+    &-control{
+        padding-left: 1.125rem;
+        padding-right: 1.125rem;
+        border-radius: 2em;
+        background-color: $cf;
+        border-color: $cf;
+        color: $primary-text;
+        box-shadow: 2px 2px 20px rgba($brand-blue, 0.1);
+        outline: none;
+        &::placeholder{
+            color: rgba($primary-text, 0.5);
+        }
+
+        &:focus{
+            border-color: $cf;
+            outline: none;
+            box-shadow: 4px 4px 20px rgba($brand-blue, 0.2);
+        }
+    }
+}
+
+.control-switcher{
+    display: flex;
+    align-items: center;
+
+    &_center{
+        justify-content: center;
+    }
+}
+
+.custom-control {
+
+    &-vertical {
+        flex-direction: column;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        min-width: 80px;
+    }
+
+    &-input {
+        display: none;
+
+        .custom-radio & {
+
+            ~ label {
+
+                &:before {
+                    top: -2rem;
+                    left: 50%;
+                    transform: translate(-50%, 0);
+                }
+
+                &:after {
+                    top: -1.6rem;
+                    left: 50%;
+                    transform: translate(-50%, 0);
+                }
+            }
+        }
+
+        .custom-radio &:focus {
+            ~ label.custom-control-label {
+
+                &:before {
+                    box-shadow: none;
+                }
+            }
+        }
+
+        .custom-radio &:active {
+
+            ~ label.custom-control-label {
+
+                &:before {
+                    background-color: $cf;
+                }
+
+                &:after {
+                    background-image: none;
+                    background-color: rgba($brand-blue, .8);
+                }
+            }
+        }
+
+        .custom-radio &:checked {
+
+            ~ label.custom-control-label {
+
+                &:before {
+                    background-color: $cf;
+                }
+
+                &:after {
+                    background-image: none;
+                    background-color: $brand-blue;
+                }
+            }
+        }
+    }
+
+
+    &-label {
+
+        .custom-control-vertical & {
+            margin-top: 3rem;
+        }
+
+        &_icon {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+
+            .custom-control-vertical & {
+                flex-direction: column;
+            }
+
+            > span {
+                padding: 0;
+                font-weight: 400;
+                width: auto;
+                //margin-left: 10px;
+                float: none;
+                @include fz(12);
+            }
+
+            .icon{
+                height: 24px;
+                margin-bottom: .25rem;
+
+                svg{
+                    //@include size(auto, 100%);
+                }
+            }
+        }
+
+        &:before {
+            @include size(1.5rem);
+            left: -2rem;
+            border-radius: 50%;
+            background-color: $cf;
+            box-shadow: none;
+            transition: .15s ease-in-out;
+        }
+
+        &:after {
+            @include size(.7rem);
+            left: -1.6rem;
+            border-radius: 50%;
+            background-image: none;
+            background-color: transparent;
+            box-shadow: none;
+            transition: .15s ease-in-out;
+        }
+    }
+}
