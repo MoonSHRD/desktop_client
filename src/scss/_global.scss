@@ -58,44 +58,13 @@ img{
             outline: none;
             box-shadow: 4px 4px 20px rgba($brand-blue, 0.2);
         }
-    }
-}
 
-[data-toggle="collapse"] {
-    @include fz(18);
-    font-weight: 500;
-    font-family: $ff-1;
-    color: $primary-text;
-    text-decoration: none;
-    padding-left: 0;
-    padding-right: 0;
-
-    &:hover,
-    &:focus,
-    &:active{
-        color: $primary-text;
-        text-decoration: none;
-    }
-    svg {
-        margin-left: 1.5rem;
-        transform: rotate(90deg);
-        transition: .2s ease;
-        path {
-            stroke: $brand-blue
+        &.error,
+        &.invalid{
+            border-color: $brand-red;
+            //box-shadow: 4px 4px 20px rgba($brand-red, 0.2);
         }
     }
-    &.collapsed {
-        svg{
-            transform: rotate(0deg);
-        }
-    }
-}
-
-.card{
-    background-color: $cf;
-    border: none;
-    box-shadow: 2px 2px 20px rgba($brand-blue,.1);
-    border-radius: 10px;
 }
 
 .control-switcher{
@@ -249,10 +218,9 @@ img{
 
 
 
-//
-// Alternate buttons
-//
-
+/*
+ * Alternate buttons
+ */
 @each $color, $value in $brand-colors {
     .btn-#{$color} {
         @include button-variant($value, $value);
@@ -267,10 +235,51 @@ img{
 
 .btn{
     @include fz(14);
-    border-radius: .85em;
+    font-weight: 700;
+    border-radius: .75rem;
     padding: .525rem 1.5rem;
 
     &-primary{
         color: $cf;
     }
+}
+
+/*
+ * Collapse
+ */
+[data-toggle="collapse"] {
+    @include fz(18);
+    font-weight: 500;
+    font-family: $ff-1;
+    color: $primary-text;
+    text-decoration: none;
+    padding-left: 0;
+    padding-right: 0;
+
+    &:hover,
+    &:focus,
+    &:active{
+        color: $primary-text;
+        text-decoration: none;
+    }
+    svg {
+        margin-left: 1.5rem;
+        transform: rotate(90deg);
+        transition: .2s ease;
+        path {
+            stroke: $brand-blue
+        }
+    }
+    &.collapsed {
+        svg{
+            transform: rotate(0deg);
+        }
+    }
+}
+
+.card{
+    background-color: $cf;
+    border: none;
+    box-shadow: 2px 2px 20px rgba($brand-blue,.1);
+    border-radius: 10px;
 }

@@ -34,8 +34,7 @@
         }
     }
     &-body{
-        padding-left: 2rem;
-        padding-top: 2rem;
+        padding: 0 2rem;
 
         #token_row{
             label{
@@ -52,6 +51,69 @@
             margin-left: 1rem;
             margin-right: 1rem;
             min-width: 10em;
+        }
+    }
+}
+
+.crowdsale{
+    padding-bottom: 1.5rem;
+
+    &__num{
+        @include size(24px);
+        @include fz(18);
+        color: rgba($primary-text,.5);
+        border: 1px solid $brand-gray-400;
+        flex-shrink: 0;
+        text-align: center;
+        line-height: 24px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+        position: relative;
+        background-color: $cf;
+        transition: .2s ease;
+
+        .crowdsale_focus &{
+            background-color: $brand-blue;
+            border-color: $brand-blue;
+            color: $primary-text;
+        }
+
+        &:before{
+            content: '';
+            display: block;
+            @include position(absolute, 100% 50% null null);
+            transform: translate(50%,0);
+            background-color: darken($cf,23%);
+            @include size(2px,300%);
+
+            .crowdsale:last-child &{
+                display: none;
+            }
+        }
+    }
+
+    &__label{
+        font-weight: 700;
+        @include fz(14);
+        margin-left: 1em;
+        margin-bottom: 0;
+        transition: .2s ease;
+        color: rgba($primary-text,.5);
+        padding: .6em 0;
+
+        .crowdsale_focus &{
+            color: $primary-text;
+        }
+    }
+
+    &__helper{
+        @include fz(12);
+        transition: .2s ease;
+        color: rgba($primary-text,.5);
+
+        .crowdsale_focus &{
+            color: $primary-text;
         }
     }
 }
