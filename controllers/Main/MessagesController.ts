@@ -5,6 +5,8 @@ import {UserModel} from "../../models/UserModel";
 import {Controller} from "../Controller";
 import {MessageModel} from "../../models/MessageModel";
 import {ChatModel} from "../../models/ChatModel";
+import {AccountModel} from "../../models/AccountModel";
+
 // import {assertAnyTypeAnnotation} from "babel-types";
 import {FileModel} from "../../models/FileModel";
 // import InterceptFileProtocolRequest = Electron.InterceptFileProtocolRequest;
@@ -13,6 +15,8 @@ import {b64img_to_buff, check_file_exist, check_file_preview, Helper, read_file,
 import * as Electron from 'electron'
 import Notification = Electron.Notification;
 import nativeImage = Electron.nativeImage;
+import ipcRenderer = Electron.ipcRenderer;
+import ipcMain = Electron.ipcMain;
 // import * as eNotify from 'electron-notify'
 // let eNotify = require('electron-notify');
 
@@ -53,15 +57,17 @@ class MessagesController extends Controller {
         // message.sender_name = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.name : message.chat.name;
         message.fill_sender_data();
         for (let num in message.files){
+            let path =  (await AccountModel.get_me(self_info.id)).downloads;
+            console.log("Paaaath:", path);
             if (check_file_preview(message.files[num].type)) {
                 message.files[num].preview=true;
-                if (!read_file(message.files[num])) {
+                if (!read_file(message.files[num], path)) {
                     message.files[num].file = (await this.ipfs.get_file(message.files[num].hash)).file;
-                    save_file(message.files[num]);
+                    save_file(message.files[num], path);
                 }
                 console.log(message.files[num]);
             } else {
-                if (check_file_exist(message.files[num]))
+                if (check_file_exist(message.files[num], path))
                     message.files[num].downloaded=true;
             }
         }
@@ -101,10 +107,12 @@ class MessagesController extends Controller {
     }
 
     async download_file(file_id: string) {
+        let self_info = await this.get_self_info();
+        let path =  AccountModel.get_me(self_info.id)["downloads"];
         let file = await FileModel.findOne(file_id);
-        if (!read_file(file)) {
+        if (!read_file(file, path)) {
             file.file = (await this.ipfs.get_file(file.hash)).file;
-            save_file(file);
+            save_file(file, path);
         }
         this.send_data('file_downloaded',{id:file_id});
     }
@@ -129,13 +137,7 @@ class MessagesController extends Controller {
         if (file) {
             console.log(file);
             fileModel = new FileModel();
-            // if ([
-            //     'image/jpeg',
-            //     'image/png',
-            // ].includes(file.type))
-                fileModel.preview = check_file_preview(file.type);
-            // file_send = {fileModel: file.fileModel, hash: await this.ipfs.add_file(fileModel), preview: preview, name: fileModel.name};
-            // file_info.sender = self_info.id;
+            fileModel.preview = check_file_preview(file.type);
             fileModel.hash = await this.ipfs.add_file(file);
             fileModel.chat = chat;
             fileModel.message = message;
@@ -144,7 +146,9 @@ class MessagesController extends Controller {
             fileModel.type = file.type;
 
             await fileModel.save();
-            save_file(fileModel);
+            let self_info = await this.get_self_info();
+            let path =  AccountModel.get_me(self_info.id)["downloads"];
+            save_file(fileModel, path);
 
             message.files=[fileModel];
         }

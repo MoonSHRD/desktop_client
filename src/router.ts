@@ -272,6 +272,13 @@ export class Router {
         });
 
 
+        /** Account events **/
+
+        this.listen_event(this.ipcMain, "change_directory", async (event, path) => {
+           console.log("Change directory:", path);
+            await this.controller_register.run_controller('AccountController', 'update_directory', path);
+
+        });
     }
 }
 

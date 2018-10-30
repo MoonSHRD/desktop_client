@@ -15,6 +15,7 @@ const UserModel_1 = require("../../models/UserModel");
 const Controller_1 = require("../Controller");
 const MessageModel_1 = require("../../models/MessageModel");
 const ChatModel_1 = require("../../models/ChatModel");
+const AccountModel_1 = require("../../models/AccountModel");
 // import {assertAnyTypeAnnotation} from "babel-types";
 const FileModel_1 = require("../../models/FileModel");
 // import InterceptFileProtocolRequest = Electron.InterceptFileProtocolRequest;
@@ -62,16 +63,18 @@ class MessagesController extends Controller_1.Controller {
             // message.sender_name = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.name : message.chat.name;
             message.fill_sender_data();
             for (let num in message.files) {
+                let path = (yield AccountModel_1.AccountModel.get_me(self_info.id)).downloads;
+                console.log("Paaaath:", path);
                 if (Helpers_1.check_file_preview(message.files[num].type)) {
                     message.files[num].preview = true;
-                    if (!Helpers_1.read_file(message.files[num])) {
+                    if (!Helpers_1.read_file(message.files[num], path)) {
                         message.files[num].file = (yield this.ipfs.get_file(message.files[num].hash)).file;
-                        Helpers_1.save_file(message.files[num]);
+                        Helpers_1.save_file(message.files[num], path);
                     }
                     console.log(message.files[num]);
                 }
                 else {
-                    if (Helpers_1.check_file_exist(message.files[num]))
+                    if (Helpers_1.check_file_exist(message.files[num], path))
                         message.files[num].downloaded = true;
                 }
             }
@@ -109,10 +112,12 @@ class MessagesController extends Controller_1.Controller {
     }
     download_file(file_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            let self_info = yield this.get_self_info();
+            let path = AccountModel_1.AccountModel.get_me(self_info.id)["downloads"];
             let file = yield FileModel_1.FileModel.findOne(file_id);
-            if (!Helpers_1.read_file(file)) {
+            if (!Helpers_1.read_file(file, path)) {
                 file.file = (yield this.ipfs.get_file(file.hash)).file;
-                Helpers_1.save_file(file);
+                Helpers_1.save_file(file, path);
             }
             this.send_data('file_downloaded', { id: file_id });
         });
@@ -136,13 +141,7 @@ class MessagesController extends Controller_1.Controller {
             if (file) {
                 console.log(file);
                 fileModel = new FileModel_1.FileModel();
-                // if ([
-                //     'image/jpeg',
-                //     'image/png',
-                // ].includes(file.type))
                 fileModel.preview = Helpers_1.check_file_preview(file.type);
-                // file_send = {fileModel: file.fileModel, hash: await this.ipfs.add_file(fileModel), preview: preview, name: fileModel.name};
-                // file_info.sender = self_info.id;
                 fileModel.hash = yield this.ipfs.add_file(file);
                 fileModel.chat = chat;
                 fileModel.message = message;
@@ -150,7 +149,9 @@ class MessagesController extends Controller_1.Controller {
                 fileModel.name = file.name;
                 fileModel.type = file.type;
                 yield fileModel.save();
-                Helpers_1.save_file(fileModel);
+                let self_info = yield this.get_self_info();
+                let path = AccountModel_1.AccountModel.get_me(self_info.id)["downloads"];
+                Helpers_1.save_file(fileModel, path);
                 message.files = [fileModel];
             }
             // message.fileModel = file_send;

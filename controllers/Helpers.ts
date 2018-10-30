@@ -8,18 +8,19 @@ import NativeImage = Electron.NativeImage;
 // require ('gm-base64');
 
 
-export function save_file(file){
-    check_files_dir();
+export function save_file(file, path){
+    if (!check_files_dir(path)) {path = files_config.files_path}
     let base64file = file.file.split(';base64,').pop();
-    fs.writeFileSync(`${files_config.files_path}${file.id}_${file.name}`, base64file, {encoding: 'base64'});
+    fs.writeFileSync(`${path}${file.id}_${file.name}`, base64file, {encoding: 'base64'});
     console.log(`file ${file.name} saved`);
 }
 
-export function read_file(file){
-    check_files_dir();
+export async function read_file(file, path){
+    if (!check_files_dir(path)) {path = files_config.files_path}
+    console.log("new path:", path);
     let succ=true;
     try {
-        file.file=`data:${file.type};base64,`+ fs.readFileSync(`${files_config.files_path}${file.id}_${file.name}`, {encoding: 'base64'});
+        file.file=`data:${file.type};base64,`+ fs.readFileSync(`${path}${file.id}_${file.name}`, {encoding: 'base64'});
     } catch (e) {
         console.log(e, 'file not found', file);
         succ=false;
@@ -28,9 +29,9 @@ export function read_file(file){
 
 }
 
-export function check_file_exist(file) {
-    check_files_dir();
-    return fs.existsSync(`${files_config.files_path}${file.id}_${file.name}`);
+export function check_file_exist(file, path) {
+    if (!check_files_dir(path)) {path = files_config.files_path}
+    return fs.existsSync(`${path}${file.id}_${file.name}`);
 }
 
 export function check_file_preview(type) {
@@ -40,10 +41,14 @@ export function check_file_preview(type) {
     ].includes(type);
 }
 
-function check_files_dir() {
-    if (!fs.existsSync(files_config.files_path)) {
+async function check_files_dir(path) {
+    if (!fs.existsSync(path)) {
+        console.log("Path not found!!111");
+        await this.controller_register.run_controller("AccountController", "update_directory", files_config.files_path);
         fs.mkdirSync(files_config.files_path);
+        return false;
     }
+    return true;
 }
 
 

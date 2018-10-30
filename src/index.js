@@ -1,6 +1,7 @@
 const {ipcRenderer} = require('electron');
 const dict = require('./langs/lang');
 const slick = require('slick-carousel');
+const {dialog} = require('electron').remote;
 
 let p = null;
 let d = null;
@@ -687,5 +688,22 @@ window.onload = function () {
     $('[data-toggle="collapse"]').collapse('toggle');
 
 
+    $(document).on('click', '[name=change_download]', function (e) {
+        dialog.showOpenDialog({
+            properties: ["openDirectory","openFile"]
+        },function (fileNames) {
+            console.log("file:", fileNames);
+            ipcRenderer.send("change_directory")
+        });
+    });
+
+    // ipcRenderer.on("change_directory", (event) => {
+    //     dialog.showOpenDialog({
+    //         properties: ["openDirectory","openFile"]
+    //     },async function (fileNames) {
+    //         console.log("file:", fileNames);
+    //         ipcRenderer.send("change_directory");
+    //     })
+    // });
 
 };
