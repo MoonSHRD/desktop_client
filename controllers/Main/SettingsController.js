@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
-const UserModel_1 = require("../../models/UserModel");
 const Controller_1 = require("../Controller");
 class SettingsController extends Controller_1.Controller {
     change_settings_menu(menu_type = "settings_identification") {
@@ -33,12 +32,6 @@ class SettingsController extends Controller_1.Controller {
                     // this.send_data('change_wallet_menu', this.render(`main/wallet/${menu_type}.pug`));
                     break;
             }
-        });
-    }
-    ;
-    get_contacts() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let contacts = yield UserModel_1.UserModel.find({ take: 10 });
         });
     }
     ;

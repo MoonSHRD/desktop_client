@@ -467,17 +467,24 @@ window.onload = function () {
     });
 
     $(document).on('submit', '.modal-content', function (e) {
+        let group_name_el = $("[name=name]");
+        let group_name = group_name_el.val().trim();
         e.preventDefault();
-        // return;
-        const data = $(this).serializeArray();
-        let obj = {};
-        data.forEach(function (elem) {
-            obj[elem.name] = elem.value;
-        });
+        if (group_name.length > 2) {
+            const data = $(this).serializeArray();
+            let obj = {};
+            data.forEach(function (elem) {
+                obj[elem.name] = elem.value;
+            });
 
-        ipcRenderer.send('create_group', obj);
-        console.log(obj);
-        $('#AppModal').modal('toggle');
+            ipcRenderer.send('create_group', obj);
+            console.log(obj);
+            $('#AppModal').modal('toggle');
+        }
+        else{
+            group_name_el.val("");
+            group_name_el.attr("placeholder", "only from three characters");
+        }
     });
 
     $(document).on('click', '[data-event=show_chat_info]', function () {
@@ -487,26 +494,6 @@ window.onload = function () {
         // let data = $this.attr('href');
         ipcRenderer.send('show_popup', {id, type});
     });
-
-    // $(document).on('click', '[data-name=submit_suggest_to_channel]', function () {
-    //     let textbox = $('[data-name=suggest_to_channel]');
-    //     let text = textbox.val();
-    //     if (text.trim() === "") return;
-    //     console.log(`Suggest: ${text}`);
-    //     textbox.val('');
-    //
-    //     bot_notif("Success! Your suggest has been sent");
-    //     console.log(text);
-    //     // return;
-    //     let active_dialog = $('.active_dialog');
-    //     // console.log({id:active_dialog.attr('id'),domain:active_dialog.attr('data-domain')});
-    //     ipcRenderer.send('channel_suggestion', {
-    //         id:active_dialog.attr('id'),
-    //         domain:active_dialog.attr('data-domain'),
-    //         contract_address:active_dialog.attr('data-contract_address'),
-    //         text: text
-    //     });
-    // });
 
     function bot_notif(text) {
         $.notify(text, {
