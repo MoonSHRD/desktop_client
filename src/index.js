@@ -579,8 +579,9 @@ window.onload = function () {
     $(document).on('submit', '.modal-content', function (e) {
         e.preventDefault();
         const $this = $(this);
-        // return;
-        // const data = $this.serializeArray();
+        let groupNameEl = $this.find("[name='name']");
+        let groupName = groupNameEl.val().trim();
+        let openPrivateRadio = $this.find('[name="openPrivate"]:checked');
 
         let {data,err}=checkFields(this);
 
@@ -588,10 +589,15 @@ window.onload = function () {
         console.log(err);
 
         // let obj = {};
-        if (!err) {
-            ipcRenderer.send('create_group', data);
-            console.log(data);
-            $('#AppModal').modal('toggle');
+        if (groupName.length > 2) {
+            if (openPrivateRadio.val() === 'off' ){
+                err = false;
+            }
+            if (!err) {
+                ipcRenderer.send('create_group', data);
+                console.log(data);
+                $('#AppModal').modal('toggle');
+            }
         }
     });
 
