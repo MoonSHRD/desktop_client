@@ -8,6 +8,29 @@ let r = null;
 let curr_width = null;
 let unlock = false;
 
+function validate_totalSupply(val) {
+    let regexp = /^[0-9\.]*$/;
+    if (regexp.test(val)){
+        console.log(val);
+        return (val);
+    }
+}
+
+function validate_subscriptionPrice(val) {
+    let regexp = /^[0-9\.]*$/;
+    if (regexp.test(val)){
+        console.log(val);
+        return (val);
+    }
+}
+
+function validate_tokenPrice(val) {
+    let regexp = /^[0-9]*\.?[0-9]*$/;
+    if (regexp.test(val)){
+        console.log(val);
+        return (val);
+    }
+}
 
 window.onload = function () {
 
@@ -510,8 +533,6 @@ window.onload = function () {
         }
     };
 
-
-
     function checkFields(fieldset) {
         let err = false;
         const $this=$(fieldset);
@@ -525,7 +546,6 @@ window.onload = function () {
 
 
         els.forEach(function (elem) {
-            console.log(elem);
             const $element = $this.find(`[name=${elem.name}]`);
             if (window['validate_'+elem.name]!==undefined){
                 if (!window['validate_'+elem.name](elem.value)){
@@ -551,12 +571,6 @@ window.onload = function () {
 
         return ret;
     }
-
-    // function validate_openPrivate(val) {
-    //     if (val === 'on'){
-    //         console.log('done')
-    //     }
-    // }
 
     // $(document).on('keyup', '[data-require="true"]', function (){
     //     validationInputs(this);

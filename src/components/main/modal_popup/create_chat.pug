@@ -35,7 +35,7 @@
                             .crowdsale__num 1
                             label.crowdsale__label(for="s-price") Subscription price
                         .col
-                            input.form-control.crowdsale__input#s-price(type="text" name="s-price" data-name="crowdsale__input" data-require="true" data-require-chars="num")
+                            input.form-control.crowdsale__input#s-price(type="text" name="subscriptionPrice" data-name="crowdsale__input" data-require="true" data-require-chars="num")
                         .col-3.align-self-center
                             .crowdsale__helper * 1$ = 1MnShrd
                     .crowdsale.row(data-name="crowdsale")
@@ -59,7 +59,7 @@
                             .crowdsale__num 4
                             label.crowdsale__label(for="t-supply") Total supply
                         .col
-                            input.form-control.crowdsale__input#t-supply(type="text" name="t-supply" data-name="crowdsale__input" data-require="true" data-require-chars="integer")
+                            input.form-control.crowdsale__input#t-supply(type="text" name="totalSupply" data-name="crowdsale__input" data-require="true" data-require-chars="integer")
                         .col-3.align-self-center
                             .crowdsale__helper * enter the number of tokens
                     .crowdsale.row(data-name="crowdsale")
@@ -67,7 +67,7 @@
                             .crowdsale__num 5
                             label.crowdsale__label(for="t-price") Token price
                         .col
-                            input.form-control.crowdsale__input#t-price(type="text" name="t-price" data-name="crowdsale__input" data-require="true" data-require-chars="num")
+                            input.form-control.crowdsale__input#t-price(type="text" name="tokenPrice" data-name="crowdsale__input" data-require="true" data-require-chars="num")
                         .col-3.align-self-center
                             .crowdsale__helper * 1 token = 1$
     .form-group#popup_error(style="color:red; display:none;")
