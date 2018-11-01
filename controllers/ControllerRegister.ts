@@ -2,6 +2,7 @@ import * as Queue from 'better-queue';
 
 const Controllers = {
     AuthController: require(__dirname + '/Auth/AuthController'),
+    AccountController: require(__dirname + '/Main/AccountController'),
     ChatsController: require(__dirname + '/Main/ChatsController'),
     MessagesController: require(__dirname + '/Main/MessagesController'),
     MenuController: require(__dirname + '/Main/MenuController'),

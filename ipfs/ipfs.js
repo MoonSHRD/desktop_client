@@ -10,34 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const env_config_1 = require("../src/env_config");
 const ipfsAPI = require('ipfs-api');
-// const ipfs = ipfsAPI(ipfs_config.host, ipfs_config.port);
-// ipfs.id((err, res) => {
-//     if (err) throw err;
-//     console.log({
-//         id: res.id,
-//         version: res.agentVersion,
-//         protocol_version: res.protocolVersion
-//     })
-// });
-// const obj = {
-//     Data: new Buffer(JSON.stringify({text: "sobaka"})),
-//     Links: []
-// };
-// ipfs.object.put(obj, (err, node) => {
-//     if (err) {
-//         throw err
-//     }
-//     // console.log(node.toJSON().multihash)
-//     const multihash=node.toJSON().multihash;
-//
-//
-//     ipfs.object.data(multihash, (err, data) => {
-//         if (err) {
-//             throw err
-//         }
-//         console.log(data.toString())
-//     })
-// });
 class Ipfs {
     static getInstance() {
         if (!Ipfs.instance) {
@@ -69,15 +41,7 @@ class Ipfs {
     get_file(ipfsId) {
         return __awaiter(this, void 0, void 0, function* () {
             let response = yield this.connection.get(ipfsId, { progress: (prog) => console.log(`received: ${prog}`) });
-            // let response = ipfs.files.get(ipfsId);
-            // console.log(response);
-            // console.log(response[0]);
-            // console.log(response[0].content);
-            // console.log(response[0].content.toString());
             return JSON.parse(response[0].content.toString());
-            // let ipfsId = response[0].hash;
-            // console.log(ipfsId);
-            // return ipfsId;
         });
     }
 }

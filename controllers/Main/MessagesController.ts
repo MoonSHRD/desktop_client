@@ -5,6 +5,8 @@ import {UserModel} from "../../models/UserModel";
 import {Controller} from "../Controller";
 import {MessageModel} from "../../models/MessageModel";
 import {ChatModel} from "../../models/ChatModel";
+import {AccountModel} from "../../models/AccountModel";
+
 // import {assertAnyTypeAnnotation} from "babel-types";
 import {FileModel} from "../../models/FileModel";
 // import InterceptFileProtocolRequest = Electron.InterceptFileProtocolRequest;
@@ -13,6 +15,8 @@ import {b64img_to_buff, check_file_exist, check_file_preview, Helper, read_file,
 import * as Electron from 'electron'
 import Notification = Electron.Notification;
 import nativeImage = Electron.nativeImage;
+import ipcRenderer = Electron.ipcRenderer;
+import ipcMain = Electron.ipcMain;
 // import * as eNotify from 'electron-notify'
 // let eNotify = require('electron-notify');
 
@@ -53,9 +57,11 @@ class MessagesController extends Controller {
         // message.sender_name = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.name : message.chat.name;
         message.fill_sender_data();
         for (let num in message.files){
+            let path =  (await AccountModel.get_me(self_info.id)).downloads;
+            // console.log("Current path:", path);
             if (check_file_preview(message.files[num].type)) {
                 message.files[num].preview=true;
-                if (!read_file(message.files[num])) {
+                if (!await read_file(message.files[num])) {
                     message.files[num].file = (await this.ipfs.get_file(message.files[num].hash)).file;
                     save_file(message.files[num]);
                 }
@@ -110,7 +116,6 @@ class MessagesController extends Controller {
     }
 
     async send_message({id, text, file}) {
-        console.log(file);
         let self_info = await this.get_self_info();
         let chat = await ChatModel.findOne(id);
         // let date = new Date();
@@ -127,22 +132,16 @@ class MessagesController extends Controller {
 
         let fileModel;
         if (file) {
-            console.log(file);
+            console.log("with file:", file);
             fileModel = new FileModel();
-            // if ([
-            //     'image/jpeg',
-            //     'image/png',
-            // ].includes(file.type))
-                fileModel.preview = check_file_preview(file.type);
-            // file_send = {fileModel: file.fileModel, hash: await this.ipfs.add_file(fileModel), preview: preview, name: fileModel.name};
-            // file_info.sender = self_info.id;
+            fileModel.preview = check_file_preview(file.type);
             fileModel.hash = await this.ipfs.add_file(file);
             fileModel.chat = chat;
             fileModel.message = message;
             fileModel.file = file.file;
             fileModel.name = file.name;
             fileModel.type = file.type;
-
+            fileModel.path = (await AccountModel.get_me(self_info.id)).downloads;
             await fileModel.save();
             save_file(fileModel);
 
@@ -208,9 +207,11 @@ class MessagesController extends Controller {
                 fileModel.name = files[num].name;
                 fileModel.type = files[num].type;
                 fileModel.preview = check_file_preview(files[num].type);
+                fileModel.path = AccountModel.get_me(self_info.id)["downloads"];
                 if (fileModel.preview) {
                     fileModel.file = (await this.ipfs.get_file(fileModel.hash)).file;
                 }
+                fileModel.path = self_info.id;
                 await fileModel.save();
                 message.files.push(fileModel);
             }
@@ -261,6 +262,7 @@ class MessagesController extends Controller {
                 if (fileModel.preview) {
                     fileModel.file = (await this.ipfs.get_file(fileModel.hash)).file;
                 }
+                fileModel.path = AccountModel.get_me(self_info.id)["downloads"];
                 await fileModel.save();
                 messageModel.files.push(fileModel);
             }

@@ -15,6 +15,7 @@ const UserModel_1 = require("../../models/UserModel");
 const Controller_1 = require("../Controller");
 const MessageModel_1 = require("../../models/MessageModel");
 const ChatModel_1 = require("../../models/ChatModel");
+const AccountModel_1 = require("../../models/AccountModel");
 // import {assertAnyTypeAnnotation} from "babel-types";
 const FileModel_1 = require("../../models/FileModel");
 // import InterceptFileProtocolRequest = Electron.InterceptFileProtocolRequest;
@@ -62,9 +63,11 @@ class MessagesController extends Controller_1.Controller {
             // message.sender_name = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.name : message.chat.name;
             message.fill_sender_data();
             for (let num in message.files) {
+                let path = (yield AccountModel_1.AccountModel.get_me(self_info.id)).downloads;
+                // console.log("Current path:", path);
                 if (Helpers_1.check_file_preview(message.files[num].type)) {
                     message.files[num].preview = true;
-                    if (!Helpers_1.read_file(message.files[num])) {
+                    if (!(yield Helpers_1.read_file(message.files[num]))) {
                         message.files[num].file = (yield this.ipfs.get_file(message.files[num].hash)).file;
                         Helpers_1.save_file(message.files[num]);
                     }
@@ -119,7 +122,6 @@ class MessagesController extends Controller_1.Controller {
     }
     send_message({ id, text, file }) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(file);
             let self_info = yield this.get_self_info();
             let chat = yield ChatModel_1.ChatModel.findOne(id);
             // let date = new Date();
@@ -134,21 +136,16 @@ class MessagesController extends Controller_1.Controller {
             let group;
             let fileModel;
             if (file) {
-                console.log(file);
+                console.log("with file:", file);
                 fileModel = new FileModel_1.FileModel();
-                // if ([
-                //     'image/jpeg',
-                //     'image/png',
-                // ].includes(file.type))
                 fileModel.preview = Helpers_1.check_file_preview(file.type);
-                // file_send = {fileModel: file.fileModel, hash: await this.ipfs.add_file(fileModel), preview: preview, name: fileModel.name};
-                // file_info.sender = self_info.id;
                 fileModel.hash = yield this.ipfs.add_file(file);
                 fileModel.chat = chat;
                 fileModel.message = message;
                 fileModel.file = file.file;
                 fileModel.name = file.name;
                 fileModel.type = file.type;
+                fileModel.path = (yield AccountModel_1.AccountModel.get_me(self_info.id)).downloads;
                 yield fileModel.save();
                 Helpers_1.save_file(fileModel);
                 message.files = [fileModel];
@@ -214,9 +211,11 @@ class MessagesController extends Controller_1.Controller {
                     fileModel.name = files[num].name;
                     fileModel.type = files[num].type;
                     fileModel.preview = Helpers_1.check_file_preview(files[num].type);
+                    fileModel.path = AccountModel_1.AccountModel.get_me(self_info.id)["downloads"];
                     if (fileModel.preview) {
                         fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
                     }
+                    fileModel.path = self_info.id;
                     yield fileModel.save();
                     message.files.push(fileModel);
                 }
@@ -268,6 +267,7 @@ class MessagesController extends Controller_1.Controller {
                     if (fileModel.preview) {
                         fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
                     }
+                    fileModel.path = AccountModel_1.AccountModel.get_me(self_info.id)["downloads"];
                     yield fileModel.save();
                     messageModel.files.push(fileModel);
                 }
