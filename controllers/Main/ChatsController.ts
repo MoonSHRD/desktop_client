@@ -75,7 +75,7 @@ class ChatsController extends Controller {
 
         let chats = await ChatModel.get_chats_with_last_msgs(self_info);
 
-        console.log(chats);
+        // console.log(chats);
         let menu_chat: string;
         if (type === this.chat_types.user) {
             menu_chat = this.chat_to_menu.user;
@@ -161,15 +161,17 @@ class ChatsController extends Controller {
             await this.load_chat(chat,this.chat_types.group)
         } else {
             // await this.load_chat(chat, this.chat_to_menu.group);
-            let count = (messages.length).toString();
+            let count = (messages.length-1).toString();
+            console.log('count: ',count);
             for (let num in messages){
                 let message=messages[num];
                 // let buf = message.time.split(" ");
                 // message.time = `${buf[0]} ${buf[1]}`;
                 let room_data = {id: message.sender};
                 let sender = {address: message.sender, domain: "localhost"};
+                console.log('num: ',num);
                 await this.controller_register.run_controller("MessagesController", "received_group_message",
-                    {room_data, message:message.message, sender, stamp:message.time, files:message.files, fresh:(num===count)});
+                    {room_data, message:message.message, sender, stamp:message.time, files:message.files, fresh:(num===count), notificate:false});
             }
             await this.controller_register.run_controller("MessagesController", "get_chat_messages", room_data.id)
         }

@@ -2,7 +2,7 @@
 /*==== Vendor Packages ====*/
 /*=========================*/
 /* Fonts */
-@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i|Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&subset=cyrillic');
 /* Animate.css */
 @import url('../../node_modules/animate.css/animate.min.css');
 /* Bootstrap 4 */
@@ -36,3 +36,5 @@
 @import "main/coming_soon/coming_soon";
 /* Messaging Block*/
 @import "main/messagingblock/newMsgBlock";
+/* Modal Window */
+@import "main/modal_popup/modal";

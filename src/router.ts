@@ -209,10 +209,10 @@ export class Router {
             await this.controller_register.queue_controller('MessagesController', 'received_group_message', {room_data, message, sender, files, stamp});
         });
 
-        this.listen_event(this.dxmpp, 'chat', async (user, message,file) => {
-            console.log(`user ${user.id} subscribed`);
+        this.listen_event(this.dxmpp, 'chat', async (user, message, stamp, file) => {
+            console.log(`user ${user.id} send you message`);
             console.log(file);
-            await this.controller_register.queue_controller('MessagesController', 'received_message', user, message,file);
+            await this.controller_register.queue_controller('MessagesController', 'received_message', user, message, stamp, file);
         });
 
         this.listen_event(this.dxmpp, 'confirmation', async (message) => {
@@ -230,6 +230,11 @@ export class Router {
 
         this.listen_event(this.ipcMain, 'download_file', async (event, arg) => {
             await this.controller_register.queue_controller('MessagesController', 'download_file', arg);
+        });
+
+        this.listen_event(this.ipcMain, "reading_messages", async (event, chat_id) => {
+            console.log("Reading msg from", chat_id);
+            await this.controller_register.run_controller("MessagesController", "reading_messages", chat_id);
         });
 
 

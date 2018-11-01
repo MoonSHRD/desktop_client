@@ -1,0 +1,119 @@
+.modal{
+
+    &-header{
+        position: relative;
+        border-bottom: 0;
+
+        &_img{
+            flex-direction: column;
+            align-items: center;
+            padding-top: 50px;
+        }
+
+        &__img{
+            @include size(80px);
+            @include gradient-y($brand-blue, $brand-blue-100);
+            @include position(absolute, 0 null null null);
+            line-height: 73px;
+            border-radius: 50%;
+            text-align: center;
+            transform: translate(0,-50%);
+            box-shadow: 2px 2px 20px $brand-blue;
+        }
+
+        &__name{
+            .form-control{
+                text-align: center;
+                &::placeholder{
+                    text-align: center;
+                }
+            }
+        }
+
+        &__category{
+        }
+    }
+    &-body{
+        padding: 0 2rem;
+
+        #token_row{
+            label{
+                @include fz(18);
+                font-family: $ff-1;
+                font-weight: 500;
+            }
+        }
+    }
+    &-footer{
+        border-top: none;
+        justify-content: center;
+        .btn{
+            margin-left: 1rem;
+            margin-right: 1rem;
+            min-width: 10em;
+        }
+    }
+}
+
+.crowdsale{
+    padding-bottom: 1.5rem;
+
+    &__num{
+        @include size(24px);
+        @include fz(18);
+        color: rgba($primary-text,.5);
+        border: 1px solid $brand-gray-400;
+        flex-shrink: 0;
+        text-align: center;
+        line-height: 24px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+        position: relative;
+        background-color: $cf;
+        transition: .2s ease;
+
+        .crowdsale_focus &{
+            background-color: $brand-blue;
+            border-color: $brand-blue;
+            color: $primary-text;
+        }
+
+        &:before{
+            content: '';
+            display: block;
+            @include position(absolute, 100% 50% null null);
+            transform: translate(50%,0);
+            background-color: darken($cf,23%);
+            @include size(2px,300%);
+
+            .crowdsale:last-child &{
+                display: none;
+            }
+        }
+    }
+
+    &__label{
+        font-weight: 700;
+        @include fz(14);
+        margin-left: 1em;
+        margin-bottom: 0;
+        transition: .2s ease;
+        color: rgba($primary-text,.5);
+        padding: .6em 0;
+
+        .crowdsale_focus &{
+            color: $primary-text;
+        }
+    }
+
+    &__helper{
+        @include fz(12);
+        transition: .2s ease;
+        color: rgba($primary-text,.5);
+
+        .crowdsale_focus &{
+            color: $primary-text;
+        }
+    }
+}

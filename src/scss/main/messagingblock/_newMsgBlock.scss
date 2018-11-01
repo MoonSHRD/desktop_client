@@ -272,9 +272,14 @@ a.join_button {
         resize: none;
         flex: 1;
         margin: 0 15px;
+        max-height: 200px;
 
         &::placeholder {
             color: $brand-blue;
+        }
+
+        &::-webkit-scrollbar {
+            width: 0;
         }
     }
 
@@ -358,7 +363,7 @@ a.join_button {
 
     // Список сообщений
     &__list{
-        padding: 15px 30px;
+        padding: 15px;
     }
 }
 /*

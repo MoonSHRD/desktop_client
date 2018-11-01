@@ -40,12 +40,14 @@ class MessagesController extends Controller_1.Controller {
             let chat = yield ChatModel_1.ChatModel.get_chat_with_events(chat_id);
             if (!chat)
                 return this.load_join_chat(chat_id);
+            yield this.reading_messages(chat.id);
             switch (chat.type) {
                 case this.chat_types.user:
                     yield chat.get_user_chat_meta();
                     break;
             }
             let html = this.render('main/messagingblock/qqq.pug', chat);
+            yield chat.save();
             yield this.send_data('reload_chat', html);
             yield this.render_chat_messages(chat_id);
         });
@@ -81,8 +83,10 @@ class MessagesController extends Controller_1.Controller {
                 id: message.chat.id,
                 html: html,
                 message: message,
+                unread_messages: message.chat.unread_messages
             };
-            this.send_data('received_message', data);
+            yield this.send_data('received_message', data);
+            // this.controller_register.run_controller("ChatsController", "load_chat", message.chat, "menu_chats");
             if (message.notificate) {
                 let notif = new Notification({
                     title: message.sender_name,
@@ -181,23 +185,26 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_message(user, text, files) {
+    received_message(user, text, stamp, files) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(files);
+            stamp = Number(stamp);
+            // console.log("Files:", files);
             let self_info = yield this.get_self_info();
             let userModel = yield UserModel_1.UserModel.findOne(user.id);
             let chat = yield ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id);
+            chat.unread_messages += 1;
+            yield chat.save();
             let message = new MessageModel_1.MessageModel();
             message.text = text;
             message.sender = userModel;
             message.chat = chat;
-            message.time = Date.now();
+            message.time = stamp;
             message.fresh = true;
             message.notificate = true;
             message.files = [];
             yield message.save();
             // let ipfs_file;
-            if (files) {
+            if (files && files.length) {
                 for (let num in files) {
                     let fileModel = new FileModel_1.FileModel();
                     // file_info.sender = self_info.id;
@@ -218,10 +225,11 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
-    received_group_message({ room_data, message, sender, files, stamp, fresh = null }) {
+    received_group_message({ room_data, message, sender, files, stamp, fresh = true, notificate = true }) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('Files: ', files);
-            console.log('Stamp: ', stamp);
+            // console.log('Files: ',files);
+            // console.log('Stamp: ',stamp);
+            stamp = Number(stamp);
             let self_info = yield this.get_self_info();
             if (sender.address == self_info.id)
                 return;
@@ -235,14 +243,16 @@ class MessagesController extends Controller_1.Controller {
             //     stamp = this.dxmpp.take_time()
             // }
             let chat = yield ChatModel_1.ChatModel.findOne(room_data.id);
+            chat.unread_messages += 1;
+            yield chat.save();
             let messageModel = new MessageModel_1.MessageModel();
             messageModel.text = message;
             messageModel.sender = userModel;
             messageModel.chat = chat;
-            messageModel.time = new Date(stamp).getTime();
+            messageModel.time = stamp;
             messageModel.files = [];
-            messageModel.fresh = fresh === false;
-            messageModel.notificate = fresh === null;
+            messageModel.fresh = fresh;
+            messageModel.notificate = notificate;
             yield messageModel.save();
             if (files) {
                 for (let num in files) {
@@ -263,6 +273,13 @@ class MessagesController extends Controller_1.Controller {
                 }
             }
             yield this.render_message(messageModel);
+        });
+    }
+    reading_messages(chat_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let chat = yield ChatModel_1.ChatModel.get_chat_with_events(chat_id);
+            chat.unread_messages = 0;
+            yield chat.save();
         });
     }
 }

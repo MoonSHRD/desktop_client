@@ -1,0 +1,3 @@
+@mixin btn-shadow($color, $x : 2px, $y : 2px, $blur : 20px){
+    box-shadow: $x $y $blur rgba($color, .4);
+}

@@ -21,8 +21,8 @@ $(document).on('click', '.sendTokenButton', function (e) {
 $(document).off('input', 'input[name=amount]');
 
 $(document).on('input', 'input[name=amount]', function (e) {
-    const $this = $(this)
-    $this.css('box-shadow', 'none')
+    const $this = $(this);
+    $this.css('box-shadow', 'none');
     if($this.val() != '') {
         var regexp = /^[0-9\.]*$/;
         if (!regexp.test($this.val())) {

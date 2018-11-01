@@ -8,6 +8,29 @@ let r = null;
 let curr_width = null;
 let unlock = false;
 
+function validate_totalSupply(val) {
+    let regexp = /^[0-9\.]*$/;
+    if (regexp.test(val)){
+        console.log(val);
+        return (val);
+    }
+}
+
+function validate_subscriptionPrice(val) {
+    let regexp = /^[0-9\.]*$/;
+    if (regexp.test(val)){
+        console.log(val);
+        return (val);
+    }
+}
+
+function validate_tokenPrice(val) {
+    let regexp = /^[0-9]*\.?[0-9]*$/;
+    if (regexp.test(val)){
+        console.log(val);
+        return (val);
+    }
+}
 
 window.onload = function () {
 
@@ -53,20 +76,20 @@ window.onload = function () {
         document.execCommand('copy');
         console.log(range, sel, elem);
 
-            $.notify('address copied \n' + range, {
+        $.notify('address copied \n' + range, {
 
-                placement: {
-                    from: "bottom",
-                    align: "right"
-                },
-                animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated fadeOutRight'
-                },
-                z_index: 10031,
-                offset: 20,
-                spacing: 10
-            });
+            placement: {
+                from: "bottom",
+                align: "right"
+            },
+            animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+            },
+            z_index: 10031,
+            offset: 20,
+            spacing: 10
+        });
         // }
     });
 
@@ -153,7 +176,7 @@ window.onload = function () {
 
     let widthMsgWindow = (target) => {
         let msgWindow =  document.querySelector(target);
-        if (msgWindow.offsetWidth > 800){
+        if (msgWindow.offsetWidth > 900){
             msgWindow.classList.add('messaging_block_lg');
         } else {
             msgWindow.classList.remove('messaging_block_lg');
@@ -203,7 +226,51 @@ window.onload = function () {
         }
     });
 
+    $(document).on('keyup', '[data-msg="data-msg"]', function () {
+        if (event.ctrlKey && event.keyCode === 13 ) {
+            $(this).attr('rows', 1)
+        }
+    });
+
+    $(document).on('keydown',".send_message__input",function(e) {
+        if($(this).val() === '') {
+            $(this).attr('rows', 1)
+        };
+        if($(this).val() === '' && event.keyCode == 13) {
+            event.preventDefault();
+        };
+
+        if ( event.keyCode === 13 && $(this).val()!=='') {
+            ResizeTextArea(this,0)
+        }
+    });
+
+    $(document).on('input',".send_message__input",function(e) {
+        // console.log('hello!')
+        if($(this).val() === '') {
+            $(this).attr('rows', 1)
+        };
+
+    });
+
+    $(document).on('paste',".send_message__input",function(e) {
+        console.log('paste!')
+        var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
+        if($(this).val()!=='')
+        {
+            $(this).attr('rows', $(this).attr('rows'))
+
+        }else {
+            ResizeTextArea(this,10)
+
+        }
+        console.log(text);
+
+    });
+
+
     $(document).on('click', '[data-toggle="send-msg"]', function () {
+        $('[data-msg="data-msg"]').focus();
         send_message();
     });
 
@@ -211,7 +278,6 @@ window.onload = function () {
         let msg_input = $('.send_message__input');
         msg_input.attr('rows', 1);
         if (msg_input.val().trim() === '') {
-            msg_input.attr('rows', 1)
 
             msg_input.val('');
             return;
@@ -225,7 +291,6 @@ window.onload = function () {
             text: msg_input.val().trim(),
             group: $('.active_dialog').attr('data-type') === 'channel',
         };
-        msg_input.attr('rows', 1)
 
         obj = {id: active_dialog.attr('id'), text: msg_input.val().trim()};
         // console.log(obj);
@@ -269,22 +334,28 @@ window.onload = function () {
     });
 
     ipcRenderer.on('received_message', (event, obj) => {
+        let chat = $('#'+obj.id);
 
         if (obj.message.fresh) {
-            let chat = $('#'+obj.id);
             if (chat) {
                 chat.find('[data-name=chat_last_time]').text(obj.message.time);
                 chat.find('[data-name=chat_last_text]').text(obj.message.text);
+                console.log(obj);
+
+                chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
+                chat.find("[data-name=unread_messages]").show();
             }
             chat.prependTo($('.chats ul')[0]);
         }
-
         if ($('.active_dialog').attr('id') === obj.id) {
+            chat.find("[data-name=unread_messages]").hide();
+            ipcRenderer.send('reading_messages', obj.id);
             $('[data-msg-list]').append(obj.html);
             scrollDown('[data-msg-history]');
         } else {
-            // fawfaw
+            chat.find("[data-name=unread_messages]").text(obj.unread_messages);
         }
+        // ipcRenderer.send('load_chats', 'menu_chats');
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
@@ -361,11 +432,14 @@ window.onload = function () {
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
         let chat = $this.attr('id');
 
-        if(!($this.hasClass("active_dialog") && $this.hasClass("have_history"))) {
+        $this.find("[data-name=unread_messages]").hide();
+        $this.find("[data-name=unread_messages]").text("0");
 
+        if(!($this.hasClass("active_dialog") && $this.hasClass("have_history"))) {
             ipcRenderer.send('get_chat_msgs', chat);
             $this.addClass('have_history');
         }
+
     });
 
     $(document).on('click', '.walletMenu li', function (e) {
@@ -400,27 +474,148 @@ window.onload = function () {
         $('.chats ul').append(data);
     });
 
-    $(document).on("change", '.modal-content select[name=substype]', function () {
-        if ($(this).find(":selected").val() === 'unfree') {
-            $("#token_row").show();
+    // $(document).on("change", '.modal-content select[name=substype]', function () {
+    //     if ($(this).find(":selected").val() === 'unfree') {
+    //         $("#token_row").show();
+    //     } else {
+    //         $("#token_row").hide();
+    //     }
+    // });
+
+    $(document).on("change", '[name="openPrivate"]', function () {
+        if ($(this).attr('id') === 'private') {
+            $("#token_row").collapse('show');
         } else {
-            $("#token_row").hide();
+            $("#token_row").collapse('hide');
         }
     });
 
-    $(document).on('submit', '.modal-content', function (e) {
-        e.preventDefault();
-        // return;
-        const data = $(this).serializeArray();
-        let obj = {};
-        data.forEach(function (elem) {
-            obj[elem.name] = elem.value;
+    /*
+     * Форма создная группы/канала
+     */
+
+    function validationInputs(target = '[data-require]'){
+        const $this = $(target);
+        const minChars = $this.attr('minlength');
+        const maxChars = $this.attr('maxlength');
+        const typeChars = $this.data('require-chars');
+        let value = $this.val();
+        let rgx;
+
+        console.log($this);
+
+        if (value.length < minChars){
+            $this.addClass('error').removeClass('correct');
+        } else {
+            $this.removeClass('error').addClass('correct');
+        }
+
+        if (typeChars === 'integer') {
+            rgx = /[0-9]|\./;
+            if (!rgx.test(value)) {
+                // e.preventDefault();
+                $this.addClass('error').removeClass('correct');
+                // alert("введите латинские символы");
+                return false;
+            } else {
+                $this.removeClass('error').addClass('correct');
+            }
+        } else if (typeChars === 'num') {
+            rgx = /^[0-9]*\.?[0-9]*$/;
+            if (!rgx.test(value)) {
+                // e.preventDefault();
+                $this.addClass('error').removeClass('correct');
+                // alert("введите латинские символы");
+                return false;
+            } else {
+                $this.removeClass('error').addClass('correct');
+            }
+        }
+    };
+
+    function checkFields(fieldset) {
+        let err = false;
+        const $this=$(fieldset);
+        let els = $this.serializeArray();
+        console.log(els);
+        // if (els.length===0) return err;
+        let ret={
+            err:true,
+            data:{}
+        };
+
+
+        els.forEach(function (elem) {
+            const $element = $this.find(`[name=${elem.name}]`);
+            if (window['validate_'+elem.name]!==undefined){
+                if (!window['validate_'+elem.name](elem.value)){
+                    $element.addClass('invalid');
+                    ret.err = true;
+                } else {
+                    $element.removeClass('invalid');
+                    ret.data[elem.name]=elem.value;
+                    ret.err = false;
+                }
+            } else {
+                // data[elem.name] = elem.value;
+                if (!elem.value) {
+                    $element.addClass('invalid');
+                    ret.err = true
+                } else {
+                    $element.removeClass('invalid');
+                    ret.data[elem.name]=elem.value;
+                    ret.err = false
+                }
+            }
         });
 
-        ipcRenderer.send('create_group', obj);
-        console.log(obj);
-        $('#AppModal').modal('toggle');
+        return ret;
+    }
+
+    // $(document).on('keyup', '[data-require="true"]', function (){
+    //     validationInputs(this);
+    // });
+
+    $(document).on('submit', '.modal-content', function (e) {
+        e.preventDefault();
+        const $this = $(this);
+        let groupNameEl = $this.find("[name='name']");
+        let groupName = groupNameEl.val().trim();
+        let openPrivateRadio = $this.find('[name="openPrivate"]:checked');
+
+        let {data,err}=checkFields(this);
+
+        console.log(data);
+        console.log(err);
+
+        // let obj = {};
+        if (groupName.length > 2) {
+            if (openPrivateRadio.val() === 'off' ){
+                err = false;
+            }
+            if (!err) {
+                ipcRenderer.send('create_group', data);
+                console.log(data);
+                $('#AppModal').modal('toggle');
+            }
+        }
     });
+
+    $(document).on('focusin', '[data-name="crowdsale__input"]', function (e) {
+        let $this = $(this);
+        let parent = $this.closest('[data-name="crowdsale"]');
+        parent.addClass('crowdsale_focus');
+    });
+
+    $(document).on('focusout', '[data-name="crowdsale__input"]', function (e) {
+        let $this = $(this);
+        let parent = $this.closest('[data-name="crowdsale"]');
+        parent.removeClass('crowdsale_focus');
+    });
+
+    /*
+     * /Форма создания группы/канала
+     */
 
     $(document).on('click', '[data-event=show_chat_info]', function () {
         const active_dialog = $('.active_dialog');
@@ -605,10 +800,7 @@ window.onload = function () {
         unlock = false;
     });
 
-    $(document).on('keyup',".send_message__input",function(e) {
-        // console.log('hello!')
-        ResizeTextArea(this,0)
-    });
+
 
     function countLines(strtocount, cols) {
         var hard_lines = 1;
@@ -616,9 +808,10 @@ window.onload = function () {
         while ( true ) {
             last = strtocount.indexOf("\n", last+1);
             hard_lines ++;
-            /* if ( hard_lines == 35) break; */
+            // if ( hard_lines == 10) break;
             if ( last == -1 ) break;
-            console.log('hi')
+            // console.log('hi')
+            // console.log(hard_lines)
         }
         var soft_lines = Math.ceil(strtocount.length / (cols-1));
         var hard = eval("hard_lines " + unescape("%3e") + "soft_lines;");
@@ -630,6 +823,18 @@ window.onload = function () {
     function ResizeTextArea(the_form,min_rows) {
         the_form.rows = Math.max(min_rows, countLines(the_form.value,the_form.cols) );
     }
+
+    $(document).on('click', '[data-toggle="switcher"]', function(e) {
+        let $this = $(this);
+        let $thisPosition = $this.data('switcher');
+        let $thisSwitcherToggle = $this.data('switcher-toggle');
+        let target = $this.data('target');
+        let $parent = $this.closest('.control-switcher');
+
+        $(target).attr('class', 'custom-control-switcher custom-control-switcher_' + $thisPosition);
+    });
+
+    $('[data-toggle="collapse"]').collapse('toggle');
 
 
 
