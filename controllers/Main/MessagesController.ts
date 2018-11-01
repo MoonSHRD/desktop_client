@@ -58,16 +58,16 @@ class MessagesController extends Controller {
         message.fill_sender_data();
         for (let num in message.files){
             let path =  (await AccountModel.get_me(self_info.id)).downloads;
-            console.log("Paaaath:", path);
+            // console.log("Current path:", path);
             if (check_file_preview(message.files[num].type)) {
                 message.files[num].preview=true;
-                if (!read_file(message.files[num], path)) {
+                if (!await read_file(message.files[num])) {
                     message.files[num].file = (await this.ipfs.get_file(message.files[num].hash)).file;
-                    save_file(message.files[num], path);
+                    save_file(message.files[num]);
                 }
                 console.log(message.files[num]);
             } else {
-                if (check_file_exist(message.files[num], path))
+                if (check_file_exist(message.files[num]))
                     message.files[num].downloaded=true;
             }
         }
@@ -107,18 +107,15 @@ class MessagesController extends Controller {
     }
 
     async download_file(file_id: string) {
-        let self_info = await this.get_self_info();
-        let path =  AccountModel.get_me(self_info.id)["downloads"];
         let file = await FileModel.findOne(file_id);
-        if (!read_file(file, path)) {
+        if (!read_file(file)) {
             file.file = (await this.ipfs.get_file(file.hash)).file;
-            save_file(file, path);
+            save_file(file);
         }
         this.send_data('file_downloaded',{id:file_id});
     }
 
     async send_message({id, text, file}) {
-        console.log(file);
         let self_info = await this.get_self_info();
         let chat = await ChatModel.findOne(id);
         // let date = new Date();
@@ -135,7 +132,7 @@ class MessagesController extends Controller {
 
         let fileModel;
         if (file) {
-            console.log(file);
+            console.log("with file:", file);
             fileModel = new FileModel();
             fileModel.preview = check_file_preview(file.type);
             fileModel.hash = await this.ipfs.add_file(file);
@@ -144,11 +141,9 @@ class MessagesController extends Controller {
             fileModel.file = file.file;
             fileModel.name = file.name;
             fileModel.type = file.type;
-
+            fileModel.path = (await AccountModel.get_me(self_info.id)).downloads;
             await fileModel.save();
-            let self_info = await this.get_self_info();
-            let path =  AccountModel.get_me(self_info.id)["downloads"];
-            save_file(fileModel, path);
+            save_file(fileModel);
 
             message.files=[fileModel];
         }
@@ -212,9 +207,11 @@ class MessagesController extends Controller {
                 fileModel.name = files[num].name;
                 fileModel.type = files[num].type;
                 fileModel.preview = check_file_preview(files[num].type);
+                fileModel.path = AccountModel.get_me(self_info.id)["downloads"];
                 if (fileModel.preview) {
                     fileModel.file = (await this.ipfs.get_file(fileModel.hash)).file;
                 }
+                fileModel.path = self_info.id;
                 await fileModel.save();
                 message.files.push(fileModel);
             }
@@ -265,6 +262,7 @@ class MessagesController extends Controller {
                 if (fileModel.preview) {
                     fileModel.file = (await this.ipfs.get_file(fileModel.hash)).file;
                 }
+                fileModel.path = AccountModel.get_me(self_info.id)["downloads"];
                 await fileModel.save();
                 messageModel.files.push(fileModel);
             }

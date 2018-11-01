@@ -26,7 +26,6 @@ let AccountModel = class AccountModel extends typeorm_1.BaseEntity {
     }
     static get_me(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            // console.log("Id:", id);
             return (yield this.find({ where: { user_id: id } }))[0];
         });
     }

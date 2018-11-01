@@ -691,9 +691,8 @@ window.onload = function () {
     $(document).on('click', '[name=change_download]', function (e) {
         dialog.showOpenDialog({
             properties: ["openDirectory","openFile"]
-        },function (fileNames) {
-            console.log("file:", fileNames);
-            ipcRenderer.send("change_directory")
+        },function (directory) {
+            ipcRenderer.send("change_directory", directory + "/")
         });
     });
 

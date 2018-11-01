@@ -5,22 +5,22 @@ import * as util from 'util'
 import * as Electron from 'electron'
 import nativeImage = Electron.nativeImage;
 import NativeImage = Electron.NativeImage;
+import {ControllerRegister} from "./ControllerRegister";
 // require ('gm-base64');
 
 
-export function save_file(file, path){
-    if (!check_files_dir(path)) {path = files_config.files_path}
+export function save_file(file){
+    file = check_files_dir(file);
     let base64file = file.file.split(';base64,').pop();
-    fs.writeFileSync(`${path}${file.id}_${file.name}`, base64file, {encoding: 'base64'});
+    fs.writeFileSync(`${file.path}${file.id}_${file.name}`, base64file, {encoding: 'base64'});
     console.log(`file ${file.name} saved`);
 }
 
-export async function read_file(file, path){
-    if (!check_files_dir(path)) {path = files_config.files_path}
-    console.log("new path:", path);
+export function read_file(file){
+    file = check_files_dir(file);
     let succ=true;
     try {
-        file.file=`data:${file.type};base64,`+ fs.readFileSync(`${path}${file.id}_${file.name}`, {encoding: 'base64'});
+        file.file=`data:${file.type};base64,`+ fs.readFileSync(`${file.path}${file.id}_${file.name}`, {encoding: 'base64'});
     } catch (e) {
         console.log(e, 'file not found', file);
         succ=false;
@@ -29,9 +29,9 @@ export async function read_file(file, path){
 
 }
 
-export function check_file_exist(file, path) {
-    if (!check_files_dir(path)) {path = files_config.files_path}
-    return fs.existsSync(`${path}${file.id}_${file.name}`);
+export function check_file_exist(file) {
+    file = check_files_dir(file);
+    return fs.existsSync(`${file.path}${file.id}_${file.name}`);
 }
 
 export function check_file_preview(type) {
@@ -41,14 +41,17 @@ export function check_file_preview(type) {
     ].includes(type);
 }
 
-async function check_files_dir(path) {
-    if (!fs.existsSync(path)) {
-        console.log("Path not found!!111");
-        await this.controller_register.run_controller("AccountController", "update_directory", files_config.files_path);
+function check_files_dir(file) {
+    let controller = ControllerRegister.getInstance();
+    if (!fs.existsSync(file.path)) {
+        console.log("Current path not found, set default path");
+        file.path = files_config.files_path;
+        file.save();
+        controller.run_controller("AccountController", "update_directory", files_config.files_path);
+        if (!fs.existsSync(files_config.files_path))
         fs.mkdirSync(files_config.files_path);
-        return false;
     }
-    return true;
+    return file;
 }
 
 

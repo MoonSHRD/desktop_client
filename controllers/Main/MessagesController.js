@@ -64,17 +64,17 @@ class MessagesController extends Controller_1.Controller {
             message.fill_sender_data();
             for (let num in message.files) {
                 let path = (yield AccountModel_1.AccountModel.get_me(self_info.id)).downloads;
-                console.log("Paaaath:", path);
+                // console.log("Current path:", path);
                 if (Helpers_1.check_file_preview(message.files[num].type)) {
                     message.files[num].preview = true;
-                    if (!Helpers_1.read_file(message.files[num], path)) {
+                    if (!(yield Helpers_1.read_file(message.files[num]))) {
                         message.files[num].file = (yield this.ipfs.get_file(message.files[num].hash)).file;
-                        Helpers_1.save_file(message.files[num], path);
+                        Helpers_1.save_file(message.files[num]);
                     }
                     console.log(message.files[num]);
                 }
                 else {
-                    if (Helpers_1.check_file_exist(message.files[num], path))
+                    if (Helpers_1.check_file_exist(message.files[num]))
                         message.files[num].downloaded = true;
                 }
             }
@@ -112,19 +112,16 @@ class MessagesController extends Controller_1.Controller {
     }
     download_file(file_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let self_info = yield this.get_self_info();
-            let path = AccountModel_1.AccountModel.get_me(self_info.id)["downloads"];
             let file = yield FileModel_1.FileModel.findOne(file_id);
-            if (!Helpers_1.read_file(file, path)) {
+            if (!Helpers_1.read_file(file)) {
                 file.file = (yield this.ipfs.get_file(file.hash)).file;
-                Helpers_1.save_file(file, path);
+                Helpers_1.save_file(file);
             }
             this.send_data('file_downloaded', { id: file_id });
         });
     }
     send_message({ id, text, file }) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(file);
             let self_info = yield this.get_self_info();
             let chat = yield ChatModel_1.ChatModel.findOne(id);
             // let date = new Date();
@@ -139,7 +136,7 @@ class MessagesController extends Controller_1.Controller {
             let group;
             let fileModel;
             if (file) {
-                console.log(file);
+                console.log("with file:", file);
                 fileModel = new FileModel_1.FileModel();
                 fileModel.preview = Helpers_1.check_file_preview(file.type);
                 fileModel.hash = yield this.ipfs.add_file(file);
@@ -148,10 +145,9 @@ class MessagesController extends Controller_1.Controller {
                 fileModel.file = file.file;
                 fileModel.name = file.name;
                 fileModel.type = file.type;
+                fileModel.path = (yield AccountModel_1.AccountModel.get_me(self_info.id)).downloads;
                 yield fileModel.save();
-                let self_info = yield this.get_self_info();
-                let path = AccountModel_1.AccountModel.get_me(self_info.id)["downloads"];
-                Helpers_1.save_file(fileModel, path);
+                Helpers_1.save_file(fileModel);
                 message.files = [fileModel];
             }
             // message.fileModel = file_send;
@@ -215,9 +211,11 @@ class MessagesController extends Controller_1.Controller {
                     fileModel.name = files[num].name;
                     fileModel.type = files[num].type;
                     fileModel.preview = Helpers_1.check_file_preview(files[num].type);
+                    fileModel.path = AccountModel_1.AccountModel.get_me(self_info.id)["downloads"];
                     if (fileModel.preview) {
                         fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
                     }
+                    fileModel.path = self_info.id;
                     yield fileModel.save();
                     message.files.push(fileModel);
                 }
@@ -269,6 +267,7 @@ class MessagesController extends Controller_1.Controller {
                     if (fileModel.preview) {
                         fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
                     }
+                    fileModel.path = AccountModel_1.AccountModel.get_me(self_info.id)["downloads"];
                     yield fileModel.save();
                     messageModel.files.push(fileModel);
                 }

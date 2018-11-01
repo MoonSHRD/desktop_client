@@ -92,7 +92,6 @@ class ChatsController extends Controller {
     }
 
     async show_chat_info(data) {
-        console.log(data);
         if (Object.values(this.group_chat_types).includes(data.type)) {
             switch (data.type) {
                 case this.group_chat_types.channel: {

@@ -9,7 +9,6 @@ import {AccountModel} from "../../models/AccountModel";
 
 class ChatsController extends Controller {
     async update_directory(path) {
-
         let account = new AccountModel;
         account.downloads = path;
         account.id = 1;

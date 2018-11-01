@@ -12,39 +12,31 @@ const fs = require("fs");
 const var_helper_1 = require("../src/var_helper");
 const Electron = require("electron");
 var nativeImage = Electron.nativeImage;
+const ControllerRegister_1 = require("./ControllerRegister");
 // require ('gm-base64');
-function save_file(file, path) {
-    if (!check_files_dir(path)) {
-        path = var_helper_1.files_config.files_path;
-    }
+function save_file(file) {
+    file = check_files_dir(file);
     let base64file = file.file.split(';base64,').pop();
-    fs.writeFileSync(`${path}${file.id}_${file.name}`, base64file, { encoding: 'base64' });
+    fs.writeFileSync(`${file.path}${file.id}_${file.name}`, base64file, { encoding: 'base64' });
     console.log(`file ${file.name} saved`);
 }
 exports.save_file = save_file;
-function read_file(file, path) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!check_files_dir(path)) {
-            path = var_helper_1.files_config.files_path;
-        }
-        console.log("new path:", path);
-        let succ = true;
-        try {
-            file.file = `data:${file.type};base64,` + fs.readFileSync(`${path}${file.id}_${file.name}`, { encoding: 'base64' });
-        }
-        catch (e) {
-            console.log(e, 'file not found', file);
-            succ = false;
-        }
-        return succ;
-    });
+function read_file(file) {
+    file = check_files_dir(file);
+    let succ = true;
+    try {
+        file.file = `data:${file.type};base64,` + fs.readFileSync(`${file.path}${file.id}_${file.name}`, { encoding: 'base64' });
+    }
+    catch (e) {
+        console.log(e, 'file not found', file);
+        succ = false;
+    }
+    return succ;
 }
 exports.read_file = read_file;
-function check_file_exist(file, path) {
-    if (!check_files_dir(path)) {
-        path = var_helper_1.files_config.files_path;
-    }
-    return fs.existsSync(`${path}${file.id}_${file.name}`);
+function check_file_exist(file) {
+    file = check_files_dir(file);
+    return fs.existsSync(`${file.path}${file.id}_${file.name}`);
 }
 exports.check_file_exist = check_file_exist;
 function check_file_preview(type) {
@@ -54,16 +46,17 @@ function check_file_preview(type) {
     ].includes(type);
 }
 exports.check_file_preview = check_file_preview;
-function check_files_dir(path) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!fs.existsSync(path)) {
-            console.log("Path not found!!111");
-            yield this.controller_register.run_controller("AccountController", "update_directory", var_helper_1.files_config.files_path);
+function check_files_dir(file) {
+    let controller = ControllerRegister_1.ControllerRegister.getInstance();
+    if (!fs.existsSync(file.path)) {
+        console.log("Current path not found, set default path");
+        file.path = var_helper_1.files_config.files_path;
+        file.save();
+        controller.run_controller("AccountController", "update_directory", var_helper_1.files_config.files_path);
+        if (!fs.existsSync(var_helper_1.files_config.files_path))
             fs.mkdirSync(var_helper_1.files_config.files_path);
-            return false;
-        }
-        return true;
-    });
+    }
+    return file;
 }
 function b64img_to_buff(b64img) {
     b64img = b64img.substr(b64img.indexOf(',') + 1);

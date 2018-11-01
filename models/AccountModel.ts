@@ -23,7 +23,6 @@ export class AccountModel extends BaseEntity {
     port: number;
 
     static async get_me(id:string) {
-        // console.log("Id:", id);
         return (await this.find({where: {user_id:id}}))[0]
     }
 }
