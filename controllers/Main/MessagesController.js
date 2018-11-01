@@ -63,8 +63,6 @@ class MessagesController extends Controller_1.Controller {
             // message.sender_name = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.name : message.chat.name;
             message.fill_sender_data();
             for (let num in message.files) {
-                let path = (yield AccountModel_1.AccountModel.get_me(self_info.id)).downloads;
-                // console.log("Current path:", path);
                 if (Helpers_1.check_file_preview(message.files[num].type)) {
                     message.files[num].preview = true;
                     if (!(yield Helpers_1.read_file(message.files[num]))) {
@@ -80,11 +78,13 @@ class MessagesController extends Controller_1.Controller {
             }
             message.time = Helpers_1.Helper.formate_date(new Date(message.time), { locale: 'ru', for: 'message' });
             let html = this.render('main/messagingblock/message.pug', message);
+            let html_date = this.render("main/messagingblock/dialog_date.pug");
             if (message.mine)
                 message.text = 'Вы: ' + message.text;
             const data = {
                 id: message.chat.id,
                 html: html,
+                html_date: html_date,
                 message: message,
                 unread_messages: message.chat.unread_messages
             };
