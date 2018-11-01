@@ -329,6 +329,14 @@ window.onload = function () {
         targetBlock.scrollTop = targetBlock.scrollHeight;
     };
 
+    let scrollDownAnimate = (target = '[data-msg-history]', list = '[data-msg-list]') => {
+        const targetBlock = $(target);
+        let targetHeight = $(list).outerHeight();
+        targetBlock.animate({
+            scrollTop: targetHeight
+        }, 600);
+    };
+
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
         $('[data-msg-list]').append(obj);
         scrollDown('[data-msg-history]');
