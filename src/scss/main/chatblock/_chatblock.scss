@@ -154,7 +154,6 @@
   top: 3px; /* положение кнопки по вертикали относительно основы */
   left: 3px; /* положение кнопки по горизонтали относительно основы */
   transition-duration: 300ms; /* анимация */
-  box-shadow: 0 0 10px 0 #999999; /* тень */
   position: absolute;
   z-index: 1;
   background: $brand-blue;
