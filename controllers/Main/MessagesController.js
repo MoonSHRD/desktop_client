@@ -267,7 +267,7 @@ class MessagesController extends Controller_1.Controller {
                     if (fileModel.preview) {
                         fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
                     }
-                    fileModel.path = AccountModel_1.AccountModel.get_me(self_info.id)["downloads"];
+                    fileModel.path = (yield AccountModel_1.AccountModel.get_me(self_info.id)).downloads;
                     yield fileModel.save();
                     messageModel.files.push(fileModel);
                 }
