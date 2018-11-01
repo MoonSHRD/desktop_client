@@ -407,14 +407,11 @@ window.onload = function () {
     $(document).on('click', '[data-name=join_channel]', function () {
         $(this).attr('disabled', 'disabled');
         let active_dialog = $('.active_dialog');
-        let input = $('[data-name=group_search]');
-        input.val('');
         ipcRenderer.send('join_channel', {
             id: active_dialog.attr('id'),
             domain: active_dialog.attr('data-domain'),
             contract_address: active_dialog.attr('data-contract_address')
         });
-        ipcRenderer.send('load_chats', 'menu_chats');
     });
 
     function click_anim(e){
