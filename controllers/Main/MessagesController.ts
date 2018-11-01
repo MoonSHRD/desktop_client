@@ -262,7 +262,7 @@ class MessagesController extends Controller {
                 if (fileModel.preview) {
                     fileModel.file = (await this.ipfs.get_file(fileModel.hash)).file;
                 }
-                fileModel.path = AccountModel.get_me(self_info.id)["downloads"];
+                fileModel.path = (await AccountModel.get_me(self_info.id)).downloads;
                 await fileModel.save();
                 messageModel.files.push(fileModel);
             }
