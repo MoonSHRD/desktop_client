@@ -99,7 +99,6 @@ class ChatsController extends Controller_1.Controller {
     }
     show_chat_info(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(data);
             if (Object.values(this.group_chat_types).includes(data.type)) {
                 switch (data.type) {
                     case this.group_chat_types.channel: {

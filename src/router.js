@@ -213,6 +213,11 @@ class Router {
             console.log('change menu');
             yield this.controller_register.run_controller('MenuController', 'load_menu', arg);
         }));
+        /** Account events **/
+        this.listen_event(this.ipcMain, "change_directory", (event, path) => __awaiter(this, void 0, void 0, function* () {
+            console.log("Change directory:", path);
+            yield this.controller_register.run_controller('AccountController', 'update_directory', path);
+        }));
     }
 }
 exports.Router = Router;

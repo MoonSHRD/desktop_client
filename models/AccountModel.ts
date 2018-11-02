@@ -8,10 +8,8 @@ export class AccountModel extends BaseEntity {
     id: number;
     @Column()
     privKey: string;
-    // @Column()
-    // pubKey: string;
-    // @Column()
-    // privKeyLoom: string="";
+    @Column()
+    downloads: string = "./downloads/";
     @Column()
     passphrase: string;
 
@@ -23,4 +21,8 @@ export class AccountModel extends BaseEntity {
     host: string;
     jidhost: string;
     port: number;
+
+    static async get_me(id:string) {
+        return (await this.find({where: {user_id:id}}))[0]
+    }
 }

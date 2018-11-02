@@ -5,21 +5,22 @@ import * as util from 'util'
 import * as Electron from 'electron'
 import nativeImage = Electron.nativeImage;
 import NativeImage = Electron.NativeImage;
+import {ControllerRegister} from "./ControllerRegister";
 // require ('gm-base64');
 
 
 export function save_file(file){
-    check_files_dir();
+    file = check_files_dir(file);
     let base64file = file.file.split(';base64,').pop();
-    fs.writeFileSync(`${files_config.files_path}${file.id}_${file.name}`, base64file, {encoding: 'base64'});
+    fs.writeFileSync(`${file.path}${file.id}_${file.name}`, base64file, {encoding: 'base64'});
     console.log(`file ${file.name} saved`);
 }
 
 export function read_file(file){
-    check_files_dir();
+    file = check_files_dir(file);
     let succ=true;
     try {
-        file.file=`data:${file.type};base64,`+ fs.readFileSync(`${files_config.files_path}${file.id}_${file.name}`, {encoding: 'base64'});
+        file.file=`data:${file.type};base64,`+ fs.readFileSync(`${file.path}${file.id}_${file.name}`, {encoding: 'base64'});
     } catch (e) {
         console.log(e, 'file not found', file);
         succ=false;
@@ -29,8 +30,8 @@ export function read_file(file){
 }
 
 export function check_file_exist(file) {
-    check_files_dir();
-    return fs.existsSync(`${files_config.files_path}${file.id}_${file.name}`);
+    file = check_files_dir(file);
+    return fs.existsSync(`${file.path}${file.id}_${file.name}`);
 }
 
 export function check_file_preview(type) {
@@ -40,10 +41,17 @@ export function check_file_preview(type) {
     ].includes(type);
 }
 
-function check_files_dir() {
-    if (!fs.existsSync(files_config.files_path)) {
+function check_files_dir(file) {
+    let controller = ControllerRegister.getInstance();
+    if (!fs.existsSync(file.path)) {
+        console.log("Current path not found, set default path");
+        file.path = files_config.files_path;
+        file.save();
+        controller.run_controller("AccountController", "update_directory", files_config.files_path);
+        if (!fs.existsSync(files_config.files_path))
         fs.mkdirSync(files_config.files_path);
     }
+    return file;
 }
 
 

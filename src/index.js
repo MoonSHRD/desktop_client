@@ -1,6 +1,7 @@
 const {ipcRenderer} = require('electron');
 const dict = require('./langs/lang');
 const slick = require('slick-carousel');
+const {dialog} = require('electron').remote;
 
 let p = null;
 let d = null;
@@ -63,10 +64,10 @@ window.onload = function () {
             sel.removeAllRanges();
             try {
                 range.selectNodeContents(elem);
-                sel.addRange(range)
+                sel.addRange(range);
             } catch (e) {
                 range.selectNode(elem);
-                sel.addRange(range)
+                sel.addRange(range);
             }
         } else if (body.createTextRange) {
             range = body.createTextRange();
@@ -78,27 +79,27 @@ window.onload = function () {
 
         $.notify('address copied \n' + range, {
 
-            placement: {
-                from: "bottom",
-                align: "right"
-            },
-            animate: {
-                enter: 'animated fadeInRight',
-                exit: 'animated fadeOutRight'
-            },
-            z_index: 10031,
-            offset: 20,
-            spacing: 10
-        });
+                placement: {
+                    from: 'bottom',
+                    align: 'right'
+                },
+                animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                },
+                z_index: 10031,
+                offset: 20,
+                spacing: 10
+            });
         // }
     });
 
     $(document).on('click','.attachFileToChat',function () {
-        $("input[id='attachFileToChat']").trigger('click');
+        $('input[id=\'attachFileToChat\']').trigger('click');
     });
 
     $(document).on('click','.attachFileToGroup',function () {
-        $("input[id='attachFileToGroup']").trigger('click');
+        $('input[id=\'attachFileToGroup\']').trigger('click');
     });
 
 
@@ -228,40 +229,40 @@ window.onload = function () {
 
     $(document).on('keyup', '[data-msg="data-msg"]', function () {
         if (event.ctrlKey && event.keyCode === 13 ) {
-            $(this).attr('rows', 1)
+            $(this).attr('rows', 1);
         }
     });
 
-    $(document).on('keydown',".send_message__input",function(e) {
+    $(document).on('keydown','.send_message__input',function(e) {
         if($(this).val() === '') {
-            $(this).attr('rows', 1)
+            $(this).attr('rows', 1);
         };
         if($(this).val() === '' && event.keyCode == 13) {
             event.preventDefault();
         };
 
         if ( event.keyCode === 13 && $(this).val()!=='') {
-            ResizeTextArea(this,0)
+            ResizeTextArea(this,0);
         }
     });
 
-    $(document).on('input',".send_message__input",function(e) {
+    $(document).on('input','.send_message__input',function(e) {
         // console.log('hello!')
         if($(this).val() === '') {
-            $(this).attr('rows', 1)
+            $(this).attr('rows', 1);
         };
 
     });
 
-    $(document).on('paste',".send_message__input",function(e) {
-        console.log('paste!')
+    $(document).on('paste','.send_message__input',function(e) {
+        console.log('paste!');
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
         if($(this).val()!=='')
         {
-            $(this).attr('rows', $(this).attr('rows'))
+            $(this).attr('rows', $(this).attr('rows'));
 
         }else {
-            ResizeTextArea(this,10)
+            ResizeTextArea(this,10);
 
         }
         console.log(text);
@@ -296,7 +297,7 @@ window.onload = function () {
         // console.log(obj);
         let files = $('#attachFileToChat').prop('files');
         if (files && files[0]) {
-            msg_input.attr('rows', 1)
+            msg_input.attr('rows', 1);
 
             let file = files[0];
             console.log(file);
@@ -305,10 +306,10 @@ window.onload = function () {
             reader.onloadend = function () {
                 obj.file = {file: reader.result, type: file.type, name: file.name};
                 // console.log(obj);
-                ipcRenderer.send("send_message", obj);
+                ipcRenderer.send('send_message', obj);
             };
         } else {
-            ipcRenderer.send("send_message", obj);
+            ipcRenderer.send('send_message', obj);
         }
         // console.log(file);
         msg_input.val('');
@@ -328,6 +329,14 @@ window.onload = function () {
         targetBlock.scrollTop = targetBlock.scrollHeight;
     };
 
+    let scrollDownAnimate = (target = '[data-msg-history]', list = '[data-msg-list]') => {
+        const targetBlock = $(target);
+        let targetHeight = $(list).outerHeight();
+        targetBlock.animate({
+            scrollTop: targetHeight
+        }, 600);
+    };
+
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
         $('[data-msg-list]').append(obj);
         scrollDown('[data-msg-history]');
@@ -343,17 +352,17 @@ window.onload = function () {
                 console.log(obj);
 
                 chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
-                chat.find("[data-name=unread_messages]").show();
+                chat.find('[data-name=unread_messages]').show();
             }
             chat.prependTo($('.chats ul')[0]);
         }
         if ($('.active_dialog').attr('id') === obj.id) {
-            chat.find("[data-name=unread_messages]").hide();
+            chat.find('[data-name=unread_messages]').hide();
             ipcRenderer.send('reading_messages', obj.id);
             $('[data-msg-list]').append(obj.html);
             scrollDown('[data-msg-history]');
         } else {
-            chat.find("[data-name=unread_messages]").text(obj.unread_messages);
+            chat.find('[data-name=unread_messages]').text(obj.unread_messages);
         }
         // ipcRenderer.send('load_chats', 'menu_chats');
     });
@@ -377,7 +386,7 @@ window.onload = function () {
 
     ipcRenderer.on('reload_chat', (event, obj) => {
         $('#messaging_block').html(obj);
-        $(".send_message_input").focus();
+        $('.send_message_input').focus();
     });
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
@@ -402,12 +411,12 @@ window.onload = function () {
     });
 
     function click_anim(e){
-        $(".ripple").remove();
+        $('.ripple').remove();
         var posX = $(this).offset().left,
             posY = $(this).offset().top,
             buttonWidth = $(this).width(),
             buttonHeight =  $(this).height();
-        $(this).children('a').prepend("<span class='ripple'></span>");
+        $(this).children('a').prepend('<span class=\'ripple\'></span>');
         if(buttonWidth >= buttonHeight) {
             buttonHeight = buttonWidth;
         } else {
@@ -415,12 +424,12 @@ window.onload = function () {
         }
         var x = e.pageX - posX - buttonWidth / 2;
         var y = e.pageY - posY - buttonHeight / 2;
-        $(".ripple").css({
+        $('.ripple').css({
             width: buttonWidth,
             height: buttonHeight,
             top: y + 'px',
             left: x + 'px'
-        }).addClass("rippleEffect");
+        }).addClass('rippleEffect');
     }
 
 
@@ -432,10 +441,10 @@ window.onload = function () {
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
         let chat = $this.attr('id');
 
-        $this.find("[data-name=unread_messages]").hide();
-        $this.find("[data-name=unread_messages]").text("0");
+        $this.find('[data-name=unread_messages]').hide();
+        $this.find('[data-name=unread_messages]').text('0');
 
-        if(!($this.hasClass("active_dialog") && $this.hasClass("have_history"))) {
+        if(!($this.hasClass('active_dialog') && $this.hasClass('have_history'))) {
             ipcRenderer.send('get_chat_msgs', chat);
             $this.addClass('have_history');
         }
@@ -482,11 +491,11 @@ window.onload = function () {
     //     }
     // });
 
-    $(document).on("change", '[name="openPrivate"]', function () {
+    $(document).on('change', '[name="openPrivate"]', function () {
         if ($(this).attr('id') === 'private') {
-            $("#token_row").collapse('show');
+            $('#token_row').collapse('show');
         } else {
-            $("#token_row").collapse('hide');
+            $('#token_row').collapse('hide');
         }
     });
 
@@ -560,11 +569,11 @@ window.onload = function () {
                 // data[elem.name] = elem.value;
                 if (!elem.value) {
                     $element.addClass('invalid');
-                    ret.err = true
+                    ret.err = true;
                 } else {
                     $element.removeClass('invalid');
                     ret.data[elem.name]=elem.value;
-                    ret.err = false
+                    ret.err = false;
                 }
             }
         });
@@ -579,7 +588,7 @@ window.onload = function () {
     $(document).on('submit', '.modal-content', function (e) {
         e.preventDefault();
         const $this = $(this);
-        let groupNameEl = $this.find("[name='name']");
+        let groupNameEl = $this.find('[name=\'name\']');
         let groupName = groupNameEl.val().trim();
         let openPrivateRadio = $this.find('[name="openPrivate"]:checked');
 
@@ -649,8 +658,8 @@ window.onload = function () {
         $.notify(text, {
 
             placement: {
-                from: "bottom",
-                align: "right"
+                from: 'bottom',
+                align: 'right'
             },
             animate: {
                 enter: 'animated fadeInRight',
@@ -666,8 +675,8 @@ window.onload = function () {
         $.notify(text, {
 
             placement: {
-                from: "bottom",
-                align: "right"
+                from: 'bottom',
+                align: 'right'
             },
             animate: {
                 enter: 'animated fadeInRight',
@@ -684,7 +693,7 @@ window.onload = function () {
         bot_notif(text);
     });
 
-    ipcRenderer.on("get_notice", (event, obj) => {
+    ipcRenderer.on('get_notice', (event, obj) => {
         if ($('.active_dialog').attr('id') === obj.id) {
             $('.notifyBlock').append((obj.html));
         }
@@ -737,19 +746,19 @@ window.onload = function () {
         ipcRenderer.send('download_file', $(this).attr('data-id'));
     });
 
-    ipcRenderer.on("file_downloaded", (event, obj) => {
+    ipcRenderer.on('file_downloaded', (event, obj) => {
         let file=$(`[data-id=${obj.id}]`);
         if (file.hasClass('load'))
             file.removeClass('load').addClass('complite');
     });
 
-    ipcRenderer.on("wallet_token_table", (event, obj) => {
+    ipcRenderer.on('wallet_token_table', (event, obj) => {
         console.log('token table');
         $('.loader').remove();
         $('.myTokens').append(obj);
     });
 
-    ipcRenderer.on("get_contacts", (event, obj) => {
+    ipcRenderer.on('get_contacts', (event, obj) => {
         // console.log('1234567')
         $('#browsers').html(obj);
 
@@ -770,30 +779,30 @@ window.onload = function () {
     $(document).mousemove(function(e) {
         if (!$('[data-id="menu_chats"]').hasClass('active_menu'))
             return;
-        p = $(".dialogs");
-        let d = $(".messaging_block");
+        p = $('.dialogs');
+        let d = $('.messaging_block');
         let change = curr_width + (e.clientX - curr_width);
         widthMsgWindow('[data-msgs-window]');
         if(unlock) {
             if(change > 369 && change < 599) {
 
-                p.css("width", change);
-                d.css("margin-left", change);
+                p.css('width', change);
+                d.css('margin-left', change);
             }
         }
     });
 
-    $(document).on('mousedown',"#resize01",function(e) {
+    $(document).on('mousedown','#resize01',function(e) {
         console.log('resize_clicked');
         curr_width = p.width();
         unlock = true;
     });
 
-    $(document).on('click',"[data-id=add_new_user]",function(e) {
+    $(document).on('click','[data-id=add_new_user]',function(e) {
         let input = $('[data-name=user_search]');
         let data={id:input.val(),domain:'localhost'};
         input.val('');
-        ipcRenderer.send("send_subscribe", data);
+        ipcRenderer.send('send_subscribe', data);
     });
 
     $(document).mouseup(function(e) {
@@ -806,7 +815,7 @@ window.onload = function () {
         var hard_lines = 1;
         var last = 0;
         while ( true ) {
-            last = strtocount.indexOf("\n", last+1);
+            last = strtocount.indexOf('\n', last+1);
             hard_lines ++;
             // if ( hard_lines == 10) break;
             if ( last == -1 ) break;
@@ -814,7 +823,7 @@ window.onload = function () {
             // console.log(hard_lines)
         }
         var soft_lines = Math.ceil(strtocount.length / (cols-1));
-        var hard = eval("hard_lines " + unescape("%3e") + "soft_lines;");
+        var hard = eval('hard_lines ' + unescape('%3e') + 'soft_lines;');
         if ( hard ) soft_lines = hard_lines;
         return soft_lines;
     }
@@ -836,6 +845,45 @@ window.onload = function () {
 
     $('[data-toggle="collapse"]').collapse('toggle');
 
+    let scrollBottom = (target = '[data-msg-history]', child = '[data-msg-list]') => {
+        let param = {
+            bottom : '',
+            height : $(target).outerHeight(true)
+        };
+        param.bottom = $(child).outerHeight(true) - ( $(target).scrollTop() + $(target).outerHeight(true));
+        return param;
+    };
 
+    document.addEventListener('scroll', function (event) {
+        if (event.target.id === 'messaging_history') { // or any other filtering condition
+            let {bottom, height} = scrollBottom();
+            if ( bottom > height ) {
+                $('[data-toggle="scrollDown"]').addClass('show');
+            } else {
+                $('[data-toggle="scrollDown"]').removeClass('show');
+            }
+        }
+    }, true /*Capture event*/);
+
+    $(document).on('click', '[name=change_download]', function (e) {
+        dialog.showOpenDialog({
+            properties: ['openDirectory','openFile']
+        },function (directory) {
+            ipcRenderer.send('change_directory', directory + '/');
+        });
+    });
+
+    // ipcRenderer.on("change_directory", (event) => {
+    //     dialog.showOpenDialog({
+    //         properties: ["openDirectory","openFile"]
+    //     },async function (fileNames) {
+    //         console.log("file:", fileNames);
+    //         ipcRenderer.send("change_directory");
+    //     })
+    // });
+    $(document).on('click', '[data-toggle="scrollDown"]', function (e){
+        e.preventDefault();
+        scrollDownAnimate();
+    });
 
 };

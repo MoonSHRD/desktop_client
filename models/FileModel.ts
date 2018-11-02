@@ -23,6 +23,8 @@ export class FileModel extends BaseEntity {
     type: string;
     @Column()
     name: string;
+    @Column()
+    path: string;
 
     @ManyToOne(type => MessageModel, message => message.files)
     message: MessageModel;

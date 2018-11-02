@@ -1,0 +1,39 @@
+.transfer {
+    input {
+        width: 150px;
+    }
+    table {
+        a {
+            color: $brand-blue;
+        }
+    }
+
+    .sendTokenButton {
+        background-color: #2BC2F9;
+        width: 90px;
+        border-radius: 10px;
+        color: white;
+    }
+    &_in {
+        input {
+            height: 35px;
+        }
+        th {
+            input {
+                width: 240px;
+            }
+        }
+        td {
+            input {
+                width: 130px;
+            }
+        }
+    }
+    &_th {
+        th {
+            padding-left: 15px;
+        }
+    }
+}
+
+
