@@ -51,6 +51,23 @@ body {
     /*stacking fieldsets above each other*/
     position: relative;
 }
+
+@media (max-width: 1300px) {
+    .welcome-auth {
+        top: 30px;
+    }
+    #profile_form {
+        width: 400px;
+        top: 190px;
+    }
+    #profile_form fieldset {
+        width: 100%;
+        height: 385px;
+        margin: 0px;
+
+    }
+}
+
 /*Hide all except first fieldset*/
 #profile_form fieldset:not(:first-of-type) {
     display: none;

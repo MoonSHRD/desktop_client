@@ -119,6 +119,7 @@ class MessagesController extends Controller {
     }
 
     async send_message({id, text, file}) {
+        console.log(file);
         let self_info = await this.get_self_info();
         let chat = await ChatModel.findOne(id);
         // let date = new Date();

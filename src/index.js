@@ -77,20 +77,20 @@ window.onload = function () {
         document.execCommand('copy');
         console.log(range, sel, elem);
 
-            $.notify('address copied \n' + range, {
+        $.notify('address copied \n' + range, {
 
-                placement: {
-                    from: 'bottom',
-                    align: 'right'
-                },
-                animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated fadeOutRight'
-                },
-                z_index: 10031,
-                offset: 20,
-                spacing: 10
-            });
+            placement: {
+                from: "bottom",
+                align: "right"
+            },
+            animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+            },
+            z_index: 10031,
+            offset: 20,
+            spacing: 10
+        });
         // }
     });
 
@@ -229,40 +229,40 @@ window.onload = function () {
 
     $(document).on('keyup', '[data-msg="data-msg"]', function () {
         if (event.ctrlKey && event.keyCode === 13 ) {
-            $(this).attr('rows', 1);
+            $(this).attr('rows', 1)
         }
     });
 
-    $(document).on('keydown','.send_message__input',function(e) {
+    $(document).on('keydown',".send_message__input",function(e) {
         if($(this).val() === '') {
-            $(this).attr('rows', 1);
+            $(this).attr('rows', 1)
         };
         if($(this).val() === '' && event.keyCode == 13) {
             event.preventDefault();
         };
 
         if ( event.keyCode === 13 && $(this).val()!=='') {
-            ResizeTextArea(this,0);
+            ResizeTextArea(this,0)
         }
     });
 
-    $(document).on('input','.send_message__input',function(e) {
+    $(document).on('input',".send_message__input",function(e) {
         // console.log('hello!')
         if($(this).val() === '') {
-            $(this).attr('rows', 1);
+            $(this).attr('rows', 1)
         };
 
     });
 
-    $(document).on('paste','.send_message__input',function(e) {
-        console.log('paste!');
+    $(document).on('paste',".send_message__input",function(e) {
+        console.log('paste!')
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
         if($(this).val()!=='')
         {
-            $(this).attr('rows', $(this).attr('rows'));
+            $(this).attr('rows', $(this).attr('rows'))
 
         }else {
-            ResizeTextArea(this,10);
+            ResizeTextArea(this,10)
 
         }
         console.log(text);
