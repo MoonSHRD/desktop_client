@@ -80,8 +80,8 @@ window.onload = function () {
         $.notify('address copied \n' + range, {
 
             placement: {
-                from: "bottom",
-                align: "right"
+                from: 'bottom',
+                align: 'right'
             },
             animate: {
                 enter: 'animated fadeInRight',
@@ -230,40 +230,40 @@ window.onload = function () {
 
     $(document).on('keyup', '[data-msg="data-msg"]', function () {
         if (event.ctrlKey && event.keyCode === 13 ) {
-            $(this).attr('rows', 1)
+            $(this).attr('rows', 1);
         }
     });
 
-    $(document).on('keydown',".send_message__input",function(e) {
+    $(document).on('keydown','.send_message__input',function(e) {
         if($(this).val() === '') {
-            $(this).attr('rows', 1)
+            $(this).attr('rows', 1);
         };
         if($(this).val() === '' && event.keyCode == 13) {
             event.preventDefault();
         };
 
         if ( event.keyCode === 13 && $(this).val()!=='') {
-            ResizeTextArea(this,0)
+            ResizeTextArea(this,0);
         }
     });
 
-    $(document).on('input',".send_message__input",function(e) {
+    $(document).on('input','.send_message__input',function(e) {
         // console.log('hello!')
         if($(this).val() === '') {
-            $(this).attr('rows', 1)
+            $(this).attr('rows', 1);
         };
 
     });
 
-    $(document).on('paste',".send_message__input",function(e) {
-        console.log('paste!')
+    $(document).on('paste','.send_message__input',function(e) {
+        console.log('paste!');
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
         if($(this).val()!=='')
         {
-            $(this).attr('rows', $(this).attr('rows'))
+            $(this).attr('rows', $(this).attr('rows'));
 
         }else {
-            ResizeTextArea(this,10)
+            ResizeTextArea(this,10);
 
         }
         console.log(text);
@@ -361,7 +361,7 @@ window.onload = function () {
             chat.find('[data-name=unread_messages]').hide();
             ipcRenderer.send('reading_messages', obj.id);
 
-            let p_count = ($("p:contains(" + obj.time + ")"));
+            let p_count = ($('p:contains(' + obj.time + ')'));
 
             if (p_count.length === 0) {
                 $('[data-msg-list]').append(obj.html_date);
@@ -892,7 +892,7 @@ window.onload = function () {
     });
 
 
-    $(document).on("click", '.switch-btn', function () {
+    $(document).on('click', '.switch-btn', function () {
         $(this).toggleClass('switch-on');
         if ($(this).hasClass('switch-on')) {
             $(this).trigger('on.switch');
@@ -902,8 +902,8 @@ window.onload = function () {
     });
     $(document).on('on.switch', function () {
         // let text = $(".searchInput");
-        let text = $(".bl-hide-1").val();
-        $(".bl-hide").val(text);
+        let text = $('.bl-hide-1').val();
+        $('.bl-hide').val(text);
         $('.bl-hide').css('display', 'block');
         $('.bl-hide-1').css('display', 'none');
         $('.chats').css('height', 'calc(100% - 153px)');
@@ -914,7 +914,7 @@ window.onload = function () {
     });
     $(document).on('off.switch', function () {
         let text = $('.bl-hide').val();
-        $(".bl-hide-1").val(text);
+        $('.bl-hide-1').val(text);
         $('.bl-hide').css('display', 'none');
         $('.bl-hide-1').css('display', 'block');
         $('.chats').css('height', 'calc(100% - 200px)');
