@@ -151,6 +151,7 @@ window.onload = function () {
         // console.log('menu_click');
 
         const $this=$(this);
+
         if ($this.data('id') !== 'menu_create_chat' && !$this.hasClass('not_active')) {
             $this.addClass('active_menu')
                 .parent()
@@ -371,7 +372,7 @@ window.onload = function () {
         } else {
             chat.find('[data-name=unread_messages]').text(obj.unread_messages);
         }
-        // ipcRenderer.send('load_chats', 'menu_chats');
+        // ipcRenderer.send('load_chat s', 'menu_chats');
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
