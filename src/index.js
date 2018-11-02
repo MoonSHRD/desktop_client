@@ -890,4 +890,36 @@ window.onload = function () {
         scrollDownAnimate();
     });
 
+
+    $(document).on("click", '.switch-btn', function () {
+        $(this).toggleClass('switch-on');
+        if ($(this).hasClass('switch-on')) {
+            $(this).trigger('on.switch');
+        } else {
+            $(this).trigger('off.switch');
+        }
+    });
+    $(document).on('on.switch', function () {
+        // let text = $(".searchInput");
+        let text = $(".bl-hide-1").val();
+        $(".bl-hide").val(text);
+        $('.bl-hide').css('display', 'block');
+        $('.bl-hide-1').css('display', 'none');
+        $('.chats').css('height', 'calc(100% - 153px)');
+        // ipcRenderer.send('load_chats', 'menu_chats');
+        // $('[data-type="channel"]').addClass('d-none');
+        // $('[data-type="user_chat"]').removeClass('d-none');
+
+    });
+    $(document).on('off.switch', function () {
+        let text = $('.bl-hide').val();
+        $(".bl-hide-1").val(text);
+        $('.bl-hide').css('display', 'none');
+        $('.bl-hide-1').css('display', 'block');
+        $('.chats').css('height', 'calc(100% - 200px)');
+        // $('[data-type="channel"]').removeClass('d-none');
+        // $('[data-type="user_chat"]').addClass('d-none');
+    });
+
+
 };
