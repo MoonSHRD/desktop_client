@@ -29,7 +29,7 @@ class WalletController extends Controller_1.Controller {
                     };
                     this.send_data('wallet_token_table', this.render(`main/wallet/wallet_token_table.pug`, data));
                     break;
-                case 'wallet_transfer':
+                case menu_type:
                     data =
                         this.send_data('change_wallet_menu', this.render(`main/wallet/${menu_type}.pug`));
                     yield this.get_contacts();
