@@ -17,6 +17,7 @@ import Notification = Electron.Notification;
 import nativeImage = Electron.nativeImage;
 import ipcRenderer = Electron.ipcRenderer;
 import ipcMain = Electron.ipcMain;
+import {helper} from "../../src/var_helper";
 // import * as eNotify from 'electron-notify'
 // let eNotify = require('electron-notify');
 
@@ -57,8 +58,6 @@ class MessagesController extends Controller {
         // message.sender_name = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.name : message.chat.name;
         message.fill_sender_data();
         for (let num in message.files){
-            let path =  (await AccountModel.get_me(self_info.id)).downloads;
-            // console.log("Current path:", path);
             if (check_file_preview(message.files[num].type)) {
                 message.files[num].preview=true;
                 if (!await read_file(message.files[num])) {
@@ -71,8 +70,10 @@ class MessagesController extends Controller {
                     message.files[num].downloaded=true;
             }
         }
+        let date_time = await Helper.formate_date(new Date(message.time), {locale:"ru:",for:"dialog_date"});
         message.time=Helper.formate_date(new Date(message.time),{locale:'ru',for:'message'});
         let html = this.render('main/messagingblock/message.pug', message);
+        let html_date = this.render("main/messagingblock/dialog_date.pug", {time:date_time});
 
         if (message.mine)
             message.text='Вы: '+message.text;
@@ -80,7 +81,9 @@ class MessagesController extends Controller {
         const data = {
             id: message.chat.id,
             html: html,
+            html_date: html_date,
             message:message,
+            time: date_time,
             unread_messages:message.chat.unread_messages
         };
         await this.send_data('received_message', data);
