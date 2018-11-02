@@ -79,6 +79,7 @@
     }
 }
 .myTokens {
+    flex: 1;
 
     .loader {
         @include fz(10);
