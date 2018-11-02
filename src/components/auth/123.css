@@ -19,7 +19,8 @@ body {
     font-size: 64px;
     position: absolute;
     right: 70px;
-    top: 80px;
+    /*top: 80px;*/
+    top: 30px;
     width: 435px;
     text-align: left;
     color: #FFFFFF;
@@ -32,11 +33,14 @@ body {
 
 /*form styles*/
 #profile_form {
-    width: 400px;
+    /*width: 400px;*/
     text-align: center;
     position: absolute;
     right: 108px;
-    top: 235px;
+    /*top: 235px;*/
+
+    width: 400px;
+    top: 190px;
 }
 #profile_form fieldset {
     background: rgba(254, 254, 254, 0.7);
@@ -45,28 +49,31 @@ body {
     /*box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);*/
     padding: 20px 30px;
     box-sizing: border-box;
-    width: 68%;
-    margin: 0px 16%;
-    height: 420px;
+    width: 100%;
+    height: 385px;
+    margin: 0px;
+    /*width: 68%;*/
+    /*margin: 0px 16%;*/
+    /*height: 420px;*/
     /*stacking fieldsets above each other*/
     position: relative;
 }
 
-@media (max-width: 1300px) {
-    .welcome-auth {
-        top: 30px;
-    }
-    #profile_form {
-        width: 400px;
-        top: 190px;
-    }
-    #profile_form fieldset {
-        width: 100%;
-        height: 385px;
-        margin: 0px;
+/*@media (max-width: 1300px) {*/
+    /*.welcome-auth {*/
+        /*top: 30px;*/
+    /*}*/
+    /*#profile_form {*/
+        /*width: 400px;*/
+        /*top: 190px;*/
+    /*}*/
+    /*#profile_form fieldset {*/
+        /*width: 100%;*/
+        /*height: 385px;*/
+        /*margin: 0px;*/
 
-    }
-}
+    /*}*/
+/*}*/
 
 /*Hide all except first fieldset*/
 #profile_form fieldset:not(:first-of-type) {
