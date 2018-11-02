@@ -1,6 +1,13 @@
 .transfer {
     input {
-        width: 150px;
+        //width: 150px;
+
+        &::-webkit-calendar-picker-indicator {
+            //display: none;
+            //background-color: $primary-text;
+            //background: url('#{$img}/modal_popup/angle.svg') 50% 50% no-repeat $cf;
+            //transform: rotate(90deg);
+        }
     }
     table {
         a {
@@ -20,12 +27,12 @@
         }
         th {
             input {
-                width: 255px;
+                //width: 255px;
             }
         }
         td {
             input {
-                width: 200px;
+                //width: 200px;
             }
         }
     }

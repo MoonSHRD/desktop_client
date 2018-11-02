@@ -32,6 +32,7 @@
         word-break: break-word;
         img {
             border-radius: 100%;
+            max-width: none;
         }
     }
 
@@ -54,14 +55,17 @@
 }
 
 .searchTokens{
-    @include size(375px,35px);
-    background: url('#{$img}/modal_popup/img/search.png') 15px center no-repeat;
-    border: 0;
-    box-shadow: 0 0 27px rgba(97, 97, 97, 0.1);
-    border: none;
-    border-radius: 29px;
+    //@include size(375px,35px);
+    width: 375px;
+    background-image: url('#{$img}/modal_popup/img/search.png');
+    background-position:  15px center;
+    background-repeat: no-repeat;
+    //border: 0;
+    //box-shadow: 0 0 27px rgba(97, 97, 97, 0.1);
+    //border: none;
+    //border-radius: 29px;
     padding-left: 55px;
-    outline: none;
+    //outline: none;
 }
 
 .myTokensHeader {
