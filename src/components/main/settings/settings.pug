@@ -1,6 +1,6 @@
 style
     include settings.css
-div.settingsLeft
+div.settingsLeft#style-11
     //div.userBar
     //    include infopanel.pug
     //div.settingsInfo
@@ -49,6 +49,13 @@ div.settingsLeft
                         input(type='checkbox', name='option3', value='a3')
                         | Visibility in the “Nearby channels”
                         span.checkmark
+                li
+                    label
+                        button(type="button", name="change_download") Change directory for files
+
+                        //input(type="file", name="change_download", dir="", id="download_file")
+                        //label.input-file-trigger(tabindex='0', for='download_file') Change directory for files
+
 
 
 
@@ -95,7 +102,7 @@ div.settingsLeft
                 a(href='#')
                     img(src='components/main/settings/img/support.png', width='40', height='40')
                     p Write to tech support
-div.p-3.settingsRight
+div.p-3.walletRight.settingsRight#style-11
     include settings_identification
 script
     include settings.js

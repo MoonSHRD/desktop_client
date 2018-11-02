@@ -85,6 +85,9 @@ div(class="head_peer" id="head_peer")
 div#messaging_history.messaging_history.msgHistory(data-msg-history="")
     div.msgHistory__list.clearfix(data-msg-list="") !{messages ? messages : ""}
 
+        button.btn.btn-rounded.btn-primary(type="button" data-toggle="scrollDown")
+            include ../../../img/modal_popup/angle.svg
+
     .tab-content(style='display: none')
         #chat.tab-pane.fade.in.active.show(role='tabpanel')
 
@@ -149,7 +152,7 @@ div#messaging_history.messaging_history.msgHistory(data-msg-history="")
 
 div.send_message__block
     if (type === "join_channel" || type === "join_group_chat")
-        include join_button
+        .btn.btn-primary.btn-block(data-name="join_channel" style="border-radius:0;") Join channel
     else if (type === "user_chat" || type === "group" || (type === "channel" && role === "moderator"))
         button.send_message__file.attachFileToChat
             img(src="components/main/messagingblock/img/files.png")

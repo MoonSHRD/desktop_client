@@ -224,3 +224,7 @@
 .myTokens {
     width: 100%;
 }
+
+.td_min {
+    min-width: 65px;
+}

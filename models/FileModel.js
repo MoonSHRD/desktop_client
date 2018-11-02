@@ -39,6 +39,10 @@ __decorate([
     __metadata("design:type", String)
 ], FileModel.prototype, "name", void 0);
 __decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], FileModel.prototype, "path", void 0);
+__decorate([
     typeorm_1.ManyToOne(type => MessageModel_1.MessageModel, message => message.files),
     __metadata("design:type", MessageModel_1.MessageModel)
 ], FileModel.prototype, "message", void 0);

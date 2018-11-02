@@ -1,0 +1,180 @@
+.walletRight{
+    flex: 1;
+    background-color: $brand-gray-100;
+    padding: 20px 20px;
+    overflow: hidden;
+    background-size: auto 110%;
+    background-image: linear-gradient(180deg,hsla(0,0%,95.3%,.9) 0,hsla(0,0%,95.3%,.9)),url('#{$img}/messBlockBg.jpg');
+
+    td,
+    th,
+    thead th {
+        border-top: none!important;
+        border-bottom: none!important;
+        vertical-align: middle;
+    }
+
+    tbody {
+        background-color: $cf;
+        line-height: 1;
+    }
+
+    thead {
+        tr {
+            @include fz(13);
+            line-height: 1;
+        }
+    }
+
+    table {
+        border-collapse: separate;
+        border-spacing: 0 15px;
+        word-break: break-word;
+        img {
+            border-radius: 100%;
+            max-width: none;
+        }
+    }
+
+    tr{
+        td,
+        th{
+
+            &:first-child {
+                border-top-left-radius: 15px;
+                border-bottom-left-radius: 15px;
+                vertical-align: middle;
+            }
+
+            &:last-child {
+                border-top-right-radius: 15px;
+                border-bottom-right-radius: 15px;
+            }
+        }
+    }
+}
+
+.searchTokens{
+    //@include size(375px,35px);
+    width: 375px;
+    background-image: url('#{$img}/modal_popup/img/search.png');
+    background-position:  15px center;
+    background-repeat: no-repeat;
+    //border: 0;
+    //box-shadow: 0 0 27px rgba(97, 97, 97, 0.1);
+    //border: none;
+    //border-radius: 29px;
+    padding-left: 55px;
+    //outline: none;
+}
+
+.myTokensHeader {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    span {
+        @include fz(14);
+        color: $brand-gray-700;
+    }
+}
+.myTokens {
+    flex: 1;
+
+    .loader {
+        @include fz(10);
+        @include size(4em,1em);
+        position: relative;
+        margin: 100px auto;
+    }
+
+    .dot {
+        @include size(1em);
+        border-radius: 50%;
+        background: lighten($c0,20%);
+        position: absolute;
+        animation-duration: 0.5s;
+        animation-timing-function: ease;
+        animation-iteration-count: infinite;
+    }
+
+    .dot1, .dot2 {
+        left: 0;
+    }
+
+    .dot3 {
+        left: 1.5em;
+    }
+
+    .dot4 {
+        left: 3em;
+    }
+
+
+
+    .dot1 {
+        /*animation-name: reveal;*/
+        /*-webkit-animation-name: reveal;*/
+    }
+
+    .dot2, .dot3 {
+        animation-name: slide;
+    }
+
+    .dot4 {
+        animation-name: reveal;
+        animation-direction: reverse; /* thx @HugoGiraudel */
+    }
+
+    .td-token {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: 140px;
+    }
+
+    .td_namb {
+        width: 60px;
+    }
+
+    .table_02_history {
+        line-height: 35px;
+    }
+
+    .td_history_time {
+        line-height: 20px;
+    }
+
+    .grey_font {
+        color: rgba(39, 43, 70, 0.5);
+    }
+
+    .blue_font {
+        color: $brand-blue;
+    }
+
+    .green_font {
+        color: $brand-green;
+    }
+
+    .t02 {
+        box-shadow: 2px 2px 20px rgba(43, 194, 249, 0.1);
+        border-radius: 10px;
+    }
+
+    .th_sub_s,.th_sub_c,.th_ser_sp,.th_ser_st,.th_ser_k,.th_ser_c {
+        min-width: 120px;
+    }
+
+    .th_sub_n,.th_sub_t {
+        min-width: 100px;
+    }
+
+    .th_sub_d,.th_ser_m {
+        min-width: 65px;
+    }
+
+    .orange_font {
+        color: $brand-orange;
+    }
+
+}

@@ -2,44 +2,76 @@
     .modal-header__img
         include ../../../img/modal_popup/icon.svg
     .modal-header__name
-        input.form-control(name="name" type="text" placeholder="Название группы")
+        input.form-control(name="name" type="text" placeholder="Название группы" data-require="true" )
     .modal-header__category.text-center
         .custom-control-vertical.custom-control-inline.custom-radio.d-none
-            input.custom-control-input#group(type="radio" name="open-private")
+            input.custom-control-input#group(type="radio" name="openPrivate" value="off")
             label.custom-control-label.custom-control-label_icon(for="group")
                 div.icon
                     include ../../../img/modal_popup/group.svg
                 span Group Chat
         .custom-control-vertical.custom-control-inline.custom-radio
-            input.custom-control-input#free(type="radio" name="open-private" checked)
+            input.custom-control-input#free(type="radio" name="openPrivate" value="off" checked)
             label.custom-control-label.custom-control-label_icon(for="free")
                 div.icon
                     include ../../../img/modal_popup/free.svg
                 span Free channel
         .custom-control-vertical.custom-control-inline.custom-radio
-            input.custom-control-input#private(type="radio" name="open-private")
+            input.custom-control-input#private(type="radio" name="openPrivate" value="on")
             label.custom-control-label.custom-control-label_icon(for="private")
                 div.icon
                     include ../../../img/modal_popup/private.svg
                 span Private channel
 .modal-body
-    .form-group.d-none
-        button.btn.btn-link(data-toggle="collapse" data-target="#crowdsale" aria-expanded="false" aria-controls="crowdsale")
-            | Token & crowdsale
-        .collapse#crowdsale
-            .card.card-body
-                | Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-    .form-group#token_row(style="display:none")
-        label(for="price") Set subscription price
-        .row.align-items-center
-            .col-5
-                input#price.form-control(type="text")
-            .col-4
-                strong MnShrd
-            .col
-                span *1$=1MnShrd
+    .form-group
+        .collapse#token_row
+            button.btn.btn-link(type="button" data-toggle="collapse" data-target="#crowdsale" aria-expanded="false" aria-controls="crowdsale")
+                span Token & crowdsale
+                include ../../../img/modal_popup/angle.svg
+            .collapse.show#crowdsale
+                .card.card-body
+                    .crowdsale.row(data-name="crowdsale")
+                        .col-4.d-flex.align-items-center
+                            .crowdsale__num 1
+                            label.crowdsale__label(for="s-price") Subscription price
+                        .col
+                            input.form-control.crowdsale__input#s-price(type="text" name="subscriptionPrice" data-name="crowdsale__input" data-require="true" data-require-chars="num")
+                        .col-3.align-self-center
+                            .crowdsale__helper * 1$ = 1MnShrd
+                    .crowdsale.row(data-name="crowdsale")
+                        .col-4.d-flex.align-items-center
+                            .crowdsale__num 2
+                            label.crowdsale__label(for="t-name") Token name
+                        .col
+                            input.form-control.crowdsale__input#t-name(type="text" name="t-name" data-name="crowdsale__input" data-require="true" minlength="3" maxlength="16")
+                        .col-3.align-self-center
+                            .crowdsale__helper * 3-16 characters
+                    .crowdsale.row(data-name="crowdsale")
+                        .col-4.d-flex.align-items-center
+                            .crowdsale__num 3
+                            label.crowdsale__label(for="t-symbol") Token symbol
+                        .col
+                            input.form-control.crowdsale__input#t-symbol(type="text" name="t-symbol" data-name="crowdsale__input" data-require="true" minlength="3" maxlength="3")
+                        .col-3.align-self-center
+                            .crowdsale__helper * 3 characters
+                    .crowdsale.row(data-name="crowdsale")
+                        .col-4.d-flex.align-items-center
+                            .crowdsale__num 4
+                            label.crowdsale__label(for="t-supply") Total supply
+                        .col
+                            input.form-control.crowdsale__input#t-supply(type="text" name="totalSupply" data-name="crowdsale__input" data-require="true" data-require-chars="integer")
+                        .col-3.align-self-center
+                            .crowdsale__helper * enter the number of tokens
+                    .crowdsale.row(data-name="crowdsale")
+                        .col-4.d-flex.align-items-center
+                            .crowdsale__num 5
+                            label.crowdsale__label(for="t-price") Token price
+                        .col
+                            input.form-control.crowdsale__input#t-price(type="text" name="tokenPrice" data-name="crowdsale__input" data-require="true" data-require-chars="num")
+                        .col-3.align-self-center
+                            .crowdsale__helper * 1 token = 1$
     .form-group#popup_error(style="color:red; display:none;")
 .modal-footer
     .text-center
-        button(class="btn btn-primary") Создать
+        button(type="submit" class="btn btn-primary") Создать
         button.btn.btn-secondary(type="button" data-dismiss="modal") Close

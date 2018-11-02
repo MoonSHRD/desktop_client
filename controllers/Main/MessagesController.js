@@ -15,6 +15,7 @@ const UserModel_1 = require("../../models/UserModel");
 const Controller_1 = require("../Controller");
 const MessageModel_1 = require("../../models/MessageModel");
 const ChatModel_1 = require("../../models/ChatModel");
+const AccountModel_1 = require("../../models/AccountModel");
 // import {assertAnyTypeAnnotation} from "babel-types";
 const FileModel_1 = require("../../models/FileModel");
 // import InterceptFileProtocolRequest = Electron.InterceptFileProtocolRequest;
@@ -64,7 +65,7 @@ class MessagesController extends Controller_1.Controller {
             for (let num in message.files) {
                 if (Helpers_1.check_file_preview(message.files[num].type)) {
                     message.files[num].preview = true;
-                    if (!Helpers_1.read_file(message.files[num])) {
+                    if (!(yield Helpers_1.read_file(message.files[num]))) {
                         message.files[num].file = (yield this.ipfs.get_file(message.files[num].hash)).file;
                         Helpers_1.save_file(message.files[num]);
                     }
@@ -75,14 +76,18 @@ class MessagesController extends Controller_1.Controller {
                         message.files[num].downloaded = true;
                 }
             }
+            let date_time = yield Helpers_1.Helper.formate_date(new Date(message.time), { locale: "ru:", for: "dialog_date" });
             message.time = Helpers_1.Helper.formate_date(new Date(message.time), { locale: 'ru', for: 'message' });
             let html = this.render('main/messagingblock/message.pug', message);
+            let html_date = this.render("main/messagingblock/dialog_date.pug", { time: date_time });
             if (message.mine)
                 message.text = 'Вы: ' + message.text;
             const data = {
                 id: message.chat.id,
                 html: html,
+                html_date: html_date,
                 message: message,
+                time: date_time,
                 unread_messages: message.chat.unread_messages
             };
             yield this.send_data('received_message', data);
@@ -134,21 +139,16 @@ class MessagesController extends Controller_1.Controller {
             let group;
             let fileModel;
             if (file) {
-                console.log(file);
+                console.log("with file:", file);
                 fileModel = new FileModel_1.FileModel();
-                // if ([
-                //     'image/jpeg',
-                //     'image/png',
-                // ].includes(file.type))
                 fileModel.preview = Helpers_1.check_file_preview(file.type);
-                // file_send = {fileModel: file.fileModel, hash: await this.ipfs.add_file(fileModel), preview: preview, name: fileModel.name};
-                // file_info.sender = self_info.id;
                 fileModel.hash = yield this.ipfs.add_file(file);
                 fileModel.chat = chat;
                 fileModel.message = message;
                 fileModel.file = file.file;
                 fileModel.name = file.name;
                 fileModel.type = file.type;
+                fileModel.path = (yield AccountModel_1.AccountModel.get_me(self_info.id)).downloads;
                 yield fileModel.save();
                 Helpers_1.save_file(fileModel);
                 message.files = [fileModel];
@@ -214,9 +214,11 @@ class MessagesController extends Controller_1.Controller {
                     fileModel.name = files[num].name;
                     fileModel.type = files[num].type;
                     fileModel.preview = Helpers_1.check_file_preview(files[num].type);
+                    fileModel.path = AccountModel_1.AccountModel.get_me(self_info.id)["downloads"];
                     if (fileModel.preview) {
                         fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
                     }
+                    fileModel.path = self_info.id;
                     yield fileModel.save();
                     message.files.push(fileModel);
                 }
@@ -268,6 +270,7 @@ class MessagesController extends Controller_1.Controller {
                     if (fileModel.preview) {
                         fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
                     }
+                    fileModel.path = (yield AccountModel_1.AccountModel.get_me(self_info.id)).downloads;
                     yield fileModel.save();
                     messageModel.files.push(fileModel);
                 }

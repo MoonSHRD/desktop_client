@@ -4,7 +4,7 @@ let current_fs, next_fs, previous_fs; //fieldsets
 let left, opacity, scale; //fieldset properties which we will animate
 let animating; //flag to prevent quick multi-click glitches
 let data = {}; //flag to prevent quick multi-click glitches
-let mnemonic_text = '';
+let mnemonic_text = "";
 let array_mnemonic_text = [];
 
 
@@ -54,7 +54,7 @@ let array_mnemonic_text = [];
 // });
 
 $(".next").click(function(){
-    if (check_fields($(this).closest('fieldset'))) return;
+    if (check_fields($(this).closest("fieldset"))) return;
 
     if(animating) return false;
     animating = true;
@@ -78,10 +78,10 @@ $(".next").click(function(){
             //3. increase opacity of next_fs to 1 as it moves in
             opacity = 1 - now;
             current_fs.css({
-                'transform': 'scale('+scale+')',
-                'position': 'absolute'
+                "transform": "scale("+scale+")",
+                "position": "absolute"
             });
-            next_fs.css({'left': left, 'opacity': opacity});
+            next_fs.css({"left": left, "opacity": opacity});
         },
         duration: 800,
         complete: function(){
@@ -89,7 +89,7 @@ $(".next").click(function(){
             animating = false;
         },
         //this comes from the custom easing plugin
-        easing: 'easeInOutBack'
+        easing: "easeInOutBack"
     });
 });
 
@@ -115,8 +115,8 @@ $(".previous").click(function(){
             left = ((1-now) * 50)+"%";
             //3. increase opacity of previous_fs to 1 as it moves in
             opacity = 1 - now;
-            current_fs.css({'left': left});
-            previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
+            current_fs.css({"left": left});
+            previous_fs.css({"transform": "scale("+scale+")", "opacity": opacity});
         },
         duration: 800,
         complete: function(){
@@ -124,13 +124,13 @@ $(".previous").click(function(){
             animating = false;
         },
         //this comes from the custom easing plugin
-        easing: 'easeInOutBack'
+        easing: "easeInOutBack"
     });
 });
 
-$(document).on('submit', '#profile_form', function (e) {
+$(document).on("submit", "#profile_form", function (e) {
     e.preventDefault();
-    if ($('fieldset.active')!==$('fieldset').last()) $(".next").toggle('click');
+    if ($("fieldset.active")!==$("fieldset").last()) $(".next").toggle("click");
     let obj = $(this).serializeArray();
     let prof = {};
 
@@ -138,10 +138,10 @@ $(document).on('submit', '#profile_form', function (e) {
         prof[elem.name] = elem.value;
     });
     prof.avatar = null;
-    if ($('[name=avatar]').prop('files').length)
+    if ($("[name=avatar]").prop("files").length)
         prof.avatar = $("#avatar_preview").attr("src");
     console.log("Msg1", prof);
-    ipcRenderer.send('submit_profile', prof);
+    ipcRenderer.send("submit_profile", prof);
 });
 
 // $(document).on('change', '[name=avatar]', function () {
@@ -160,7 +160,7 @@ $(document).on('submit', '#profile_form', function (e) {
 
 
 
-document.querySelector("html").classList.add('js');
+document.querySelector("html").classList.add("js");
 
 let fileInput  = document.querySelector( ".input-file" ),
     button     = document.querySelector( ".input-file-trigger" );
@@ -194,18 +194,18 @@ function check_fields(fieldset) {
     console.log(els);
     // mnemonic_text = els[0].value;
 
-    console.log(array_mnemonic_text)
-    console.log(mnemonic_text)
+    console.log(array_mnemonic_text);
+    console.log(mnemonic_text);
     els.forEach(function (elem) {
         // console.log(window['validate_'+elem.name]);
-        if (window['validate_'+elem.name]!==undefined){
+        if (window["validate_"+elem.name]!==undefined){
             const $element = $this.find(`[name=${elem.name}]`);
             // console.log($element)
-            if (!window['validate_'+elem.name](elem.value)){
-                $element.addClass('invalid');
+            if (!window["validate_"+elem.name](elem.value)){
+                $element.addClass("invalid");
                 err = true;
             } else {
-                $element.removeClass('invalid');
+                $element.removeClass("invalid");
             }
         }
         data[elem.name] = elem.value;
@@ -235,8 +235,8 @@ function validate_firstname(val) {
 function validate_confirm_mnemonic(val) {
     // return true;
     if (val.trim() == mnemonic_text) {
-        console.log(val)
-        console.log(mnemonic_text)
+        console.log(val);
+        console.log(mnemonic_text);
         return (val);
     }
 
@@ -253,39 +253,39 @@ function validate_confirm_mnemonic(val) {
 // }
 
 
-$('input[name=firstname]').bind('input', function (e) {
+$("input[name=firstname]").bind("input", function (e) {
     // console.log($(this).val());
-    if (!$(this).val()) $(this).addClass('invalid');
-    else $(this).removeClass('invalid');
+    if (!$(this).val()) $(this).addClass("invalid");
+    else $(this).removeClass("invalid");
 });
 
-$('textarea[name=mnemonic]').bind('input', function (e) {
+$("textarea[name=mnemonic]").bind("input", function (e) {
     // console.log($(this).val());
-    if (!validate_mnemonic($(this).val())) $(this).addClass('invalid');
-    else $(this).removeClass('invalid');
+    if (!validate_mnemonic($(this).val())) $(this).addClass("invalid");
+    else $(this).removeClass("invalid");
 
 });
 
-$('textarea[name=confirm_mnemonic]').bind('input', function (e) {
+$("textarea[name=confirm_mnemonic]").bind("input", function (e) {
     console.log($(this).val());
-    if (!validate_confirm_mnemonic($(this).val()) === mnemonic_text + ' ') $(this).addClass('invalid');
-    else $(this).removeClass('invalid');
+    if (!validate_confirm_mnemonic($(this).val()) === mnemonic_text + " ") $(this).addClass("invalid");
+    else $(this).removeClass("invalid");
 
 });
 
 
-$(document).on('click', '#generate_mnemonic', function () {
+$(document).on("click", "#generate_mnemonic", function () {
 
-    ipcRenderer.send('generate_mnemonic');
+    ipcRenderer.send("generate_mnemonic");
     $( "#input_mnemonic_next" ).focus();
 
 
 });
 
-ipcRenderer.on('generate_mnemonic', (event, arg) => {
-    const mnemonic = $('#input_mnemonic');
+ipcRenderer.on("generate_mnemonic", (event, arg) => {
+    const mnemonic = $("#input_mnemonic");
     mnemonic.val(arg);
-    mnemonic.removeClass('invalid');
+    mnemonic.removeClass("invalid");
 
 });
 
@@ -374,74 +374,74 @@ function validate_mnemonic(mnem) {
 // });
 
 
-$(document).on('click', '#generate_mnemonic', function () {
-    ipcRenderer.send('generate_mnemonic');
+$(document).on("click", "#generate_mnemonic", function () {
+    ipcRenderer.send("generate_mnemonic");
 
 });
 
-$(document).on('click', '#input_mnemonic_next', function () {
+$(document).on("click", "#input_mnemonic_next", function () {
 
     // if (!($('#input_mnemonic').hasClass('invalid')))
         // console.log(mnemonic_text)
-    mnemonic_text  = $('#input_mnemonic').val()
-    array_mnemonic_text = mnemonic_text.split(' ')
-    console.log(array_mnemonic_text)
+    mnemonic_text  = $("#input_mnemonic").val();
+    array_mnemonic_text = mnemonic_text.split(" ");
+    console.log(array_mnemonic_text);
 
     array_mnemonic_text.sort().map(function (item) {
 
-        $('.words').prepend(`<a style="display: inline-flex; padding: 5px 10px; margin: 2px;">${item}</a>`)
+        $(".words").prepend(`<a style="display: inline-flex; padding: 5px 10px; margin: 2px;">${item}</a>`);
 
-    })
+    });
 });
 
 
-$(document).on('click', '.words a', function () {
+$(document).on("click", ".words a", function () {
     let $this = $(this);
-    let text = $('#confirm_input_mnemonic').val();
+    let text = $("#confirm_input_mnemonic").val();
 
-    if(!$this.hasClass('use')){
+    if(!$this.hasClass("use")){
 
-        text += ($this.text() + ' ')
-        $('#confirm_input_mnemonic').val(text)
+        text += ($this.text() + " ");
+        $("#confirm_input_mnemonic").val(text);
     }else {
 
     }
-    $this.addClass('use')
-    console.log(text)
-    console.log(mnemonic_text)
-    if(text == mnemonic_text + ' '){
-        $('#confirm_input_mnemonic').removeClass('invalid')
+    $this.addClass("use");
+    console.log(text);
+    console.log(mnemonic_text);
+    if(text == mnemonic_text + " "){
+        $("#confirm_input_mnemonic").removeClass("invalid");
     }
 });
 
-$(document).on('click', '.words .use', function () {
+$(document).on("click", ".words .use", function () {
     let $this = $(this);
-    let text = $('#confirm_input_mnemonic').val().replace($this.text() + ' ','');
+    let text = $("#confirm_input_mnemonic").val().replace($this.text() + " ","");
 
-    $('#confirm_input_mnemonic').val(text)
-    $this.removeClass('use')
-    console.log(text)
+    $("#confirm_input_mnemonic").val(text);
+    $this.removeClass("use");
+    console.log(text);
 
-    if(!(text == mnemonic_text + ' ')){
-        $('#confirm_input_mnemonic').addClass('invalid')
+    if(!(text == mnemonic_text + " ")){
+        $("#confirm_input_mnemonic").addClass("invalid");
     }
 
 });
 
-ipcRenderer.on('generate_mnemonic', (event, arg) => {
-    const mnemonic = $('#input_mnemonic');
+ipcRenderer.on("generate_mnemonic", (event, arg) => {
+    const mnemonic = $("#input_mnemonic");
     mnemonic.val(arg);
-    mnemonic.removeClass('invalid');
+    mnemonic.removeClass("invalid");
 });
 
-$('#confirm_input_mnemonic').keydown(function(e){
+$("#confirm_input_mnemonic").keydown(function(e){
     // $('p').html($('p').html() + ' ' + (e.key));
     e.preventDefault();
 });
 
-$('#confirm_input_mnemonic').on('focus', function() {
+$("#confirm_input_mnemonic").on("focus", function() {
 
-        $(this).blur()
+        $(this).blur();
 
 });
 

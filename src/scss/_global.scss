@@ -45,7 +45,7 @@ img{
         padding-right: 1.125rem;
         border-radius: 2em;
         background-color: $cf;
-        border-color: $cf;
+        border-color: $brand-gray-100;
         color: $primary-text;
         box-shadow: 2px 2px 20px rgba($brand-blue, 0.1);
         outline: none;
@@ -57,6 +57,12 @@ img{
             border-color: $cf;
             outline: none;
             box-shadow: 4px 4px 20px rgba($brand-blue, 0.2);
+        }
+
+        &.error,
+        &.invalid{
+            border-color: $brand-red;
+            //box-shadow: 4px 4px 20px rgba($brand-red, 0.2);
         }
     }
 }
@@ -194,4 +200,86 @@ img{
             transition: .15s ease-in-out;
         }
     }
+}
+
+//.btn{
+//
+//    &-primary{
+//        @include btn-shadow($primary);
+//        background-color: $primary;
+//        color: $cf;
+//    }
+//    &-secondary {
+//        @include btn-shadow($secondary);
+//        background-color: $secondary;
+//        color: $primary-text;
+//    }
+//}
+
+
+
+/*
+ * Alternate buttons
+ */
+@each $color, $value in $brand-colors {
+    .btn-#{$color} {
+        @include button-variant($value, $value);
+    }
+}
+
+@each $color, $value in $brand-colors {
+    .btn-outline-#{$color} {
+        @include button-outline-variant($value);
+    }
+}
+
+.btn{
+    @include fz(14);
+    font-weight: 700;
+    border-radius: .75rem;
+    padding: .525rem 1.5rem;
+
+    &-primary{
+        color: $cf;
+    }
+}
+
+/*
+ * Collapse
+ */
+[data-toggle="collapse"] {
+    @include fz(18);
+    font-weight: 500;
+    font-family: $ff-1;
+    color: $primary-text;
+    text-decoration: none;
+    padding-left: 0;
+    padding-right: 0;
+
+    &:hover,
+    &:focus,
+    &:active{
+        color: $primary-text;
+        text-decoration: none;
+    }
+    svg {
+        margin-left: 1.5rem;
+        transform: rotate(90deg);
+        transition: .2s ease;
+        path {
+            stroke: $brand-blue
+        }
+    }
+    &.collapsed {
+        svg{
+            transform: rotate(0deg);
+        }
+    }
+}
+
+.card{
+    background-color: $cf;
+    border: none;
+    box-shadow: 2px 2px 20px rgba($brand-blue,.1);
+    border-radius: 10px;
 }

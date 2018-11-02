@@ -333,6 +333,7 @@ a.join_button {
     overflow-x: hidden;
     //margin-top: 40px;
     padding-bottom: 10px;
+    @extend #style-11;
 
     #dialogDate {
         text-align: center;
@@ -351,19 +352,45 @@ a.join_button {
     @media screen and (max-width: 735px) {
         max-height: calc(100% - 105px);
     }
-
-    &::-webkit-scrollbar {
-        width: 8px;
-        background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.3);
-    }
+    //
+    //&::-webkit-scrollbar {
+    //    width: 8px;
+    //    background: transparent;
+    //}
+    //
+    //&::-webkit-scrollbar-thumb {
+    //    background-color: rgba(0, 0, 0, 0.3);
+    //}
 
     // Список сообщений
     &__list{
-        padding: 15px 30px;
+        padding: 15px;
+        position: relative;
+
+        .btn{
+            @include size(2.5rem);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include position(fixed, null 30px 70px null);
+            padding: 0;
+            transition: .2s ease;
+            opacity: 0;
+            visibility: hidden;
+
+            &.show{
+                opacity: 1;
+                visibility: visible;
+            }
+
+            svg{
+                transform: rotate(90deg);
+                path {
+                    stroke: $cf;
+                }
+            }
+        }
     }
 }
 /*

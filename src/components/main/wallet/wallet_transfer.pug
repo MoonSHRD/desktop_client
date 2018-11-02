@@ -1,7 +1,3 @@
-style
-    include myTokens.css
-style
-    include transfers.css
 div.myTokens.transfer
     table.table(style='    ')
         thead
@@ -13,16 +9,16 @@ div.myTokens.transfer
         tbody
             tr.trasfer_in.t02
                 th(scope='row')
-                    input#sendTokenTo(placeholder='Enter the name or address' name='address' list="browsers" )
+                    input.form-control.form-control#sendTokenTo(placeholder='Enter the name or address' name='address' list="browsers" )
                     datalist#browsers
                         //input !{chats?chats:""}
 
                 td
-                    input(placeholder='How much?' name='amount')
+                    input.form-control(placeholder='How much?' name='amount')
                 td
                     a(href='#') Add info
                 td
-                    .btn.sendTokenButton Send
+                    .btn.btn-primary.sendTokenButton Send
 
 
 

@@ -1,6 +1,7 @@
 const {ipcRenderer} = require('electron');
 const dict = require('./langs/lang');
 const slick = require('slick-carousel');
+const {dialog} = require('electron').remote;
 
 let p = null;
 let d = null;
@@ -8,6 +9,29 @@ let r = null;
 let curr_width = null;
 let unlock = false;
 
+function validate_totalSupply(val) {
+    let regexp = /^[0-9\.]*$/;
+    if (regexp.test(val)){
+        console.log(val);
+        return (val);
+    }
+}
+
+function validate_subscriptionPrice(val) {
+    let regexp = /^[0-9\.]*$/;
+    if (regexp.test(val)){
+        console.log(val);
+        return (val);
+    }
+}
+
+function validate_tokenPrice(val) {
+    let regexp = /^[0-9]*\.?[0-9]*$/;
+    if (regexp.test(val)){
+        console.log(val);
+        return (val);
+    }
+}
 
 window.onload = function () {
 
@@ -40,10 +64,10 @@ window.onload = function () {
             sel.removeAllRanges();
             try {
                 range.selectNodeContents(elem);
-                sel.addRange(range)
+                sel.addRange(range);
             } catch (e) {
                 range.selectNode(elem);
-                sel.addRange(range)
+                sel.addRange(range);
             }
         } else if (body.createTextRange) {
             range = body.createTextRange();
@@ -53,29 +77,29 @@ window.onload = function () {
         document.execCommand('copy');
         console.log(range, sel, elem);
 
-            $.notify('address copied \n' + range, {
+        $.notify('address copied \n' + range, {
 
-                placement: {
-                    from: "bottom",
-                    align: "right"
-                },
-                animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated fadeOutRight'
-                },
-                z_index: 10031,
-                offset: 20,
-                spacing: 10
-            });
+            placement: {
+                from: 'bottom',
+                align: 'right'
+            },
+            animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+            },
+            z_index: 10031,
+            offset: 20,
+            spacing: 10
+        });
         // }
     });
 
     $(document).on('click','.attachFileToChat',function () {
-        $("input[id='attachFileToChat']").trigger('click');
+        $('input[id=\'attachFileToChat\']').trigger('click');
     });
 
     $(document).on('click','.attachFileToGroup',function () {
-        $("input[id='attachFileToGroup']").trigger('click');
+        $('input[id=\'attachFileToGroup\']').trigger('click');
     });
 
 
@@ -127,6 +151,7 @@ window.onload = function () {
         // console.log('menu_click');
 
         const $this=$(this);
+
         if ($this.data('id') !== 'menu_create_chat' && !$this.hasClass('not_active')) {
             $this.addClass('active_menu')
                 .parent()
@@ -205,40 +230,40 @@ window.onload = function () {
 
     $(document).on('keyup', '[data-msg="data-msg"]', function () {
         if (event.ctrlKey && event.keyCode === 13 ) {
-            $(this).attr('rows', 1)
+            $(this).attr('rows', 1);
         }
     });
 
-    $(document).on('keydown',".send_message__input",function(e) {
+    $(document).on('keydown','.send_message__input',function(e) {
         if($(this).val() === '') {
-            $(this).attr('rows', 1)
+            $(this).attr('rows', 1);
         };
         if($(this).val() === '' && event.keyCode == 13) {
             event.preventDefault();
         };
 
         if ( event.keyCode === 13 && $(this).val()!=='') {
-            ResizeTextArea(this,0)
+            ResizeTextArea(this,0);
         }
     });
 
-    $(document).on('input',".send_message__input",function(e) {
+    $(document).on('input','.send_message__input',function(e) {
         // console.log('hello!')
         if($(this).val() === '') {
-            $(this).attr('rows', 1)
+            $(this).attr('rows', 1);
         };
 
     });
 
-    $(document).on('paste',".send_message__input",function(e) {
-        console.log('paste!')
+    $(document).on('paste','.send_message__input',function(e) {
+        console.log('paste!');
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
         if($(this).val()!=='')
         {
-            $(this).attr('rows', $(this).attr('rows'))
+            $(this).attr('rows', $(this).attr('rows'));
 
         }else {
-            ResizeTextArea(this,10)
+            ResizeTextArea(this,10);
 
         }
         console.log(text);
@@ -273,7 +298,7 @@ window.onload = function () {
         // console.log(obj);
         let files = $('#attachFileToChat').prop('files');
         if (files && files[0]) {
-            msg_input.attr('rows', 1)
+            msg_input.attr('rows', 1);
 
             let file = files[0];
             console.log(file);
@@ -282,10 +307,10 @@ window.onload = function () {
             reader.onloadend = function () {
                 obj.file = {file: reader.result, type: file.type, name: file.name};
                 // console.log(obj);
-                ipcRenderer.send("send_message", obj);
+                ipcRenderer.send('send_message', obj);
             };
         } else {
-            ipcRenderer.send("send_message", obj);
+            ipcRenderer.send('send_message', obj);
         }
         // console.log(file);
         msg_input.val('');
@@ -305,6 +330,14 @@ window.onload = function () {
         targetBlock.scrollTop = targetBlock.scrollHeight;
     };
 
+    let scrollDownAnimate = (target = '[data-msg-history]', list = '[data-msg-list]') => {
+        const targetBlock = $(target);
+        let targetHeight = $(list).outerHeight();
+        targetBlock.animate({
+            scrollTop: targetHeight
+        }, 600);
+    };
+
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
         $('[data-msg-list]').append(obj);
         scrollDown('[data-msg-history]');
@@ -320,19 +353,26 @@ window.onload = function () {
                 console.log(obj);
 
                 chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
-                chat.find("[data-name=unread_messages]").show();
+                chat.find('[data-name=unread_messages]').show();
             }
             chat.prependTo($('.chats ul')[0]);
         }
         if ($('.active_dialog').attr('id') === obj.id) {
-            chat.find("[data-name=unread_messages]").hide();
+            chat.find('[data-name=unread_messages]').hide();
             ipcRenderer.send('reading_messages', obj.id);
+
+            let p_count = ($('p:contains(' + obj.time + ')'));
+
+            if (p_count.length === 0) {
+                $('[data-msg-list]').append(obj.html_date);
+            }
+
             $('[data-msg-list]').append(obj.html);
             scrollDown('[data-msg-history]');
         } else {
-            chat.find("[data-name=unread_messages]").text(obj.unread_messages);
+            chat.find('[data-name=unread_messages]').text(obj.unread_messages);
         }
-        // ipcRenderer.send('load_chats', 'menu_chats');
+        // ipcRenderer.send('load_chat s', 'menu_chats');
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
@@ -354,7 +394,7 @@ window.onload = function () {
 
     ipcRenderer.on('reload_chat', (event, obj) => {
         $('#messaging_block').html(obj);
-        $(".send_message_input").focus();
+        $('.send_message_input').focus();
     });
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
@@ -368,23 +408,20 @@ window.onload = function () {
     $(document).on('click', '[data-name=join_channel]', function () {
         $(this).attr('disabled', 'disabled');
         let active_dialog = $('.active_dialog');
-        let input = $('[data-name=group_search]');
-        input.val('');
         ipcRenderer.send('join_channel', {
             id: active_dialog.attr('id'),
             domain: active_dialog.attr('data-domain'),
             contract_address: active_dialog.attr('data-contract_address')
         });
-        ipcRenderer.send('load_chats', 'menu_chats');
     });
 
     function click_anim(e){
-        $(".ripple").remove();
+        $('.ripple').remove();
         var posX = $(this).offset().left,
             posY = $(this).offset().top,
             buttonWidth = $(this).width(),
             buttonHeight =  $(this).height();
-        $(this).children('a').prepend("<span class='ripple'></span>");
+        $(this).children('a').prepend('<span class=\'ripple\'></span>');
         if(buttonWidth >= buttonHeight) {
             buttonHeight = buttonWidth;
         } else {
@@ -392,12 +429,12 @@ window.onload = function () {
         }
         var x = e.pageX - posX - buttonWidth / 2;
         var y = e.pageY - posY - buttonHeight / 2;
-        $(".ripple").css({
+        $('.ripple').css({
             width: buttonWidth,
             height: buttonHeight,
             top: y + 'px',
             left: x + 'px'
-        }).addClass("rippleEffect");
+        }).addClass('rippleEffect');
     }
 
 
@@ -409,10 +446,10 @@ window.onload = function () {
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
         let chat = $this.attr('id');
 
-        $this.find("[data-name=unread_messages]").hide();
-        $this.find("[data-name=unread_messages]").text("0");
+        $this.find('[data-name=unread_messages]').hide();
+        $this.find('[data-name=unread_messages]').text('0');
 
-        if(!($this.hasClass("active_dialog") && $this.hasClass("have_history"))) {
+        if(!($this.hasClass('active_dialog') && $this.hasClass('have_history'))) {
             ipcRenderer.send('get_chat_msgs', chat);
             $this.addClass('have_history');
         }
@@ -451,34 +488,148 @@ window.onload = function () {
         $('.chats ul').append(data);
     });
 
-    $(document).on("change", '.modal-content select[name=substype]', function () {
-        if ($(this).find(":selected").val() === 'unfree') {
-            $("#token_row").show();
-        } else {
-            $("#token_row").hide();
-        }
-    });
-    $(document).on("change", '[name="open-private"]', function () {
+    // $(document).on("change", '.modal-content select[name=substype]', function () {
+    //     if ($(this).find(":selected").val() === 'unfree') {
+    //         $("#token_row").show();
+    //     } else {
+    //         $("#token_row").hide();
+    //     }
+    // });
+
+    $(document).on('change', '[name="openPrivate"]', function () {
         if ($(this).attr('id') === 'private') {
-            $("#token_row").show();
+            $('#token_row').collapse('show');
         } else {
-            $("#token_row").hide();
+            $('#token_row').collapse('hide');
         }
     });
+
+    /*
+     * Форма создная группы/канала
+     */
+
+    function validationInputs(target = '[data-require]'){
+        const $this = $(target);
+        const minChars = $this.attr('minlength');
+        const maxChars = $this.attr('maxlength');
+        const typeChars = $this.data('require-chars');
+        let value = $this.val();
+        let rgx;
+
+        console.log($this);
+
+        if (value.length < minChars){
+            $this.addClass('error').removeClass('correct');
+        } else {
+            $this.removeClass('error').addClass('correct');
+        }
+
+        if (typeChars === 'integer') {
+            rgx = /[0-9]|\./;
+            if (!rgx.test(value)) {
+                // e.preventDefault();
+                $this.addClass('error').removeClass('correct');
+                // alert("введите латинские символы");
+                return false;
+            } else {
+                $this.removeClass('error').addClass('correct');
+            }
+        } else if (typeChars === 'num') {
+            rgx = /^[0-9]*\.?[0-9]*$/;
+            if (!rgx.test(value)) {
+                // e.preventDefault();
+                $this.addClass('error').removeClass('correct');
+                // alert("введите латинские символы");
+                return false;
+            } else {
+                $this.removeClass('error').addClass('correct');
+            }
+        }
+    };
+
+    function checkFields(fieldset) {
+        let err = false;
+        const $this=$(fieldset);
+        let els = $this.serializeArray();
+        console.log(els);
+        // if (els.length===0) return err;
+        let ret={
+            err:true,
+            data:{}
+        };
+
+
+        els.forEach(function (elem) {
+            const $element = $this.find(`[name=${elem.name}]`);
+            if (window['validate_'+elem.name]!==undefined){
+                if (!window['validate_'+elem.name](elem.value)){
+                    $element.addClass('invalid');
+                    ret.err = true;
+                } else {
+                    $element.removeClass('invalid');
+                    ret.data[elem.name]=elem.value;
+                    ret.err = false;
+                }
+            } else {
+                // data[elem.name] = elem.value;
+                if (!elem.value) {
+                    $element.addClass('invalid');
+                    ret.err = true;
+                } else {
+                    $element.removeClass('invalid');
+                    ret.data[elem.name]=elem.value;
+                    ret.err = false;
+                }
+            }
+        });
+
+        return ret;
+    }
+
+    // $(document).on('keyup', '[data-require="true"]', function (){
+    //     validationInputs(this);
+    // });
 
     $(document).on('submit', '.modal-content', function (e) {
         e.preventDefault();
-        // return;
-        const data = $(this).serializeArray();
-        let obj = {};
-        data.forEach(function (elem) {
-            obj[elem.name] = elem.value;
-        });
+        const $this = $(this);
+        let groupNameEl = $this.find('[name=\'name\']');
+        let groupName = groupNameEl.val().trim();
+        let openPrivateRadio = $this.find('[name="openPrivate"]:checked');
 
-        ipcRenderer.send('create_group', obj);
-        console.log(obj);
-        $('#AppModal').modal('toggle');
+        let {data,err}=checkFields(this);
+
+        console.log(data);
+        console.log(err);
+
+        // let obj = {};
+        if (groupName.length > 2) {
+            if (openPrivateRadio.val() === 'off' ){
+                err = false;
+            }
+            if (!err) {
+                ipcRenderer.send('create_group', data);
+                console.log(data);
+                $('#AppModal').modal('toggle');
+            }
+        }
     });
+
+    $(document).on('focusin', '[data-name="crowdsale__input"]', function (e) {
+        let $this = $(this);
+        let parent = $this.closest('[data-name="crowdsale"]');
+        parent.addClass('crowdsale_focus');
+    });
+
+    $(document).on('focusout', '[data-name="crowdsale__input"]', function (e) {
+        let $this = $(this);
+        let parent = $this.closest('[data-name="crowdsale"]');
+        parent.removeClass('crowdsale_focus');
+    });
+
+    /*
+     * /Форма создания группы/канала
+     */
 
     $(document).on('click', '[data-event=show_chat_info]', function () {
         const active_dialog = $('.active_dialog');
@@ -512,8 +663,8 @@ window.onload = function () {
         $.notify(text, {
 
             placement: {
-                from: "bottom",
-                align: "right"
+                from: 'bottom',
+                align: 'right'
             },
             animate: {
                 enter: 'animated fadeInRight',
@@ -529,8 +680,8 @@ window.onload = function () {
         $.notify(text, {
 
             placement: {
-                from: "bottom",
-                align: "right"
+                from: 'bottom',
+                align: 'right'
             },
             animate: {
                 enter: 'animated fadeInRight',
@@ -547,7 +698,7 @@ window.onload = function () {
         bot_notif(text);
     });
 
-    ipcRenderer.on("get_notice", (event, obj) => {
+    ipcRenderer.on('get_notice', (event, obj) => {
         if ($('.active_dialog').attr('id') === obj.id) {
             $('.notifyBlock').append((obj.html));
         }
@@ -600,19 +751,19 @@ window.onload = function () {
         ipcRenderer.send('download_file', $(this).attr('data-id'));
     });
 
-    ipcRenderer.on("file_downloaded", (event, obj) => {
+    ipcRenderer.on('file_downloaded', (event, obj) => {
         let file=$(`[data-id=${obj.id}]`);
         if (file.hasClass('load'))
             file.removeClass('load').addClass('complite');
     });
 
-    ipcRenderer.on("wallet_token_table", (event, obj) => {
+    ipcRenderer.on('wallet_token_table', (event, obj) => {
         console.log('token table');
         $('.loader').remove();
         $('.myTokens').append(obj);
     });
 
-    ipcRenderer.on("get_contacts", (event, obj) => {
+    ipcRenderer.on('get_contacts', (event, obj) => {
         // console.log('1234567')
         $('#browsers').html(obj);
 
@@ -633,30 +784,30 @@ window.onload = function () {
     $(document).mousemove(function(e) {
         if (!$('[data-id="menu_chats"]').hasClass('active_menu'))
             return;
-        p = $(".dialogs");
-        let d = $(".messaging_block");
+        p = $('.dialogs');
+        let d = $('.messaging_block');
         let change = curr_width + (e.clientX - curr_width);
         widthMsgWindow('[data-msgs-window]');
         if(unlock) {
             if(change > 369 && change < 599) {
 
-                p.css("width", change);
-                d.css("margin-left", change);
+                p.css('width', change);
+                d.css('margin-left', change);
             }
         }
     });
 
-    $(document).on('mousedown',"#resize01",function(e) {
+    $(document).on('mousedown','#resize01',function(e) {
         console.log('resize_clicked');
         curr_width = p.width();
         unlock = true;
     });
 
-    $(document).on('click',"[data-id=add_new_user]",function(e) {
+    $(document).on('click','[data-id=add_new_user]',function(e) {
         let input = $('[data-name=user_search]');
         let data={id:input.val(),domain:'localhost'};
         input.val('');
-        ipcRenderer.send("send_subscribe", data);
+        ipcRenderer.send('send_subscribe', data);
     });
 
     $(document).mouseup(function(e) {
@@ -669,7 +820,7 @@ window.onload = function () {
         var hard_lines = 1;
         var last = 0;
         while ( true ) {
-            last = strtocount.indexOf("\n", last+1);
+            last = strtocount.indexOf('\n', last+1);
             hard_lines ++;
             // if ( hard_lines == 10) break;
             if ( last == -1 ) break;
@@ -677,7 +828,7 @@ window.onload = function () {
             // console.log(hard_lines)
         }
         var soft_lines = Math.ceil(strtocount.length / (cols-1));
-        var hard = eval("hard_lines " + unescape("%3e") + "soft_lines;");
+        var hard = eval('hard_lines ' + unescape('%3e') + 'soft_lines;');
         if ( hard ) soft_lines = hard_lines;
         return soft_lines;
     }
@@ -699,6 +850,72 @@ window.onload = function () {
 
     $('[data-toggle="collapse"]').collapse('toggle');
 
+    let scrollBottom = (target = '[data-msg-history]', child = '[data-msg-list]') => {
+        let param = {
+            bottom : '',
+            height : $(target).outerHeight(true)
+        };
+        param.bottom = $(child).outerHeight(true) - ( $(target).scrollTop() + $(target).outerHeight(true));
+        return param;
+    };
+
+    document.addEventListener('scroll', function (event) {
+        if (event.target.id === 'messaging_history') { // or any other filtering condition
+            let {bottom, height} = scrollBottom();
+            if ( bottom > height ) {
+                $('[data-toggle="scrollDown"]').addClass('show');
+            } else {
+                $('[data-toggle="scrollDown"]').removeClass('show');
+            }
+        }
+    }, true /*Capture event*/);
+
+    $(document).on('click', '[name=change_download]', function (e) {
+        dialog.showOpenDialog({
+            properties: ['openDirectory','openFile']
+        },function (directory) {
+            ipcRenderer.send('change_directory', directory + '/');
+        });
+    });
+
+    // ipcRenderer.on("change_directory", (event) => {
+    //     dialog.showOpenDialog({
+    //         properties: ["openDirectory","openFile"]
+    //     },async function (fileNames) {
+    //         console.log("file:", fileNames);
+    //         ipcRenderer.send("change_directory");
+    //     })
+    // });
+    $(document).on('click', '[data-toggle="scrollDown"]', function (e){
+        e.preventDefault();
+        scrollDownAnimate();
+    });
+
+
+    $(document).on('click', '.switch-btn', function () {
+        $(this).toggleClass('switch-on');
+        if ($(this).hasClass('switch-on')) {
+            $(this).trigger('on.switch');
+        } else {
+            $(this).trigger('off.switch');
+        }
+    });
+    $(document).on('on.switch', function () {
+        $(".bl-hide-1").val("");
+        ipcRenderer.send("load_chats", "menu_chats");
+        $('.bl-hide').css('display', 'block');
+        $('.bl-hide-1').css('display', 'none');
+        $('.chats').css('height', 'calc(100% - 153px)');
+
+
+    });
+    $(document).on('off.switch', function () {
+        $('.bl-hide').val("");
+        $('.bl-hide').css('display', 'none');
+        $('.bl-hide-1').css('display', 'block');
+        $('.chats').css('height', 'calc(100% - 200px)');
+
+    });
 
 
 };

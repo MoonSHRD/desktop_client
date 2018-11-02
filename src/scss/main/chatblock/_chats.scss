@@ -145,28 +145,34 @@
 /**  STYLE 11 */
 #style-11 {
     &::-webkit-scrollbar-track {
-        border-radius: 10px;
-        background: opacify($cf, 0.1);
-        border: 1px solid #ccc;
+        //border-radius: 10px;
+        background: opacify($brand-gray-100, 0.3);
+        //border: 1px solid rgba($brand-gray-400, 0.1);
+        transition: .2s ease;
     }
     &::-webkit-scrollbar {
-        width: 2px;
+        //width: 2px;
+        width: 6px;
         background-color: $cf;
+        transition: .2s ease;
     }
 
     &:hover{
         &::-webkit-scrollbar-thumb{
             border-radius: 10px;
-            background: linear-gradient(left, #fff, #e4e4e4);
-            border: 1px solid #aaa;
+            //background: linear-gradient(left, #fff, #e4e4e4);
+            background-color: rgba($primary-text, .6);
+            //border: 1px solid $primary-text;
         }
     }
     &::-webkit-scrollbar-thumb {
         border-radius: 10px;
-        background: linear-gradient(left, #fff, #e4e4e4);
+        //background: linear-gradient(left, #fff, #e4e4e4);
+        background-color: rgba($primary-text, .25);
+        transition: .2s ease;
 
         &:active {
-            background: linear-gradient(left, #22ADD4, #1E98BA);
+            //background: linear-gradient(left, #22ADD4, #1E98BA);
         }
     }
 }

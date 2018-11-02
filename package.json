@@ -31,7 +31,7 @@
     "rebuild_packages": "./node_modules/.bin/electron-rebuild  -f -w sqlite3",
     "build_platforms": "npm run package-linux && npm run package-win64",
     "prebuild:css": "node-sass --include-path scss src/scss/index.scss src/css/index.css --source-map-embed true",
-    "build:css": "postcss --use autoprefixer -b 'last 2 versions' < src/css/index.css | postcss --use cssnano > src/css/index.min.css",
+    "build:css": "postcss --use autoprefixer -b \"last 2 versions\" < src/css/index.css | postcss --use cssnano > src/css/index.min.css",
     "css": "npm run prebuild:css | npm run build:css"
   },
   "includeSources": true,
