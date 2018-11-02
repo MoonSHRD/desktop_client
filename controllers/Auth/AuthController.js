@@ -47,9 +47,18 @@ class AuthController extends Controller_1.Controller {
             yield this.loom.connect(account.privKey);
             console.log('loom connected');
             if (first) {
-                let identyti_tx = yield this.loom.set_identity(account.user.name);
-                console.log(identyti_tx);
-                this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
+                //todo Проверить повторение попыток
+                while (true) {
+                    try {
+                        let identyti_tx = yield this.loom.set_identity(account.user.name);
+                        console.log(identyti_tx);
+                        this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
+                        break;
+                    }
+                    catch (e) {
+                        console.log("Error with set identity. Reset...", e);
+                    }
+                }
             }
             let user = yield this.get_self_info();
             this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
@@ -77,6 +86,7 @@ class AuthController extends Controller_1.Controller {
             account.privKey = loom_data.priv;
             account.passphrase = data.mnemonic;
             account.user = user;
+            account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
             yield account.save();
             yield this.auth(account, true);
         });

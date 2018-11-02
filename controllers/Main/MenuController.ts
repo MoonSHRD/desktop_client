@@ -11,8 +11,8 @@ class MenuController extends Controller {
         console.log('init_main');
         await this.generate_initial_chats();
         let self_info = await this.get_self_info();
-        this.send_data(this.events.change_app_state, this.render('main/main.pug', self_info));
-        await this.load_menu_initial(true);
+        await this.send_data(this.events.change_app_state, this.render('main/main.pug', self_info));
+        await this.load_menu_initial();
     };
 
     async load_menu(menu) {
@@ -39,7 +39,20 @@ class MenuController extends Controller {
     private async load_menu_chats(account) {
         let self_info = await this.get_self_info();
         self_info.state=this.chat_to_menu.group;
-        let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
+        console.log("self", self_info);
+        let obj = {
+            state:      self_info.state,
+            name:       self_info.name,
+            firstname:  self_info.firstname,
+            lastname:   self_info.lastname,
+            bio:        self_info.bio,
+            avatar:     self_info.avatar,
+            id:         self_info.id,
+            domain:     self_info.domain,
+            filename:   self_info.filename,
+            width_chats:(await this.get_me(self_info.id)).width_chats
+        };
+        let html = this.render('main/chatsblock/chatsblock.pug', obj) +
             this.render('main/messagingblock/messagingblock.pug');
         this.send_data('change_menu_state', html);
         await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.group);
@@ -138,13 +151,10 @@ class MenuController extends Controller {
         this.send_data('get_my_vcard', this.render('main/modal_popup/create_chat.pug'));
     }
 
-    private async load_menu_initial(first: boolean = false) {
+    private async load_menu_initial() {
         console.log('load_menu_default');
-        let self_info = await this.get_self_info();
-        await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user, first);
-        if (first) {
-            await this.controller_register.run_controller('MessagesController', 'get_chat_messages', '0x0000000000000000000000000000000000000000_' + self_info.id);
-        }
+        await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
+        await this.controller_register.run_controller("AccountController", "set_sizes");
     }
 
     private async load_menu_default() {

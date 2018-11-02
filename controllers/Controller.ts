@@ -24,6 +24,7 @@ export abstract class Controller {
     protected loom: Loom = Loom.getInstance();
     protected ipfs: Ipfs = Ipfs.getInstance();
     private self_info: UserModel = null;
+    private me: AccountModel = null;
 
     protected constructor(window) {
         this.window = window;
@@ -50,4 +51,11 @@ export abstract class Controller {
     protected send_data(event, data) {
         this.window.webContents.send(event, data);
     };
+
+    protected async get_me(id:string) {
+        if (!this.me) {
+            this.me = (await AccountModel.find({where: {user_id:id}}))[0]
+        }
+        return this.me;
+    }
 }
