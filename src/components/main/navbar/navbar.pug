@@ -2,7 +2,7 @@
 //    include navbar.css
 
 #menu.block(class='icon-bar')
-    ul(class='menu' id=('main-menu'))
+    ul.menu#main-menu
         li
             div.menu__item.menu__item_logo.not_active
                 div(class='image')
@@ -54,14 +54,14 @@
                 span.text (data-translate-key="CREATE_CHAT") New group
 
         li
-            a.menu__item.menu__item_notification(data-id="")
+            a.menu__item.menu__item_notification.not_active(data-id="")
                 div(class='image')
                     //img(src="img/navbar/img/bell.png")
                     include ../../../img/navbar/img/notification.svg
                 span.text (data-translate-key="NOTIFICATIONS") Notifications
 
         li(class='exit')
-            a.menu__item.menu__item_exit
+            a.menu__item.menu__item_exit.not_active
                 div(class='image')
                     //img(src="img/navbar/img/logout.png")
                     include ../../../img/navbar/img/exit.svg

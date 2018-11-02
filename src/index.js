@@ -79,18 +79,18 @@ window.onload = function () {
 
         $.notify('address copied \n' + range, {
 
-                placement: {
-                    from: 'bottom',
-                    align: 'right'
-                },
-                animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated fadeOutRight'
-                },
-                z_index: 10031,
-                offset: 20,
-                spacing: 10
-            });
+            placement: {
+                from: "bottom",
+                align: "right"
+            },
+            animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutRight'
+            },
+            z_index: 10031,
+            offset: 20,
+            spacing: 10
+        });
         // }
     });
 
@@ -151,6 +151,7 @@ window.onload = function () {
         // console.log('menu_click');
 
         const $this=$(this);
+
         if ($this.data('id') !== 'menu_create_chat' && !$this.hasClass('not_active')) {
             $this.addClass('active_menu')
                 .parent()
@@ -229,40 +230,40 @@ window.onload = function () {
 
     $(document).on('keyup', '[data-msg="data-msg"]', function () {
         if (event.ctrlKey && event.keyCode === 13 ) {
-            $(this).attr('rows', 1);
+            $(this).attr('rows', 1)
         }
     });
 
-    $(document).on('keydown','.send_message__input',function(e) {
+    $(document).on('keydown',".send_message__input",function(e) {
         if($(this).val() === '') {
-            $(this).attr('rows', 1);
+            $(this).attr('rows', 1)
         };
         if($(this).val() === '' && event.keyCode == 13) {
             event.preventDefault();
         };
 
         if ( event.keyCode === 13 && $(this).val()!=='') {
-            ResizeTextArea(this,0);
+            ResizeTextArea(this,0)
         }
     });
 
-    $(document).on('input','.send_message__input',function(e) {
+    $(document).on('input',".send_message__input",function(e) {
         // console.log('hello!')
         if($(this).val() === '') {
-            $(this).attr('rows', 1);
+            $(this).attr('rows', 1)
         };
 
     });
 
-    $(document).on('paste','.send_message__input',function(e) {
-        console.log('paste!');
+    $(document).on('paste',".send_message__input",function(e) {
+        console.log('paste!')
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
         if($(this).val()!=='')
         {
-            $(this).attr('rows', $(this).attr('rows'));
+            $(this).attr('rows', $(this).attr('rows'))
 
         }else {
-            ResizeTextArea(this,10);
+            ResizeTextArea(this,10)
 
         }
         console.log(text);
@@ -359,12 +360,19 @@ window.onload = function () {
         if ($('.active_dialog').attr('id') === obj.id) {
             chat.find('[data-name=unread_messages]').hide();
             ipcRenderer.send('reading_messages', obj.id);
+
+            let p_count = ($("p:contains(" + obj.time + ")"));
+
+            if (p_count.length === 0) {
+                $('[data-msg-list]').append(obj.html_date);
+            }
+
             $('[data-msg-list]').append(obj.html);
             scrollDown('[data-msg-history]');
         } else {
             chat.find('[data-name=unread_messages]').text(obj.unread_messages);
         }
-        // ipcRenderer.send('load_chats', 'menu_chats');
+        // ipcRenderer.send('load_chat s', 'menu_chats');
     });
 
     ipcRenderer.on('buddy', (event, obj) => {
@@ -400,14 +408,11 @@ window.onload = function () {
     $(document).on('click', '[data-name=join_channel]', function () {
         $(this).attr('disabled', 'disabled');
         let active_dialog = $('.active_dialog');
-        let input = $('[data-name=group_search]');
-        input.val('');
         ipcRenderer.send('join_channel', {
             id: active_dialog.attr('id'),
             domain: active_dialog.attr('data-domain'),
             contract_address: active_dialog.attr('data-contract_address')
         });
-        ipcRenderer.send('load_chats', 'menu_chats');
     });
 
     function click_anim(e){
@@ -885,5 +890,37 @@ window.onload = function () {
         e.preventDefault();
         scrollDownAnimate();
     });
+
+
+    $(document).on("click", '.switch-btn', function () {
+        $(this).toggleClass('switch-on');
+        if ($(this).hasClass('switch-on')) {
+            $(this).trigger('on.switch');
+        } else {
+            $(this).trigger('off.switch');
+        }
+    });
+    $(document).on('on.switch', function () {
+        // let text = $(".searchInput");
+        let text = $(".bl-hide-1").val();
+        $(".bl-hide").val(text);
+        $('.bl-hide').css('display', 'block');
+        $('.bl-hide-1').css('display', 'none');
+        $('.chats').css('height', 'calc(100% - 153px)');
+        // ipcRenderer.send('load_chats', 'menu_chats');
+        // $('[data-type="channel"]').addClass('d-none');
+        // $('[data-type="user_chat"]').removeClass('d-none');
+
+    });
+    $(document).on('off.switch', function () {
+        let text = $('.bl-hide').val();
+        $(".bl-hide-1").val(text);
+        $('.bl-hide').css('display', 'none');
+        $('.bl-hide-1').css('display', 'block');
+        $('.chats').css('height', 'calc(100% - 200px)');
+        // $('[data-type="channel"]').removeClass('d-none');
+        // $('[data-type="user_chat"]').addClass('d-none');
+    });
+
 
 };
