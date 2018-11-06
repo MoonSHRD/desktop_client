@@ -136,6 +136,10 @@
                      position: relative;
                      z-index: 10;
                 }
+                svg{
+                    @include size(40px);
+                    flex-shrink: 0;
+                }
 
                 &.active_settings {
                     background-color: #2BC2F9;
@@ -175,7 +179,7 @@
         background-color: $brand-gray-100;
         overflow-x: hidden;
         background-size: auto 110%;
-        background-image: linear-gradient(180deg,hsla(0,0%,95.3%,.9) 0,hsla(0,0%,95.3%,.9)),url('#{$img}/settings/messBlockBg.jpg');
+        background-image: linear-gradient(180deg,hsla(0,0%,95.3%,.9) 0,hsla(0,0%,95.3%,.9)),url('#{$img}/messBlockBg.jpg');
 
         textarea {
             border-radius: 15px;
@@ -235,8 +239,9 @@
                 font-size: 13px;
                 width: 43px;
                 border: none;
-                background-color: #ffffff;
-                color: #2BC2F9;
+                background-color: $cf;
+                color: $brand-blue;
+                flex-basis: 100%;
             }
         }
     }

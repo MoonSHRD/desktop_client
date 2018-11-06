@@ -1,5 +1,5 @@
 style
-    include settings.css
+    //include settings.css
 div.settings__left.custom-scrollbar
 
     ul#optionsList.p-0.m-0
@@ -47,44 +47,52 @@ div.settings__left.custom-scrollbar
 
             li.active_settings(data-name="settings_identification")
                 a(href='#')
-                    img(src='components/main/settings/img/ident.png', width='40', height='40')
+                    //img(src='img/settings/ident.png', width='40', height='40')
+                    include ../../../img/settings/icons/ident.svg
                     p Identification
 
             li(data-name="settings_mySubscriptions")
                 a(href='#')
-                    img(src='components/main/settings/img/myPurSub.png', width='40', height='40')
+                    //img(src='img/settings/myPurSub.png', width='40', height='40')
+                    include ../../../img/settings/icons/myPurSub.svg
                     p My subscriptions
 
             li(data-name="settings_released_subscriptions")
                 a(href='#')
-                    img(src='components/main/settings/img/relSub.png', width='40', height='40')
+                    //img(src='img/settings/relSub.png', width='40', height='40')
+                    include ../../../img/settings/icons/relSub.svg
                     p Released subscriptions
 
             li(data-name="settings_black_list")
                 a(href='#')
-                    img(src='components/main/settings/img/blackList.png', width='40', height='40')
+                    //img(src='img/settings/blackList.png', width='40', height='40')
+                    include ../../../img/settings/icons/blackList.svg
                     p Black list
 
             li(data-name="settings_my_stickers")
                 a(href='#')
-                    img(src='components/main/settings/img/myStickers.png', width='40', height='40')
+                    //img(src='img/settings/myStickers.png', width='40', height='40')
+                    include ../../../img/settings/icons/myStickers.svg
                     p My stickers
 
             li(data-name="settings_instructions_faq")
                 a(href='#')
-                    img(src='components/main/settings/img/faq.png', width='40', height='40')
+                    //img(src='img/settings/faq.png', width='40', height='40')
+                    include ../../../img/settings/icons/faq.svg
                     p Instructions & FAQ
 
             li(data-name="settings_connected_devices")
                 a(href='#')
-                    img(src='components/main/settings/img/devices.png', width='40', height='40')
+                    //img(src='img/settings/devices.png', width='40', height='40')
+                    include ../../../img/settings/icons/devices.svg
                     p Connected devices & sessions
 
             li(data-name="settings_write_to_tech")
                 a(href='#')
-                    img(src='components/main/settings/img/support.png', width='40', height='40')
+                    //img(src='img/settings/support.png', width='40', height='40')
+                    include ../../../img/settings/icons/support.svg
                     p Write to tech support
-div.p-3.walletRight.settingsRight.custom-scrollbar
+div.p-3.settings__right.custom-scrollbar
     include settings_identification
 script
     include settings.js
