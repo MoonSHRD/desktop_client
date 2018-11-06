@@ -53,9 +53,7 @@ export abstract class Controller {
     };
 
     protected async get_me(id:string) {
-        if (!this.me) {
-            this.me = (await AccountModel.find({where: {user_id:id}}))[0]
-        }
+        this.me = (await AccountModel.find({where: {user_id:id}}))[0];
         return this.me;
     }
 }

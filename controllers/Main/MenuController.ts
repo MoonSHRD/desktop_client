@@ -30,9 +30,26 @@ class MenuController extends Controller {
     private async load_menu_user_chats(account) {
         let self_info = await this.get_self_info();
         self_info.state=this.chat_to_menu.user;
+        // let obj = {
+        //     state:      self_info.state,
+        //     name:       self_info.name,
+        //     firstname:  self_info.firstname,
+        //     lastname:   self_info.lastname,
+        //     bio:        self_info.bio,
+        //     avatar:     self_info.avatar,
+        //     id:         self_info.id,
+        //     domain:     self_info.domain,
+        //     filename:   self_info.filename,
+        //     width_chats:(await this.get_me(self_info.id)).width_chats
+        // };
         let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
             this.render('main/messagingblock/messagingblock.pug');
+        // let obj = {
+        //     html:html,
+        //     width_chats:(await this.get_me(self_info.id)).width_chats
+        // };
         this.send_data('change_menu_state', html);
+        this.send_data("set_chats_width", (await this.get_me(self_info.id)).width_chats);
         await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
     }
 
@@ -40,21 +57,14 @@ class MenuController extends Controller {
         let self_info = await this.get_self_info();
         self_info.state=this.chat_to_menu.group;
         console.log("self", self_info);
-        let obj = {
-            state:      self_info.state,
-            name:       self_info.name,
-            firstname:  self_info.firstname,
-            lastname:   self_info.lastname,
-            bio:        self_info.bio,
-            avatar:     self_info.avatar,
-            id:         self_info.id,
-            domain:     self_info.domain,
-            filename:   self_info.filename,
-            width_chats:(await this.get_me(self_info.id)).width_chats
-        };
-        let html = this.render('main/chatsblock/chatsblock.pug', obj) +
+        let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
             this.render('main/messagingblock/messagingblock.pug');
+        // let obj = {
+        //     html:html,
+        //     width_chats:(await this.get_me(self_info.id)).width_chats
+        // };
         this.send_data('change_menu_state', html);
+        this.send_data("set_chats_width", (await this.get_me(self_info.id)).width_chats);
         await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.group);
     }
 

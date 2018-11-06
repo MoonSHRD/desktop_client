@@ -256,7 +256,7 @@ window.onload = function () {
     });
 
     $(document).on('paste',".send_message__input",function(e) {
-        console.log('paste!')
+        // console.log('paste!');
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
         if($(this).val()!=='')
         {

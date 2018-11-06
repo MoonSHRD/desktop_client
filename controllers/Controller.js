@@ -59,9 +59,7 @@ class Controller {
     ;
     get_me(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!this.me) {
-                this.me = (yield AccountModel_1.AccountModel.find({ where: { user_id: id } }))[0];
-            }
+            this.me = (yield AccountModel_1.AccountModel.find({ where: { user_id: id } }))[0];
             return this.me;
         });
     }

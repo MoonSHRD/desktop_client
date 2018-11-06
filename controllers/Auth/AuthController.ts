@@ -33,19 +33,26 @@ class AuthController extends Controller {
         console.log('connected');
         console.log(account);
         // await this.ipfs.ipfs_info();
-        await this.loom.connect(account.privKey);
-        console.log('loom connected');
+        // await this.loom.connect(account.privKey);
+        // console.log('loom connected');
         if (first) {
             //todo Проверить повторение попыток
+            let time = 2000;
             while (true) {
                 try {
+                    await this.loom.connect(account.privKey);
+                    console.log('loom connected');
                     let identyti_tx = await this.loom.set_identity(account.user.name);
                     console.log(identyti_tx);
                     this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
                     break;
                 }
                 catch (e) {
-                    console.log("Error with set identity. Reset...", e);
+                    console.log("Error with set identity. Reset...");
+                    await new Promise(resolve => {
+                        setTimeout(resolve, time);
+                        time = time*2;
+                    });
                 }
             }
 
