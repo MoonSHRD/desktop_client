@@ -1,24 +1,6 @@
 style
     include settings.css
-div.settingsLeft#style-11
-    //div.userBar
-    //    include infopanel.pug
-    //div.settingsInfo
-    //    table
-    //        tbody
-    //            tr
-    //                td Total ETH
-    //                th 10000
-    //            tr
-    //                td ETH in tokens
-    //                th 23
-    //            tr
-    //                td Free ETH
-    //                th 123
-    //
-    //
-    //div.addToBalance.text-center
-    //    .btn.badge-primary.balanceBtn Add to Balance
+div.settings__left.custom-scrollbar
 
     ul#optionsList.p-0.m-0
         li
@@ -59,7 +41,7 @@ div.settingsLeft#style-11
 
 
 
-    div.settingsMenu
+    div.settings__menu
         ul
             b.my-2.d-block Basic options
 
@@ -102,7 +84,7 @@ div.settingsLeft#style-11
                 a(href='#')
                     img(src='components/main/settings/img/support.png', width='40', height='40')
                     p Write to tech support
-div.p-3.walletRight.settingsRight#style-11
+div.p-3.walletRight.settingsRight.custom-scrollbar
     include settings_identification
 script
     include settings.js

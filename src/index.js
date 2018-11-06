@@ -176,12 +176,14 @@ window.onload = function () {
         console.log(arg);
     });
 
-    let widthMsgWindow = (target) => {
+    let widthMsgWindow = (target = '[data-msgs-window]') => {
         let msgWindow =  document.querySelector(target);
-        if (msgWindow.offsetWidth > 900){
-            msgWindow.classList.add('messaging_block_lg');
-        } else {
-            msgWindow.classList.remove('messaging_block_lg');
+        if (msgWindow) {
+            if (msgWindow.offsetWidth > 900) {
+                msgWindow.classList.add('messaging_block_lg');
+            } else {
+                msgWindow.classList.remove('messaging_block_lg');
+            }
         }
     };
 
@@ -325,7 +327,7 @@ window.onload = function () {
         $('[data-msg-list]').append(obj);
     });
 
-    let scrollDown = (target) => {
+    let scrollDown = (target = '[data-msg-history]') => {
         let targetBlock = document.querySelector(target);
         targetBlock.scrollTop = targetBlock.scrollHeight;
     };
@@ -340,7 +342,6 @@ window.onload = function () {
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
         $('[data-msg-list]').append(obj);
-        scrollDown('[data-msg-history]');
     });
 
     ipcRenderer.on('received_message', (event, obj) => {

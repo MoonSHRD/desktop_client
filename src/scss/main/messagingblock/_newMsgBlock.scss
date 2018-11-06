@@ -333,7 +333,7 @@ a.join_button {
     overflow-x: hidden;
     //margin-top: 40px;
     padding-bottom: 10px;
-    @extend #style-11;
+    @extend .custom-scrollbar;
 
     #dialogDate {
         text-align: center;

@@ -45,7 +45,7 @@ img{
         padding-right: 1.125rem;
         border-radius: 2em;
         background-color: $cf;
-        border-color: $brand-gray-100;
+        border-color: $brand-gray-400;
         color: $primary-text;
         box-shadow: 2px 2px 20px rgba($brand-blue, 0.1);
         outline: none;
@@ -54,7 +54,7 @@ img{
         }
 
         &:focus{
-            border-color: $cf;
+            border-color: $brand-gray-400;
             outline: none;
             box-shadow: 4px 4px 20px rgba($brand-blue, 0.2);
         }
@@ -282,4 +282,42 @@ img{
     border: none;
     box-shadow: 2px 2px 20px rgba($brand-blue,.1);
     border-radius: 10px;
+}
+
+
+
+
+/**  old STYLE 11 */
+.custom-scrollbar {
+    &::-webkit-scrollbar-track {
+        //border-radius: 10px;
+        background: opacify($brand-gray-100, 0.3);
+        //border: 1px solid rgba($brand-gray-400, 0.1);
+        transition: .2s ease;
+    }
+    &::-webkit-scrollbar {
+        //width: 2px;
+        width: 6px;
+        background-color: $cf;
+        transition: .2s ease;
+    }
+
+    &:hover{
+        &::-webkit-scrollbar-thumb{
+            border-radius: 10px;
+            //background: linear-gradient(left, #fff, #e4e4e4);
+            background-color: rgba($primary-text, .6);
+            //border: 1px solid $primary-text;
+        }
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        //background: linear-gradient(left, #fff, #e4e4e4);
+        background-color: rgba($primary-text, .25);
+        transition: .2s ease;
+
+        &:active {
+            //background: linear-gradient(left, #22ADD4, #1E98BA);
+        }
+    }
 }
