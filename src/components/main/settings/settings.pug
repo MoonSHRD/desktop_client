@@ -2,41 +2,45 @@ style
     //include settings.css
 div.settings__left.custom-scrollbar
 
-    ul#optionsList.p-0.m-0
-        li
-            a(href='#')
-                b.my-2 Settings
-                img.rotate(src='components/main/modal_popup/img/arrow.png')
-            ul()
-                li
-                    label
-                        input(type='checkbox', name='option3', value='a3')
-                        | Allow screenshots of your messages
-                        span.checkmark
+    #optionsList.p-0.m-0
+        //a(href='#')
+        //    b.my-2 Settings
+        //    img.rotate(src='components/main/modal_popup/img/arrow.png')
+        button.btn.btn-link(type="button" data-toggle="collapse" data-target="#options-list" aria-expanded="false" aria-controls="options-list")
+            span Settings
+            include ../../../img/modal_popup/angle.svg
+        .collapse.show#options-list
+            .card.card-body
+                ul()
+                    li
+                        label
+                            input(type='checkbox', name='option3', value='a3')
+                            | Allow screenshots of your messages
+                            span.checkmark
 
-                li
-                    label
-                        input(type='checkbox', name='option3', value='a3')
-                        | Show status
-                        span.checkmark
+                    li
+                        label
+                            input(type='checkbox', name='option3', value='a3')
+                            | Show status
+                            span.checkmark
 
-                li
-                    label
-                        input(type='checkbox', name='option3', value='a3')
-                        | Visibility in the “People nearby”
-                        span.checkmark
+                    li
+                        label
+                            input(type='checkbox', name='option3', value='a3')
+                            | Visibility in the “People nearby”
+                            span.checkmark
 
-                li
-                    label
-                        input(type='checkbox', name='option3', value='a3')
-                        | Visibility in the “Nearby channels”
-                        span.checkmark
-                li
-                    label
-                        button(type="button", name="change_download") Change directory for files
+                    li
+                        label
+                            input(type='checkbox', name='option3', value='a3')
+                            | Visibility in the “Nearby channels”
+                            span.checkmark
+                    li
+                        label
+                            button.btn.btn-secondary(type="button", name="change_download") Change directory for files
 
-                        //input(type="file", name="change_download", dir="", id="download_file")
-                        //label.input-file-trigger(tabindex='0', for='download_file') Change directory for files
+                            //input(type="file", name="change_download", dir="", id="download_file")
+                            //label.input-file-trigger(tabindex='0', for='download_file') Change directory for files
 
 
 

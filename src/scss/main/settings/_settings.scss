@@ -9,52 +9,51 @@
         overflow-y: auto;
 
         #optionsList {
-            > li{
-                list-style: none;
-                > a {
-                    > img {
-                        margin-left: 10px;
-                        transition: 0.5s;
-                        border-radius: 100%;
-                        position: relative;
-                        z-index: 10;
-                    }
-                }
+            //> a {
+            //    > img {
+            //        margin-left: 10px;
+            //        transition: 0.5s;
+            //        border-radius: 100%;
+            //        position: relative;
+            //        z-index: 10;
+            //    }
+            //}
+            //
+            //a {
+            //    color: $primary-text;
+            //
+            //    .rotate{
+            //        transform: rotate(90deg);
+            //    }
+            //
+            //    &:hover {
+            //        text-decoration: none;
+            //    }
+            //}
 
-                a {
-                    color: $primary-text;
-
-                    .rotate{
-                        transform: rotate(90deg);
-                    }
-
-                    &:hover {
-                        text-decoration: none;
-                    }
-                }
-
-                ul {
-                    li {
-                        list-style: none;
-                        margin-top: 20px;
-                        display: block;
-                        position: relative;
-                        padding-right: 35px;
-                        margin-bottom: 12px;
-                        cursor: pointer;
-                        -webkit-user-select: none;
-                        -moz-user-select: none;
-                        -ms-user-select: none;
-                        user-select: none;
-                        font-size: 13px;
-                    }
-                }
+            .card.card-body{
+                padding: 0;
+                background-color: transparent;
+                border-radius: 0;
+                box-shadow: none;
             }
-
-            li {
-                ul {
+            ul {
+                display: block;
+                padding: 0;
+                list-style: none;
+                li {
+                    list-style: none;
+                    margin-top: 20px;
                     display: block;
-                    padding: 0;
+                    position: relative;
+                    padding-right: 35px;
+                    margin-bottom: 12px;
+                    cursor: pointer;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                    font-size: 13px;
                 }
             }
 
