@@ -124,7 +124,6 @@
             li {
                 margin-bottom: 2px;
 
-
                 p {
                     margin: 0;
                     padding: 0 10px;
@@ -141,10 +140,10 @@
                 }
 
                 &.active_settings {
-                    background-color: #2BC2F9;
-                    border-radius: 8px;
 
                     a {
+                        background-color: #2BC2F9;
+                        border-radius: 8px;
                         color: $cf;
                     }
                 }
@@ -251,9 +250,4 @@
     border-radius: 10px;
     margin: 20px 0;
     padding: 6px 30px;
-}
-
-.userBar span{
-    margin-left: 10px;
-    color: black;
 }

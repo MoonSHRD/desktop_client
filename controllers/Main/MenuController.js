@@ -20,8 +20,8 @@ class MenuController extends Controller_1.Controller {
             console.log('init_main');
             yield this.generate_initial_chats();
             let self_info = yield this.get_self_info();
-            this.send_data(this.events.change_app_state, this.render('main/main.pug', self_info));
-            yield this.load_menu_initial(true);
+            yield this.send_data(this.events.change_app_state, this.render('main/main.pug', self_info));
+            yield this.load_menu_initial();
         });
     }
     ;
@@ -42,9 +42,26 @@ class MenuController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             self_info.state = this.chat_to_menu.user;
+            // let obj = {
+            //     state:      self_info.state,
+            //     name:       self_info.name,
+            //     firstname:  self_info.firstname,
+            //     lastname:   self_info.lastname,
+            //     bio:        self_info.bio,
+            //     avatar:     self_info.avatar,
+            //     id:         self_info.id,
+            //     domain:     self_info.domain,
+            //     filename:   self_info.filename,
+            //     width_chats:(await this.get_me(self_info.id)).width_chats
+            // };
             let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
                 this.render('main/messagingblock/messagingblock.pug');
+            // let obj = {
+            //     html:html,
+            //     width_chats:(await this.get_me(self_info.id)).width_chats
+            // };
             this.send_data('change_menu_state', html);
+            this.send_data("set_chats_width", (yield this.get_me(self_info.id)).width_chats);
             yield this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
         });
     }
@@ -52,9 +69,15 @@ class MenuController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             self_info.state = this.chat_to_menu.group;
+            console.log("self", self_info);
             let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
                 this.render('main/messagingblock/messagingblock.pug');
+            // let obj = {
+            //     html:html,
+            //     width_chats:(await this.get_me(self_info.id)).width_chats
+            // };
             this.send_data('change_menu_state', html);
+            this.send_data("set_chats_width", (yield this.get_me(self_info.id)).width_chats);
             yield this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.group);
         });
     }
@@ -145,14 +168,11 @@ class MenuController extends Controller_1.Controller {
     load_menu_create_chat() {
         this.send_data('get_my_vcard', this.render('main/modal_popup/create_chat.pug'));
     }
-    load_menu_initial(first = false) {
+    load_menu_initial() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('load_menu_default');
-            let self_info = yield this.get_self_info();
-            yield this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user, first);
-            if (first) {
-                yield this.controller_register.run_controller('MessagesController', 'get_chat_messages', '0x0000000000000000000000000000000000000000_' + self_info.id);
-            }
+            yield this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
+            yield this.controller_register.run_controller("AccountController", "set_sizes");
         });
     }
     load_menu_default() {

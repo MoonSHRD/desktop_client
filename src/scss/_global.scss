@@ -289,6 +289,7 @@ img{
 
 /**  old STYLE 11 */
 .custom-scrollbar {
+    overflow: auto !important;
     &::-webkit-scrollbar-track {
         //border-radius: 10px;
         background: opacify($brand-gray-100, 0.3);

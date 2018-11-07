@@ -8,14 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const UserModel_1 = require("./UserModel");
@@ -23,11 +15,9 @@ let AccountModel = class AccountModel extends typeorm_1.BaseEntity {
     constructor() {
         super(...arguments);
         this.downloads = "./downloads/";
-    }
-    static get_me(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return (yield this.find({ where: { user_id: id } }))[0];
-        });
+        this.width = 1000;
+        this.height = 700;
+        this.width_chats = 370;
     }
 };
 __decorate([
@@ -46,6 +36,22 @@ __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
 ], AccountModel.prototype, "passphrase", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Number)
+], AccountModel.prototype, "width", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Number)
+], AccountModel.prototype, "height", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Number)
+], AccountModel.prototype, "width_chats", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], AccountModel.prototype, "last_chat", void 0);
 __decorate([
     typeorm_1.OneToOne(type => UserModel_1.UserModel, user => user.account),
     typeorm_1.JoinColumn(),

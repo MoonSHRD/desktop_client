@@ -49,20 +49,20 @@ div.settings__left.custom-scrollbar
         ul
             b.my-2.d-block Basic options
 
-            li.active_settings(data-name="settings_identification")
-                a(href='#')
+            li.active_settings
+                a(href='#' data-name="settings_identification")
                     //img(src='img/settings/ident.png', width='40', height='40')
                     include ../../../img/settings/icons/ident.svg
                     p Identification
 
-            li(data-name="settings_mySubscriptions")
-                a(href='#')
+            li
+                a(href='#' data-name="settings_mySubscriptions")
                     //img(src='img/settings/myPurSub.png', width='40', height='40')
                     include ../../../img/settings/icons/myPurSub.svg
                     p My subscriptions
 
-            li(data-name="settings_released_subscriptions")
-                a(href='#')
+            li
+                a(href='#' data-name="settings_released_subscriptions")
                     //img(src='img/settings/relSub.png', width='40', height='40')
                     include ../../../img/settings/icons/relSub.svg
                     p Released subscriptions
@@ -73,30 +73,30 @@ div.settings__left.custom-scrollbar
                     include ../../../img/settings/icons/blackList.svg
                     p Black list
 
-            li(data-name="settings_my_stickers")
-                a(href='#')
+            li
+                a(href='#' data-name="settings_my_stickers")
                     //img(src='img/settings/myStickers.png', width='40', height='40')
                     include ../../../img/settings/icons/myStickers.svg
                     p My stickers
 
-            li(data-name="settings_instructions_faq")
-                a(href='#')
+            li
+                a(href='#' data-name="settings_instructions_faq")
                     //img(src='img/settings/faq.png', width='40', height='40')
                     include ../../../img/settings/icons/faq.svg
                     p Instructions & FAQ
 
-            li(data-name="settings_connected_devices")
-                a(href='#')
+            li
+                a(href='#' data-name="settings_connected_devices")
                     //img(src='img/settings/devices.png', width='40', height='40')
                     include ../../../img/settings/icons/devices.svg
                     p Connected devices & sessions
 
-            li(data-name="settings_write_to_tech")
-                a(href='#')
+            li
+                a(href='#' data-name="settings_write_to_tech")
                     //img(src='img/settings/support.png', width='40', height='40')
                     include ../../../img/settings/icons/support.svg
                     p Write to tech support
-div.p-3.settings__right.custom-scrollbar
+div.p-3.walletRight.settings__right.custom-scrollbar
     include settings_identification
 script
     include settings.js
