@@ -1,0 +1,253 @@
+.settings {
+    &__left {
+        width: 300px;
+        min-width: 300px;
+        padding: 20px;
+        background-color: #FFFFFF;
+        border-right: 1px solid #d0d0d0;
+        margin-left: 70px;
+        overflow-y: auto;
+
+        #optionsList {
+            //> a {
+            //    > img {
+            //        margin-left: 10px;
+            //        transition: 0.5s;
+            //        border-radius: 100%;
+            //        position: relative;
+            //        z-index: 10;
+            //    }
+            //}
+            //
+            //a {
+            //    color: $primary-text;
+            //
+            //    .rotate{
+            //        transform: rotate(90deg);
+            //    }
+            //
+            //    &:hover {
+            //        text-decoration: none;
+            //    }
+            //}
+
+            .card.card-body{
+                padding: 0;
+                background-color: transparent;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            ul {
+                display: block;
+                padding: 0;
+                list-style: none;
+                li {
+                    list-style: none;
+                    margin-top: 20px;
+                    display: block;
+                    position: relative;
+                    padding-right: 35px;
+                    margin-bottom: 12px;
+                    cursor: pointer;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                    font-size: 13px;
+                }
+            }
+
+            input {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+                height: 0;
+                width: 0;
+            }
+
+            label {
+                width: 100%;
+                cursor: pointer;
+                margin: 0;
+            }
+
+            /* Create a custom checkbox */
+            .checkmark {
+                @include size(25px);
+                @include position(absolute, 0 0 null null);
+                border-radius: 100%;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+                border: 1px solid darken($cf,14%);
+
+                /* Create the checkmark/indicator (hidden when not checked) */
+                &:after {
+                    content: "";
+                    position: absolute;
+                    display: none;
+
+                    /* Style the checkmark/indicator */
+                    @include size(17px);
+                    border-radius: 100%;
+                    height: 17px;
+                    width: 17px;
+                    border: solid $cf;
+                    background-color: $brand-blue;
+                }
+            }
+
+            /* When the checkbox is checked, add a blue background */
+            input:checked {
+                ~ .checkmark {
+                    background-color: $cf;
+                    border-radius: 100%;
+
+                    /* Show the checkmark when checked */
+                    &:after {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+    &_info {
+        margin: 20px 0px;
+    }
+    &__menu {
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 20px 0;
+
+            li {
+                margin-bottom: 2px;
+
+                p {
+                    margin: 0;
+                    padding: 0 10px;
+                    position: relative;
+                    z-index: 10;
+                }
+                img {
+                     position: relative;
+                     z-index: 10;
+                }
+                svg{
+                    @include size(40px);
+                    flex-shrink: 0;
+                }
+
+                &.active_settings {
+
+                    a {
+                        background-color: #2BC2F9;
+                        border-radius: 8px;
+                        color: $cf;
+                    }
+                }
+            }
+        }
+
+        a {
+            height: 57px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px 0 20px;
+            color: $primary-text;
+            text-decoration: none;
+            font-size: 13px;
+            font-family: $ff-1;
+            transition: all 0.1s ease;
+            overflow: hidden;
+            position: relative;
+
+            &:hover{
+                border-radius: 8px;
+                background-color: $brand-blue;
+                color: $cf;
+            }
+        }
+    }
+
+    &__right{
+        flex: 1;
+        display: flex;
+        background-color: $brand-gray-100;
+        overflow-x: hidden;
+        background-size: auto 110%;
+        background-image: linear-gradient(180deg,hsla(0,0%,95.3%,.9) 0,hsla(0,0%,95.3%,.9)),url('#{$img}/messBlockBg.jpg');
+
+        textarea {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 0 30px rgba(43, 194, 249, 0.1);
+            resize: none;
+            width: 100%;
+            padding: 15px 20px;
+        }
+        p {
+            @include fz(14);
+         }
+        .generateBtn {
+            //border: none;
+            //background-color: #2BC2F9;
+            //border-radius: 7px;
+            //outline: none;
+            //padding: 12px 20px;
+            //color: #ffffff;
+            //cursor: pointer;
+        }
+
+        /*   IDENTIFICATIONS   */
+        .settings_identification {
+            padding: 30px;
+        }
+
+        .substradeForPin {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 0 30px rgba(43, 194, 249, 0.1);
+            width: 100%;
+            padding: 15px 20px;
+            background-color: #ffffff;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+
+            .singlePin {
+                border-radius: 10px;
+                border: none;
+                box-shadow: 0 0 30px rgba(43, 194, 249, 0.2);
+                padding: 15px 20px;
+                background-color: #ffffff;
+                color: #2BC2F9;
+                margin: 10px;
+                cursor: pointer;
+
+                p {
+                    padding: 0;
+                    margin: 0;
+                }
+            }
+
+            input {
+                font-size: 13px;
+                width: 43px;
+                border: none;
+                background-color: $cf;
+                color: $brand-blue;
+                flex-basis: 100%;
+            }
+        }
+    }
+}
+
+.balanceBtn{
+    background-color: #2BC2F9;
+    border-radius: 10px;
+    margin: 20px 0;
+    padding: 6px 30px;
+}

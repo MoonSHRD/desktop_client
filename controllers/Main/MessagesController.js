@@ -112,7 +112,6 @@ class MessagesController extends Controller_1.Controller {
     }
     send_message({ id, text, file }) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(file);
             let self_info = yield this.get_self_info();
             let chat = yield ChatModel_1.ChatModel.findOne(id);
             // let date = new Date();

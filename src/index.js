@@ -80,8 +80,8 @@ window.onload = function () {
         $.notify('address copied \n' + range, {
 
             placement: {
-                from: "bottom",
-                align: "right"
+                from: 'bottom',
+                align: 'right'
             },
             animate: {
                 enter: 'animated fadeInRight',
@@ -176,12 +176,14 @@ window.onload = function () {
         console.log(arg);
     });
 
-    let widthMsgWindow = (target) => {
+    let widthMsgWindow = (target = '[data-msgs-window]') => {
         let msgWindow =  document.querySelector(target);
-        if (msgWindow.offsetWidth > 900){
-            msgWindow.classList.add('messaging_block_lg');
-        } else {
-            msgWindow.classList.remove('messaging_block_lg');
+        if (msgWindow) {
+            if (msgWindow.offsetWidth > 900) {
+                msgWindow.classList.add('messaging_block_lg');
+            } else {
+                msgWindow.classList.remove('messaging_block_lg');
+            }
         }
     };
 
@@ -230,40 +232,40 @@ window.onload = function () {
 
     $(document).on('keyup', '[data-msg="data-msg"]', function () {
         if (event.ctrlKey && event.keyCode === 13 ) {
-            $(this).attr('rows', 1)
+            $(this).attr('rows', 1);
         }
     });
 
-    $(document).on('keydown',".send_message__input",function(e) {
+    $(document).on('keydown','.send_message__input',function(e) {
         if($(this).val() === '') {
-            $(this).attr('rows', 1)
+            $(this).attr('rows', 1);
         };
         if($(this).val() === '' && event.keyCode == 13) {
             event.preventDefault();
         };
 
         if ( event.keyCode === 13 && $(this).val()!=='') {
-            ResizeTextArea(this,0)
+            ResizeTextArea(this,0);
         }
     });
 
-    $(document).on('input',".send_message__input",function(e) {
+    $(document).on('input','.send_message__input',function(e) {
         // console.log('hello!')
         if($(this).val() === '') {
-            $(this).attr('rows', 1)
+            $(this).attr('rows', 1);
         };
 
     });
 
-    $(document).on('paste',".send_message__input",function(e) {
+    $(document).on('paste','.send_message__input',function(e) {
         // console.log('paste!');
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
         if($(this).val()!=='')
         {
-            $(this).attr('rows', $(this).attr('rows'))
+            $(this).attr('rows', $(this).attr('rows'));
 
         }else {
-            ResizeTextArea(this,10)
+            ResizeTextArea(this,10);
 
         }
         console.log(text);
@@ -325,7 +327,7 @@ window.onload = function () {
         $('[data-msg-list]').append(obj);
     });
 
-    let scrollDown = (target) => {
+    let scrollDown = (target = '[data-msg-history]') => {
         let targetBlock = document.querySelector(target);
         targetBlock.scrollTop = targetBlock.scrollHeight;
     };
@@ -340,7 +342,6 @@ window.onload = function () {
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
         $('[data-msg-list]').append(obj);
-        scrollDown('[data-msg-history]');
     });
 
     ipcRenderer.on('received_message', (event, obj) => {
@@ -361,7 +362,7 @@ window.onload = function () {
             chat.find('[data-name=unread_messages]').hide();
             ipcRenderer.send('reading_messages', obj.id);
 
-            let p_count = ($("p:contains(" + obj.time + ")"));
+            let p_count = ($('p:contains(' + obj.time + ')'));
 
             if (p_count.length === 0) {
                 $('[data-msg-list]').append(obj.html_date);
@@ -445,7 +446,7 @@ window.onload = function () {
         $this.siblings().removeClass('have_history');
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
         let chat = $this.attr('id');
-        ipcRenderer.send("change_last_chat", chat);
+        ipcRenderer.send('change_last_chat', chat);
 
         $this.find('[data-name=unread_messages]').hide();
         $this.find('[data-name=unread_messages]').text('0');
@@ -802,7 +803,7 @@ window.onload = function () {
         console.log('resize_clicked');
         unlock = true;
         $(document).on('mouseup', function(e) {
-            ipcRenderer.send("change_chats_size", p.width());
+            ipcRenderer.send('change_chats_size', p.width());
         });
     });
 
@@ -884,7 +885,7 @@ window.onload = function () {
     });
 
 
-    $(document).on("click", '.switch-btn', function () {
+    $(document).on('click', '.switch-btn', function () {
         $(this).toggleClass('switch-on');
         if ($(this).hasClass('switch-on')) {
             $(this).trigger('on.switch');
@@ -893,35 +894,35 @@ window.onload = function () {
         }
     });
     $(document).on('on.switch', function () {
-        // let text = $(".searchInput");
-        let text = $(".bl-hide-1").val();
-        $(".bl-hide").val(text);
+        $('.bl-hide-1').val('');
+        ipcRenderer.send('load_chats', 'menu_chats');
         $('.bl-hide').css('display', 'block');
         $('.bl-hide-1').css('display', 'none');
         $('.chats').css('height', 'calc(100% - 153px)');
 
+
     });
     $(document).on('off.switch', function () {
         let text = $('.bl-hide').val();
-        $(".bl-hide-1").val(text);
+        $('.bl-hide-1').val(text);
         $('.bl-hide').css('display', 'none');
         $('.bl-hide-1').css('display', 'block');
         $('.chats').css('height', 'calc(100% - 200px)');
     });
 
     $(window).resize(function(){
-        if ($("#main-menu").length !== 0) {
-            ipcRenderer.send("change_size_window", $(window).width(), $(window).height());
+        if ($('#main-menu').length !== 0) {
+            ipcRenderer.send('change_size_window', $(window).width(), $(window).height());
         }
     });
 
-   ipcRenderer.on("set_windows_size", (event, obj) => {
+   ipcRenderer.on('set_windows_size', (event, obj) => {
        window.resizeTo(obj.width, obj.height);
        // $(window).outerWidth(obj.width);
        // $(window).outerHeight(obj.height);
    });
 
-    ipcRenderer.on("set_chats_width", (event, width) => {
+    ipcRenderer.on('set_chats_width', (event, width) => {
         let p = $('.dialogs');
         let d = $('.messaging_block');
         widthMsgWindow('[data-msgs-window]');

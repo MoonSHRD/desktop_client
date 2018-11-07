@@ -1,108 +1,102 @@
 style
-    include settings.css
-div.settingsLeft#style-11
-    //div.userBar
-    //    include infopanel.pug
-    //div.settingsInfo
-    //    table
-    //        tbody
-    //            tr
-    //                td Total ETH
-    //                th 10000
-    //            tr
-    //                td ETH in tokens
-    //                th 23
-    //            tr
-    //                td Free ETH
-    //                th 123
-    //
-    //
-    //div.addToBalance.text-center
-    //    .btn.badge-primary.balanceBtn Add to Balance
+    //include settings.css
+div.settings__left.custom-scrollbar
 
-    ul#optionsList.p-0.m-0
-        li
-            a(href='#')
-                b.my-2 Settings
-                img.rotate(src='components/main/modal_popup/img/arrow.png')
-            ul()
-                li
-                    label
-                        input(type='checkbox', name='option3', value='a3')
-                        | Allow screenshots of your messages
-                        span.checkmark
+    #optionsList.p-0.m-0
+        //a(href='#')
+        //    b.my-2 Settings
+        //    img.rotate(src='components/main/modal_popup/img/arrow.png')
+        button.btn.btn-link(type="button" data-toggle="collapse" data-target="#options-list" aria-expanded="false" aria-controls="options-list")
+            span Settings
+            include ../../../img/modal_popup/angle.svg
+        .collapse.show#options-list
+            .card.card-body
+                ul()
+                    li
+                        label
+                            input(type='checkbox', name='option3', value='a3')
+                            | Allow screenshots of your messages
+                            span.checkmark
 
-                li
-                    label
-                        input(type='checkbox', name='option3', value='a3')
-                        | Show status
-                        span.checkmark
+                    li
+                        label
+                            input(type='checkbox', name='option3', value='a3')
+                            | Show status
+                            span.checkmark
 
-                li
-                    label
-                        input(type='checkbox', name='option3', value='a3')
-                        | Visibility in the “People nearby”
-                        span.checkmark
+                    li
+                        label
+                            input(type='checkbox', name='option3', value='a3')
+                            | Visibility in the “People nearby”
+                            span.checkmark
 
-                li
-                    label
-                        input(type='checkbox', name='option3', value='a3')
-                        | Visibility in the “Nearby channels”
-                        span.checkmark
-                li
-                    label
-                        button(type="button", name="change_download") Change directory for files
+                    li
+                        label
+                            input(type='checkbox', name='option3', value='a3')
+                            | Visibility in the “Nearby channels”
+                            span.checkmark
+                    li
+                        label
+                            button.btn.btn-secondary(type="button", name="change_download") Change directory for files
 
-                        //input(type="file", name="change_download", dir="", id="download_file")
-                        //label.input-file-trigger(tabindex='0', for='download_file') Change directory for files
+                            //input(type="file", name="change_download", dir="", id="download_file")
+                            //label.input-file-trigger(tabindex='0', for='download_file') Change directory for files
 
 
 
 
-    div.settingsMenu
+    div.settings__menu
         ul
             b.my-2.d-block Basic options
 
-            li.active_settings(data-name="settings_identification")
-                a(href='#')
-                    img(src='components/main/settings/img/ident.png', width='40', height='40')
+            li.active_settings
+                a(href='#' data-name="settings_identification")
+                    //img(src='img/settings/ident.png', width='40', height='40')
+                    include ../../../img/settings/icons/ident.svg
                     p Identification
 
-            li(data-name="settings_mySubscriptions")
-                a(href='#')
-                    img(src='components/main/settings/img/myPurSub.png', width='40', height='40')
+            li
+                a(href='#' data-name="settings_mySubscriptions")
+                    //img(src='img/settings/myPurSub.png', width='40', height='40')
+                    include ../../../img/settings/icons/myPurSub.svg
                     p My subscriptions
 
-            li(data-name="settings_released_subscriptions")
-                a(href='#')
-                    img(src='components/main/settings/img/relSub.png', width='40', height='40')
+            li
+                a(href='#' data-name="settings_released_subscriptions")
+                    //img(src='img/settings/relSub.png', width='40', height='40')
+                    include ../../../img/settings/icons/relSub.svg
                     p Released subscriptions
 
             li(data-name="settings_black_list")
                 a(href='#')
-                    img(src='components/main/settings/img/blackList.png', width='40', height='40')
+                    //img(src='img/settings/blackList.png', width='40', height='40')
+                    include ../../../img/settings/icons/blackList.svg
                     p Black list
 
-            li(data-name="settings_my_stickers")
-                a(href='#')
-                    img(src='components/main/settings/img/myStickers.png', width='40', height='40')
+            li
+                a(href='#' data-name="settings_my_stickers")
+                    //img(src='img/settings/myStickers.png', width='40', height='40')
+                    include ../../../img/settings/icons/myStickers.svg
                     p My stickers
 
-            li(data-name="settings_instructions_faq")
-                a(href='#')
-                    img(src='components/main/settings/img/faq.png', width='40', height='40')
+            li
+                a(href='#' data-name="settings_instructions_faq")
+                    //img(src='img/settings/faq.png', width='40', height='40')
+                    include ../../../img/settings/icons/faq.svg
                     p Instructions & FAQ
 
-            li(data-name="settings_connected_devices")
-                a(href='#')
-                    img(src='components/main/settings/img/devices.png', width='40', height='40')
+            li
+                a(href='#' data-name="settings_connected_devices")
+                    //img(src='img/settings/devices.png', width='40', height='40')
+                    include ../../../img/settings/icons/devices.svg
                     p Connected devices & sessions
 
-            li(data-name="settings_write_to_tech")
-                a(href='#')
-                    img(src='components/main/settings/img/support.png', width='40', height='40')
+            li
+                a(href='#' data-name="settings_write_to_tech")
+                    //img(src='img/settings/support.png', width='40', height='40')
+                    include ../../../img/settings/icons/support.svg
                     p Write to tech support
-div.p-3.walletRight.settingsRight#style-11
+div.p-3.walletRight.settings__right.custom-scrollbar
     include settings_identification
 script
     include settings.js

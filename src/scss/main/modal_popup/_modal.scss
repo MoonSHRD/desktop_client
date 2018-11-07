@@ -1,4 +1,8 @@
 .modal{
+    &-title{
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
 
     &-header{
         position: relative;
