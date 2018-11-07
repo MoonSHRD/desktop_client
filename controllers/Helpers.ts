@@ -156,8 +156,23 @@ export abstract class Helper {
             7: 'Вс'
         },
     };
+    private static mounth_to_locale = {
+      1:    "Января",
+      2:    "Февраля",
+      3:    "Марта",
+      4:    "Апреля",
+      5:    "Мая",
+      6:    "Июня",
+      7:    "Июля",
+      8:    "Августа",
+      9:    "Сентября",
+      10:   "Октября",
+      11:   "Ноября",
+      12:   "Декабря",
+    };
 
     static formate_date(date:Date,options:{locale:string,for:string}){
+        let day_diff;
         let formated_date;
         let now=new Date();
 
@@ -166,7 +181,7 @@ export abstract class Helper {
                 formated_date=`${date.getHours()}:${get_minutes(date)}`;
                 return formated_date;
             case 'chat':
-                let day_diff = now.getDate()-date.getDate();
+                day_diff = now.getDate()-date.getDate();
                 console.log(`year ${date.getFullYear()} - ${now.getFullYear()}`);
                 console.log(`month ${date.getMonth()} - ${now.getMonth()}`);
                 console.log(`day ${date.getDate()} - ${now.getDate()}`);
@@ -180,6 +195,16 @@ export abstract class Helper {
                 }
                 formated_date=`${date.getHours()}:${get_minutes(date)}`;
                 return formated_date;
+            case "dialog_date":
+                 day_diff = now.getDate()-date.getDate();
+                if (day_diff == 1){
+                    return "Вчера";
+                }
+                if (day_diff > 0){
+                    formated_date =`${date.getDate()} ${this.mounth_to_locale[date.getMonth() + 1]} ${date.getFullYear()}`;
+                    return formated_date;
+                }
+                return "Сегодня";
         }
 
         return date.toLocaleString(options.locale, this.date_options)

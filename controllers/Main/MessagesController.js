@@ -76,9 +76,10 @@ class MessagesController extends Controller_1.Controller {
                         message.files[num].downloaded = true;
                 }
             }
+            let date_time = yield Helpers_1.Helper.formate_date(new Date(message.time), { locale: "ru:", for: "dialog_date" });
             message.time = Helpers_1.Helper.formate_date(new Date(message.time), { locale: 'ru', for: 'message' });
             let html = this.render('main/messagingblock/message.pug', message);
-            let html_date = this.render("main/messagingblock/dialog_date.pug");
+            let html_date = this.render("main/messagingblock/dialog_date.pug", { time: date_time });
             if (message.mine)
                 message.text = 'Вы: ' + message.text;
             const data = {
@@ -86,6 +87,7 @@ class MessagesController extends Controller_1.Controller {
                 html: html,
                 html_date: html_date,
                 message: message,
+                time: date_time,
                 unread_messages: message.chat.unread_messages
             };
             yield this.send_data('received_message', data);

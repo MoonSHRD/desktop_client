@@ -17,6 +17,7 @@ import Notification = Electron.Notification;
 import nativeImage = Electron.nativeImage;
 import ipcRenderer = Electron.ipcRenderer;
 import ipcMain = Electron.ipcMain;
+import {helper} from "../../src/var_helper";
 // import * as eNotify from 'electron-notify'
 // let eNotify = require('electron-notify');
 
@@ -69,9 +70,10 @@ class MessagesController extends Controller {
                     message.files[num].downloaded=true;
             }
         }
+        let date_time = await Helper.formate_date(new Date(message.time), {locale:"ru:",for:"dialog_date"});
         message.time=Helper.formate_date(new Date(message.time),{locale:'ru',for:'message'});
         let html = this.render('main/messagingblock/message.pug', message);
-        let html_date = this.render("main/messagingblock/dialog_date.pug");
+        let html_date = this.render("main/messagingblock/dialog_date.pug", {time:date_time});
 
         if (message.mine)
             message.text='Вы: '+message.text;
@@ -81,6 +83,7 @@ class MessagesController extends Controller {
             html: html,
             html_date: html_date,
             message:message,
+            time: date_time,
             unread_messages:message.chat.unread_messages
         };
         await this.send_data('received_message', data);

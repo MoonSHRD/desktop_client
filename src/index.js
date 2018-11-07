@@ -359,11 +359,13 @@ window.onload = function () {
         if ($('.active_dialog').attr('id') === obj.id) {
             chat.find('[data-name=unread_messages]').hide();
             ipcRenderer.send('reading_messages', obj.id);
-            if ($("#dialogDate").text() != "October, 23")
-            {
-                $('[data-msg-list]').append(obj.html_date);
 
+            let p_count = ($("p:contains(" + obj.time + ")"));
+
+            if (p_count.length === 0) {
+                $('[data-msg-list]').append(obj.html_date);
             }
+
             $('[data-msg-list]').append(obj.html);
             scrollDown('[data-msg-history]');
         } else {

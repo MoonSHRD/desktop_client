@@ -136,6 +136,7 @@ function resize_b64_img(b64img) {
 exports.resize_b64_img = resize_b64_img;
 class Helper {
     static formate_date(date, options) {
+        let day_diff;
         let formated_date;
         let now = new Date();
         switch (options.for) {
@@ -143,7 +144,7 @@ class Helper {
                 formated_date = `${date.getHours()}:${get_minutes(date)}`;
                 return formated_date;
             case 'chat':
-                let day_diff = now.getDate() - date.getDate();
+                day_diff = now.getDate() - date.getDate();
                 console.log(`year ${date.getFullYear()} - ${now.getFullYear()}`);
                 console.log(`month ${date.getMonth()} - ${now.getMonth()}`);
                 console.log(`day ${date.getDate()} - ${now.getDate()}`);
@@ -157,6 +158,16 @@ class Helper {
                 }
                 formated_date = `${date.getHours()}:${get_minutes(date)}`;
                 return formated_date;
+            case "dialog_date":
+                day_diff = now.getDate() - date.getDate();
+                if (day_diff == 1) {
+                    return "Вчера";
+                }
+                if (day_diff > 0) {
+                    formated_date = `${date.getDate()} ${this.mounth_to_locale[date.getMonth() + 1]} ${date.getFullYear()}`;
+                    return formated_date;
+                }
+                return "Сегодня";
         }
         return date.toLocaleString(options.locale, this.date_options);
     }
@@ -182,6 +193,20 @@ Helper.day_to_locale = {
         6: 'Сб',
         7: 'Вс'
     },
+};
+Helper.mounth_to_locale = {
+    1: "Января",
+    2: "Февраля",
+    3: "Марта",
+    4: "Апреля",
+    5: "Мая",
+    6: "Июня",
+    7: "Июля",
+    8: "Августа",
+    9: "Сентября",
+    10: "Октября",
+    11: "Ноября",
+    12: "Декабря",
 };
 exports.Helper = Helper;
 function get_minutes(date) {
