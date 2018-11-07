@@ -32,6 +32,7 @@ class Controller {
         this.loom = loom_1.Loom.getInstance();
         this.ipfs = ipfs_1.Ipfs.getInstance();
         this.self_info = null;
+        this.me = null;
         this.window = window;
     }
     render(path, data = null) {
@@ -56,6 +57,12 @@ class Controller {
         this.window.webContents.send(event, data);
     }
     ;
+    get_me(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.me = (yield AccountModel_1.AccountModel.find({ where: { user_id: id } }))[0];
+            return this.me;
+        });
+    }
 }
 exports.Controller = Controller;
 //# sourceMappingURL=Controller.js.map
