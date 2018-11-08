@@ -22,6 +22,8 @@
 @import "mixins";
 /* Global Settings */
 @import 'global';
+/* Auth */
+@import "main/auth/auth";
 /* App */
 @import "app";
 /* Navbar */

@@ -1,4 +1,5 @@
 .modal{
+    @extend .custom-scrollbar;
 
     &-header{
         position: relative;

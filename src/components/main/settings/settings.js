@@ -34,5 +34,4 @@ $(document).on('change', 'input[name="change_pin"]', function () {
 
 ipcRenderer.on('change_settings_menu', (event, obj) => {
     $('.settings__right').html(obj);
-    // $('#tokens_table').html('<div class="lds-roller"></div>');
 });

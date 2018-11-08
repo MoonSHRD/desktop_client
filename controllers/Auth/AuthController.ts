@@ -17,7 +17,7 @@ class AuthController extends Controller {
         if (account)
             await this.auth(account);
         else
-            this.send_data(this.events.change_app_state, this.render('auth/123.pug'));
+            this.send_data(this.events.change_app_state, this.render('auth/auth.pug'));
     };
 
     generate_mnemonic() {
