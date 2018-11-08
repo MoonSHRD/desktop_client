@@ -251,3 +251,12 @@
     margin: 20px 0;
     padding: 6px 30px;
 }
+
+.stub {
+    &-settings {
+        display: table-cell;
+        vertical-align: middle;
+        margin: auto;
+        text-align: center;
+    }
+}
