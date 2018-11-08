@@ -130,43 +130,36 @@
 
 
 .switch-btn {
-  display: inline-block;
-  width: 40px; /* ширина переключателя */
-  height: 20px; /* высота переключателя */
-  border-radius: 12px; /* радиус скругления */
-  background: $cf; /* цвет фона */
-  z-index: 0;
-  margin: 0;
-  padding: 0;
-  cursor: pointer;
-  position: relative;
-  transition-duration: 300ms; /* анимация */
-  border: 1px solid rgba(1,1,1,.3);
-  box-shadow: 4px 4px 20px rgba(43,194,249,.2);
-}
-
-.switch-btn::after {
-  content: "";
-  height: 12px; /* высота кнопки */
-  width: 12px; /* ширина кнопки */
-  border-radius: 18px; /* радиус кнопки */
-  background: $cf; /* цвет кнопки */
-  top: 3px; /* положение кнопки по вертикали относительно основы */
-  left: 3px; /* положение кнопки по горизонтали относительно основы */
-  transition-duration: 300ms; /* анимация */
-  position: absolute;
-  z-index: 1;
-  background: $brand-blue;
-}
-
-.switch-on {
-  background: #fff;
-  box-shadow: 4px 4px 20px rgba(43, 194, 249,.2); /* тень */
-}
-
-.switch-on::after {
-  left: 22px;
-  background: $brand-blue;
+    display: inline-block;
+    @include size(40px,20px); /* ширина/высота переключателя */
+    border-radius: 12px; /* радиус скругления */
+    background: $cf; /* цвет фона */
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    transition-duration: 300ms; /* анимация */
+    border: 1px solid rgba($primary-text, .3);
+    box-shadow: 4px 4px 20px rgba($brand-blue, .2);
+    &::after {
+        content: "";
+        @include size(12px); /* высота кнопки / ширина кнопки */
+        @include position(absolute, 3px null null 3px);
+        border-radius: 18px; /* радиус кнопки */
+        //background: $cf; /* цвет кнопки */
+        transition-duration: 300ms; /* анимация */
+        z-index: 2;
+        background: $brand-blue;
+    }
+    &.switch-on {
+        background: $cf;
+        box-shadow: 4px 4px 20px rgba($brand-blue,.2); /* тень */
+        &::after {
+            left: 22px;
+            background: $brand-blue;
+        }
+    }
 }
 
 .bl-hide {
