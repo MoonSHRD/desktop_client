@@ -242,6 +242,11 @@ img{
     &-primary{
         color: $cf;
     }
+
+    &-lg{
+        @include fz(18);
+        border-radius: .5rem;
+    }
 }
 
 /*

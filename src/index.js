@@ -863,7 +863,7 @@ window.onload = function () {
     document.addEventListener('scroll', function (event) {
         if (event.target.id === 'messaging_history') { // or any other filtering condition
             let {bottom, height} = scrollBottom();
-            if ( bottom > height ) {
+            if ( bottom > ( height / 2 ) ) {
                 $('[data-toggle="scrollDown"]').addClass('show');
             } else {
                 $('[data-toggle="scrollDown"]').removeClass('show');

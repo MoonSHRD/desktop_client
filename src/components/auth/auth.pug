@@ -1,0 +1,56 @@
+.auth.w-100
+    .container-fluid.h-100
+        .row.h-100
+            .col-7.d-flex.justify-content-center.align-content-center.auth__left
+                .auth__moon
+                .auth__logo
+                    include ../../img/logo.svg
+                    span Welcome <br />to Moonshard!
+            .col-5.auth__form
+                form#profile_form.d-flex.flex-column.h-100.justify-content-start
+                    // progressbar
+                    ul#progressbar
+                        li.active
+                        li
+                        li
+                        li
+                    // fieldsets
+                    fieldset.fs
+                        h2.fs__title.h2 Step 1
+                        h3.fs__subtitle.mb-4 Enter 12 words of backup phrase to restore your account or generate new one with a button below.
+                        textarea.invalid.fs__textarea(rows='4', name='mnemonic', placeholder='Enter any 12 words in a space, or click the "Generate" button' id='input_mnemonic' required=true)
+                        button.action-button.btn.btn-primary.btn-block.btn-lg.mt-4.mb-5(type='button' id='generate_mnemonic') Generate
+                        .fs__warning
+                            span !Do not forget to save the phrase on paper to avoid loss!
+                            include ../../img/warning.svg
+                        //h2.fs__next-title.next-step-title Step 2
+                        button.next.fs__next-btn.action-button.btn.btn-dark.btn-lg.btn-block(type='button', name='next', id='input_mnemonic_next') Step 2
+                    fieldset.fs
+                        h2.fs__title.h2 Step 2
+                        h3.fs__subtitle.mb-4 Confirm your 12 words.
+                        textarea.invalid.fs__textarea(rows='4', name='confirm_mnemonic', placeholder='Enter any 12 words in a space, or click the "Generate" button' id='confirm_input_mnemonic' required=true )
+                        div.words.fs__words
+
+                        //h2.next-step-title Step 3
+                        button.next.fs__next-btn.action-button.btn.btn-dark.btn-lg.btn-block(type='button', name='next', id='') Step 3
+                    fieldset.fs
+                        h2.fs__title.h2 Step 3
+                        h3.fs__subtitle.mb-4 How we can call you?
+                        input.invalid.fs__textarea(name='firstname', placeholder='Firstname', type='text' required=true)
+                        input.fs__textarea(name='lastname', placeholder='Lastname', type='text' )
+                        textarea.fs__textarea(rows='5', name='bio', placeholder='Enter bio')
+                        //h2.next-step-title Step 4
+                        button.next.fs__next-btn.action-button.btn.btn-dark.btn-lg.btn-block(type='button', name='next') Step 4
+                    fieldset.fs
+                        h2.fs__title.h2 Step 4
+                        h3.fs__subtitle.mb-4.text-center You can upload your photo
+                        .avatar_preview.fs__avatar
+                            img.rounded-circle#avatar_preview(src='img/default-avatar1.jpg')
+                        .input-file-container.fs__inputfile
+                            input#my-file.input-file(type='file' name='avatar')
+                            label.input-file-trigger.btn.btn-primary.btn-block.btn-lg.mb-5(tabindex='0', for='my-file') Select an avatar
+                        //input.previous.action-button(type='button', name='previous', value='Previous')
+                        //h2.next-step-title FINISH
+                        button.submit.fs__next-btn.action-button.btn.btn-dark.btn-lg.btn-block(type='submit', name='submit') Finish
+script
+    include auth.js
