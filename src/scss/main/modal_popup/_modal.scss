@@ -1,6 +1,11 @@
 .modal{
     @extend .custom-scrollbar;
 
+    &-title{
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
     &-header{
         position: relative;
         border-bottom: 0;
