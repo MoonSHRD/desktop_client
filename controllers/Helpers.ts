@@ -47,7 +47,7 @@ function check_files_dir(file) {
         console.log("Current path not found, set default path");
         file.path = files_config.files_path;
         file.save();
-        controller.run_controller("AccountController", "update_directory", files_config.files_path);
+        controller.run_controller("AccountController", "change_directory", files_config.files_path);
         if (!fs.existsSync(files_config.files_path))
         fs.mkdirSync(files_config.files_path);
     }
@@ -156,7 +156,7 @@ export abstract class Helper {
             7: 'Вс'
         },
     };
-    private static mounth_to_locale = {
+    private static month_to_locale = {
       1:    "Января",
       2:    "Февраля",
       3:    "Марта",
@@ -201,7 +201,7 @@ export abstract class Helper {
                     return "Вчера";
                 }
                 if (day_diff > 0){
-                    formated_date =`${date.getDate()} ${this.mounth_to_locale[date.getMonth() + 1]} ${date.getFullYear()}`;
+                    formated_date =`${date.getDate()} ${this.month_to_locale[date.getMonth() + 1]} ${date.getFullYear()}`;
                     return formated_date;
                 }
                 return "Сегодня";

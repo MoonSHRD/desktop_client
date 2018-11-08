@@ -19,7 +19,7 @@ yarn-error.log
 .eslintrc.json
 
 account.json
-sqlite/data.db
+sqlite/
 yarn-error.log
 
 not_for_git/

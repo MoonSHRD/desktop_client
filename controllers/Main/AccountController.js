@@ -11,9 +11,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const Controller_1 = require("../Controller");
 const AccountModel_1 = require("../../models/AccountModel");
+const fs = require("fs");
+var encryptor = require('file-encryptor');
 class AccountController extends Controller_1.Controller {
-    update_directory(path) {
+    change_directory(path) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (path == "undefined/")
+                return;
             let account = (yield AccountModel_1.AccountModel.find({ where: { id: 1 } }))[0];
             account.downloads = path;
             yield account.save();
@@ -53,6 +57,26 @@ class AccountController extends Controller_1.Controller {
         });
     }
     ;
+    decrypt_db() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let account = (yield AccountModel_1.AccountModel.find({ where: { id: 1 } }))[0];
+            let key = account.privKey;
+            if (fs.existsSync(`${__dirname}/../../sqlite/data.db`))
+                encryptor.encryptFile(`${__dirname}/../../sqlite/data.db`, `${__dirname}/../../sqlite/encrypted.db`, key, function (err) { });
+            else
+                console.log("File for decrypt not exist");
+        });
+    }
+    encrypt_db() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let account = (yield AccountModel_1.AccountModel.find({ where: { id: 1 } }))[0];
+            let key = account.privKey;
+            if (fs.existsSync(`${__dirname}/../../sqlite/encrypted.db`))
+                encryptor.decryptFile(`${__dirname}/../../sqlite/encrypted.db`, `${__dirname}/../../sqlite/test.db`, key, function (err) { });
+            else
+                console.log("File for encrypt not exist");
+        });
+    }
 }
 module.exports = AccountController;
 //# sourceMappingURL=AccountController.js.map

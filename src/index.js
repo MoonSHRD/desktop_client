@@ -2,6 +2,7 @@ const {ipcRenderer} = require('electron');
 const dict = require('./langs/lang');
 const slick = require('slick-carousel');
 const {dialog} = require('electron').remote;
+const fs = require('fs');
 
 let p = null;
 let d = null;
@@ -799,7 +800,7 @@ window.onload = function () {
     });
 
     $(document).on('mousedown','#resize01',function(e) {
-        console.log('resize_clicked');
+        // console.log('resize_clicked');
         unlock = true;
         $(document).on('mouseup', function(e) {
             ipcRenderer.send("change_chats_size", p.width());
@@ -893,17 +894,15 @@ window.onload = function () {
         }
     });
     $(document).on('on.switch', function () {
-        // let text = $(".searchInput");
-        let text = $(".bl-hide-1").val();
-        $(".bl-hide").val(text);
+        $(".bl-hide-1").val("");
+        ipcRenderer.send("load_chats", "menu_chats");
         $('.bl-hide').css('display', 'block');
         $('.bl-hide-1').css('display', 'none');
         $('.chats').css('height', 'calc(100% - 153px)');
 
     });
     $(document).on('off.switch', function () {
-        let text = $('.bl-hide').val();
-        $(".bl-hide-1").val(text);
+        $('.bl-hide').val("");
         $('.bl-hide').css('display', 'none');
         $('.bl-hide-1').css('display', 'block');
         $('.chats').css('height', 'calc(100% - 200px)');
@@ -927,6 +926,14 @@ window.onload = function () {
         widthMsgWindow('[data-msgs-window]');
         p.css('width', width);
         d.css('margin-left', width);
+    });
+
+    $(document).on('click', '[name=decrypt_database]', function (e) {
+        ipcRenderer.send("decrypt_db");
+    });
+
+    $(document).on('click', '[name=encrypt_database]', function (e) {
+        ipcRenderer.send("encrypt_db");
     });
 
 };
