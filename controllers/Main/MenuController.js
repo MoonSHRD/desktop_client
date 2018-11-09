@@ -19,7 +19,9 @@ class MenuController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('init_main');
             yield this.generate_initial_chats();
-            let self_info = yield this.get_self_info();
+            let self_info = Object(yield this.get_self_info());
+            let settings = yield this.get_Settings();
+            self_info.width_chats = settings.width_chats;
             yield this.send_data(this.events.change_app_state, this.render('main/main.pug', self_info));
             yield this.load_menu_initial();
         });
@@ -40,24 +42,29 @@ class MenuController extends Controller_1.Controller {
     ;
     load_menu_user_chats(account) {
         return __awaiter(this, void 0, void 0, function* () {
-            let self_info = yield this.get_self_info();
+            let self_info = Object(yield this.get_self_info());
+            let settings = yield this.get_Settings();
             self_info.state = this.chat_to_menu.user;
+            self_info.width_chats = settings.width_chats;
+            console.log("self", self_info);
             let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
-                this.render('main/messagingblock/messagingblock.pug');
+                this.render('main/messagingblock/messagingblock.pug', { width_chats: settings.width_chats });
             this.send_data('change_menu_state', html);
-            this.send_data("set_chats_width", (yield this.get_me(self_info.id)).width_chats);
+            // this.send_data("set_chats_width", settings.width_chats);
             yield this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
         });
     }
     load_menu_chats(account) {
         return __awaiter(this, void 0, void 0, function* () {
-            let self_info = yield this.get_self_info();
+            let self_info = Object(yield this.get_self_info());
+            let settings = yield this.get_Settings();
             self_info.state = this.chat_to_menu.group;
+            self_info.width_chats = settings.width_chats;
             console.log("self", self_info);
             let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
-                this.render('main/messagingblock/messagingblock.pug');
+                this.render('main/messagingblock/messagingblock.pug', { width_chats: settings.width_chats });
             this.send_data('change_menu_state', html);
-            this.send_data("set_chats_width", (yield this.get_me(self_info.id)).width_chats);
+            // this.send_data("set_chats_width", settings.width_chats);
             yield this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.group);
         });
     }
@@ -134,12 +141,7 @@ class MenuController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('load_menu_default');
             yield this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
-            yield this.controller_register.run_controller("AccountController", "set_sizes");
-        });
-    }
-    load_menu_default() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.send_data(this.events.change_menu_state, this.render('main/file.pug', { state: "menu_under_construction" }));
+            // await this.controller_register.run_controller("AccountController", "set_sizes");
         });
     }
 }

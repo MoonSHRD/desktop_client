@@ -16,6 +16,7 @@ const AccountModel_1 = require("../models/AccountModel");
 const ControllerRegister_1 = require("./ControllerRegister");
 const loom_1 = require("../loom/loom");
 const ipfs_1 = require("../ipfs/ipfs");
+const SettingsModel_1 = require("../models/SettingsModel");
 class Controller {
     constructor(window) {
         this.pug = Pug;
@@ -33,6 +34,7 @@ class Controller {
         this.ipfs = ipfs_1.Ipfs.getInstance();
         this.self_info = null;
         this.me = null;
+        this.settings = null;
         this.window = window;
     }
     render(path, data = null) {
@@ -57,10 +59,16 @@ class Controller {
         this.window.webContents.send(event, data);
     }
     ;
-    get_me(id) {
+    get_me() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.me = (yield AccountModel_1.AccountModel.find({ where: { user_id: id } }))[0];
+            this.me = (yield AccountModel_1.AccountModel.find({ where: { id: 1 } }))[0];
             return this.me;
+        });
+    }
+    get_Settings() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.settings = (yield SettingsModel_1.SettingsModel.find({ where: { id: 1 } }))[0];
+            return this.settings;
         });
     }
 }

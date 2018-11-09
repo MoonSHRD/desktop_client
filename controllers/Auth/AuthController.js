@@ -14,6 +14,7 @@ const Controller_1 = require("../Controller");
 const UserModel_1 = require("../../models/UserModel");
 const loom_1 = require("../../loom/loom");
 const Helpers_1 = require("../Helpers");
+const SettingsModel_1 = require("../../models/SettingsModel");
 // let {TextDecoder} = require('text-encoding');
 class AuthController extends Controller_1.Controller {
     constructor() {
@@ -41,10 +42,23 @@ class AuthController extends Controller_1.Controller {
             else
                 this.connection_tries += 1;
             yield this.ipfs.connect();
-            console.log('connected');
+            console.log('IPFS connected');
             console.log(account);
             // await this.ipfs.ipfs_info();
-            yield this.loom.connect(account.privKey);
+            let time = 2000;
+            while (true) {
+                try {
+                    yield this.loom.connect(account.privKey);
+                    break;
+                }
+                catch (e) {
+                    console.log("Cannot connect to loom. Retry...");
+                    yield new Promise(resolve => {
+                        setTimeout(resolve, time);
+                        time = time * 2;
+                    });
+                }
+            }
             console.log('loom connected');
             if (first) {
                 let time = 2000;
@@ -87,10 +101,12 @@ class AuthController extends Controller_1.Controller {
             user.avatar = data.avatar ? (yield Helpers_1.resize_b64_img(data.avatar)) : (yield Helpers_1.resize_img_from_path(this.paths.components + 'auth/default-avatar1.jpg'));
             yield user.save();
             let account = new AccountModel_1.AccountModel();
+            let settings = new SettingsModel_1.SettingsModel();
             account.privKey = loom_data.priv;
             account.passphrase = data.mnemonic;
             account.user = user;
-            account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
+            settings.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
+            yield settings.save();
             yield account.save();
             yield this.auth(account, true);
         });

@@ -914,26 +914,12 @@ window.onload = function () {
         }
     });
 
-   ipcRenderer.on("set_windows_size", (event, obj) => {
-       window.resizeTo(obj.width, obj.height);
-       // $(window).outerWidth(obj.width);
-       // $(window).outerHeight(obj.height);
-   });
-
-    ipcRenderer.on("set_chats_width", (event, width) => {
-        let p = $('.dialogs');
-        let d = $('.messaging_block');
-        widthMsgWindow('[data-msgs-window]');
-        p.css('width', width);
-        d.css('margin-left', width);
+    $(document).on('click', '[name=encrypt_database]', function (e) {
+        ipcRenderer.send("encrypt_db");
     });
 
     $(document).on('click', '[name=decrypt_database]', function (e) {
         ipcRenderer.send("decrypt_db");
-    });
-
-    $(document).on('click', '[name=encrypt_database]', function (e) {
-        ipcRenderer.send("encrypt_db");
     });
 
 };

@@ -127,6 +127,7 @@ class MessagesController extends Controller_1.Controller {
             let fileModel;
             if (file) {
                 console.log("with file:", file);
+                let settings = yield this.get_Settings();
                 fileModel = new FileModel_1.FileModel();
                 fileModel.preview = Helpers_1.check_file_preview(file.type);
                 fileModel.hash = yield this.ipfs.add_file(file);
@@ -135,7 +136,7 @@ class MessagesController extends Controller_1.Controller {
                 fileModel.file = file.file;
                 fileModel.name = file.name;
                 fileModel.type = file.type;
-                fileModel.path = (yield this.get_me(self_info.id)).downloads;
+                fileModel.path = settings.downloads;
                 yield fileModel.save();
                 Helpers_1.save_file(fileModel);
                 message.files = [fileModel];
@@ -187,6 +188,7 @@ class MessagesController extends Controller_1.Controller {
             if (files && files.length) {
                 for (let num in files) {
                     let fileModel = new FileModel_1.FileModel();
+                    let settings = yield this.get_Settings();
                     // file_info.sender = self_info.id;
                     fileModel.hash = files[num].hash;
                     fileModel.chat = chat;
@@ -194,7 +196,7 @@ class MessagesController extends Controller_1.Controller {
                     fileModel.name = files[num].name;
                     fileModel.type = files[num].type;
                     fileModel.preview = Helpers_1.check_file_preview(files[num].type);
-                    fileModel.path = (yield this.get_me(self_info.id)).downloads;
+                    fileModel.path = settings.downloads;
                     if (fileModel.preview) {
                         fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
                     }
@@ -233,6 +235,7 @@ class MessagesController extends Controller_1.Controller {
             if (files) {
                 for (let num in files) {
                     yield messageModel.save();
+                    let settings = yield this.get_Settings();
                     let fileModel = new FileModel_1.FileModel();
                     // file_info.sender = self_info.id;
                     fileModel.hash = files[num].hash;
@@ -244,7 +247,7 @@ class MessagesController extends Controller_1.Controller {
                     if (fileModel.preview) {
                         fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
                     }
-                    fileModel.path = (yield this.get_me(self_info.id)).downloads;
+                    fileModel.path = settings.downloads;
                     yield fileModel.save();
                     messageModel.files.push(fileModel);
                 }

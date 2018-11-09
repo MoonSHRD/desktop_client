@@ -2,6 +2,11 @@
 // let Router = require('electron-routes');
 
 import {Router} from "./router";
+import * as fs from "fs";
+import {createConnection} from "typeorm";
+import "reflect-metadata";
+import {AccountModel} from "../models/AccountModel";
+import {SettingsModel} from "../models/SettingsModel";
 
 const {app, BrowserWindow} = require('electron');
 const locals = {/* ...*/};
@@ -16,16 +21,34 @@ app.on('ready', async () => {
         console.log(`Could not initiate 'electron-pug'`);
     }
 
-    let mainWindow = new BrowserWindow({ width: 1000, minWidth: 1000, height: 700, minHeight: 700, resizable: true, show: false, webPreferences: {
+    let width = 1000;
+    let height = 700;
+
+    await createConnection({
+        type: "sqlite",
+        database: `${__dirname}/../sqlite/data.db`,
+        entities: [
+            __dirname + '/../models/' + "*.js"
+        ],
+        synchronize: true,
+        logging: false
+    });
+    let settings = (await SettingsModel.find({where: {id:1}}))[0];
+    if (settings) {
+        width = settings.width;
+        height = settings.height;
+    }
+
+    let mainWindow = new BrowserWindow({ width: width, minWidth: 1000, height: height, minHeight: 700, resizable: true, show: false, webPreferences: {
             nodeIntegration: true   }, icon: __dirname + '/icon.png' });
 
     // mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`file://${__dirname}/index.pug`);
-    mainWindow.webContents.on('dom-ready', function() {
+    mainWindow.webContents.on('dom-ready', async function() {
         // console.log('finished');
         mainWindow.show();
         const router = new Router(mainWindow);
-        router.start_loading();
+        await router.init_app();
     });
 });
 

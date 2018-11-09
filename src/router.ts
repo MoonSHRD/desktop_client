@@ -38,19 +38,6 @@ export class Router {
         this.types = helper.paths;
     };
 
-    private init_sqlite() {
-        createConnection({
-            type: "sqlite",
-            database: "sqlite/data.db",
-            entities: [
-                this.paths.models + "*.js"
-            ],
-            synchronize: true,
-            logging: false
-        }).then(async connection => {
-            await this.init_app();
-        }).catch(error => console.log(error));
-    }
 
     private listen_event(from, event_name, callback) {
         from.on(event_name, async (...args) => {
@@ -63,13 +50,7 @@ export class Router {
         });
     }
 
-    public start_loading() {
-        setTimeout(() => {
-            this.init_sqlite();
-        }, 2000)
-    }
-
-    private async init_app() {
+    public async init_app() {
         await this.controller_register.run_controller('AuthController', 'init_auth');
         this.start_listening();
     }
@@ -92,8 +73,6 @@ export class Router {
                     setTimeout(resolve, ms)
                 });
             }
-            // console.log("Loom reconecting");
-            // await this.controller_register.queue_controller("AuthController", "auth");
             await this.controller_register.queue_controller('AuthController', 'init_auth');
             await sleep(10000);
         });
@@ -263,6 +242,16 @@ export class Router {
             await this.controller_register.queue_controller('SettingsController', 'change_settings_menu', arg);
         });
 
+        this.listen_event(this.ipcMain, "change_directory", async (event, path) => {
+            // console.log("Change directory:", path);
+            await this.controller_register.run_controller('SettingsController', 'change_directory', path);
+        });
+
+        this.listen_event(this.ipcMain, "change_last_chat", async (event, chat_id) => {
+            // console.log("Change last chat:", chat_id);
+            await this.controller_register.run_controller('SettingsController', 'update_last_chat', chat_id);
+        });
+
 
         /** Menu events **/
 
@@ -273,16 +262,6 @@ export class Router {
 
 
         /** Account events **/
-
-        this.listen_event(this.ipcMain, "change_directory", async (event, path) => {
-           // console.log("Change directory:", path);
-            await this.controller_register.run_controller('AccountController', 'change_directory', path);
-        });
-
-        this.listen_event(this.ipcMain, "change_last_chat", async (event, chat_id) => {
-            // console.log("Change last chat:", chat_id);
-            await this.controller_register.run_controller('AccountController', 'update_last_chat', chat_id);
-        });
 
         this.listen_event(this.ipcMain, "decrypt_db", async (event) => {
             this.controller_register.run_controller('AccountController', 'decrypt_db');
@@ -298,12 +277,12 @@ export class Router {
             // console.log("Changed windows size");
             // console.log("Width:", width);
             // console.log("height:", height);
-            await this.controller_register.run_controller('AccountController', 'change_windows_size', width, height);
+            await this.controller_register.run_controller('SettingsController', 'change_windows_size', width, height);
         });
 
         this.listen_event(this.ipcMain, "change_chats_size", async (events, width) => {
             // console.log("New chats width:", width);
-            await this.controller_register.run_controller('AccountController', 'change_chats_width', width);
+            await this.controller_register.run_controller('SettingsController', 'change_chats_width', width);
         });
     }
 }
