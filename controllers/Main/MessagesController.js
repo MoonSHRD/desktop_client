@@ -29,8 +29,8 @@ var nativeImage = Electron.nativeImage;
 class MessagesController extends Controller_1.Controller {
     load_join_chat(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let q_chats = this.controller_register.get_controller_parameter('ChatsController', 'queried_chats');
-            let chat = q_chats[chat_id];
+            let q_chats = this.controller_register.get_controller_parameter('ChatsController', 'found_chats');
+            let chat = q_chats.chats[chat_id];
             chat.type = this.group_chat_types.join_channel;
             this.send_data(this.events.reload_chat, this.render('main/messagingblock/qqq.pug', chat));
         });
@@ -130,7 +130,7 @@ class MessagesController extends Controller_1.Controller {
             if (!chat) {
                 let user = this.controller_register.get_controller_parameter('ChatsController', 'found_chats').users[id];
                 let userModel = new UserModel_1.UserModel();
-                userModel.id = user.id;
+                userModel.id = ChatModel_1.ChatModel.get_chat_opponent_id(id, self_info.id);
                 userModel.domain = 'localhost';
                 userModel.firstname = user.firstname;
                 userModel.lastname = user.lastname;
@@ -138,7 +138,9 @@ class MessagesController extends Controller_1.Controller {
                 userModel.avatar = user.avatar;
                 yield userModel.save();
                 chat = new ChatModel_1.ChatModel();
-                chat.id = ChatModel_1.ChatModel.get_chat_opponent_id(id, self_info.id);
+                chat.id = id;
+                chat.domain = "localhost";
+                chat.type = this.chat_types.user;
                 yield chat.save();
             }
             // let date = new Date();

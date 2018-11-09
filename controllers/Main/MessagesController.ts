@@ -24,8 +24,8 @@ import {helper} from "../../src/var_helper";
 class MessagesController extends Controller {
 
     async load_join_chat(chat_id: string) {
-        let q_chats = this.controller_register.get_controller_parameter('ChatsController', 'queried_chats');
-        let chat = q_chats[chat_id];
+        let q_chats = this.controller_register.get_controller_parameter('ChatsController', 'found_chats');
+        let chat = q_chats.chats[chat_id];
         chat.type = this.group_chat_types.join_channel;
         this.send_data(this.events.reload_chat, this.render('main/messagingblock/qqq.pug', chat));
     }
@@ -125,7 +125,7 @@ class MessagesController extends Controller {
         if (!chat) {
             let user = this.controller_register.get_controller_parameter('ChatsController','found_chats').users[id];
             let userModel=new UserModel();
-            userModel.id=user.id;
+            userModel.id=ChatModel.get_chat_opponent_id(id,self_info.id);
             userModel.domain='localhost';
             userModel.firstname=user.firstname;
             userModel.lastname=user.lastname;
@@ -133,7 +133,9 @@ class MessagesController extends Controller {
             userModel.avatar=user.avatar;
             await userModel.save();
             chat = new ChatModel();
-            chat.id=ChatModel.get_chat_opponent_id(id,self_info.id);
+            chat.id=id;
+            chat.domain="localhost";
+            chat.type=this.chat_types.user;
             await chat.save();
         }
         // let date = new Date();

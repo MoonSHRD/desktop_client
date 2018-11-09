@@ -9,7 +9,7 @@ import {Helper} from "../Helpers";
 class ChatsController extends Controller {
 
     public queried_chats: object;
-    public found_chats: {
+    public found_chats= {
         users:{},
         chats:{},
     };
@@ -212,7 +212,7 @@ class ChatsController extends Controller {
         let users=fData.Users;
         for (let i in users){
             let user = users[i];
-            // user.id=ChatModel.get_user_chat_id(self_info.id,user.id);
+            user.id=ChatModel.get_user_chat_id(self_info.id,user.id);
             user.name=user.firstname+" "+user.lastname;
             user.type=this.chat_types.user;
             user.online=user.last_active<(Date.now()+1000*60*5);

@@ -14,6 +14,13 @@ const Controller_1 = require("../Controller");
 const ChatModel_1 = require("../../models/ChatModel");
 const Helpers_1 = require("../Helpers");
 class ChatsController extends Controller_1.Controller {
+    constructor() {
+        super(...arguments);
+        this.found_chats = {
+            users: {},
+            chats: {},
+        };
+    }
     init_chats() {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
@@ -223,7 +230,7 @@ class ChatsController extends Controller_1.Controller {
             let users = fData.Users;
             for (let i in users) {
                 let user = users[i];
-                // user.id=ChatModel.get_user_chat_id(self_info.id,user.id);
+                user.id = ChatModel_1.ChatModel.get_user_chat_id(self_info.id, user.id);
                 user.name = user.firstname + " " + user.lastname;
                 user.type = this.chat_types.user;
                 user.online = user.last_active < (Date.now() + 1000 * 60 * 5);
