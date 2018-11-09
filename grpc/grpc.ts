@@ -4,6 +4,7 @@ import * as protoLoader from '@grpc/proto-loader';
 import {UserModel} from "../models/UserModel";
 import {LocalAddress, CryptoUtils} from 'loom-js';
 import * as tweetnacl from 'tweetnacl';
+import {grpc_config} from "../src/env_config";
 
 let PROTO_PATH = __dirname + '/proto/moonshard.proto';
 
@@ -24,7 +25,7 @@ export class Grpc {
         let packageDefinition = protoLoader.loadSync(PROTO_PATH, {});
         let proto = grpc.loadPackageDefinition(packageDefinition).moonshard;
 
-        this.client = new proto['Moonshard']('localhost:50051',
+        this.client = new proto['Moonshard'](grpc_config.host+':'+grpc_config.port,
             grpc.credentials.createInsecure());
     }
 

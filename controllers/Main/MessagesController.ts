@@ -192,6 +192,7 @@ class MessagesController extends Controller {
         } else if (Object.values(this.group_chat_types).includes(chat.type)) {
             group = true;
         }
+        console.log("sending to",chat,text);
         this.dxmpp.send(chat, text, group, message.files);
     };
 
@@ -214,9 +215,13 @@ class MessagesController extends Controller {
         // console.log("Files:", files);
         let self_info = await this.get_self_info();
         let userModel = await UserModel.findOne(user.id);
+        console.log(userModel);
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
-        if (!UserModel){
-            let userGR=(await this.grpc.CallMethod("GetObjData",{id: user.id,obj:'user'})).data;
+        console.log(chat);
+        if (!userModel || !chat){
+            console.log("retriving user info");
+            let userGR=JSON.parse((await this.grpc.CallMethod("GetObjData",{id: user.id,obj:'user'})).data.data);
+            console.log(userGR);
             userModel=new UserModel();
             userModel.id=userGR.id;
             userModel.domain="localhost";
@@ -224,15 +229,19 @@ class MessagesController extends Controller {
             userModel.firstname=userGR.firstname;
             userModel.lastname=userGR.lastname;
             userModel.avatar=userGR.avatar;
-            await userModel.save()
-        }
-        if (!chat) {
+            userModel.last_active=userGR.last_active;
+            await userModel.save();
+
             chat = new ChatModel();
             chat.id = ChatModel.get_user_chat_id(self_info.id, user.id);
             chat.type = this.chat_types.user;
             chat.domain = "localhost";
             chat.users = [userModel];
             await chat.save();
+
+            await chat.get_user_chat_meta(self_info.id);
+
+            await this.controller_register.run_controller('ChatsController','load_chat',chat,this.chat_to_menu.user)
         }
 
         // let chat = await ChatModel.get_user_chat(self_info.id, user.id);

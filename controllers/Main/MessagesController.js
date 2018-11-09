@@ -193,6 +193,7 @@ class MessagesController extends Controller_1.Controller {
             else if (Object.values(this.group_chat_types).includes(chat.type)) {
                 group = true;
             }
+            console.log("sending to", chat, text);
             this.dxmpp.send(chat, text, group, message.files);
         });
     }
@@ -218,9 +219,13 @@ class MessagesController extends Controller_1.Controller {
             // console.log("Files:", files);
             let self_info = yield this.get_self_info();
             let userModel = yield UserModel_1.UserModel.findOne(user.id);
+            console.log(userModel);
             let chat = yield ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id);
-            if (!UserModel_1.UserModel) {
-                let userGR = (yield this.grpc.CallMethod("GetObjData", { id: user.id, obj: 'user' })).data;
+            console.log(chat);
+            if (!userModel || !chat) {
+                console.log("retriving user info");
+                let userGR = JSON.parse((yield this.grpc.CallMethod("GetObjData", { id: user.id, obj: 'user' })).data.data);
+                console.log(userGR);
                 userModel = new UserModel_1.UserModel();
                 userModel.id = userGR.id;
                 userModel.domain = "localhost";
@@ -228,15 +233,16 @@ class MessagesController extends Controller_1.Controller {
                 userModel.firstname = userGR.firstname;
                 userModel.lastname = userGR.lastname;
                 userModel.avatar = userGR.avatar;
+                userModel.last_active = userGR.last_active;
                 yield userModel.save();
-            }
-            if (!chat) {
                 chat = new ChatModel_1.ChatModel();
                 chat.id = ChatModel_1.ChatModel.get_user_chat_id(self_info.id, user.id);
                 chat.type = this.chat_types.user;
                 chat.domain = "localhost";
                 chat.users = [userModel];
                 yield chat.save();
+                yield chat.get_user_chat_meta(self_info.id);
+                yield this.controller_register.run_controller('ChatsController', 'load_chat', chat, this.chat_to_menu.user);
             }
             // let chat = await ChatModel.get_user_chat(self_info.id, user.id);
             chat.unread_messages += 1;

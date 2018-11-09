@@ -14,6 +14,7 @@ const protoLoader = require("@grpc/proto-loader");
 const UserModel_1 = require("../models/UserModel");
 const loom_js_1 = require("loom-js");
 const tweetnacl = require("tweetnacl");
+const env_config_1 = require("../src/env_config");
 let PROTO_PATH = __dirname + '/proto/moonshard.proto';
 function sleep(ms) {
     return new Promise(resolve => {
@@ -25,7 +26,7 @@ class Grpc {
         this.promisedFuncs = {};
         let packageDefinition = protoLoader.loadSync(PROTO_PATH, {});
         let proto = grpc.loadPackageDefinition(packageDefinition).moonshard;
-        this.client = new proto['Moonshard']('localhost:50051', grpc.credentials.createInsecure());
+        this.client = new proto['Moonshard'](env_config_1.grpc_config.host + ':' + env_config_1.grpc_config.port, grpc.credentials.createInsecure());
     }
     static getIntance() {
         if (!this.identity)
