@@ -1,5 +1,13 @@
 .modal{
-    @extend .custom-scrollbar;
+    //@extend .custom-scrollbar;
+
+    &-dialog{
+        margin: 4rem auto 1.75rem;
+
+        @include media-breakpoint-up(sm){
+            margin: 4rem auto;
+        }
+    }
 
     &-title{
         text-overflow: ellipsis;

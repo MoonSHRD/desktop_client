@@ -24,12 +24,12 @@ a.infopanel {
     flex-direction: column;
     padding-left: 10px;
     font-family: $ff-1;
-    color: black;
+    color: $primary-text;
 }
 
 .infopanel_title > b, .infopanel:hover > span {
     text-decoration: none;
-    color: black;
+    color: $primary-text;
 }
 
 
