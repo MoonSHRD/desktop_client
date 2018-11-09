@@ -6,11 +6,16 @@ import {Router} from "./router";
 const {app, BrowserWindow} = require('electron');
 const locals = {/* ...*/};
 const setupPug = require('electron-pug');
+
+const updater = require('electron-simple-updater');
+import {download} from 'electron-download-manager';
+
+
 // const Router = require('./router');
 const DownloadManager = require("electron-download-manager");
 
 DownloadManager.register({
-    downloadFolder: __dirname + `/../updates/`
+    downloadFolder: __dirname + `/../dist/`
 });
 app.on('ready', async () => {
     try {
@@ -21,7 +26,7 @@ app.on('ready', async () => {
     }
 
     let mainWindow = new BrowserWindow({ width: 1000, minWidth: 1000, height: 750, minHeight: 750, resizable: true, show: false, webPreferences: {
-            nodeIntegration: true   }, icon: __dirname + '/icon.png' });
+            nodeIntegration: true   }, icon : __dirname + '/icon.png' });
 
     // mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`file://${__dirname}/index.pug`);
@@ -31,6 +36,8 @@ app.on('ready', async () => {
         const router = new Router(mainWindow);
         router.start_loading();
     });
+
+
 
     mainWindow.on('closed', () => {
         // console.log('closed')

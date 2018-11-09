@@ -58,6 +58,10 @@ exports.events = {
     get_updates: "get_updates",
     reading_messages: "reading_messages",
     change_directory: "change_directory",
+    change_windows_size: "change_windows_size",
+    change_chats_width: "change_chats_width",
+    set_sizes: "set_sizes",
+    update_last_chat: "update_last_chat",
 };
 exports.helper = {
     paths: exports.paths,

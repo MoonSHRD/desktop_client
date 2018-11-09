@@ -280,7 +280,25 @@ export class Router {
         this.listen_event(this.ipcMain, "change_directory", async (event, path) => {
            console.log("Change directory:", path);
             await this.controller_register.run_controller('AccountController', 'update_directory', path);
+        });
 
+        this.listen_event(this.ipcMain, "change_last_chat", async (event, chat_id) => {
+            console.log("Change last chat:", chat_id);
+            await this.controller_register.run_controller('AccountController', 'update_last_chat', chat_id);
+        });
+
+
+        /** Window events **/
+        this.listen_event(this.ipcMain, "change_size_window", async (events, width, height) => {
+            console.log("Changed windows size");
+            console.log("Width:", width);
+            console.log("height:", height);
+            await this.controller_register.run_controller('AccountController', 'change_windows_size', width, height);
+        });
+
+        this.listen_event(this.ipcMain, "change_chats_size", async (events, width) => {
+            console.log("New chats width:", width);
+            await this.controller_register.run_controller('AccountController', 'change_chats_width', width);
         });
     }
 }

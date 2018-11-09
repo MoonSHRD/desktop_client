@@ -145,9 +145,9 @@ class Helper {
                 return formated_date;
             case 'chat':
                 day_diff = now.getDate() - date.getDate();
-                console.log(`year ${date.getFullYear()} - ${now.getFullYear()}`);
-                console.log(`month ${date.getMonth()} - ${now.getMonth()}`);
-                console.log(`day ${date.getDate()} - ${now.getDate()}`);
+                // console.log(`year ${date.getFullYear()} - ${now.getFullYear()}`);
+                // console.log(`month ${date.getMonth()} - ${now.getMonth()}`);
+                // console.log(`day ${date.getDate()} - ${now.getDate()}`);
                 if (date.getFullYear() < now.getFullYear() || date.getMonth() < now.getMonth() || day_diff > 6) {
                     formated_date = `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
                     return formated_date;

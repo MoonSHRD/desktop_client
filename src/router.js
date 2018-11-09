@@ -219,6 +219,21 @@ class Router {
             console.log("Change directory:", path);
             yield this.controller_register.run_controller('AccountController', 'update_directory', path);
         }));
+        this.listen_event(this.ipcMain, "change_last_chat", (event, chat_id) => __awaiter(this, void 0, void 0, function* () {
+            console.log("Change last chat:", chat_id);
+            yield this.controller_register.run_controller('AccountController', 'update_last_chat', chat_id);
+        }));
+        /** Window events **/
+        this.listen_event(this.ipcMain, "change_size_window", (events, width, height) => __awaiter(this, void 0, void 0, function* () {
+            console.log("Changed windows size");
+            console.log("Width:", width);
+            console.log("height:", height);
+            yield this.controller_register.run_controller('AccountController', 'change_windows_size', width, height);
+        }));
+        this.listen_event(this.ipcMain, "change_chats_size", (events, width) => __awaiter(this, void 0, void 0, function* () {
+            console.log("New chats width:", width);
+            yield this.controller_register.run_controller('AccountController', 'change_chats_width', width);
+        }));
     }
 }
 exports.Router = Router;

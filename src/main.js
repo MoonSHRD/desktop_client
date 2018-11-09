@@ -14,10 +14,11 @@ const router_1 = require("./router");
 const { app, BrowserWindow } = require('electron');
 const locals = { /* ...*/};
 const setupPug = require('electron-pug');
+const updater = require('electron-simple-updater');
 // const Router = require('./router');
 const DownloadManager = require("electron-download-manager");
 DownloadManager.register({
-    downloadFolder: __dirname + `/../updates/`
+    downloadFolder: __dirname + `/../dist/`
 });
 app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
     try {

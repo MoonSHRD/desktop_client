@@ -12,6 +12,14 @@ export class AccountModel extends BaseEntity {
     downloads: string = "./downloads/";
     @Column()
     passphrase: string;
+    @Column()
+    width: number = 1000;
+    @Column()
+    height: number = 700;
+    @Column()
+    width_chats: number = 370;
+    @Column()
+    last_chat: string;
 
     @OneToOne(type => UserModel, user => user.account)
     @JoinColumn()
@@ -21,8 +29,4 @@ export class AccountModel extends BaseEntity {
     host: string;
     jidhost: string;
     port: number;
-
-    static async get_me(id:string) {
-        return (await this.find({where: {user_id:id}}))[0]
-    }
 }

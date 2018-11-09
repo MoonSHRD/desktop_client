@@ -24,7 +24,7 @@
     display: flex;
     align-items: center;
     padding: 5px 20px;
-    color: $c0;
+    color: $primary-text;
     text-decoration: none;
     transition: all 0.1s ease;
     overflow: hidden;
@@ -124,14 +124,14 @@
     z-index: 1;
 
     input {
-        @include size(100%, 38px);
-        border-radius: 10px;
-        outline:none;
+        //@include size(100%, 38px);
+        //border-radius: 10px;
+        //outline:none;
         margin: 0 15px 0 20px;
-        padding: 0 40px 0 10px;
-        border: 1px solid rgba(0, 208, 255, 0.2);
-        box-shadow: 2px 2px 20px rgba(43, 194, 249, 0.1);
-        font-size: 14px;
+        //padding: 0 40px 0 10px;
+        //border: 1px solid rgba(0, 208, 255, 0.2);
+        //box-shadow: 2px 2px 20px rgba(43, 194, 249, 0.1);
+        //font-size: 14px;
     }
 }
 
@@ -139,42 +139,6 @@
     @include position(absolute, null 50px null null);
     position: absolute;
     right: 50px;
-}
-
-
-/**  STYLE 11 */
-#style-11 {
-    &::-webkit-scrollbar-track {
-        //border-radius: 10px;
-        background: opacify($brand-gray-100, 0.3);
-        //border: 1px solid rgba($brand-gray-400, 0.1);
-        transition: .2s ease;
-    }
-    &::-webkit-scrollbar {
-        //width: 2px;
-        width: 6px;
-        background-color: $cf;
-        transition: .2s ease;
-    }
-
-    &:hover{
-        &::-webkit-scrollbar-thumb{
-            border-radius: 10px;
-            //background: linear-gradient(left, #fff, #e4e4e4);
-            background-color: rgba($primary-text, .6);
-            //border: 1px solid $primary-text;
-        }
-    }
-    &::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        //background: linear-gradient(left, #fff, #e4e4e4);
-        background-color: rgba($primary-text, .25);
-        transition: .2s ease;
-
-        &:active {
-            //background: linear-gradient(left, #22ADD4, #1E98BA);
-        }
-    }
 }
 
 .label {
@@ -192,7 +156,7 @@
         margin: 0;
         font-size: 13px;
         padding: 0;
-        color: black;
+        color: $primary-text;
     }
 }
 

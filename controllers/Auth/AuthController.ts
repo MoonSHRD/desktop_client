@@ -17,7 +17,7 @@ class AuthController extends Controller {
         if (account)
             await this.auth(account);
         else
-            this.send_data(this.events.change_app_state, this.render('auth/123.pug'));
+            this.send_data(this.events.change_app_state, this.render('auth/auth.pug'));
     };
 
     generate_mnemonic() {
@@ -36,9 +36,23 @@ class AuthController extends Controller {
         await this.loom.connect(account.privKey);
         console.log('loom connected');
         if (first) {
-            let identyti_tx= await this.loom.set_identity(account.user.name);
-            console.log(identyti_tx);
-            this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
+            let time = 2000;
+            while (true) {
+                try {
+                    let identyti_tx = await this.loom.set_identity(account.user.name);
+                    console.log(identyti_tx);
+                    this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
+                    break;
+                }
+                catch (e) {
+                    console.log("Error with set identity. Reset...");
+                    await new Promise(resolve => {
+                        setTimeout(resolve, time);
+                        time = time*2;
+                    });
+                }
+            }
+
         }
         let user=await this.get_self_info();
         this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
@@ -67,6 +81,7 @@ class AuthController extends Controller {
         account.privKey = loom_data.priv;
         account.passphrase = data.mnemonic;
         account.user = user;
+        account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
         await account.save();
 
         await this.auth(account,true);

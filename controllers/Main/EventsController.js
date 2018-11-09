@@ -14,6 +14,7 @@ const os = require('os');
 var fs = require('fs');
 var unzip = require('unzip');
 const electron_download_manager_1 = require("electron-download-manager");
+const updater = require('electron-simple-updater');
 const Controller_1 = require("../Controller");
 const ChatModel_1 = require("../../models/ChatModel");
 const EventModel_1 = require("../../models/EventModel");
@@ -61,10 +62,62 @@ class EventsController extends Controller_1.Controller {
     }
     update_server(os, file) {
         return __awaiter(this, void 0, void 0, function* () {
-            axios.get(`http://localhost:8081/updates/${os}/${file}`)
-                .then((response) => {
+            // axios.get(`http://localhost:8081/updates/${os}/${file}`)
+            //     .then( (response) => {
+            //         download({
+            //             url: `http://localhost:8081/updates/${os}/${file}`,
+            //             onProgress:  (percentage) => {
+            //                 console.log("percentage : " + percentage );
+            //                 this.send_data('get_updates', percentage);
+            //             }
+            //         }, function (error, info) {
+            //             if (error) {
+            //                 console.log(error);
+            //                 return;
+            //             }
+            //
+            //             var dirPath  = __dirname + `/../../updates/${file}`;
+            //
+            //             var destPath = __dirname + `/../../updates/arch`;
+            //
+            //             fs.createReadStream(dirPath).pipe(unzip.Extract({ path: destPath }));
+            //
+            //
+            //
+            //             console.log("DONE: " + info.url);
+            //         });
+            //
+            //
+            //     })
+            //     .catch(function (error) {
+            //         // handle error
+            //         console.log(error);
+            //     })
+            //     .then(function () {
+            //         // always executed
+            //     });
+        });
+    }
+    get_updates() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const stringf = 'update-not-available';
+            updater.init('http://localhost:8081/update.json');
+            updater.on('checking-for-update', () => console.log('Checking for updates...'));
+            updater.on('update-not-available', () => {
+                this.send_data('get_updates', stringf);
+                console.log('Update is not available');
+            });
+            updater.on('update-available', (meta) => {
+                this.send_data('get_updates', meta);
+                console.log('Update available');
+            });
+            updater.on('update-downloaded', () => {
+                updater.quitAndInstall();
+            });
+            updater.on('update-downloading', (meta) => {
+                console.log();
                 electron_download_manager_1.download({
-                    url: `http://localhost:8081/updates/${os}/${file}`,
+                    url: `http://localhost:8081/updates/Linux/Moonshard_0.0.2.AppImage`,
                     onProgress: (percentage) => {
                         console.log("percentage : " + percentage);
                         // this.send_data('get_updates', percentage);
@@ -74,32 +127,24 @@ class EventsController extends Controller_1.Controller {
                         console.log(error);
                         return;
                     }
-                    var dirPath = __dirname + `/../../updates/${file}`;
-                    var destPath = __dirname + `/../../updates/arch`;
-                    fs.createReadStream(dirPath).pipe(unzip.Extract({ path: destPath }));
-                    console.log("DONE: " + info.url);
+                    console.log('Downloading update:', meta);
                 });
-            })
-                .catch(function (error) {
-                // handle error
-                console.log(error);
-            })
-                .then(function () {
-                // always executed
             });
-        });
-    }
-    get_updates() {
-        return __awaiter(this, void 0, void 0, function* () {
+            updater.on('error', (meta) => console.log('Error:', meta));
+            // this.send_data('get_updates', null);
             // console.log(os.type())
-            let file = "arch.zip";
-            let get_os_type = os.type();
-            if (get_os_type === 'Linux') {
-                this.update_server(get_os_type, file);
-            }
-            else if (get_os_type === 'Windows_NT') {
-                this.update_server(get_os_type, file);
-            }
+            // let file = "arch.zip";
+            // let get_os_type = os.type();
+            //
+            // if( get_os_type === 'Linux'){
+            //
+            //     this.update_server(get_os_type, file)
+            //
+            // }else if (get_os_type === 'Windows_NT') {
+            //
+            //     this.update_server(get_os_type, file)
+            //
+            // }
             // this.ipfs.set_version();
             // this.ipfs.get_version();
         });

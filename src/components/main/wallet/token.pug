@@ -1,9 +1,11 @@
-tr.table_02.t02
-    th(scope='row' class='token-avatar')
+tr.table_02.t02.transfer-info
+    td.token-avatar(scope='row')
         img(src=avatar width='40' height='40')
-    td(class='td-name') #{name}
-    td(class='td-token') #{contract_address}
-    td #{amount}
+    td.td-name #{name}
+    td.td-token #{contract_address}
+    td
+        span.text-nowrap #{amount}
     td #{link_info}
-        a Channel link
+        a.transfer-info__link
+            include ../../../img/wallet/icons/link.svg
     //td status

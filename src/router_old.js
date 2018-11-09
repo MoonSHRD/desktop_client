@@ -127,7 +127,7 @@ async function router(renderer) {
                 app_status = states.offline
             } else {
                 // let html = Account.get_auth_html();
-                const html = pug.renderFile(__dirname + '/components/auth/123.pug', PUG_OPTIONS);
+                const html = pug.renderFile(__dirname + '/components/auth/auth.pug', PUG_OPTIONS);
                 renderer.webContents.send('change_app_state', html);
             }
             break;
