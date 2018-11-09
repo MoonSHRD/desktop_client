@@ -9,15 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
+// import * as fs from "fs";
+// import {AccountModel} from "../../models/AccountModel";
 const UserModel_1 = require("../../models/UserModel");
 const Controller_1 = require("../Controller");
 const MessageModel_1 = require("../../models/MessageModel");
 const ChatModel_1 = require("../../models/ChatModel");
+const AccountModel_1 = require("../../models/AccountModel");
+// import {assertAnyTypeAnnotation} from "babel-types";
 const FileModel_1 = require("../../models/FileModel");
+// import InterceptFileProtocolRequest = Electron.InterceptFileProtocolRequest;
+// import {files_config} from "../../src/var_helper";
 const Helpers_1 = require("../Helpers");
 const Electron = require("electron");
 var Notification = Electron.Notification;
 var nativeImage = Electron.nativeImage;
+// import * as eNotify from 'electron-notify'
+// let eNotify = require('electron-notify');
 class MessagesController extends Controller_1.Controller {
     load_join_chat(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -58,8 +66,11 @@ class MessagesController extends Controller_1.Controller {
     ;
     render_message(message) {
         return __awaiter(this, void 0, void 0, function* () {
+            // console.log(message);
             let self_info = yield this.get_self_info();
             message.mine = message.sender ? (self_info.id === message.sender.id) : false;
+            // message.sender_avatar = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.avatar : message.chat.avatar;
+            // message.sender_name = message.sender && (message.chat.type !== this.group_chat_types.channel || message.mine) ? message.sender.name : message.chat.name;
             message.fill_sender_data();
             for (let num in message.files) {
                 if (Helpers_1.check_file_preview(message.files[num].type)) {
@@ -90,6 +101,7 @@ class MessagesController extends Controller_1.Controller {
                 unread_messages: message.chat.unread_messages
             };
             yield this.send_data('received_message', data);
+            // this.controller_register.run_controller("ChatsController", "load_chat", message.chat, "menu_chats");
             if (message.notificate) {
                 let notif = new Notification({
                     title: message.sender_name,
@@ -122,6 +134,7 @@ class MessagesController extends Controller_1.Controller {
     }
     send_message({ id, text, file }) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(file);
             let self_info = yield this.get_self_info();
             let chat = yield ChatModel_1.ChatModel.findOne(id);
             if (!chat) {
@@ -162,7 +175,7 @@ class MessagesController extends Controller_1.Controller {
                 fileModel.file = file.file;
                 fileModel.name = file.name;
                 fileModel.type = file.type;
-                fileModel.path = (yield this.get_me(self_info.id)).downloads;
+                fileModel.path = (yield AccountModel_1.AccountModel.get_me(self_info.id)).downloads;
                 yield fileModel.save();
                 Helpers_1.save_file(fileModel);
                 message.files = [fileModel];
@@ -185,6 +198,13 @@ class MessagesController extends Controller_1.Controller {
         });
     }
     ;
+    // async show_message_notification(message_id:string){
+    //     let message = await MessageModel.find({
+    //         where:{id:message_id},
+    //         relations:['sender','chat'],
+    //     })[0];
+    //     message.fill_sender_data();
+    // }
     message_delivered(message_d) {
         return __awaiter(this, void 0, void 0, function* () {
             let message = yield MessageModel_1.MessageModel.findOne(message_d.userid);
@@ -247,7 +267,7 @@ class MessagesController extends Controller_1.Controller {
                     fileModel.name = files[num].name;
                     fileModel.type = files[num].type;
                     fileModel.preview = Helpers_1.check_file_preview(files[num].type);
-                    fileModel.path = (yield this.get_me(self_info.id)).downloads;
+                    fileModel.path = AccountModel_1.AccountModel.get_me(self_info.id)["downloads"];
                     if (fileModel.preview) {
                         fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
                     }
@@ -271,6 +291,12 @@ class MessagesController extends Controller_1.Controller {
             let userModel;
             if (sender)
                 userModel = yield UserModel_1.UserModel.findOne(sender.address);
+            // if (stamp) {
+            //     let time = stamp.split(" ")[1].split(":");
+            //     stamp = `${time[0]}:${time[1]}`;
+            // } else {
+            //     stamp = this.dxmpp.take_time()
+            // }
             let chat = yield ChatModel_1.ChatModel.findOne(room_data.id);
             chat.unread_messages += 1;
             yield chat.save();
@@ -297,7 +323,7 @@ class MessagesController extends Controller_1.Controller {
                     if (fileModel.preview) {
                         fileModel.file = (yield this.ipfs.get_file(fileModel.hash)).file;
                     }
-                    fileModel.path = (yield this.get_me(self_info.id)).downloads;
+                    fileModel.path = (yield AccountModel_1.AccountModel.get_me(self_info.id)).downloads;
                     yield fileModel.save();
                     messageModel.files.push(fileModel);
                 }

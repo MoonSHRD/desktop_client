@@ -17,7 +17,7 @@ class AuthController extends Controller {
         if (account)
             await this.auth(account);
         else
-            this.send_data(this.events.change_app_state, this.render('auth/123.pug'));
+            this.send_data(this.events.change_app_state, this.render('auth/auth.pug'));
     };
 
     generate_mnemonic() {
@@ -81,6 +81,7 @@ class AuthController extends Controller {
         let account = new AccountModel();
         account.privKey = loom_data.priv;
         account.passphrase = data.mnemonic;
+        account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
         account.user = user;
         await account.save();
 
