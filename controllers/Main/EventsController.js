@@ -9,6 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
+const axios = require('axios');
+const os = require('os');
+var fs = require('fs');
+var unzip = require('unzip');
+const electron_download_manager_1 = require("electron-download-manager");
 const Controller_1 = require("../Controller");
 const ChatModel_1 = require("../../models/ChatModel");
 const EventModel_1 = require("../../models/EventModel");
@@ -54,6 +59,52 @@ class EventsController extends Controller_1.Controller {
             this.send_data(this.events.change_app_state, this.render(`loading/loading.pug`));
         });
     }
+    update_server(os, file) {
+        return __awaiter(this, void 0, void 0, function* () {
+            axios.get(`http://localhost:8081/updates/${os}/${file}`)
+                .then((response) => {
+                electron_download_manager_1.download({
+                    url: `http://localhost:8081/updates/${os}/${file}`,
+                    onProgress: (percentage) => {
+                        console.log("percentage : " + percentage);
+                        // this.send_data('get_updates', percentage);
+                    }
+                }, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                        return;
+                    }
+                    var dirPath = __dirname + `/../../updates/${file}`;
+                    var destPath = __dirname + `/../../updates/arch`;
+                    fs.createReadStream(dirPath).pipe(unzip.Extract({ path: destPath }));
+                    console.log("DONE: " + info.url);
+                });
+            })
+                .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+                .then(function () {
+                // always executed
+            });
+        });
+    }
+    get_updates() {
+        return __awaiter(this, void 0, void 0, function* () {
+            // console.log(os.type())
+            let file = "arch.zip";
+            let get_os_type = os.type();
+            if (get_os_type === 'Linux') {
+                this.update_server(get_os_type, file);
+            }
+            else if (get_os_type === 'Windows_NT') {
+                this.update_server(get_os_type, file);
+            }
+            // this.ipfs.set_version();
+            // this.ipfs.get_version();
+        });
+    }
+    ;
 }
 module.exports = EventsController;
 //# sourceMappingURL=EventsController.js.map

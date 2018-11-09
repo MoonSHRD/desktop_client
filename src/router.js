@@ -98,6 +98,7 @@ class Router {
                 yield this.controller_register.queue_controller('MenuController', 'init_main');
                 this.loading = false;
             }
+            yield this.controller_register.queue_controller('EventsController', 'get_updates');
         }));
         /** Auth Events **/
         this.listen_event(this.ipcMain, 'submit_profile', (event, arg) => __awaiter(this, void 0, void 0, function* () {

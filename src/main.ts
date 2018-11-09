@@ -2,12 +2,16 @@
 // let Router = require('electron-routes');
 
 import {Router} from "./router";
-
+// let exec = require('child_process').exec;
 const {app, BrowserWindow} = require('electron');
 const locals = {/* ...*/};
 const setupPug = require('electron-pug');
 // const Router = require('./router');
+const DownloadManager = require("electron-download-manager");
 
+DownloadManager.register({
+    downloadFolder: app.getPath("downloads") + "/my-app"
+});
 app.on('ready', async () => {
     try {
         let pug = await setupPug({pretty: true}, locals);
@@ -27,6 +31,27 @@ app.on('ready', async () => {
         const router = new Router(mainWindow);
         router.start_loading();
     });
+
+    mainWindow.on('closed', () => {
+        // console.log('closed')
+        // let child = exec(`node ./src/just.js`, function (error, stdout, stderr) {
+        //
+        //
+        //         console.log('stdout: ', stdout);
+        //         console.log('stderr: ', stderr);
+        //         if (error !== null) {
+        //             console.log('exec error: ', error);
+        //         }
+        //     },
+        //     {
+        //         detached: true,
+        //         stdio: ['ignore', 'ignore', 'ignore'],
+        //     })
+        // child.unref();
+
+    })
+
+
 });
 
 

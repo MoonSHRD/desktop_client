@@ -10,10 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 // let Router = require('electron-routes');
 const router_1 = require("./router");
+// let exec = require('child_process').exec;
 const { app, BrowserWindow } = require('electron');
 const locals = { /* ...*/};
 const setupPug = require('electron-pug');
 // const Router = require('./router');
+const DownloadManager = require("electron-download-manager");
+DownloadManager.register({
+    downloadFolder: app.getPath("downloads") + "/my-app"
+});
 app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
     try {
         let pug = yield setupPug({ pretty: true }, locals);
@@ -32,6 +37,23 @@ app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
         mainWindow.show();
         const router = new router_1.Router(mainWindow);
         router.start_loading();
+    });
+    mainWindow.on('closed', () => {
+        // console.log('closed')
+        // let child = exec(`node ./src/just.js`, function (error, stdout, stderr) {
+        //
+        //
+        //         console.log('stdout: ', stdout);
+        //         console.log('stderr: ', stderr);
+        //         if (error !== null) {
+        //             console.log('exec error: ', error);
+        //         }
+        //     },
+        //     {
+        //         detached: true,
+        //         stdio: ['ignore', 'ignore', 'ignore'],
+        //     })
+        // child.unref();
     });
 }));
 app.on('window-all-closed', function () {

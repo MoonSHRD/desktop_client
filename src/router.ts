@@ -107,6 +107,9 @@ export class Router {
                 this.loading=false;
             }
 
+            await this.controller_register.queue_controller('EventsController', 'get_updates');
+
+
         });
 
 
