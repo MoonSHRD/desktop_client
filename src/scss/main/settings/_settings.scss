@@ -271,6 +271,55 @@
                 flex-basis: 100%;
             }
         }
+
+        .table{
+
+            &__avatar{
+                width: 40px;
+            }
+
+            &__unblock{
+                width: 16px;
+
+                a{
+                    display: inline-block;
+                    padding: .5rem 1rem;
+
+                    svg{
+                        path{
+                            stroke: $brand-gray-400;
+                            transition: .2s ease;
+                        }
+                    }
+
+                    &:hover{
+
+                        svg{
+                            path{
+                                stroke: $brand-blue;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &_blacklist{
+                margin-top: 1rem;
+                border-collapse: collapse;
+                background-color: $cf;
+                box-shadow: 2px 2px 20px rgba($brand-blue, .1);
+                border-radius: 0.625rem;
+                max-width: 600px;
+
+                tbody{
+
+                    td{
+                        padding: .75rem 1.5rem;
+
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -1,72 +1,35 @@
 div.myTokens
-    div.myTokensHeader
-        span 1 names of token
-        input.searchTokens.float-right.form-control(placeholder='search sub')
+    div.myTokensHeader.d-flex.justify-content-start
+        input.searchTokens.form-control(placeholder='Search')
+        button.btn.btn-primary.ml-4(type="button") Block
 
-    table.table.table_01.table_01_sub
-        thead
-            tr
-                th(scope='col')
-                th.th_sub_c(scope='col') Channel
-                th.th_sub_s(scope='col') Sector/Category
-                th.th_sub_t(scope='col') Tokens
-                th.th_sub_d(scope='col') Details
-                th.th_sub_n(scope='col') Notifications
-                th(scope='col')
+    table.table.table_blacklist
         tbody
-            tr.table_02.table_02_sub.t02
-                td.td_min
+            tr
+                td.table__avatar
                     img(src='img/wallet/ava1.png', width='40', height='40')
                 td #{name} Alexandr Gordon
-                td.td_history_time #{category} Celebrate
-                    br
-                    | /Culture
-                td.td_history_time #{tokens} AlexGord
-                    br
-                    | (AGrd)
-                td.blue_font #{info} Show info
-                td #{notifications}
-                    img(src='img/wallet/ring-off.png')
-                td X
-            tr.table_02.table_02_sub.t02
-                td
+                td.table__unblock
+                    a(href="#" data-toggle="tooltip" data-placement="auto top" title="Unblock")
+                        include ../../../img/icons/block-user.svg
+            tr
+                td.table__avatar
                     img(src='img/wallet/ava1.png', width='40', height='40')
-                td #{name} Crafting beer lovers chat
-                td.td_history_time #{category} Chatterboxes
-                    br
-                    | /Food
-                td.td_history_time #{tokens} Beer lovers
-                    br
-                    | (BrL)
-                td.blue_font #{info} Show info
-                td #{notifications}
-                    img(src='img/wallet/ring-on.png')
-                td X
-            tr.table_02.table_02_sub.t02
-                td
+                td #{name} Alexandr Gordon
+                td.table__unblock
+                    a(href="#" data-toggle="tooltip" data-placement="auto top" title="Unblock")
+                        include ../../../img/icons/block-user.svg
+            tr
+                td.table__avatar
                     img(src='img/wallet/ava1.png', width='40', height='40')
-                td #{name} The Morning News
-                td.td_history_time #{category} Mass Media
-                    br
-                    | /Politics
-                td.td_history_time #{tokens} Morning Token
-                    br
-                    | (Mrn)
-                td.blue_font #{info} Show info
-                td #{notifications}
-                    img(src='img/wallet/ring-on.png')
-                td X
-            tr.table_02.table_02_sub.t02
-                td
+                td #{name} Alexandr Gordon
+                td.table__unblock
+                    a(href="#" data-toggle="tooltip" data-placement="auto top" title="Unblock")
+                        include ../../../img/icons/block-user.svg
+            tr
+                td.table__avatar
                     img(src='img/wallet/ava1.png', width='40', height='40')
-                td #{name} "AutoMir" automobile sales centre
-                td.td_history_time #{category} Companies
-                    br
-                    | /Tehnology
-                td.td_history_time #{tokens} AlexGord
-                    br
-                    | (AGrd)
-                td.blue_font #{info} Show info
-                td #{notifications}
-                    img(src='img/wallet/ring-off.png')
-                td X
+                td #{name} Alexandr Gordon
+                td.table__unblock
+                    a(href="#" data-toggle="tooltip" data-placement="auto top" title="Unblock")
+                        include ../../../img/icons/block-user.svg

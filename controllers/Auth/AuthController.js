@@ -51,15 +51,22 @@ class AuthController extends Controller_1.Controller {
             this.grpc.SetPrivKey(account.privKey);
             console.log('1');
             if (first) {
-                let identyti_tx = yield this.loom.set_identity(account.user.name);
-                console.log('2');
-                // console.log(identyti_tx);
-                this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
-                console.log('3');
-                console.log(user);
-                let suc = yield this.grpc.CallMethod('SetObjData', { pubKey: this.loom.priv_as_hex(), obj: 'user', data: user });
-                console.log('4');
-                // console.log(suc);
+                let time = 2000;
+                while (true) {
+                    try {
+                        let identyti_tx = yield this.loom.set_identity(account.user.name);
+                        console.log(identyti_tx);
+                        this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
+                        break;
+                    }
+                    catch (e) {
+                        console.log("Error with set identity. Reset...");
+                        yield new Promise(resolve => {
+                            setTimeout(resolve, time);
+                            time = time * 2;
+                        });
+                    }
+                }
             }
             this.grpc.StartPinging();
             console.log('5');
@@ -92,6 +99,7 @@ class AuthController extends Controller_1.Controller {
             account.passphrase = data.mnemonic;
             account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
             account.user = user;
+            account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
             yield account.save();
             yield this.auth(account, true);
         });

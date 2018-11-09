@@ -34,9 +34,12 @@ class ChatsController extends Controller {
                 chat.text='Вы: '+chat.text;
         }
 
-        // console.log(chat);
+        // console.log("Load chat:", chat.id);
         let html = this.render('main/chatsblock/chats/imDialog.pug', chat);
-        this.send_data('buddy', {id: chat.id, type: general_chat_type, html: html})
+        await this.send_data('buddy', {id: chat.id, type: general_chat_type, html: html});
+        if (chat.active === true) {
+            await this.controller_register.run_controller("MessagesController", "get_chat_messages", {id:chat.id,type:chat.type});
+        }
     }
 
     async user_change_state(user, state, statusText, resource) {
@@ -73,13 +76,13 @@ class ChatsController extends Controller {
         }
     }
 
-    async load_chats(type: string, first: boolean = false) {
+    async load_chats(type: string) {
         console.log('load_chats');
         let self_info = await this.get_self_info();
 
         let chats = await ChatModel.get_chats_with_last_msgs(self_info);
 
-        // console.log(chats);
+
         let menu_chat: string;
         if (type === this.chat_types.user) {
             menu_chat = this.chat_to_menu.user;
@@ -88,11 +91,14 @@ class ChatsController extends Controller {
         }
 
         if (!chats.length) return;
-        await chats.forEach(async (chat) => {
-            if (chat.id === '0x0000000000000000000000000000000000000000_' + self_info.id && first)
-                chat.active = true;
-            await this.load_chat(chat, menu_chat);
-        });
+        for (let num in chats) {
+            chats[num].active = (chats[num].id === (await this.get_me(self_info.id)).last_chat);
+            await this.load_chat(chats[num], menu_chat);
+        }
+        // await chats.forEach(async (chat) => {
+        //     chat.active = (chat.id === (await this.get_me(self_info.id)).last_chat);
+        //     await this.load_chat(chat, menu_chat);
+        // });
     }
 
     async show_chat_info(data) {
@@ -171,13 +177,11 @@ class ChatsController extends Controller {
             await this.grpc.CallMethod('SetObjData',{pubKey: this.grpc.pubKey,obj:'community',data:chat});
             await this.load_chat(chat,this.chat_types.group);
         } else {
-            // await this.load_chat(chat, this.chat_to_menu.group);
             let count = (messages.length-1).toString();
             console.log('count: ',count);
             for (let num in messages){
                 let message=messages[num];
-                // let buf = message.time.split(" ");
-                // message.time = `${buf[0]} ${buf[1]}`;
+
                 let room_data = {id: message.sender};
                 let sender = {address: message.sender, domain: "localhost"};
                 console.log('num: ',num);
@@ -190,7 +194,6 @@ class ChatsController extends Controller {
 
     async create_group(group_data) {
         console.log(group_data);
-        // let group_type=group_data.type?group_data.type:this.group_chat_types.channel;
         if (group_data.substype=='unfree'){
             // let price=64;
             let rate = 1/group_data.token_price;
@@ -253,7 +256,6 @@ class ChatsController extends Controller {
     async found_groups(result: any) {
 
         this.queried_chats = {};
-        // console.log(result);
 
         result.forEach(async (group) => {
             console.log(group);

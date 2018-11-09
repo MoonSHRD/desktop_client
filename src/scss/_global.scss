@@ -327,3 +327,42 @@ img{
         }
     }
 }
+
+/* Tooltips */
+.tooltip{
+
+    &-inner {
+        background-color: $brand-gray-700;
+        @include fz(14);
+        border-radius: .85em;
+        color: $primary-text;
+    }
+}
+.bs-tooltip-top {
+    .arrow {
+        &::before {
+            border-top-color: $brand-gray-700;
+        }
+    }
+}
+.bs-tooltip-right {
+    .arrow {
+        &::before {
+            border-right-color: $brand-gray-700;
+        }
+    }
+}
+.bs-tooltip-bottom {
+    .arrow {
+        &::before {
+            border-bottom-color: $brand-gray-700;
+        }
+    }
+}
+.bs-tooltip-left {
+    .arrow {
+        &::before {
+            border-left-color: $brand-gray-700;
+        }
+    }
+}
