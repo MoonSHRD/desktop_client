@@ -7,11 +7,13 @@ import {UserModel} from "../models/UserModel";
 import {ControllerRegister} from "./ControllerRegister";
 import {Loom} from "../loom/loom";
 import {Ipfs} from "../ipfs/ipfs";
+import {Grpc} from "../grpc/grpc";
 
 export abstract class Controller {
     protected pug = Pug;
     protected controller_register = ControllerRegister.getInstance();
     protected window: any;
+    protected grpc = Grpc.getIntance();
     protected dxmpp = dxmpp.getInstance();
     protected dxmpp_config = config;
     protected pug_options = helper.pug_options;

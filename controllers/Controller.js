@@ -16,10 +16,12 @@ const AccountModel_1 = require("../models/AccountModel");
 const ControllerRegister_1 = require("./ControllerRegister");
 const loom_1 = require("../loom/loom");
 const ipfs_1 = require("../ipfs/ipfs");
+const grpc_1 = require("../grpc/grpc");
 class Controller {
     constructor(window) {
         this.pug = Pug;
         this.controller_register = ControllerRegister_1.ControllerRegister.getInstance();
+        this.grpc = grpc_1.Grpc.getIntance();
         this.dxmpp = moonshard_core_1.dxmpp.getInstance();
         this.dxmpp_config = env_config_1.config;
         this.pug_options = var_helper_1.helper.pug_options;

@@ -9,6 +9,10 @@ import {Helper} from "../Helpers";
 class ChatsController extends Controller {
 
     public queried_chats: object;
+    public found_chats: {
+        users:{},
+        chats:{},
+    };
 
     async init_chats() {
         let self_info = await this.get_self_info();
@@ -28,7 +32,7 @@ class ChatsController extends Controller {
                 chat.text='Вы: '+chat.text;
         }
 
-        console.log("Load chat:", chat.id);
+        // console.log("Load chat:", chat.id);
         let html = this.render('main/chatsblock/chats/imDialog.pug', chat);
         await this.send_data('buddy', {id: chat.id, type: general_chat_type, html: html});
         if (chat.active === true) {
@@ -161,7 +165,8 @@ class ChatsController extends Controller {
         await chat.save();
 
         if (room_data.role==='moderator'){
-            await this.load_chat(chat,this.chat_types.group)
+            await this.grpc.CallMethod('SetObjData',{pubKey: this.grpc.pubKey,obj:'community',data:chat});
+            await this.load_chat(chat,this.chat_types.group);
         } else {
             let count = (messages.length-1).toString();
             console.log('count: ',count);
@@ -196,7 +201,38 @@ class ChatsController extends Controller {
     }
 
     async find_groups(group_name: string) {
-        this.dxmpp.find_group(group_name);
+        this.found_chats.users={};
+        this.found_chats.chats={};
+        let self_info = await this.get_self_info();
+        let data = await this.grpc.CallMethod('GetObjsData',{str: group_name,obj:'all',prt:0});
+        if (data.err)
+            throw data.err;
+        console.log(data);
+        let fData=JSON.parse(data.data.data);
+        console.log(fData);
+        let users=fData.Users;
+        for (let i in users){
+            let user = users[i];
+            // user.id=ChatModel.get_user_chat_id(self_info.id,user.id);
+            user.name=user.firstname+" "+user.lastname;
+            user.type=this.chat_types.user;
+            user.online=user.last_active<(Date.now()+1000*60*5);
+            user.domain='localhost';
+            this.found_chats.users[user.id]=user;
+            this.send_data('found_chats', this.render('main/chatsblock/chats/imDialog.pug', user));
+        }
+        let communities=fData.Communities;
+        for (let i in communities){
+            let community = communities[i];
+            community.domain='localhost';
+            let chat = await ChatModel.findOne(community.id);
+            if (!chat)
+                community.type = this.group_chat_types.join_channel;
+            this.found_chats.chats[community.id]=community;
+            this.send_data('found_chats', this.render('main/chatsblock/chats/imDialog.pug', community));
+        }
+
+        // this.dxmpp.find_group(group_name);
     }
 
     async channel_suggestion() {
@@ -209,6 +245,7 @@ class ChatsController extends Controller {
     }
 
     async found_groups(result: any) {
+
         this.queried_chats = {};
 
         result.forEach(async (group) => {

@@ -23,6 +23,7 @@ let UserModel = class UserModel extends typeorm_1.BaseEntity {
         this.avatar = '';
         this.online = false;
         this.self = false;
+        this.last_active = 0;
     }
 };
 __decorate([
@@ -61,6 +62,10 @@ __decorate([
     typeorm_1.Column(),
     __metadata("design:type", Boolean)
 ], UserModel.prototype, "self", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Number)
+], UserModel.prototype, "last_active", void 0);
 __decorate([
     typeorm_1.OneToOne(type => AccountModel_1.AccountModel, account => account.user),
     typeorm_1.JoinColumn(),

@@ -136,6 +136,15 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
             return opps.find(x => x.id !== account.id);
         });
     }
+    static get_chat_opponent_id(chat_id, id) {
+        let opps = chat_id.split("_");
+        if (opps[0] == id) {
+            return opps[1];
+        }
+        else {
+            return opps[0];
+        }
+    }
     get_user_chat_meta() {
         return __awaiter(this, void 0, void 0, function* () {
             let data = (yield ChatModel_1.get_chat_opponent(this.id));

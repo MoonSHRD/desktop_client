@@ -36,16 +36,20 @@ class AuthController extends Controller_1.Controller {
     ;
     auth(account, first = false) {
         return __awaiter(this, void 0, void 0, function* () {
+            let user = yield this.get_self_info();
+            // let user_json=JSON.stringify(user);
             if (this.connection_tries === 9)
                 this.connection_tries = 0;
             else
                 this.connection_tries += 1;
             yield this.ipfs.connect();
-            console.log('connected');
-            console.log(account);
+            console.log('ipfs connected');
+            // console.log(account);
             // await this.ipfs.ipfs_info();
             yield this.loom.connect(account.privKey);
             console.log('loom connected');
+            this.grpc.SetPrivKey(account.privKey);
+            console.log('1');
             if (first) {
                 let time = 2000;
                 while (true) {
@@ -64,12 +68,16 @@ class AuthController extends Controller_1.Controller {
                     }
                 }
             }
-            let user = yield this.get_self_info();
+            this.grpc.StartPinging();
+            console.log('5');
+            this.grpc.StartUserPinging();
+            console.log('6');
             this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
             account.host = this.dxmpp_config.host;
             account.jidhost = this.dxmpp_config.jidhost;
             account.port = this.dxmpp_config.port + this.connection_tries;
             yield this.dxmpp.connect(account);
+            console.log('7');
         });
     }
     save_acc(data) {

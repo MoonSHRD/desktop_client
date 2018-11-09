@@ -133,6 +133,15 @@ export class ChatModel extends BaseEntity {
         return opps.find(x => x.id !== account.id);
     }
 
+    static get_chat_opponent_id(chat_id:string,id:string):string{
+        let opps = chat_id.split("_");
+        if (opps[0]==id) {
+            return opps[1];
+        } else {
+            return opps[0];
+        }
+    }
+
     async get_user_chat_meta():Promise<string>{
         let data:UserModel=(await ChatModel.get_chat_opponent(this.id));
         this.avatar=data.avatar;

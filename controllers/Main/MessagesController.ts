@@ -113,6 +113,20 @@ class MessagesController extends Controller {
     async send_message({id, text, file}) {
         let self_info = await this.get_self_info();
         let chat = await ChatModel.findOne(id);
+        if (!chat) {
+            let user = this.controller_register.get_controller_parameter('ChatsController','found_chats').users[id];
+            let userModel=new UserModel();
+            userModel.id=user.id;
+            userModel.domain='localhost';
+            userModel.firstname=user.firstname;
+            userModel.lastname=user.lastname;
+            userModel.name=user.firstname+" "+user.lastname;
+            userModel.avatar=user.avatar;
+            await userModel.save();
+            chat = new ChatModel();
+            chat.id=ChatModel.get_chat_opponent_id(id,self_info.id);
+            await chat.save();
+        }
         // let date = new Date();
         let message = new MessageModel();
         message.sender = self_info;

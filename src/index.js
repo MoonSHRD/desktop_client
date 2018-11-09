@@ -507,6 +507,17 @@ window.onload = function () {
     });
 
     /*
+     * Tooltips init
+     */
+    $(document)
+        .on('mouseover', '[data-toggle="tooltip"]', function () {
+            $(this).tooltip('show');
+        })
+        .on('mouseout', '[data-toogle="tooltip"]', function () {
+            $(this).tooltip('hide');
+        });
+
+    /*
      * Форма создная группы/канала
      */
 
