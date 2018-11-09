@@ -260,13 +260,11 @@ window.onload = function () {
     $(document).on('paste','.send_message__input',function(e) {
         // console.log('paste!');
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
-        if($(this).val()!=='')
-        {
+        let val = $(this).text();
+        if($(this).val() !==''){
             $(this).attr('rows', $(this).attr('rows'));
-
-        }else {
-            ResizeTextArea(this,10);
-
+        } else {
+            ResizeTextArea(this,1);
         }
         console.log(text);
 
@@ -395,7 +393,7 @@ window.onload = function () {
 
     ipcRenderer.on('reload_chat', (event, obj) => {
         $('#messaging_block').html(obj);
-        $('.send_message_input').focus();
+        $('[data-msg]').focus();
     });
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
@@ -448,14 +446,13 @@ window.onload = function () {
         let chat = $this.attr('id');
         ipcRenderer.send('change_last_chat', chat);
 
-        $this.find('[data-name=unread_messages]').hide();
-        $this.find('[data-name=unread_messages]').text('0');
+        $this.find('[data-name="unread_messages"]').hide();
+        $this.find('[data-name="unread_messages"]').text('0');
 
         if(!($this.hasClass('active_dialog') && $this.hasClass('have_history'))) {
             ipcRenderer.send('get_chat_msgs', chat);
             $this.addClass('have_history');
         }
-
     });
 
     $(document).on('click', '.walletMenu li', function (e) {
@@ -846,8 +843,9 @@ window.onload = function () {
     }
 
 // функция вызывается при каждом нажатии клавиши в области ввода текста
-    function ResizeTextArea(the_form,min_rows) {
+    function ResizeTextArea(the_form, min_rows) {
         the_form.rows = Math.max(min_rows, countLines(the_form.value,the_form.cols) );
+        console.log(the_form.value, the_form.cols, Math.max(min_rows, countLines(the_form.value,the_form.cols));
     }
 
     $(document).on('click', '[data-toggle="switcher"]', function(e) {
