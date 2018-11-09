@@ -106,7 +106,6 @@ export class Router {
                 await this.controller_register.queue_controller('MenuController', 'init_main');
                 this.loading=false;
             }
-
         });
 
 
@@ -221,6 +220,7 @@ export class Router {
         });
 
         this.listen_event(this.ipcMain, 'get_chat_msgs', async (event, arg) => {
+            console.log(arg);
             await this.controller_register.run_controller('MessagesController', 'get_chat_messages', arg);
         });
 

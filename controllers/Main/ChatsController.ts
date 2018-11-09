@@ -9,6 +9,10 @@ import {Helper} from "../Helpers";
 class ChatsController extends Controller {
 
     public queried_chats: object;
+    public found_chats= {
+        users:{},
+        chats:{},
+    };
 
     async init_chats() {
         let self_info = await this.get_self_info();
@@ -20,7 +24,9 @@ class ChatsController extends Controller {
 
     private async load_chat(chat: ChatModel, general_chat_type) {
         let self_info = await this.get_self_info();
-
+        // if (chat.type === this.chat_types.user && chat.hasOwnProperty('get_user_chat_meta')) {
+        //     await chat.get_user_chat_meta();
+        // }
         if (chat.time)
             chat.time=Helper.formate_date(new Date(chat.time),{locale:'ru',for:'chat'});
         if (chat.senderId===self_info.id){
@@ -28,18 +34,15 @@ class ChatsController extends Controller {
                 chat.text='Вы: '+chat.text;
         }
 
-        console.log("Load chat:", chat.id);
+        // console.log(chat);
         let html = this.render('main/chatsblock/chats/imDialog.pug', chat);
-        await this.send_data('buddy', {id: chat.id, type: general_chat_type, html: html});
-        if (chat.active === true) {
-            await this.controller_register.run_controller("MessagesController", "get_chat_messages", chat.id);
-        }
+        this.send_data('buddy', {id: chat.id, type: general_chat_type, html: html})
     }
 
     async user_change_state(user, state, statusText, resource) {
         let self_info = await this.get_self_info();
         let userModel = await UserModel.findOne(user.id);
-
+        // let e;
         if (userModel) {
             userModel.online = state === 'online';
             await userModel.save();
@@ -70,13 +73,13 @@ class ChatsController extends Controller {
         }
     }
 
-    async load_chats(type: string) {
+    async load_chats(type: string, first: boolean = false) {
         console.log('load_chats');
         let self_info = await this.get_self_info();
 
         let chats = await ChatModel.get_chats_with_last_msgs(self_info);
 
-
+        // console.log(chats);
         let menu_chat: string;
         if (type === this.chat_types.user) {
             menu_chat = this.chat_to_menu.user;
@@ -85,17 +88,15 @@ class ChatsController extends Controller {
         }
 
         if (!chats.length) return;
-        for (let num in chats) {
-            chats[num].active = (chats[num].id === (await this.get_me(self_info.id)).last_chat);
-            await this.load_chat(chats[num], menu_chat);
-        }
-        // await chats.forEach(async (chat) => {
-        //     chat.active = (chat.id === (await this.get_me(self_info.id)).last_chat);
-        //     await this.load_chat(chat, menu_chat);
-        // });
+        await chats.forEach(async (chat) => {
+            if (chat.id === '0x0000000000000000000000000000000000000000_' + self_info.id && first)
+                chat.active = true;
+            await this.load_chat(chat, menu_chat);
+        });
     }
 
     async show_chat_info(data) {
+        let self_info = await this.get_self_info();
         if (Object.values(this.group_chat_types).includes(data.type)) {
             switch (data.type) {
                 case this.group_chat_types.channel: {
@@ -105,7 +106,13 @@ class ChatsController extends Controller {
                 }
             }
         } else if (data.type === this.chat_types.user) {
-            let user = await ChatModel.get_chat_opponent(data.id);
+            let user;
+            try {
+                user = await ChatModel.get_chat_opponent(data.id,self_info.id);
+            } catch (e) {
+                user = this.controller_register.get_controller_parameter('ChatsController', 'found_chats').users[data.id];
+                user.id=ChatModel.get_chat_opponent_id(data.id,self_info.id)
+            }
             this.send_data('get_my_vcard', this.render('main/modal_popup/modal_content.pug', user));
         }
     }
@@ -127,7 +134,7 @@ class ChatsController extends Controller {
         await user.save();
         user.type = this.chat_types.user;
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
-        await chat.get_user_chat_meta();
+        await chat.get_user_chat_meta(self_info.id);
         await this.load_chat(chat, this.chat_to_menu.user);
     }
 
@@ -161,25 +168,29 @@ class ChatsController extends Controller {
         await chat.save();
 
         if (room_data.role==='moderator'){
-            await this.load_chat(chat,this.chat_types.group)
+            await this.grpc.CallMethod('SetObjData',{pubKey: this.grpc.pubKey,obj:'community',data:chat});
+            await this.load_chat(chat,this.chat_types.group);
         } else {
+            // await this.load_chat(chat, this.chat_to_menu.group);
             let count = (messages.length-1).toString();
             console.log('count: ',count);
             for (let num in messages){
                 let message=messages[num];
-
+                // let buf = message.time.split(" ");
+                // message.time = `${buf[0]} ${buf[1]}`;
                 let room_data = {id: message.sender};
                 let sender = {address: message.sender, domain: "localhost"};
                 console.log('num: ',num);
                 await this.controller_register.run_controller("MessagesController", "received_group_message",
                     {room_data, message:message.message, sender, stamp:message.time, files:message.files, fresh:(num===count), notificate:false});
             }
-            await this.controller_register.run_controller("MessagesController", "get_chat_messages", room_data.id)
+            await this.controller_register.run_controller("MessagesController", "get_chat_messages", {id:room_data.id,type:room_data.type})
         }
     }
 
     async create_group(group_data) {
         console.log(group_data);
+        // let group_type=group_data.type?group_data.type:this.group_chat_types.channel;
         if (group_data.substype=='unfree'){
             // let price=64;
             let rate = 1/group_data.token_price;
@@ -196,7 +207,38 @@ class ChatsController extends Controller {
     }
 
     async find_groups(group_name: string) {
-        this.dxmpp.find_group(group_name);
+        this.found_chats.users={};
+        this.found_chats.chats={};
+        let self_info = await this.get_self_info();
+        let data = await this.grpc.CallMethod('GetObjsData',{str: group_name,obj:'all',prt:0});
+        if (data.err)
+            throw data.err;
+        console.log(data);
+        let fData=JSON.parse(data.data.data);
+        console.log(fData);
+        let users=fData.Users;
+        for (let i in users){
+            let user = users[i];
+            user.id=ChatModel.get_user_chat_id(self_info.id,user.id);
+            user.name=user.firstname+" "+user.lastname;
+            user.type=this.chat_types.user;
+            user.online=user.last_active<(Date.now()+1000*60*5);
+            user.domain='localhost';
+            this.found_chats.users[user.id]=user;
+            this.send_data('found_chats', this.render('main/chatsblock/chats/imDialog.pug', user));
+        }
+        let communities=fData.Communities;
+        for (let i in communities){
+            let community = communities[i];
+            community.domain='localhost';
+            let chat = await ChatModel.findOne(community.id);
+            if (!chat)
+                community.type = this.group_chat_types.join_channel;
+            this.found_chats.chats[community.id]=community;
+            this.send_data('found_chats', this.render('main/chatsblock/chats/imDialog.pug', community));
+        }
+
+        // this.dxmpp.find_group(group_name);
     }
 
     async channel_suggestion() {
@@ -209,7 +251,9 @@ class ChatsController extends Controller {
     }
 
     async found_groups(result: any) {
+
         this.queried_chats = {};
+        // console.log(result);
 
         result.forEach(async (group) => {
             console.log(group);

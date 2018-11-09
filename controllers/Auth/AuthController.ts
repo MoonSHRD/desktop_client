@@ -17,7 +17,7 @@ class AuthController extends Controller {
         if (account)
             await this.auth(account);
         else
-            this.send_data(this.events.change_app_state, this.render('auth/auth.pug'));
+            this.send_data(this.events.change_app_state, this.render('auth/123.pug'));
     };
 
     generate_mnemonic() {
@@ -25,41 +25,42 @@ class AuthController extends Controller {
     };
 
     private async auth(account: AccountModel,first:boolean=false) {
+        let user=await this.get_self_info();
+        // let user_json=JSON.stringify(user);
         if (this.connection_tries === 9)
             this.connection_tries=0;
         else
             this.connection_tries+=1;
         await this.ipfs.connect();
-        console.log('connected');
-        console.log(account);
+        console.log('ipfs connected');
+        // console.log(account);
         // await this.ipfs.ipfs_info();
         await this.loom.connect(account.privKey);
         console.log('loom connected');
-        if (first) {
-            let time = 2000;
-            while (true) {
-                try {
-                    let identyti_tx = await this.loom.set_identity(account.user.name);
-                    console.log(identyti_tx);
-                    this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
-                    break;
-                }
-                catch (e) {
-                    console.log("Error with set identity. Reset...");
-                    await new Promise(resolve => {
-                        setTimeout(resolve, time);
-                        time = time*2;
-                    });
-                }
-            }
 
+        this.grpc.SetPrivKey(account.privKey);
+        console.log('1');
+        if (first) {
+            let identyti_tx= await this.loom.set_identity(account.user.name);
+            console.log('2');
+            // console.log(identyti_tx);
+            this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
+            console.log('3');
+            console.log(user);
+            let suc=await this.grpc.CallMethod('SetObjData',{pubKey: this.loom.priv_as_hex(),obj:'user',data:user});
+            console.log('4');
+            // console.log(suc);
         }
-        let user=await this.get_self_info();
+        this.grpc.StartPinging();
+        console.log('5');
+        this.grpc.StartUserPinging();
+        console.log('6');
         this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
         account.host = this.dxmpp_config.host;
         account.jidhost = this.dxmpp_config.jidhost;
         account.port = this.dxmpp_config.port+this.connection_tries;
-        await this.dxmpp.connect(account)
+        await this.dxmpp.connect(account);
+        console.log('7');
     }
 
     async save_acc(data) {
@@ -81,7 +82,6 @@ class AuthController extends Controller {
         account.privKey = loom_data.priv;
         account.passphrase = data.mnemonic;
         account.user = user;
-        account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
         await account.save();
 
         await this.auth(account,true);

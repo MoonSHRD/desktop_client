@@ -176,14 +176,12 @@ window.onload = function () {
         console.log(arg);
     });
 
-    let widthMsgWindow = (target = '[data-msgs-window]') => {
+    let widthMsgWindow = (target) => {
         let msgWindow =  document.querySelector(target);
-        if (msgWindow) {
-            if (msgWindow.offsetWidth > 900) {
-                msgWindow.classList.add('messaging_block_lg');
-            } else {
-                msgWindow.classList.remove('messaging_block_lg');
-            }
+        if (msgWindow.offsetWidth > 900){
+            msgWindow.classList.add('messaging_block_lg');
+        } else {
+            msgWindow.classList.remove('messaging_block_lg');
         }
     };
 
@@ -258,7 +256,7 @@ window.onload = function () {
     });
 
     $(document).on('paste','.send_message__input',function(e) {
-        // console.log('paste!');
+        console.log('paste!');
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
         if($(this).val()!=='')
         {
@@ -327,7 +325,7 @@ window.onload = function () {
         $('[data-msg-list]').append(obj);
     });
 
-    let scrollDown = (target = '[data-msg-history]') => {
+    let scrollDown = (target) => {
         let targetBlock = document.querySelector(target);
         targetBlock.scrollTop = targetBlock.scrollHeight;
     };
@@ -342,6 +340,7 @@ window.onload = function () {
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
         $('[data-msg-list]').append(obj);
+        scrollDown('[data-msg-history]');
     });
 
     ipcRenderer.on('received_message', (event, obj) => {
@@ -445,8 +444,7 @@ window.onload = function () {
 
         $this.siblings().removeClass('have_history');
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
-        let chat = $this.attr('id');
-        ipcRenderer.send('change_last_chat', chat);
+        let chat = {id:$this.attr('id'),type:$this.attr('data-type')};
 
         $this.find('[data-name=unread_messages]').hide();
         $this.find('[data-name=unread_messages]').text('0');
@@ -801,10 +799,8 @@ window.onload = function () {
 
     $(document).on('mousedown','#resize01',function(e) {
         console.log('resize_clicked');
+        curr_width = p.width();
         unlock = true;
-        $(document).on('mouseup', function(e) {
-            ipcRenderer.send('change_chats_size', p.width());
-        });
     });
 
     $(document).on('click','[data-id=add_new_user]',function(e) {
@@ -826,7 +822,10 @@ window.onload = function () {
         while ( true ) {
             last = strtocount.indexOf('\n', last+1);
             hard_lines ++;
+            // if ( hard_lines == 10) break;
             if ( last == -1 ) break;
+            // console.log('hi')
+            // console.log(hard_lines)
         }
         var soft_lines = Math.ceil(strtocount.length / (cols-1));
         var hard = eval('hard_lines ' + unescape('%3e') + 'soft_lines;');
@@ -863,7 +862,7 @@ window.onload = function () {
     document.addEventListener('scroll', function (event) {
         if (event.target.id === 'messaging_history') { // or any other filtering condition
             let {bottom, height} = scrollBottom();
-            if ( bottom > ( height / 2 ) ) {
+            if ( bottom > height ) {
                 $('[data-toggle="scrollDown"]').addClass('show');
             } else {
                 $('[data-toggle="scrollDown"]').removeClass('show');
@@ -879,6 +878,14 @@ window.onload = function () {
         });
     });
 
+    // ipcRenderer.on("change_directory", (event) => {
+    //     dialog.showOpenDialog({
+    //         properties: ["openDirectory","openFile"]
+    //     },async function (fileNames) {
+    //         console.log("file:", fileNames);
+    //         ipcRenderer.send("change_directory");
+    //     })
+    // });
     $(document).on('click', '[data-toggle="scrollDown"]', function (e){
         e.preventDefault();
         scrollDownAnimate();
@@ -894,8 +901,8 @@ window.onload = function () {
         }
     });
     $(document).on('on.switch', function () {
-        $('.bl-hide-1').val('');
-        ipcRenderer.send('load_chats', 'menu_chats');
+        $(".bl-hide-1").val("");
+        ipcRenderer.send("load_chats", "menu_chats");
         $('.bl-hide').css('display', 'block');
         $('.bl-hide-1').css('display', 'none');
         $('.chats').css('height', 'calc(100% - 153px)');
@@ -903,31 +910,12 @@ window.onload = function () {
 
     });
     $(document).on('off.switch', function () {
-        let text = $('.bl-hide').val();
-        $('.bl-hide-1').val(text);
+        $('.bl-hide').val("");
         $('.bl-hide').css('display', 'none');
         $('.bl-hide-1').css('display', 'block');
         $('.chats').css('height', 'calc(100% - 200px)');
+
     });
 
-    $(window).resize(function(){
-        if ($('#main-menu').length !== 0) {
-            ipcRenderer.send('change_size_window', $(window).width(), $(window).height());
-        }
-    });
-
-   ipcRenderer.on('set_windows_size', (event, obj) => {
-       window.resizeTo(obj.width, obj.height);
-       // $(window).outerWidth(obj.width);
-       // $(window).outerHeight(obj.height);
-   });
-
-    ipcRenderer.on('set_chats_width', (event, width) => {
-        let p = $('.dialogs');
-        let d = $('.messaging_block');
-        widthMsgWindow('[data-msgs-window]');
-        p.css('width', width);
-        d.css('margin-left', width);
-    });
 
 };

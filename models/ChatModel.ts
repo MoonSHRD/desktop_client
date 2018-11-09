@@ -126,15 +126,24 @@ export class ChatModel extends BaseEntity {
         return (await ChatModel.get_chat_with_users(chat_id)).users;
     }
 
-    static async get_chat_opponent(chat_id:string):Promise<UserModel>{
-        let opps = await ChatModel.get_chat_users(chat_id);
-        let account_id = 1;
-        let account = (await AccountModel.find({relations: ["user"], where: {id: account_id}, take: 1}))[0].user;
-        return opps.find(x => x.id !== account.id);
+    static async get_chat_opponent(chat_id:string,self_id:string):Promise<UserModel>{
+        let opp_id = await ChatModel.get_chat_opponent_id(chat_id,self_id);
+        return await UserModel.findOne(opp_id);
+        // let account_id = 1;
+        // let account = (await AccountModel.find({relations: ["user"], where: {id: account_id}, take: 1}))[0].user;
     }
 
-    async get_user_chat_meta():Promise<string>{
-        let data:UserModel=(await ChatModel.get_chat_opponent(this.id));
+    static get_chat_opponent_id(chat_id:string,self_id:string):string{
+        let opps = chat_id.split("_");
+        if (opps[0]==self_id) {
+            return opps[1];
+        } else {
+            return opps[0];
+        }
+    }
+
+    async get_user_chat_meta(self_id:string):Promise<string>{
+        let data:UserModel=(await ChatModel.get_chat_opponent(this.id,self_id));
         this.avatar=data.avatar;
         this.name=data.name;
         this.online=data.online;
