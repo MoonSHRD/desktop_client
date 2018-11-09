@@ -124,7 +124,7 @@
     width: 30px;
     height: 27px;
     position: absolute;
-    right: 82px;
+    right: 22px;
     cursor: pointer;
 }
 
@@ -141,7 +141,7 @@
     position: relative;
     transition-duration: 300ms; /* анимация */
     border: 1px solid rgba($primary-text, .3);
-    box-shadow: 4px 4px 20px rgba($brand-blue, .2);
+    /*box-shadow: 4px 4px 20px rgba($brand-blue, .2);*/
     &::after {
         content: "";
         @include size(12px); /* высота кнопки / ширина кнопки */

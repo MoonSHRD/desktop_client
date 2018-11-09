@@ -14,6 +14,13 @@ const Controller_1 = require("../Controller");
 const ChatModel_1 = require("../../models/ChatModel");
 const Helpers_1 = require("../Helpers");
 class ChatsController extends Controller_1.Controller {
+    constructor() {
+        super(...arguments);
+        this.found_chats = {
+            users: {},
+            chats: {},
+        };
+    }
     init_chats() {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
@@ -27,6 +34,9 @@ class ChatsController extends Controller_1.Controller {
     load_chat(chat, general_chat_type) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
+            // if (chat.type === this.chat_types.user && chat.hasOwnProperty('get_user_chat_meta')) {
+            //     await chat.get_user_chat_meta();
+            // }
             if (chat.time)
                 chat.time = Helpers_1.Helper.formate_date(new Date(chat.time), { locale: 'ru', for: 'chat' });
             if (chat.senderId === self_info.id) {
@@ -45,6 +55,7 @@ class ChatsController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
             let userModel = yield UserModel_1.UserModel.findOne(user.id);
+            // let e;
             if (userModel) {
                 userModel.online = state === 'online';
                 yield userModel.save();
@@ -100,6 +111,7 @@ class ChatsController extends Controller_1.Controller {
     }
     show_chat_info(data) {
         return __awaiter(this, void 0, void 0, function* () {
+            let self_info = yield this.get_self_info();
             if (Object.values(this.group_chat_types).includes(data.type)) {
                 switch (data.type) {
                     case this.group_chat_types.channel: {
@@ -110,7 +122,14 @@ class ChatsController extends Controller_1.Controller {
                 }
             }
             else if (data.type === this.chat_types.user) {
-                let user = yield ChatModel_1.ChatModel.get_chat_opponent(data.id);
+                let user;
+                try {
+                    user = yield ChatModel_1.ChatModel.get_chat_opponent(data.id, self_info.id);
+                }
+                catch (e) {
+                    user = this.controller_register.get_controller_parameter('ChatsController', 'found_chats').users[data.id];
+                    user.id = ChatModel_1.ChatModel.get_chat_opponent_id(data.id, self_info.id);
+                }
                 this.send_data('get_my_vcard', this.render('main/modal_popup/modal_content.pug', user));
             }
         });
@@ -135,7 +154,7 @@ class ChatsController extends Controller_1.Controller {
             yield user.save();
             user.type = this.chat_types.user;
             let chat = yield ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id);
-            yield chat.get_user_chat_meta();
+            yield chat.get_user_chat_meta(self_info.id);
             yield this.load_chat(chat, this.chat_to_menu.user);
         });
     }
@@ -182,7 +201,7 @@ class ChatsController extends Controller_1.Controller {
                     console.log('num: ', num);
                     yield this.controller_register.run_controller("MessagesController", "received_group_message", { room_data, message: message.message, sender, stamp: message.time, files: message.files, fresh: (num === count), notificate: false });
                 }
-                yield this.controller_register.run_controller("MessagesController", "get_chat_messages", room_data.id);
+                yield this.controller_register.run_controller("MessagesController", "get_chat_messages", { id: room_data.id, type: room_data.type });
             }
         });
     }
@@ -220,7 +239,7 @@ class ChatsController extends Controller_1.Controller {
             let users = fData.Users;
             for (let i in users) {
                 let user = users[i];
-                // user.id=ChatModel.get_user_chat_id(self_info.id,user.id);
+                user.id = ChatModel_1.ChatModel.get_user_chat_id(self_info.id, user.id);
                 user.name = user.firstname + " " + user.lastname;
                 user.type = this.chat_types.user;
                 user.online = user.last_active < (Date.now() + 1000 * 60 * 5);

@@ -9,7 +9,7 @@ import {Helper} from "../Helpers";
 class ChatsController extends Controller {
 
     public queried_chats: object;
-    public found_chats: {
+    public found_chats= {
         users:{},
         chats:{},
     };
@@ -24,7 +24,9 @@ class ChatsController extends Controller {
 
     private async load_chat(chat: ChatModel, general_chat_type) {
         let self_info = await this.get_self_info();
-
+        // if (chat.type === this.chat_types.user && chat.hasOwnProperty('get_user_chat_meta')) {
+        //     await chat.get_user_chat_meta();
+        // }
         if (chat.time)
             chat.time=Helper.formate_date(new Date(chat.time),{locale:'ru',for:'chat'});
         if (chat.senderId===self_info.id){
@@ -43,7 +45,7 @@ class ChatsController extends Controller {
     async user_change_state(user, state, statusText, resource) {
         let self_info = await this.get_self_info();
         let userModel = await UserModel.findOne(user.id);
-
+        // let e;
         if (userModel) {
             userModel.online = state === 'online';
             await userModel.save();
@@ -100,6 +102,7 @@ class ChatsController extends Controller {
     }
 
     async show_chat_info(data) {
+        let self_info = await this.get_self_info();
         if (Object.values(this.group_chat_types).includes(data.type)) {
             switch (data.type) {
                 case this.group_chat_types.channel: {
@@ -109,7 +112,13 @@ class ChatsController extends Controller {
                 }
             }
         } else if (data.type === this.chat_types.user) {
-            let user = await ChatModel.get_chat_opponent(data.id);
+            let user;
+            try {
+                user = await ChatModel.get_chat_opponent(data.id,self_info.id);
+            } catch (e) {
+                user = this.controller_register.get_controller_parameter('ChatsController', 'found_chats').users[data.id];
+                user.id=ChatModel.get_chat_opponent_id(data.id,self_info.id)
+            }
             this.send_data('get_my_vcard', this.render('main/modal_popup/modal_content.pug', user));
         }
     }
@@ -131,7 +140,7 @@ class ChatsController extends Controller {
         await user.save();
         user.type = this.chat_types.user;
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
-        await chat.get_user_chat_meta();
+        await chat.get_user_chat_meta(self_info.id);
         await this.load_chat(chat, this.chat_to_menu.user);
     }
 
@@ -179,7 +188,7 @@ class ChatsController extends Controller {
                 await this.controller_register.run_controller("MessagesController", "received_group_message",
                     {room_data, message:message.message, sender, stamp:message.time, files:message.files, fresh:(num===count), notificate:false});
             }
-            await this.controller_register.run_controller("MessagesController", "get_chat_messages", room_data.id)
+            await this.controller_register.run_controller("MessagesController", "get_chat_messages", {id:room_data.id,type:room_data.type})
         }
     }
 
@@ -213,7 +222,7 @@ class ChatsController extends Controller {
         let users=fData.Users;
         for (let i in users){
             let user = users[i];
-            // user.id=ChatModel.get_user_chat_id(self_info.id,user.id);
+            user.id=ChatModel.get_user_chat_id(self_info.id,user.id);
             user.name=user.firstname+" "+user.lastname;
             user.type=this.chat_types.user;
             user.online=user.last_active<(Date.now()+1000*60*5);
