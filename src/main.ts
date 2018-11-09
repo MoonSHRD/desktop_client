@@ -10,7 +10,7 @@ const setupPug = require('electron-pug');
 const DownloadManager = require("electron-download-manager");
 
 DownloadManager.register({
-    downloadFolder: app.getPath("downloads") + "/my-app"
+    downloadFolder: __dirname + `/../updates/`
 });
 app.on('ready', async () => {
     try {

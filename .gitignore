@@ -9,6 +9,7 @@ src/env_config.js.map
 .idea
 .npmignore
 dist/
+updates/
 downloads/
 release-builds/
 Makefile
