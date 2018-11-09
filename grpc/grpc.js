@@ -101,6 +101,7 @@ class Grpc {
             }
             catch (e) {
                 result.err = e;
+                // console.log(e);
             }
             return result;
         });

@@ -151,7 +151,7 @@ class MenuController extends Controller_1.Controller {
             let self_info = yield this.get_self_info();
             yield this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user, first);
             if (first) {
-                yield this.controller_register.run_controller('MessagesController', 'get_chat_messages', '0x0000000000000000000000000000000000000000_' + self_info.id);
+                yield this.controller_register.run_controller('MessagesController', 'get_chat_messages', { id: '0x0000000000000000000000000000000000000000_' + self_info.id, type: this.chat_types.user });
             }
         });
     }

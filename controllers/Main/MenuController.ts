@@ -143,7 +143,7 @@ class MenuController extends Controller {
         let self_info = await this.get_self_info();
         await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user, first);
         if (first) {
-            await this.controller_register.run_controller('MessagesController', 'get_chat_messages', '0x0000000000000000000000000000000000000000_' + self_info.id);
+            await this.controller_register.run_controller('MessagesController', 'get_chat_messages', {id:'0x0000000000000000000000000000000000000000_' + self_info.id,type:this.chat_types.user});
         }
     }
 

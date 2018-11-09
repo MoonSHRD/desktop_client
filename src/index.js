@@ -444,7 +444,7 @@ window.onload = function () {
 
         $this.siblings().removeClass('have_history');
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
-        let chat = $this.attr('id');
+        let chat = {id:$this.attr('id'),type:$this.attr('data-type')};
 
         $this.find('[data-name=unread_messages]').hide();
         $this.find('[data-name=unread_messages]').text('0');

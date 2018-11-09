@@ -104,6 +104,7 @@ export class Grpc {
             result.data = await this.promisedFuncs[method](data);
         } catch (e) {
             result.err = e;
+            // console.log(e);
         }
         return result;
     }

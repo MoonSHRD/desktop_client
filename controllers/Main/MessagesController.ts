@@ -18,6 +18,7 @@ import nativeImage = Electron.nativeImage;
 import ipcRenderer = Electron.ipcRenderer;
 import ipcMain = Electron.ipcMain;
 import {helper} from "../../src/var_helper";
+import {Grpc} from "../../grpc/grpc";
 // import * as eNotify from 'electron-notify'
 // let eNotify = require('electron-notify');
 
@@ -30,24 +31,33 @@ class MessagesController extends Controller {
         this.send_data(this.events.reload_chat, this.render('main/messagingblock/qqq.pug', chat));
     }
 
-    async get_chat_messages(chat_id: string) {
-        console.log('get_chat_messages');
-        let chat = await ChatModel.get_chat_with_events(chat_id);
+    async load_founded_chat(chat_id: string) {
+        let q_chats = this.controller_register.get_controller_parameter('ChatsController', 'found_chats');
+        let chat = q_chats.users[chat_id];
+        this.send_data(this.events.reload_chat, this.render('main/messagingblock/qqq.pug', chat));
+    }
 
-        if (!chat)
-            return this.load_join_chat(chat_id);
-        await this.reading_messages(chat.id);
+    async get_chat_messages({id,type}) {
+        let self_info = await this.get_self_info();
+        console.log('get_chat_messages',id,type);
+        let chat = await ChatModel.get_chat_with_events(id);
 
-        switch (chat.type) {
+
+        switch (type) {
             case this.chat_types.user:
-                await chat.get_user_chat_meta();
+                if (!chat)
+                    return this.load_founded_chat(id);
+                await chat.get_user_chat_meta(self_info.id);
                 break;
+            case this.group_chat_types.join_channel:
+                return this.load_join_chat(id);
         }
         let html = this.render('main/messagingblock/qqq.pug', chat);
-        await chat.save();
+        await this.reading_messages(chat.id);
+        // await chat.save();
         await this.send_data('reload_chat', html);
 
-        await this.render_chat_messages(chat_id);
+        await this.render_chat_messages(chat.id);
     };
 
     private async render_message(message: MessageModel) {
@@ -136,6 +146,7 @@ class MessagesController extends Controller {
             chat.id=id;
             chat.domain="localhost";
             chat.type=this.chat_types.user;
+            chat.users.push(userModel);
             await chat.save();
         }
         // let date = new Date();
@@ -176,7 +187,7 @@ class MessagesController extends Controller {
 
         if (chat.type === this.chat_types.user) {
             await this.render_message(message);
-            chat.id = await chat.get_user_chat_meta();
+            chat.id = await chat.get_user_chat_meta(self_info.id);
             group = false;
         } else if (Object.values(this.group_chat_types).includes(chat.type)) {
             group = true;
@@ -204,6 +215,27 @@ class MessagesController extends Controller {
         let self_info = await this.get_self_info();
         let userModel = await UserModel.findOne(user.id);
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
+        if (!UserModel){
+            let userGR=(await this.grpc.CallMethod("GetObjData",{id: user.id,obj:'user'})).data;
+            userModel=new UserModel();
+            userModel.id=userGR.id;
+            userModel.domain="localhost";
+            userModel.name=userGR.firstname+(userGR.lastname?" "+userGR.lastname:"");
+            userModel.firstname=userGR.firstname;
+            userModel.lastname=userGR.lastname;
+            userModel.avatar=userGR.avatar;
+            await userModel.save()
+        }
+        if (!chat) {
+            chat = new ChatModel();
+            chat.id = ChatModel.get_user_chat_id(self_info.id, user.id);
+            chat.type = this.chat_types.user;
+            chat.domain = "localhost";
+            chat.users = [userModel];
+            await chat.save();
+        }
+
+        // let chat = await ChatModel.get_user_chat(self_info.id, user.id);
         chat.unread_messages += 1;
         await chat.save();
         let message = new MessageModel();

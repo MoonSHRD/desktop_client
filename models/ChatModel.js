@@ -22,7 +22,6 @@ const typeorm_1 = require("typeorm");
 const MessageModel_1 = require("./MessageModel");
 const UserModel_1 = require("./UserModel");
 const var_helper_1 = require("../src/var_helper");
-const AccountModel_1 = require("./AccountModel");
 const EventModel_1 = require("./EventModel");
 const FileModel_1 = require("./FileModel");
 // helper
@@ -128,26 +127,26 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
             return (yield ChatModel_1.get_chat_with_users(chat_id)).users;
         });
     }
-    static get_chat_opponent(chat_id) {
+    static get_chat_opponent(chat_id, self_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let opps = yield ChatModel_1.get_chat_users(chat_id);
-            let account_id = 1;
-            let account = (yield AccountModel_1.AccountModel.find({ relations: ["user"], where: { id: account_id }, take: 1 }))[0].user;
-            return opps.find(x => x.id !== account.id);
+            let opp_id = yield ChatModel_1.get_chat_opponent_id(chat_id, self_id);
+            return yield UserModel_1.UserModel.findOne(opp_id);
+            // let account_id = 1;
+            // let account = (await AccountModel.find({relations: ["user"], where: {id: account_id}, take: 1}))[0].user;
         });
     }
-    static get_chat_opponent_id(chat_id, id) {
+    static get_chat_opponent_id(chat_id, self_id) {
         let opps = chat_id.split("_");
-        if (opps[0] == id) {
+        if (opps[0] == self_id) {
             return opps[1];
         }
         else {
             return opps[0];
         }
     }
-    get_user_chat_meta() {
+    get_user_chat_meta(self_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let data = (yield ChatModel_1.get_chat_opponent(this.id));
+            let data = (yield ChatModel_1.get_chat_opponent(this.id, self_id));
             this.avatar = data.avatar;
             this.name = data.name;
             this.online = data.online;

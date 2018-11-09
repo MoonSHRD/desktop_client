@@ -106,6 +106,7 @@ class ChatsController extends Controller_1.Controller {
     }
     show_chat_info(data) {
         return __awaiter(this, void 0, void 0, function* () {
+            let self_info = yield this.get_self_info();
             if (Object.values(this.group_chat_types).includes(data.type)) {
                 switch (data.type) {
                     case this.group_chat_types.channel: {
@@ -116,7 +117,14 @@ class ChatsController extends Controller_1.Controller {
                 }
             }
             else if (data.type === this.chat_types.user) {
-                let user = yield ChatModel_1.ChatModel.get_chat_opponent(data.id);
+                let user;
+                try {
+                    user = yield ChatModel_1.ChatModel.get_chat_opponent(data.id, self_info.id);
+                }
+                catch (e) {
+                    user = this.controller_register.get_controller_parameter('ChatsController', 'found_chats').users[data.id];
+                    user.id = ChatModel_1.ChatModel.get_chat_opponent_id(data.id, self_info.id);
+                }
                 this.send_data('get_my_vcard', this.render('main/modal_popup/modal_content.pug', user));
             }
         });
@@ -141,7 +149,7 @@ class ChatsController extends Controller_1.Controller {
             yield user.save();
             user.type = this.chat_types.user;
             let chat = yield ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id);
-            yield chat.get_user_chat_meta();
+            yield chat.get_user_chat_meta(self_info.id);
             yield this.load_chat(chat, this.chat_to_menu.user);
         });
     }
@@ -191,7 +199,7 @@ class ChatsController extends Controller_1.Controller {
                     console.log('num: ', num);
                     yield this.controller_register.run_controller("MessagesController", "received_group_message", { room_data, message: message.message, sender, stamp: message.time, files: message.files, fresh: (num === count), notificate: false });
                 }
-                yield this.controller_register.run_controller("MessagesController", "get_chat_messages", room_data.id);
+                yield this.controller_register.run_controller("MessagesController", "get_chat_messages", { id: room_data.id, type: room_data.type });
             }
         });
     }
