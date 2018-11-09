@@ -9,17 +9,17 @@ class AccountController extends Controller {
     async encrypt_db () {
         let me = await this.get_me();
         let key = me.privKey;
-        if (fs.existsSync(`${__dirname}/../../sqlite/data.db`))
+        if (fs.existsSync(`${__dirname}/../../sqlite/data.db`) && !fs.existsSync(`${__dirname}/../../sqlite/encrypted.db`))
             encryptor.encryptFile(`${__dirname}/../../sqlite/data.db`, `${__dirname}/../../sqlite/encrypted.db`, key, function (err) {});
-        else console.log("File for decrypt not exist");
+        else console.log("File for decrypt not exist or file already created");
     }
 
     async decrypt_db () {
         let me = await this.get_me();
         let key = me.privKey;
-        if (fs.existsSync(`${__dirname}/../../sqlite/encrypted.db`))
+        if (fs.existsSync(`${__dirname}/../../sqlite/encrypted.db`) && !fs.existsSync(`${__dirname}/../../sqlite/test.db`))
             encryptor.decryptFile(`${__dirname}/../../sqlite/encrypted.db`, `${__dirname}/../../sqlite/test.db`, key, function(err) {});
-        else console.log("File for encrypt not exist");
+        else console.log("File for encrypt not exist or file already created");
     }
 }
 

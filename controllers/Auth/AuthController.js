@@ -26,8 +26,13 @@ class AuthController extends Controller_1.Controller {
             let account = yield AccountModel_1.AccountModel.findOne(1);
             if (account)
                 yield this.auth(account);
-            else
-                this.send_data(this.events.change_app_state, this.render('auth/123.pug'));
+            else {
+                let obj = {
+                    arg: this.render('auth/123.pug'),
+                    language: "en"
+                };
+                this.send_data(this.events.change_app_state, obj);
+            }
         });
     }
     ;

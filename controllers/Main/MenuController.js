@@ -22,7 +22,9 @@ class MenuController extends Controller_1.Controller {
             let self_info = Object(yield this.get_self_info());
             let settings = yield this.get_Settings();
             self_info.width_chats = settings.width_chats;
-            yield this.send_data(this.events.change_app_state, this.render('main/main.pug', self_info));
+            self_info.arg = this.render('main/main.pug', self_info);
+            self_info.language = settings.language;
+            yield this.send_data(this.events.change_app_state, self_info);
             yield this.load_menu_initial();
         });
     }

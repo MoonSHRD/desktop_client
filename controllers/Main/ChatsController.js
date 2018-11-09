@@ -17,8 +17,13 @@ class ChatsController extends Controller_1.Controller {
     init_chats() {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
+            let language = (yield this.get_Settings()).language;
+            let obj = {
+                arg: this.render('main/main.pug', { state: '' }),
+                language: language
+            };
             self_info.state = 'menu_chats';
-            this.send_data(this.events.change_app_state, this.render('main/main.pug', { state: '' }));
+            this.send_data(this.events.change_app_state, obj);
             // todo: load all chats.
             yield this.load_chats(this.chat_types.user);
         });

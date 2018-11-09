@@ -14,7 +14,9 @@ class MenuController extends Controller {
         let self_info = Object(await this.get_self_info());
         let settings = await this.get_Settings();
         self_info.width_chats = settings.width_chats;
-        await this.send_data(this.events.change_app_state, this.render('main/main.pug', self_info));
+        self_info.arg = this.render('main/main.pug', self_info);
+        self_info.language = settings.language;
+        await this.send_data(this.events.change_app_state, self_info);
         await this.load_menu_initial();
     };
 

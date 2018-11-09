@@ -186,11 +186,10 @@ window.onload = function () {
         }
     };
 
-    ipcRenderer.on('change_app_state', (event, arg) => {
+    ipcRenderer.on('change_app_state', (event, obj) => {
         console.log('autyh');
-        $('#view').html(arg);
-        $.html5Translate(dict, 'en');
-        // todo: fix some console errors with this func
+        $('#view').html(obj.arg);
+        $.html5Translate(dict, obj.language);
         widthMsgWindow('[data-msgs-window]');
     });
 
@@ -407,7 +406,7 @@ window.onload = function () {
     });
 
     $(document).on('click', '[data-name=join_channel]', function () {
-        $(this).attr('disabled', 'disabled');
+        console.log("azaza");
         let active_dialog = $('.active_dialog');
         ipcRenderer.send('join_channel', {
             id: active_dialog.attr('id'),
@@ -592,7 +591,9 @@ window.onload = function () {
     //     validationInputs(this);
     // });
 
-    $(document).on('submit', '.modal-content', function (e) {
+    $(document).on('click', '.modal-content', function (e) {
+        let button = $(this).find(".btn-primary");
+        // $(this).submit()
         e.preventDefault();
         const $this = $(this);
         let groupNameEl = $this.find('[name=\'name\']');
@@ -615,6 +616,8 @@ window.onload = function () {
                 $('#AppModal').modal('toggle');
             }
         }
+        else
+            button.removeAttr("disabled");
     });
 
     $(document).on('focusin', '[data-name="crowdsale__input"]', function (e) {
@@ -922,4 +925,8 @@ window.onload = function () {
         ipcRenderer.send("decrypt_db");
     });
 
+    $(document).on('click', "button[data-block=\"data-block\"]", function (e) {
+        console.log("Click!");
+        $(this).attr("disabled", true);
+    });
 };
