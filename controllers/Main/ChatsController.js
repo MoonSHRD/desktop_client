@@ -36,7 +36,7 @@ class ChatsController extends Controller_1.Controller {
                 if (chat.text)
                     chat.text = 'Вы: ' + chat.text;
             }
-            console.log(chat);
+            // console.log(chat);
             let html = this.render('main/chatsblock/chats/imDialog.pug', chat);
             this.send_data('buddy', { id: chat.id, type: general_chat_type, html: html });
         });
@@ -168,6 +168,7 @@ class ChatsController extends Controller_1.Controller {
                 chat.contract_address = room_data.contractaddress;
             yield chat.save();
             if (room_data.role === 'moderator') {
+                yield this.grpc.CallMethod('SetObjData', { pubKey: this.grpc.pubKey, obj: 'community', data: chat });
                 yield this.load_chat(chat, this.chat_types.group);
             }
             else {
@@ -210,7 +211,37 @@ class ChatsController extends Controller_1.Controller {
     }
     find_groups(group_name) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.dxmpp.find_group(group_name);
+            this.found_chats.users = {};
+            this.found_chats.chats = {};
+            let self_info = yield this.get_self_info();
+            let data = yield this.grpc.CallMethod('GetObjsData', { str: group_name, obj: 'all', prt: 0 });
+            if (data.err)
+                throw data.err;
+            console.log(data);
+            let fData = JSON.parse(data.data.data);
+            console.log(fData);
+            let users = fData.Users;
+            for (let i in users) {
+                let user = users[i];
+                // user.id=ChatModel.get_user_chat_id(self_info.id,user.id);
+                user.name = user.firstname + " " + user.lastname;
+                user.type = this.chat_types.user;
+                user.online = user.last_active < (Date.now() + 1000 * 60 * 5);
+                user.domain = 'localhost';
+                this.found_chats.users[user.id] = user;
+                this.send_data('found_chats', this.render('main/chatsblock/chats/imDialog.pug', user));
+            }
+            let communities = fData.Communities;
+            for (let i in communities) {
+                let community = communities[i];
+                community.domain = 'localhost';
+                let chat = yield ChatModel_1.ChatModel.findOne(community.id);
+                if (!chat)
+                    community.type = this.group_chat_types.join_channel;
+                this.found_chats.chats[community.id] = community;
+                this.send_data('found_chats', this.render('main/chatsblock/chats/imDialog.pug', community));
+            }
+            // this.dxmpp.find_group(group_name);
         });
     }
     channel_suggestion() {

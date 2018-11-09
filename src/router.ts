@@ -106,7 +106,6 @@ export class Router {
                 await this.controller_register.queue_controller('MenuController', 'init_main');
                 this.loading=false;
             }
-
         });
 
 

@@ -64,7 +64,7 @@ class MessagesController extends Controller {
                     message.files[num].file = (await this.ipfs.get_file(message.files[num].hash)).file;
                     save_file(message.files[num]);
                 }
-                console.log(message.files[num]);
+                // console.log(message.files[num]);
             } else {
                 if (check_file_exist(message.files[num]))
                     message.files[num].downloaded=true;
@@ -122,6 +122,20 @@ class MessagesController extends Controller {
         console.log(file);
         let self_info = await this.get_self_info();
         let chat = await ChatModel.findOne(id);
+        if (!chat) {
+            let user = this.controller_register.get_controller_parameter('ChatsController','found_chats').users[id];
+            let userModel=new UserModel();
+            userModel.id=user.id;
+            userModel.domain='localhost';
+            userModel.firstname=user.firstname;
+            userModel.lastname=user.lastname;
+            userModel.name=user.firstname+" "+user.lastname;
+            userModel.avatar=user.avatar;
+            await userModel.save();
+            chat = new ChatModel();
+            chat.id=ChatModel.get_chat_opponent_id(id,self_info.id);
+            await chat.save();
+        }
         // let date = new Date();
         let message = new MessageModel();
         message.sender = self_info;

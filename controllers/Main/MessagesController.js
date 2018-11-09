@@ -69,7 +69,7 @@ class MessagesController extends Controller_1.Controller {
                         message.files[num].file = (yield this.ipfs.get_file(message.files[num].hash)).file;
                         Helpers_1.save_file(message.files[num]);
                     }
-                    console.log(message.files[num]);
+                    // console.log(message.files[num]);
                 }
                 else {
                     if (Helpers_1.check_file_exist(message.files[num]))
@@ -127,6 +127,20 @@ class MessagesController extends Controller_1.Controller {
             console.log(file);
             let self_info = yield this.get_self_info();
             let chat = yield ChatModel_1.ChatModel.findOne(id);
+            if (!chat) {
+                let user = this.controller_register.get_controller_parameter('ChatsController', 'found_chats').users[id];
+                let userModel = new UserModel_1.UserModel();
+                userModel.id = user.id;
+                userModel.domain = 'localhost';
+                userModel.firstname = user.firstname;
+                userModel.lastname = user.lastname;
+                userModel.name = user.firstname + " " + user.lastname;
+                userModel.avatar = user.avatar;
+                yield userModel.save();
+                chat = new ChatModel_1.ChatModel();
+                chat.id = ChatModel_1.ChatModel.get_chat_opponent_id(id, self_info.id);
+                yield chat.save();
+            }
             // let date = new Date();
             let message = new MessageModel_1.MessageModel();
             message.sender = self_info;
