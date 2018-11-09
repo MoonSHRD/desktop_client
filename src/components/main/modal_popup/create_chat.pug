@@ -2,7 +2,7 @@
     .modal-header__img
         include ../../../img/modal_popup/icon.svg
     .modal-header__name
-        input.form-control(name="name" type="text" placeholder="Название группы" data-require="true" )
+        input.form-control(name="name" type="text" placeholder="Enter channel name (min 3, max 30 characters)" data-require="true" maxlength="30")
     .modal-header__category.text-center
         .custom-control-vertical.custom-control-inline.custom-radio.d-none
             input.custom-control-input#group(type="radio" name="openPrivate" value="off")
