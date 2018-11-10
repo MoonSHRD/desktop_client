@@ -844,7 +844,7 @@ window.onload = function () {
 // функция вызывается при каждом нажатии клавиши в области ввода текста
     function ResizeTextArea(the_form, min_rows) {
         the_form.rows = Math.max(min_rows, countLines(the_form.value,the_form.cols) );
-        console.log(the_form.value, the_form.cols, Math.max(min_rows, countLines(the_form.value,the_form.cols));
+        console.log(the_form.value, the_form.cols, Math.max(min_rows, countLines(the_form.value,the_form.cols)));
     }
 
     $(document).on('click', '[data-toggle="switcher"]', function(e) {

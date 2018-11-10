@@ -71,4 +71,6 @@ exports.helper = {
     event_types: exports.event_types,
     pug_options: exports.pug_options
 };
+exports.pug_options;
+;
 //# sourceMappingURL=var_helper.js.map
