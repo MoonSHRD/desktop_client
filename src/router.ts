@@ -104,10 +104,11 @@ export class Router {
             this.online = true;
             if (this.loading) {
                 await this.controller_register.queue_controller('MenuController', 'init_main');
+                await this.controller_register.queue_controller('EventsController', 'checking_updates');
+
                 this.loading=false;
             }
 
-            await this.controller_register.queue_controller('EventsController', 'get_updates');
 
 
         });
@@ -122,6 +123,14 @@ export class Router {
 
         this.listen_event(this.ipcMain, 'generate_mnemonic', async (event, arg) => {
             await this.controller_register.queue_controller('AuthController', 'generate_mnemonic', (arg));
+        });
+
+        this.listen_event(this.ipcMain, 'get_updates', async (event, arg) => {
+            await this.controller_register.queue_controller('EventsController', 'get_updates');
+        });
+
+        this.listen_event(this.ipcMain, 'install_updates', async (event, arg) => {
+            await this.controller_register.queue_controller('EventsController', 'install_updates');
         });
 
 

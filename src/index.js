@@ -706,9 +706,59 @@ window.onload = function () {
         }
     });
 
-    ipcRenderer.on('get_updates', (event, obj) => {
-      console.log(obj)
+    ipcRenderer.on('checking_updates', (event, data) => {
+        // $('#download_updates').css('width', obj+'%')
+        console.log(data)
+        if(data) {
+            setTimeout(() => {
+                if (data) $('#update_button').fadeIn().addClass('update_animate')
+
+
+                $.notify('Доступно новое обновление!!!', {
+
+                    placement: {
+                        from: 'bottom',
+                        align: 'right'
+                    },
+                    animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                    },
+                    z_index: 10031,
+                    offset: 20,
+                    spacing: 10
+                });
+
+            }, 1000)
+        }
     });
+
+    ipcRenderer.on('get_updates', (event, obj) => {
+        console.log(typeof(obj))
+        if(obj == 100){
+            $('[data-name=download_updates]').attr('data-name','install_updates')
+            setTimeout(()=>{
+                $('#download_img').fadeOut()
+
+                setTimeout(()=>{
+                    $('#update_img').fadeIn()
+                },500)
+            },500)
+
+        }
+      $('#download_updates').css('width', obj+'%')
+    });
+
+    $(document).on('click', '[data-name=download_updates]', function (e) {
+        ipcRenderer.send('get_updates', {});
+    });
+
+    $(document).on('click', '[data-name=install_updates]', function (e) {
+        ipcRenderer.send('install_updates', {});
+    });
+
+
+
 
     // Context menu
     $(document).mousedown(function (event) {

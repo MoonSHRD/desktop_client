@@ -67,6 +67,8 @@ export const events = {
     get_my_vcard: "get_my_vcard",
     reload_chat: "reload_chat",
     get_updates: "get_updates",
+    checking_updates: "checking_updates",
+    install_updates: "install_updates",
     reading_messages: "reading_messages",
     change_directory: "change_directory",
     change_windows_size: "change_windows_size",

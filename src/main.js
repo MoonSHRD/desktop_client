@@ -18,7 +18,7 @@ const updater = require('electron-simple-updater');
 // const Router = require('./router');
 const DownloadManager = require("electron-download-manager");
 DownloadManager.register({
-    downloadFolder: __dirname + `/../dist/`
+    downloadFolder: './'
 });
 app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
     try {
@@ -39,6 +39,7 @@ app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
         const router = new router_1.Router(mainWindow);
         router.start_loading();
     });
+    // mainWindow.webContents.openDevTools()
     mainWindow.on('closed', () => {
         // console.log('closed')
         // let child = exec(`node ./src/just.js`, function (error, stdout, stderr) {

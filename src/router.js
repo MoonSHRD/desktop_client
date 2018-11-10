@@ -96,9 +96,9 @@ class Router {
             this.online = true;
             if (this.loading) {
                 yield this.controller_register.queue_controller('MenuController', 'init_main');
+                yield this.controller_register.queue_controller('EventsController', 'checking_updates');
                 this.loading = false;
             }
-            yield this.controller_register.queue_controller('EventsController', 'get_updates');
         }));
         /** Auth Events **/
         this.listen_event(this.ipcMain, 'submit_profile', (event, arg) => __awaiter(this, void 0, void 0, function* () {
@@ -106,6 +106,12 @@ class Router {
         }));
         this.listen_event(this.ipcMain, 'generate_mnemonic', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             yield this.controller_register.queue_controller('AuthController', 'generate_mnemonic', (arg));
+        }));
+        this.listen_event(this.ipcMain, 'get_updates', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('EventsController', 'get_updates');
+        }));
+        this.listen_event(this.ipcMain, 'install_updates', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            yield this.controller_register.queue_controller('EventsController', 'install_updates');
         }));
         /** Chats Events **/
         this.listen_event(this.ipcMain, 'channel_suggestion', (event, arg) => __awaiter(this, void 0, void 0, function* () {

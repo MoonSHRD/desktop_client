@@ -1,6 +1,6 @@
 {
   "name": "messanger_desktop_client",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Messanger desktop client",
   "main": "./src/main.js",
   "contributors": [

@@ -15,7 +15,7 @@ import {download} from 'electron-download-manager';
 const DownloadManager = require("electron-download-manager");
 
 DownloadManager.register({
-    downloadFolder: __dirname + `/../dist/`
+    downloadFolder: './'
 });
 app.on('ready', async () => {
     try {
@@ -37,6 +37,7 @@ app.on('ready', async () => {
         router.start_loading();
     });
 
+    // mainWindow.webContents.openDevTools()
 
 
     mainWindow.on('closed', () => {

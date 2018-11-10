@@ -98,58 +98,54 @@ class EventsController extends Controller_1.Controller {
             //     });
         });
     }
-    get_updates() {
+    checking_updates() {
         return __awaiter(this, void 0, void 0, function* () {
-            const stringf = 'update-not-available';
-            updater.init('http://localhost:8081/update.json');
-            updater.on('checking-for-update', () => console.log('Checking for updates...'));
+            updater.init({
+                autoDownload: false,
+                url: 'http://localhost:8081/update.json',
+                checkUpdateOnStart: true
+            });
             updater.on('update-not-available', () => {
-                this.send_data('get_updates', stringf);
+                this.send_data('checking_updates', false);
                 console.log('Update is not available');
             });
             updater.on('update-available', (meta) => {
-                this.send_data('get_updates', meta);
+                // this.send_data('get_updates', stringf);
+                //
+                this.send_data('checking_updates', true);
                 console.log('Update available');
             });
-            updater.on('update-downloaded', () => {
-                updater.quitAndInstall();
+        });
+    }
+    get_updates() {
+        return __awaiter(this, void 0, void 0, function* () {
+            // const stringf = 'update-not-available'
+            // console.log('211111111111111111111113')
+            updater.downloadUpdate();
+            console.log('435345345345345345345');
+            electron_download_manager_1.download({
+                url: `http://localhost:8081/updates/Linux/Moonshard_0.0.2.AppImage`,
+                onProgress: (percentage) => {
+                    console.log("percentage : " + percentage);
+                    this.send_data('get_updates', percentage);
+                }
+            }, function (error, info) {
+                if (error) {
+                    console.log(error);
+                    return;
+                }
+                // console.log('Downloading update:', meta);
             });
-            updater.on('update-downloading', (meta) => {
-                console.log();
-                electron_download_manager_1.download({
-                    url: `http://localhost:8081/updates/Linux/Moonshard_0.0.2.AppImage`,
-                    onProgress: (percentage) => {
-                        console.log("percentage : " + percentage);
-                        // this.send_data('get_updates', percentage);
-                    }
-                }, function (error, info) {
-                    if (error) {
-                        console.log(error);
-                        return;
-                    }
-                    console.log('Downloading update:', meta);
-                });
-            });
-            updater.on('error', (meta) => console.log('Error:', meta));
-            // this.send_data('get_updates', null);
-            // console.log(os.type())
-            // let file = "arch.zip";
-            // let get_os_type = os.type();
-            //
-            // if( get_os_type === 'Linux'){
-            //
-            //     this.update_server(get_os_type, file)
-            //
-            // }else if (get_os_type === 'Windows_NT') {
-            //
-            //     this.update_server(get_os_type, file)
-            //
-            // }
-            // this.ipfs.set_version();
-            // this.ipfs.get_version();
+            // updater.init('http://localhost:8081/update.json');
+            // updater.on('checking-for-update', () => console.log('Checking for updates...'));
         });
     }
     ;
+    install_updates() {
+        return __awaiter(this, void 0, void 0, function* () {
+            updater.quitAndInstall();
+        });
+    }
 }
 module.exports = EventsController;
 //# sourceMappingURL=EventsController.js.map
