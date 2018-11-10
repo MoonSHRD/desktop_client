@@ -147,21 +147,28 @@ window.onload = function () {
         $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
     });
 
-    $(document).on('click','.menu a',function () {
-        // console.log('menu_click');
+    $(document).on('click', '.menu a', function () {
+        const $this = $(this);
+        const type = $this.data('id');
 
-        const $this=$(this);
+        if (!$this.hasClass('active_menu') && type) {
+            console.log($this.hasClass('active_menu'), type);
 
-        if ($this.data('id') !== 'menu_create_chat' && !$this.hasClass('not_active')) {
-            $this.addClass('active_menu')
+            ipcRenderer.send('change_menu_state', type);
+        }
+
+        if (
+            (type !== 'menu_create_chat')
+            &&
+            !$this.hasClass('not_active')
+        ) {
+            $this
+                .addClass('active_menu')
                 .parent()
                 .siblings('li')
                 .children()
                 .removeClass('active_menu');
         }
-        const type = $this.data('id');
-        if (type)
-            ipcRenderer.send('change_menu_state', type);
     });
 
     $(document).on('click','[data-id=menu_create_chat]',function (e) {
@@ -178,10 +185,12 @@ window.onload = function () {
 
     let widthMsgWindow = (target) => {
         let msgWindow =  document.querySelector(target);
-        if (msgWindow.offsetWidth > 900){
-            msgWindow.classList.add('messaging_block_lg');
-        } else {
-            msgWindow.classList.remove('messaging_block_lg');
+        if ( msgWindow ) {
+            if (msgWindow.offsetWidth > 900) {
+                msgWindow.classList.add('messaging_block_lg');
+            } else {
+                msgWindow.classList.remove('messaging_block_lg');
+            }
         }
     };
 
@@ -442,12 +451,19 @@ window.onload = function () {
 
         $this.siblings().removeClass('have_history');
         $this.addClass('active_dialog').siblings().removeClass('active_dialog');
-        let chat = {id:$this.attr('id'),type:$this.attr('data-type')};
+        let chat = {
+            id : $this.attr('id'),
+            type : $this.data('type')
+        };
 
         $this.find('[data-name="unread_messages"]').hide();
         $this.find('[data-name="unread_messages"]').text('0');
 
-        if(!($this.hasClass('active_dialog') && $this.hasClass('have_history'))) {
+        if ( !(
+            $this.hasClass('active_dialog')
+            &&
+            $this.hasClass('have_history')
+        ) ) {
             ipcRenderer.send('get_chat_msgs', chat);
             $this.addClass('have_history');
         }
@@ -910,8 +926,8 @@ window.onload = function () {
         }
     });
     $(document).on('on.switch', function () {
-        $(".bl-hide-1").val("");
-        ipcRenderer.send("load_chats", "menu_chats");
+        $('.bl-hide-1').val('');
+        ipcRenderer.send('load_chats', 'menu_chats');
         $('.bl-hide').css('display', 'block');
         $('.bl-hide-1').css('display', 'none');
         $('.chats').css('height', 'calc(100% - 153px)');
@@ -919,7 +935,7 @@ window.onload = function () {
 
     });
     $(document).on('off.switch', function () {
-        $('.bl-hide').val("");
+        $('.bl-hide').val('');
         $('.bl-hide').css('display', 'none');
         $('.bl-hide-1').css('display', 'block');
         $('.chats').css('height', 'calc(100% - 200px)');
