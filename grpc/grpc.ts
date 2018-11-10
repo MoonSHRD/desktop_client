@@ -39,7 +39,7 @@ export class Grpc {
         while (true) {
             let result = await this.CallMethod("Ping", {pubKey: this.pubKey});
             // console.log(result);
-            await sleep(1000 * 60 * 5);
+            await sleep(1000 * 60 * 4);
         }
     }
 

@@ -39,28 +39,21 @@ class AuthController extends Controller {
         console.log('loom connected');
 
         this.grpc.SetPrivKey(account.privKey);
-        console.log('1');
         if (first) {
             let identyti_tx= await this.loom.set_identity(account.user.name);
-            console.log('2');
             // console.log(identyti_tx);
             this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
-            console.log('3');
             console.log(user);
             let suc=await this.grpc.CallMethod('SetObjData',{pubKey: this.loom.priv_as_hex(),obj:'user',data:user});
-            console.log('4');
             // console.log(suc);
         }
         this.grpc.StartPinging();
-        console.log('5');
         this.grpc.StartUserPinging();
-        console.log('6');
         this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
         account.host = this.dxmpp_config.host;
         account.jidhost = this.dxmpp_config.jidhost;
         account.port = this.dxmpp_config.port+this.connection_tries;
         await this.dxmpp.connect(account);
-        console.log('7');
     }
 
     async save_acc(data) {
