@@ -97,6 +97,7 @@ class AuthController extends Controller_1.Controller {
             let account = new AccountModel_1.AccountModel();
             account.privKey = loom_data.priv;
             account.passphrase = data.mnemonic;
+            account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
             account.user = user;
             account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
             yield account.save();

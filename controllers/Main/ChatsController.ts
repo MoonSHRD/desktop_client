@@ -38,7 +38,7 @@ class ChatsController extends Controller {
         let html = this.render('main/chatsblock/chats/imDialog.pug', chat);
         await this.send_data('buddy', {id: chat.id, type: general_chat_type, html: html});
         if (chat.active === true) {
-            await this.controller_register.run_controller("MessagesController", "get_chat_messages", chat.id);
+            await this.controller_register.run_controller("MessagesController", "get_chat_messages", {id:chat.id,type:chat.type});
         }
     }
 
