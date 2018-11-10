@@ -7,6 +7,7 @@ import {UserModel} from "../models/UserModel";
 import {ControllerRegister} from "./ControllerRegister";
 import {Loom} from "../loom/loom";
 import {Ipfs} from "../ipfs/ipfs";
+import {SettingsModel} from "../models/SettingsModel";
 import {Grpc} from "../grpc/grpc";
 
 export abstract class Controller {
@@ -27,6 +28,7 @@ export abstract class Controller {
     protected ipfs: Ipfs = Ipfs.getInstance();
     private self_info: UserModel = null;
     private me: AccountModel = null;
+    private settings = null;
 
     protected constructor(window) {
         this.window = window;
@@ -54,8 +56,17 @@ export abstract class Controller {
         this.window.webContents.send(event, data);
     };
 
-    protected async get_me(id:string) {
-        this.me = (await AccountModel.find({where: {user_id:id}}))[0];
+    // protected async get_me(id:string) {
+    //     this.me = (await AccountModel.find({where: {user_id:id}}))[0];
+    //     return this.me;
+    // }
+    protected async get_me() {
+        this.me = (await AccountModel.find({where: {id:1}}))[0];
         return this.me;
+    }
+
+    protected async get_Settings() {
+        this.settings = (await SettingsModel.find({where: {id:1}}))[0];
+        return this.settings;
     }
 }

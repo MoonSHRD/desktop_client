@@ -10,28 +10,46 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
-const UserModel_1 = require("./UserModel");
-let AccountModel = class AccountModel extends typeorm_1.BaseEntity {
+let SettingsModel = class SettingsModel extends typeorm_1.BaseEntity {
+    constructor() {
+        super(...arguments);
+        this.downloads = "./downloads/";
+        this.width = 1000;
+        this.height = 700;
+        this.width_chats = 370;
+        this.language = "en";
+    }
 };
 __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
     __metadata("design:type", Number)
-], AccountModel.prototype, "id", void 0);
+], SettingsModel.prototype, "id", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], AccountModel.prototype, "privKey", void 0);
+], SettingsModel.prototype, "downloads", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Number)
+], SettingsModel.prototype, "width", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Number)
+], SettingsModel.prototype, "height", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Number)
+], SettingsModel.prototype, "width_chats", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], AccountModel.prototype, "passphrase", void 0);
+], SettingsModel.prototype, "last_chat", void 0);
 __decorate([
-    typeorm_1.OneToOne(type => UserModel_1.UserModel, user => user.account),
-    typeorm_1.JoinColumn(),
-    __metadata("design:type", UserModel_1.UserModel)
-], AccountModel.prototype, "user", void 0);
-AccountModel = __decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], SettingsModel.prototype, "language", void 0);
+SettingsModel = __decorate([
     typeorm_1.Entity()
-], AccountModel);
-exports.AccountModel = AccountModel;
-//# sourceMappingURL=AccountModel.js.map
+], SettingsModel);
+exports.SettingsModel = SettingsModel;
+//# sourceMappingURL=SettingsModel.js.map

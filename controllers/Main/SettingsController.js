@@ -35,6 +35,44 @@ class SettingsController extends Controller_1.Controller {
         });
     }
     ;
+    // async transfer_token(data) {
+    //     let identyti_tx=await this.loom.transfer_token(data.address,data.amount);
+    //     this.send_data('user_joined_room', `Successfully transferred. <br/> txHash: ${identyti_tx.transactionHash}`);
+    // }
+    change_directory(path) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (path == "undefined/")
+                return;
+            let settings = yield this.get_Settings();
+            settings.downloads = path;
+            yield settings.save();
+        });
+    }
+    ;
+    update_last_chat(chat_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let settings = yield this.get_Settings();
+            settings.last_chat = chat_id;
+            yield settings.save();
+        });
+    }
+    change_windows_size(width, height) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let settings = yield this.get_Settings();
+            settings.width = width;
+            settings.height = height;
+            yield settings.save();
+        });
+    }
+    ;
+    change_chats_width(width) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let settings = yield this.get_Settings();
+            settings.width_chats = width;
+            yield settings.save();
+        });
+    }
+    ;
 }
 module.exports = SettingsController;
 //# sourceMappingURL=SettingsController.js.map

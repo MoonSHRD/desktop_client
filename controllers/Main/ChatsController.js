@@ -24,8 +24,13 @@ class ChatsController extends Controller_1.Controller {
     init_chats() {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
+            let language = (yield this.get_Settings()).language;
+            let obj = {
+                arg: this.render('main/main.pug', { state: '' }),
+                language: language
+            };
             self_info.state = 'menu_chats';
-            this.send_data(this.events.change_app_state, this.render('main/main.pug', { state: '' }));
+            this.send_data(this.events.change_app_state, obj);
             // todo: load all chats.
             yield this.load_chats(this.chat_types.user);
         });
@@ -89,6 +94,7 @@ class ChatsController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('load_chats');
             let self_info = yield this.get_self_info();
+            let settings = yield this.get_Settings();
             let chats = yield ChatModel_1.ChatModel.get_chats_with_last_msgs(self_info);
             let menu_chat;
             if (type === this.chat_types.user) {
@@ -100,13 +106,9 @@ class ChatsController extends Controller_1.Controller {
             if (!chats.length)
                 return;
             for (let num in chats) {
-                chats[num].active = (chats[num].id === (yield this.get_me(self_info.id)).last_chat);
+                chats[num].active = (chats[num].id === settings.last_chat);
                 yield this.load_chat(chats[num], menu_chat);
             }
-            // await chats.forEach(async (chat) => {
-            //     chat.active = (chat.id === (await this.get_me(self_info.id)).last_chat);
-            //     await this.load_chat(chat, menu_chat);
-            // });
         });
     }
     show_chat_info(data) {

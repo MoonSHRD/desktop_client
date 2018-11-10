@@ -6,6 +6,7 @@ import {Loom} from "../../loom/loom";
 import {TextEncoder,TextDecoder} from 'text-encoding';
 import {resize_b64_img, resize_img_from_path} from "../Helpers";
 import {paths} from "../../src/var_helper";
+import {SettingsModel} from "../../models/SettingsModel";
 // let {TextDecoder} = require('text-encoding');
 
 class AuthController extends Controller {
@@ -16,8 +17,14 @@ class AuthController extends Controller {
         let account = await AccountModel.findOne(1);
         if (account)
             await this.auth(account);
-        else
-            this.send_data(this.events.change_app_state, this.render('auth/auth.pug'));
+        else {
+            let obj = {
+                arg:this.render('auth/123.pug'),
+                language:"en"
+            };
+            this.send_data(this.events.change_app_state, obj);
+        }
+
     };
 
     generate_mnemonic() {
@@ -32,10 +39,24 @@ class AuthController extends Controller {
         else
             this.connection_tries+=1;
         await this.ipfs.connect();
-        console.log('ipfs connected');
-        // console.log(account);
+        console.log('IPFS connected');
+        console.log(account);
         // await this.ipfs.ipfs_info();
-        await this.loom.connect(account.privKey);
+        let time = 2000;
+        while (true) {
+            try {
+                await this.loom.connect(account.privKey);
+                break;
+            }
+            catch (e) {
+                console.log("Cannot connect to loom. Retry...");
+                await new Promise(resolve => {
+                    setTimeout(resolve, time);
+                    time = time*2;
+                });
+            }
+        }
+
         console.log('loom connected');
 
         this.grpc.SetPrivKey(account.privKey);
@@ -87,10 +108,12 @@ class AuthController extends Controller {
         await user.save();
 
         let account = new AccountModel();
+        let settings = new SettingsModel();
         account.privKey = loom_data.priv;
         account.passphrase = data.mnemonic;
         account.user = user;
-        account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
+        settings.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
+        await settings.save();
         await account.save();
 
         await this.auth(account,true);

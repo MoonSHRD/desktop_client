@@ -164,6 +164,7 @@ class MessagesController extends Controller {
         let fileModel;
         if (file) {
             console.log("with file:", file);
+            let settings = await this.get_Settings();
             fileModel = new FileModel();
             fileModel.preview = check_file_preview(file.type);
             fileModel.hash = await this.ipfs.add_file(file);
@@ -172,7 +173,8 @@ class MessagesController extends Controller {
             fileModel.file = file.file;
             fileModel.name = file.name;
             fileModel.type = file.type;
-            fileModel.path = (await AccountModel.get_me(self_info.id)).downloads;
+            // fileModel.path = (await AccountModel.get_me(self_info.id)).downloads;
+            fileModel.path = settings.downloads;
             await fileModel.save();
             save_file(fileModel);
 
@@ -261,6 +263,7 @@ class MessagesController extends Controller {
         if (files && files.length) {
             for (let num in files){
                 let fileModel = new FileModel();
+                let settings = await this.get_Settings();
                 // file_info.sender = self_info.id;
                 fileModel.hash = files[num].hash;
                 fileModel.chat = chat;
@@ -268,7 +271,8 @@ class MessagesController extends Controller {
                 fileModel.name = files[num].name;
                 fileModel.type = files[num].type;
                 fileModel.preview = check_file_preview(files[num].type);
-                fileModel.path = AccountModel.get_me(self_info.id)["downloads"];
+                fileModel.path = settings.downloads;
+                // fileModel.path = AccountModel.get_me(self_info.id)["downloads"];
                 if (fileModel.preview) {
                     fileModel.file = (await this.ipfs.get_file(fileModel.hash)).file;
                 }
@@ -312,6 +316,7 @@ class MessagesController extends Controller {
         if (files) {
             for (let num in files){
                 await messageModel.save();
+                let settings = await this.get_Settings();
                 let fileModel = new FileModel();
                 // file_info.sender = self_info.id;
                 fileModel.hash = files[num].hash;
@@ -323,7 +328,8 @@ class MessagesController extends Controller {
                 if (fileModel.preview) {
                     fileModel.file = (await this.ipfs.get_file(fileModel.hash)).file;
                 }
-                fileModel.path = (await AccountModel.get_me(self_info.id)).downloads;
+                // fileModel.path = (await AccountModel.get_me(self_info.id)).downloads;
+                fileModel.path = settings.downloads;
                 await fileModel.save();
                 messageModel.files.push(fileModel);
             }

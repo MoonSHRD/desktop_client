@@ -15,28 +15,34 @@ var nativeImage = Electron.nativeImage;
 const ControllerRegister_1 = require("./ControllerRegister");
 // require ('gm-base64');
 function save_file(file) {
-    file = check_files_dir(file);
-    let base64file = file.file.split(';base64,').pop();
-    fs.writeFileSync(`${file.path}${file.id}_${file.name}`, base64file, { encoding: 'base64' });
-    console.log(`file ${file.name} saved`);
+    return __awaiter(this, void 0, void 0, function* () {
+        file = yield check_files_dir(file);
+        let base64file = file.file.split(';base64,').pop();
+        fs.writeFileSync(`${file.path}${file.id}_${file.name}`, base64file, { encoding: 'base64' });
+        console.log(`file ${file.name} saved`);
+    });
 }
 exports.save_file = save_file;
 function read_file(file) {
-    file = check_files_dir(file);
-    let succ = true;
-    try {
-        file.file = `data:${file.type};base64,` + fs.readFileSync(`${file.path}${file.id}_${file.name}`, { encoding: 'base64' });
-    }
-    catch (e) {
-        console.log(e, 'file not found', file);
-        succ = false;
-    }
-    return succ;
+    return __awaiter(this, void 0, void 0, function* () {
+        file = yield check_files_dir(file);
+        let succ = true;
+        try {
+            file.file = `data:${file.type};base64,` + fs.readFileSync(`${file.path}${file.id}_${file.name}`, { encoding: 'base64' });
+        }
+        catch (e) {
+            console.log(e, 'file not found', file);
+            succ = false;
+        }
+        return succ;
+    });
 }
 exports.read_file = read_file;
 function check_file_exist(file) {
-    file = check_files_dir(file);
-    return fs.existsSync(`${file.path}${file.id}_${file.name}`);
+    return __awaiter(this, void 0, void 0, function* () {
+        file = yield check_files_dir(file);
+        return fs.existsSync(`${file.path}${file.id}_${file.name}`);
+    });
 }
 exports.check_file_exist = check_file_exist;
 function check_file_preview(type) {
@@ -47,16 +53,18 @@ function check_file_preview(type) {
 }
 exports.check_file_preview = check_file_preview;
 function check_files_dir(file) {
-    let controller = ControllerRegister_1.ControllerRegister.getInstance();
-    if (!fs.existsSync(file.path)) {
-        console.log("Current path not found, set default path");
-        file.path = var_helper_1.files_config.files_path;
-        file.save();
-        controller.run_controller("AccountController", "update_directory", var_helper_1.files_config.files_path);
-        if (!fs.existsSync(var_helper_1.files_config.files_path))
-            fs.mkdirSync(var_helper_1.files_config.files_path);
-    }
-    return file;
+    return __awaiter(this, void 0, void 0, function* () {
+        let controller = ControllerRegister_1.ControllerRegister.getInstance();
+        if (!fs.existsSync(file.path)) {
+            console.log("Current path not found, set default path");
+            file.path = var_helper_1.files_config.files_path;
+            file.save();
+            yield controller.run_controller("SettingsController", "change_directory", var_helper_1.files_config.files_path);
+            if (!fs.existsSync(var_helper_1.files_config.files_path))
+                fs.mkdirSync(var_helper_1.files_config.files_path);
+        }
+        return file;
+    });
 }
 function b64img_to_buff(b64img) {
     b64img = b64img.substr(b64img.indexOf(',') + 1);
@@ -164,7 +172,7 @@ class Helper {
                     return "Вчера";
                 }
                 if (day_diff > 0) {
-                    formated_date = `${date.getDate()} ${this.mounth_to_locale[date.getMonth() + 1]} ${date.getFullYear()}`;
+                    formated_date = `${date.getDate()} ${this.month_to_locale[date.getMonth() + 1]} ${date.getFullYear()}`;
                     return formated_date;
                 }
                 return "Сегодня";
@@ -194,7 +202,7 @@ Helper.day_to_locale = {
         7: 'Вс'
     },
 };
-Helper.mounth_to_locale = {
+Helper.month_to_locale = {
     1: "Января",
     2: "Февраля",
     3: "Марта",
