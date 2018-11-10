@@ -27,6 +27,9 @@ class ChatsController extends Controller {
         // if (chat.type === this.chat_types.user && chat.hasOwnProperty('get_user_chat_meta')) {
         //     await chat.get_user_chat_meta();
         // }
+        if (chat.type === this.chat_types.user) {
+            chat.online=chat.last_active>(Date.now()-1000*60*5);
+        }
         if (chat.time)
             chat.time=Helper.formate_date(new Date(chat.time),{locale:'ru',for:'chat'});
         if (chat.senderId===self_info.id){
@@ -225,7 +228,7 @@ class ChatsController extends Controller {
             user.id=ChatModel.get_user_chat_id(self_info.id,user.id);
             user.name=user.firstname+" "+user.lastname;
             user.type=this.chat_types.user;
-            user.online=user.last_active<(Date.now()+1000*60*5);
+            user.online=user.last_active>(Date.now()-1000*60*5);
             user.domain='localhost';
             this.found_chats.users[user.id]=user;
             this.send_data('found_chats', this.render('main/chatsblock/chats/imDialog.pug', user));

@@ -340,17 +340,19 @@ a.join_button {
     //padding-bottom: 10px;
     @extend .custom-scrollbar;
 
-    #dialogDate {
+    .dialogDate {
         text-align: center;
+        margin: 15px 0;
         p {
-            background: rgba(0, 0, 0, 0.34);
+            background: rgba($c0, 0.34);
+            @include fz(14);
             display: inline-block;
             padding: 2px 15px;
+            margin: 0;
             border-radius: 15px;
-            color: white;
+            color: $cf;
             font-weight: 800;
-            font-size: 14px;
-            font-family: Roboto, sans-serif;
+            //font-family: Roboto, sans-serif;
         }
     }
 
@@ -465,6 +467,13 @@ a.join_button {
 
     &__text{
         user-select: auto;
+
+        &_transaction{
+
+            .transaction{
+
+            }
+        }
     }
 
     &__date{

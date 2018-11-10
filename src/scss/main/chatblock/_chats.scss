@@ -84,6 +84,7 @@
 
         svg{
             height: .9em;
+            flex-shrink: 0;
             margin-right: .4em;
             path{
                 fill: $primary-text;

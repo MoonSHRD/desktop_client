@@ -2,6 +2,8 @@ const {ipcRenderer} = require('electron');
 const dict = require('./langs/lang');
 const slick = require('slick-carousel');
 const {dialog} = require('electron').remote;
+require('waypoints/lib/noframework.waypoints.min');
+require('waypoints/lib/shortcuts/sticky.min');
 
 let p = null;
 let d = null;
@@ -32,6 +34,8 @@ function validate_tokenPrice(val) {
         return (val);
     }
 }
+
+
 
 window.onload = function () {
 
@@ -347,7 +351,17 @@ window.onload = function () {
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
         $('[data-msg-list]').append(obj);
-        scrollDown('[data-msg-history]');
+
+
+        if ( $('.dialogDate').length ) {
+            new Waypoint.Sticky({
+                element: $('.dialogDate')[0],
+                entered: function(direction) {
+                    console.log("working");
+                }
+            });
+        }
+        // scrollDown('[data-msg-history]');
     });
 
     ipcRenderer.on('received_message', (event, obj) => {
@@ -941,7 +955,6 @@ window.onload = function () {
         $('.chats').css('height', 'calc(100% - 200px)');
 
     });
-
 
 
 };
