@@ -381,6 +381,8 @@
     width: 200px;
     margin-left: -100px;
     border-radius: 5px;
+    margin-top: -180px;
+    padding-top: 180px;
 }
 .js .input-file-trigger {
     display: block;
@@ -400,6 +402,7 @@
     padding: 14px 0;
     cursor: pointer;
     border-radius: 5px;
+    height: 100%;
 }
 .js .input-file:hover + .input-file-trigger,
 .js .input-file:focus + .input-file-trigger,

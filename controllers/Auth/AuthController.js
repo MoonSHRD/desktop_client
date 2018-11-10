@@ -14,7 +14,6 @@ const Controller_1 = require("../Controller");
 const UserModel_1 = require("../../models/UserModel");
 const loom_1 = require("../../loom/loom");
 const Helpers_1 = require("../Helpers");
-const SettingsModel_1 = require("../../models/SettingsModel");
 // let {TextDecoder} = require('text-encoding');
 class AuthController extends Controller_1.Controller {
     constructor() {
@@ -26,13 +25,8 @@ class AuthController extends Controller_1.Controller {
             let account = yield AccountModel_1.AccountModel.findOne(1);
             if (account)
                 yield this.auth(account);
-            else {
-                let obj = {
-                    arg: this.render('auth/123.pug'),
-                    language: "en"
-                };
-                this.send_data(this.events.change_app_state, obj);
-            }
+            else
+                this.send_data(this.events.change_app_state, this.render('auth/auth.pug'));
         });
     }
     ;
@@ -42,29 +36,20 @@ class AuthController extends Controller_1.Controller {
     ;
     auth(account, first = false) {
         return __awaiter(this, void 0, void 0, function* () {
+            let user = yield this.get_self_info();
+            // let user_json=JSON.stringify(user);
             if (this.connection_tries === 9)
                 this.connection_tries = 0;
             else
                 this.connection_tries += 1;
             yield this.ipfs.connect();
-            console.log('IPFS connected');
-            console.log(account);
+            console.log('ipfs connected');
+            // console.log(account);
             // await this.ipfs.ipfs_info();
-            let time = 2000;
-            while (true) {
-                try {
-                    yield this.loom.connect(account.privKey);
-                    break;
-                }
-                catch (e) {
-                    console.log("Cannot connect to loom. Retry...");
-                    yield new Promise(resolve => {
-                        setTimeout(resolve, time);
-                        time = time * 2;
-                    });
-                }
-            }
+            yield this.loom.connect(account.privKey);
             console.log('loom connected');
+            this.grpc.SetPrivKey(account.privKey);
+            console.log('1');
             if (first) {
                 let time = 2000;
                 while (true) {
@@ -83,12 +68,16 @@ class AuthController extends Controller_1.Controller {
                     }
                 }
             }
-            let user = yield this.get_self_info();
+            this.grpc.StartPinging();
+            console.log('5');
+            this.grpc.StartUserPinging();
+            console.log('6');
             this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
             account.host = this.dxmpp_config.host;
             account.jidhost = this.dxmpp_config.jidhost;
             account.port = this.dxmpp_config.port + this.connection_tries;
             yield this.dxmpp.connect(account);
+            console.log('7');
         });
     }
     save_acc(data) {
@@ -106,12 +95,11 @@ class AuthController extends Controller_1.Controller {
             user.avatar = data.avatar ? (yield Helpers_1.resize_b64_img(data.avatar)) : (yield Helpers_1.resize_img_from_path(this.paths.components + 'auth/default-avatar1.jpg'));
             yield user.save();
             let account = new AccountModel_1.AccountModel();
-            let settings = new SettingsModel_1.SettingsModel();
             account.privKey = loom_data.priv;
             account.passphrase = data.mnemonic;
+            account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
             account.user = user;
-            settings.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
-            yield settings.save();
+            account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
             yield account.save();
             yield this.auth(account, true);
         });

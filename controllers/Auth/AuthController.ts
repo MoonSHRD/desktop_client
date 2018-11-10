@@ -19,7 +19,7 @@ class AuthController extends Controller {
             await this.auth(account);
         else {
             let obj = {
-                arg:this.render('auth/123.pug'),
+                arg:this.render('auth/auth.pug'),
                 language:"en"
             };
             this.send_data(this.events.change_app_state, obj);
