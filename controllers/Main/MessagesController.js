@@ -137,21 +137,25 @@ class MessagesController extends Controller_1.Controller {
             console.log(file);
             let self_info = yield this.get_self_info();
             let chat = yield ChatModel_1.ChatModel.findOne(id);
+            let opp_id = ChatModel_1.ChatModel.get_chat_opponent_id(id, self_info.id);
             if (!chat) {
                 let user = this.controller_register.get_controller_parameter('ChatsController', 'found_chats').users[id];
-                let userModel = new UserModel_1.UserModel();
-                userModel.id = ChatModel_1.ChatModel.get_chat_opponent_id(id, self_info.id);
-                userModel.domain = 'localhost';
-                userModel.firstname = user.firstname;
-                userModel.lastname = user.lastname;
-                userModel.name = user.firstname + " " + user.lastname;
-                userModel.avatar = user.avatar;
-                yield userModel.save();
+                let userModel = yield UserModel_1.UserModel.findOne(opp_id);
+                if (!userModel) {
+                    userModel = new UserModel_1.UserModel();
+                    userModel.id = opp_id;
+                    userModel.domain = 'localhost';
+                    userModel.firstname = user.firstname;
+                    userModel.lastname = user.lastname;
+                    userModel.name = user.firstname + " " + user.lastname;
+                    userModel.avatar = user.avatar;
+                    yield userModel.save();
+                }
                 chat = new ChatModel_1.ChatModel();
                 chat.id = id;
                 chat.domain = "localhost";
                 chat.type = this.chat_types.user;
-                chat.users.push(userModel);
+                chat.users = [userModel, self_info];
                 yield chat.save();
             }
             // let date = new Date();
@@ -194,7 +198,8 @@ class MessagesController extends Controller_1.Controller {
                 group = true;
             }
             console.log("sending to", chat, text);
-            this.dxmpp.send(chat, text, group, message.files);
+            if (opp_id != self_info.id)
+                this.dxmpp.send(chat, text, group, message.files);
         });
     }
     ;
@@ -240,6 +245,8 @@ class MessagesController extends Controller_1.Controller {
                 chat.type = this.chat_types.user;
                 chat.domain = "localhost";
                 chat.users = [userModel];
+                if (user.id != self_info.id)
+                    chat.users.push(self_info);
                 yield chat.save();
                 yield chat.get_user_chat_meta(self_info.id);
                 yield this.controller_register.run_controller('ChatsController', 'load_chat', chat, this.chat_to_menu.user);

@@ -38,7 +38,7 @@ class Grpc {
             while (true) {
                 let result = yield this.CallMethod("Ping", { pubKey: this.pubKey });
                 // console.log(result);
-                yield sleep(1000 * 60 * 5);
+                yield sleep(1000 * 60 * 4);
             }
         });
     }

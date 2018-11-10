@@ -132,21 +132,25 @@ class MessagesController extends Controller {
         console.log(file);
         let self_info = await this.get_self_info();
         let chat = await ChatModel.findOne(id);
+        let opp_id=ChatModel.get_chat_opponent_id(id,self_info.id);
         if (!chat) {
             let user = this.controller_register.get_controller_parameter('ChatsController','found_chats').users[id];
-            let userModel=new UserModel();
-            userModel.id=ChatModel.get_chat_opponent_id(id,self_info.id);
-            userModel.domain='localhost';
-            userModel.firstname=user.firstname;
-            userModel.lastname=user.lastname;
-            userModel.name=user.firstname+" "+user.lastname;
-            userModel.avatar=user.avatar;
-            await userModel.save();
+            let userModel=await UserModel.findOne(opp_id);
+            if (!userModel) {
+                userModel=new UserModel();
+                userModel.id=opp_id;
+                userModel.domain='localhost';
+                userModel.firstname=user.firstname;
+                userModel.lastname=user.lastname;
+                userModel.name=user.firstname+" "+user.lastname;
+                userModel.avatar=user.avatar;
+                await userModel.save();
+            }
             chat = new ChatModel();
             chat.id=id;
             chat.domain="localhost";
             chat.type=this.chat_types.user;
-            chat.users.push(userModel);
+            chat.users=[userModel,self_info];
             await chat.save();
         }
         // let date = new Date();
@@ -193,7 +197,8 @@ class MessagesController extends Controller {
             group = true;
         }
         console.log("sending to",chat,text);
-        this.dxmpp.send(chat, text, group, message.files);
+        if (opp_id!=self_info.id)
+            this.dxmpp.send(chat, text, group, message.files);
     };
 
     // async show_message_notification(message_id:string){
@@ -236,7 +241,9 @@ class MessagesController extends Controller {
             chat.id = ChatModel.get_user_chat_id(self_info.id, user.id);
             chat.type = this.chat_types.user;
             chat.domain = "localhost";
-            chat.users = [userModel];
+            chat.users=[userModel];
+            if (user.id!=self_info.id)
+                chat.users.push(self_info);
             await chat.save();
 
             await chat.get_user_chat_meta(self_info.id);
