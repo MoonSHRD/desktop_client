@@ -526,6 +526,14 @@ window.onload = function () {
         })
         .on('mouseout', '[data-toogle="tooltip"]', function () {
             $(this).tooltip('hide');
+        })
+
+        .on('keydown', '[data-toggle="tooltip2"]', function () {
+        $(this).tooltip('show');
+         })
+
+        .on('backspace-down', '[data-toggle="tooltip2"]', function () {
+            $(this).tooltip('hide');
         });
 
     /*
