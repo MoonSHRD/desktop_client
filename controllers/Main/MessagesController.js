@@ -155,7 +155,10 @@ class MessagesController extends Controller_1.Controller {
                 chat.id = id;
                 chat.domain = "localhost";
                 chat.type = this.chat_types.user;
-                chat.users = [userModel, self_info];
+                // chat.users=[userModel,self_info];
+                chat.users = [userModel];
+                if (userModel.id != self_info.id)
+                    chat.users.push(self_info);
                 yield chat.save();
             }
             // let date = new Date();
