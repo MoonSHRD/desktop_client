@@ -13,6 +13,7 @@ const UserModel_1 = require("../../models/UserModel");
 const Controller_1 = require("../Controller");
 const ChatModel_1 = require("../../models/ChatModel");
 const Helpers_1 = require("../Helpers");
+const env_config_1 = require("../../src/env_config");
 class ChatsController extends Controller_1.Controller {
     constructor() {
         super(...arguments);
@@ -102,7 +103,7 @@ class ChatsController extends Controller_1.Controller {
                 return;
             // console.log(chats);
             yield chats.forEach((chat) => __awaiter(this, void 0, void 0, function* () {
-                if (chat.id === '0x0000000000000000000000000000000000000000_' + self_info.id && first)
+                if (chat.id === env_config_1.bot_acc.addr + '_' + self_info.id && first)
                     chat.active = true;
                 yield this.load_chat(chat, menu_chat);
             }));
@@ -129,13 +130,40 @@ class ChatsController extends Controller_1.Controller {
                     user = this.controller_register.get_controller_parameter('ChatsController', 'found_chats').users[data.id];
                     user.id = ChatModel_1.ChatModel.get_chat_opponent_id(data.id, self_info.id);
                 }
+                user.eth_balance = yield this.web3.GetUserBalance(user.id);
                 this.send_data('get_my_vcard', this.render('main/modal_popup/modal_content.pug', user));
             }
+        });
+    }
+    CreateUserChat(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let self_info = yield this.get_self_info();
+            let userGR = JSON.parse((yield this.grpc.CallMethod("GetObjData", { id: user_id, obj: 'user' })).data.data);
+            console.log(userGR);
+            let userModel = new UserModel_1.UserModel();
+            userModel.id = userGR.id;
+            userModel.domain = "localhost";
+            userModel.name = userGR.firstname + (userGR.lastname ? " " + userGR.lastname : "");
+            userModel.firstname = userGR.firstname;
+            userModel.lastname = userGR.lastname;
+            userModel.avatar = userGR.avatar;
+            userModel.last_active = userGR.last_active;
+            yield userModel.save();
+            let chat = new ChatModel_1.ChatModel();
+            chat.id = ChatModel_1.ChatModel.get_user_chat_id(self_info.id, userGR.id);
+            chat.type = this.chat_types.user;
+            chat.domain = "localhost";
+            chat.users = [userModel];
+            if (userGR.id != self_info.id)
+                chat.users.push(self_info);
+            yield chat.save();
+            return { user: userModel, chat };
         });
     }
     get_my_vcard() {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
+            self_info.eth_balance = yield this.web3.GetUserBalance(self_info.id);
             this.send_data('get_my_vcard', this.render('main/modal_popup/modal_content.pug', self_info));
         });
     }
@@ -211,17 +239,18 @@ class ChatsController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(group_data);
             // let group_type=group_data.type?group_data.type:this.group_chat_types.channel;
-            if (group_data.substype == 'unfree') {
+            if (group_data.openPrivate == 'on') {
                 // let price=64;
-                let rate = 1 / group_data.token_price;
-                let decimals = 18;
-                if (rate < 1) {
-                    decimals += rate.toString().match(/[0.]*[1-9]/)[0].length - 2;
+                group_data.rate = 1 / group_data.subscriptionPrice;
+                group_data.decimals = 18;
+                if (group_data.rate < 1) {
+                    group_data.decimals += group_data.rate.toString().match(/[0.]*[1-9]/)[0].length - 2;
                 }
                 else {
-                    decimals -= (Math.floor(rate).toString().length - 1);
+                    group_data.decimals -= (Math.floor(group_data.rate).toString().length - 1);
                 }
-                console.log('rate: ', rate, ' decimals: ', decimals);
+                console.log('rate: ', group_data.rate, ' decimals: ', group_data.decimals);
+                console.log(yield this.web3.CreateToken(group_data));
             }
             else {
                 this.dxmpp.register_channel(group_data, '');

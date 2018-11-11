@@ -5,6 +5,7 @@ import {UserModel} from "../models/UserModel";
 import {LocalAddress, CryptoUtils} from 'loom-js';
 import * as tweetnacl from 'tweetnacl';
 import {grpc_config} from "../src/env_config";
+import ethers = require('ethers');
 
 let PROTO_PATH = __dirname + '/proto/moonshard.proto';
 
@@ -19,7 +20,8 @@ export class Grpc {
     private promisedFuncs = {};
     public addr: string;
     public pubKey: string;
-    private privKey: Uint8Array;
+    public privKey: string;
+    public wal: any;
 
     private constructor() {
         let packageDefinition = protoLoader.loadSync(PROTO_PATH, {});
@@ -68,24 +70,27 @@ export class Grpc {
         }
     }
 
-    private signData(data) {
-        if (!this.privKey) {
-            throw new Error('private key must be set first');
-        }
-
-        let uint_data = Buffer.from(data, 'utf-8');
-        let uint8_sig = tweetnacl.sign.detached(
-            uint_data, // message as uint8
-            this.privKey
-        );
-        return CryptoUtils.Uint8ArrayToB64(uint8_sig);
-    }
+    // private signData(data) {
+    //     if (!this.privKey) {
+    //         throw new Error('private key must be set first');
+    //     }
+    //
+    //     let uint_data = Buffer.from(data, 'utf-8');
+    //     let uint8_sig = tweetnacl.sign.detached(
+    //         uint_data, // message as uint8
+    //         this.privKey
+    //     );
+    //     return CryptoUtils.Uint8ArrayToB64(uint8_sig);
+    // }
 
     SetPrivKey(privKey: string) {
-        this.privKey = CryptoUtils.B64ToUint8Array(privKey);
-        let pub = CryptoUtils.publicKeyFromPrivateKey(this.privKey);
-        this.pubKey = CryptoUtils.bytesToHexAddr(pub).toLowerCase();
-        this.addr = LocalAddress.fromPublicKey(pub).toString();
+        let wal=new ethers.Wallet(privKey);
+        this.wal=wal;
+        let addr = wal.address.toLowerCase();
+        let {privateKey,publicKey}=wal['signingKey'].keyPair;
+        this.privKey=privateKey;
+        this.pubKey=publicKey;
+        this.addr = addr;
     }
 
     async CallMethod(method: string, data): Promise<{ err, data }> {
@@ -100,7 +105,7 @@ export class Grpc {
         try {
             if (data.data) {
                 data.data = JSON.stringify(data.data);
-                data.sign = this.signData(data.data)
+                data.sign=await this.wal.signMessage(data.data);
             }
             result.data = await this.promisedFuncs[method](data);
         } catch (e) {

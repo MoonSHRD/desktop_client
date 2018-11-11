@@ -8,6 +8,7 @@ import {ControllerRegister} from "./ControllerRegister";
 import {Loom} from "../loom/loom";
 import {Ipfs} from "../ipfs/ipfs";
 import {Grpc} from "../grpc/grpc";
+import {Web3S} from "../web3/web3";
 
 export abstract class Controller {
     protected pug = Pug;
@@ -23,6 +24,7 @@ export abstract class Controller {
     protected group_chat_types = helper.group_chat_types;
     protected chat_to_menu = helper.chat_to_menu;
     protected eth = eth;
+    protected web3 = Web3S.GetInstance();
     protected loom: Loom = Loom.getInstance();
     protected ipfs: Ipfs = Ipfs.getInstance();
     private self_info: UserModel = null;

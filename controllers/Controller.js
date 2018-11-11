@@ -17,6 +17,7 @@ const ControllerRegister_1 = require("./ControllerRegister");
 const loom_1 = require("../loom/loom");
 const ipfs_1 = require("../ipfs/ipfs");
 const grpc_1 = require("../grpc/grpc");
+const web3_1 = require("../web3/web3");
 class Controller {
     constructor(window) {
         this.pug = Pug;
@@ -31,6 +32,7 @@ class Controller {
         this.group_chat_types = var_helper_1.helper.group_chat_types;
         this.chat_to_menu = var_helper_1.helper.chat_to_menu;
         this.eth = moonshard_core_1.eth;
+        this.web3 = web3_1.Web3S.GetInstance();
         this.loom = loom_1.Loom.getInstance();
         this.ipfs = ipfs_1.Ipfs.getInstance();
         this.self_info = null;

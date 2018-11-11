@@ -199,6 +199,14 @@ class MessagesController extends Controller {
         } else if (Object.values(this.group_chat_types).includes(chat.type)) {
             group = true;
         }
+
+        // if (opp_id=='0x0000000000000000000000000000000000000000'){
+        //     if (text=='claim'){
+        //
+        //     }
+        //     return
+        // }
+
         console.log("sending to",chat,text);
         if (opp_id!=self_info.id)
             this.dxmpp.send(chat, text, group, message.files);

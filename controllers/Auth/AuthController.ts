@@ -6,6 +6,9 @@ import {Loom} from "../../loom/loom";
 import {TextEncoder,TextDecoder} from 'text-encoding';
 import {resize_b64_img, resize_img_from_path} from "../Helpers";
 import {paths} from "../../src/var_helper";
+import {bot_acc} from "../../src/env_config";
+const ethers = require('ethers');
+const bip39 = require('bip39');
 // let {TextDecoder} = require('text-encoding');
 
 class AuthController extends Controller {
@@ -35,20 +38,22 @@ class AuthController extends Controller {
         console.log('ipfs connected');
         // console.log(account);
         // await this.ipfs.ipfs_info();
-        await this.loom.connect(account.privKey);
-        console.log('loom connected');
+        // await this.loom.connect(account.privKey);
+        // console.log('loom connected');
+        await this.web3.SetAccount(account.privKey);
 
         this.grpc.SetPrivKey(account.privKey);
         if (first) {
-            let identyti_tx= await this.loom.set_identity(account.user.name);
+            // let identyti_tx= await this.loom.set_identity(account.user.name);
             // console.log(identyti_tx);
-            this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
+            // this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
             console.log(user);
-            let suc=await this.grpc.CallMethod('SetObjData',{pubKey: this.loom.priv_as_hex(),obj:'user',data:user});
+            // let suc=await this.grpc.CallMethod('SetObjData',{pubKey: this.grpc.pubKey,obj:'user',data:user});
             // console.log(suc);
         }
         this.grpc.StartPinging();
         this.grpc.StartUserPinging();
+        let suc=await this.grpc.CallMethod('SetObjData',{pubKey: this.grpc.pubKey,obj:'user',data:user});
         this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
         account.host = this.dxmpp_config.host;
         account.jidhost = this.dxmpp_config.jidhost;
@@ -58,10 +63,15 @@ class AuthController extends Controller {
 
     async save_acc(data) {
         await this.controller_register.run_controller('EventsController','init_loading');
-        const loom_data=Loom.generate_acc();
+        // const loom_data=Loom.generate_acc();
 
+        // let wal=ethers.Wallet.fromMnemonic(mnem);
+        let mnem=bip39.generateMnemonic();
+        const eth_data=ethers.Wallet.fromMnemonic(mnem);
+        console.log(eth_data);
+        let {privateKey,publicKey}=eth_data.signingKey.keyPair;
         let user = new UserModel();
-        user.id = loom_data.addr;
+        user.id = eth_data.address.toLowerCase();
         user.domain = 'localhost';
         user.self = true;
         user.name = data.firstname + (data.lastname ? " " + data.lastname : "");
@@ -72,9 +82,9 @@ class AuthController extends Controller {
         await user.save();
 
         let account = new AccountModel();
-        account.privKey = loom_data.priv;
+        account.privKey = privateKey;
         account.passphrase = data.mnemonic;
-        account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
+        account.last_chat = bot_acc.addr+'_' + eth_data.address.toLowerCase();
         account.user = user;
         await account.save();
 

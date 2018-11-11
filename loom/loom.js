@@ -144,7 +144,7 @@ class Loom {
     static from_b64(str) {
         return loom_js_1.CryptoUtils.B64ToUint8Array(str);
     }
-    priv_as_hex() {
+    pub_as_hex() {
         return loom_js_1.CryptoUtils.bytesToHexAddr(this.pub).toLowerCase();
     }
     sign_data(data) {

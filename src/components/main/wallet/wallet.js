@@ -4,20 +4,6 @@ $('.walletMenu li').click(function (e) {
     ipcRenderer.send('change_wallet_menu', type);
 });
 
-$(document).on('click', '.sendTokenButton', function (e) {
-    // let data_arr=$(this).closest('form');
-    // console.log(data_arr);
-    // return;
-    let data_arr = $(this).closest('tr').find('input').serializeArray();
-    let data = {};
-    data_arr.forEach((el) => {
-        data[el.name] = el.value;
-    });
-    // console.log(data_arr);
-    // console.log(data);
-    ipcRenderer.send('transfer_token', data);
-});
-
 $(document).off('input', 'input[name=amount]');
 
 $(document).on('input', 'input[name=amount]', function (e) {

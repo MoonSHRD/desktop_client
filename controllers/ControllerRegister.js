@@ -52,7 +52,7 @@ class ControllerRegister {
     run_with_handling(func) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield func();
+                return yield func();
             }
             catch (e) {
                 yield this.run_controller('EventsController', 'send_error', e.toString());
@@ -63,7 +63,7 @@ class ControllerRegister {
     }
     run_controller(controller, func, ...args) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.run_with_handling(() => __awaiter(this, void 0, void 0, function* () {
+            return yield this.run_with_handling(() => __awaiter(this, void 0, void 0, function* () {
                 return yield this.get_controller(controller)[func](...args);
             }));
         });

@@ -5,6 +5,7 @@ import {ChatModel} from "../../models/ChatModel";
 import {MessageModel} from "../../models/MessageModel";
 import {getConnection} from "typeorm";
 import {Helper} from "../Helpers";
+import {bot_acc} from "../../src/env_config";
 
 class ChatsController extends Controller {
 
@@ -93,7 +94,7 @@ class ChatsController extends Controller {
         if (!chats.length) return;
         // console.log(chats);
         await chats.forEach(async (chat) => {
-            if (chat.id === '0x0000000000000000000000000000000000000000_' + self_info.id && first)
+            if (chat.id === bot_acc.addr+'_' + self_info.id && first)
                 chat.active = true;
             await this.load_chat(chat, menu_chat);
         });
@@ -117,12 +118,40 @@ class ChatsController extends Controller {
                 user = this.controller_register.get_controller_parameter('ChatsController', 'found_chats').users[data.id];
                 user.id=ChatModel.get_chat_opponent_id(data.id,self_info.id)
             }
+            user.eth_balance=await this.web3.GetUserBalance(user.id);
             this.send_data('get_my_vcard', this.render('main/modal_popup/modal_content.pug', user));
         }
     }
 
+    async CreateUserChat(user_id:string):Promise<{user:UserModel,chat:ChatModel}>{
+        let self_info=await this.get_self_info();
+        let userGR=JSON.parse((await this.grpc.CallMethod("GetObjData",{id: user_id,obj:'user'})).data.data);
+        console.log(userGR);
+        let userModel=new UserModel();
+        userModel.id=userGR.id;
+        userModel.domain="localhost";
+        userModel.name=userGR.firstname+(userGR.lastname?" "+userGR.lastname:"");
+        userModel.firstname=userGR.firstname;
+        userModel.lastname=userGR.lastname;
+        userModel.avatar=userGR.avatar;
+        userModel.last_active=userGR.last_active;
+        await userModel.save();
+
+        let chat = new ChatModel();
+        chat.id = ChatModel.get_user_chat_id(self_info.id, userGR.id);
+        chat.type = this.chat_types.user;
+        chat.domain = "localhost";
+        chat.users=[userModel];
+        if (userGR.id!=self_info.id)
+            chat.users.push(self_info);
+        await chat.save();
+
+        return {user:userModel,chat}
+    }
+
     async get_my_vcard() {
         let self_info = await this.get_self_info();
+        self_info.eth_balance=await this.web3.GetUserBalance(self_info.id);
         this.send_data('get_my_vcard', this.render('main/modal_popup/modal_content.pug', self_info));
     }
 
@@ -195,16 +224,17 @@ class ChatsController extends Controller {
     async create_group(group_data) {
         console.log(group_data);
         // let group_type=group_data.type?group_data.type:this.group_chat_types.channel;
-        if (group_data.substype=='unfree'){
+        if (group_data.openPrivate=='on'){
             // let price=64;
-            let rate = 1/group_data.token_price;
-            let decimals=18;
-            if (rate<1){
-                decimals += rate.toString().match(/[0.]*[1-9]/)[0].length-2;
+            group_data.rate = 1/group_data.subscriptionPrice;
+            group_data.decimals=18;
+            if (group_data.rate<1){
+                group_data.decimals += group_data.rate.toString().match(/[0.]*[1-9]/)[0].length-2;
             } else {
-                decimals -= (Math.floor(rate).toString().length-1);
+                group_data.decimals -= (Math.floor(group_data.rate).toString().length-1);
             }
-            console.log('rate: ',rate,' decimals: ',decimals);
+            console.log('rate: ',group_data.rate,' decimals: ',group_data.decimals);
+            console.log(await this.web3.CreateToken(group_data));
         } else {
             this.dxmpp.register_channel(group_data, '');
         }

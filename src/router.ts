@@ -11,6 +11,7 @@ import {ipcMain} from "electron";
 import {ControllerRegister} from "../controllers/ControllerRegister";
 import {helper} from "./var_helper";
 import {Loom} from "../loom/loom";
+import {Web3S} from "../web3/web3";
 
 export class Router {
     readonly window: any;
@@ -20,6 +21,7 @@ export class Router {
     private loading: boolean=true;
     readonly ipcMain: any;
     readonly dxmpp: any;
+    readonly web3: any;
     private events: any;
     private connection_tries: number=0;
     // private connecting: boolean = false;
@@ -33,6 +35,7 @@ export class Router {
         this.paths = helper.paths;
         this.ipcMain = ipcMain;
         this.dxmpp = dxmpp.getInstance();
+        this.web3 = Web3S.GetInstance();
         this.loom = Loom.getInstance();
         this.events = helper.events;
         this.types = helper.paths;
@@ -296,6 +299,22 @@ export class Router {
         this.listen_event(this.ipcMain, "change_chats_size", async (events, width) => {
             console.log("New chats width:", width);
             await this.controller_register.run_controller('AccountController', 'change_chats_width', width);
+        });
+
+
+        /** Eth events **/
+        this.listen_event(this.web3, 'received_eth', async (tx)=>{
+            console.log(`Received ${tx.value/Math.pow(10,18)}Eth from ${tx.from.toLowerCase()}`);
+            console.log(tx);
+            let text=`Received transaction
+From: ${tx.from.toLowerCase()}.
+Amount: ${tx.value/Math.pow(10,18)} Coin.
+Link: https://blocks.moonshard.io/tx/${tx.hash}`;
+            await this.controller_register.queue_controller('MessagesController', 'received_message', {id:tx.from.toLowerCase(),domain:'localhost'}, text, Date.now(), []);
+        });
+
+        this.listen_event(this.web3, 'received_eth', async (one,two,three)=>{
+            console.log(one,two,three);
         });
     }
 }
