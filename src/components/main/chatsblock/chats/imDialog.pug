@@ -17,6 +17,10 @@ li(id=id data-domain=domain data-type=type data-contract_address=contract_addres
                     h3.userchat__name #{name}
                 .userchat__date(data-name="chat_last_time") #{time && time !== 1?time:''}
             .userchat__body
-                .userchat__lastmessage(data-name="chat_last_text") #{text?text:''}
+                .userchat__lastmessage(data-name="chat_last_text")
+                    if text
+                        | #{text}
+                    else
+                        span(style="opacity:0") 123
                 //if (unread_messages !== 0)
                 .badge.badge-pill(data-name="unread_messages" style=unread_messages!==0?'':'display:none;') #{unread_messages}
