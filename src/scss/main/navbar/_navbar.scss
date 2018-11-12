@@ -18,7 +18,8 @@
             flex-direction: column;
             width: 70px; /* Set a specific width */
             min-width: 70px; /* Set a specific width */
-            background-color: $primary-text; /* Dark-grey background */
+            //background-color: $primary-text; /* Dark-grey background */
+            background: linear-gradient(lighten($brand-primary,15%), lighten($brand-primary,35%));
             height: 100%;
 
             li{
@@ -91,11 +92,11 @@
                 }
 
                 &:hover:not(.menu__item_logo) {
-                    background-color: $c0; /* Add a hover color */
+                    background-color: $primary-text; /* Add a hover color */
                 }
 
                 &.active_menu {
-                    background-color: $c0; /* Add a hover color */
+                    background-color: $primary-text; /* Add a hover color */
                 }
 
                 &_settings{

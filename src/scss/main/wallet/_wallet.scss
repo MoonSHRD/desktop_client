@@ -61,8 +61,8 @@
 }
 
 .userBar span{
-    margin-left: 10px;
-    color: $c0;
+    //margin-left: 10px;
+    color: $primary-text;
 }
 
 .active_wallet {
@@ -198,4 +198,21 @@
 .table_02 a {
     text-decoration: underline!important;
     color: $brand-blue!important;
+}
+
+
+.transfer{
+
+    &-info{
+
+        &__link{
+            cursor: pointer;
+            display: inline-block;
+            padding: 5px 10px;
+
+            svg{
+                width: 20px;
+            }
+        }
+    }
 }

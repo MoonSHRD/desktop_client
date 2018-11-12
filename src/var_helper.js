@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.paths = {
     root: __dirname + '/../',
-    src: __dirname,
+    src: __dirname + '/',
     components: __dirname + '/components/',
     controllers: __dirname + '/../controllers/',
     models: __dirname + '/../models/',

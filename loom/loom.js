@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const env_config_1 = require("../src/env_config");
 const loom_js_1 = require("loom-js");
+const tweetnacl = require("tweetnacl");
 const LoomTruffleProvider = require('loom-truffle-provider');
 const Web3 = require('web3');
 let qbox = require('qbox');
@@ -142,6 +143,15 @@ class Loom {
     }
     static from_b64(str) {
         return loom_js_1.CryptoUtils.B64ToUint8Array(str);
+    }
+    pub_as_hex() {
+        return loom_js_1.CryptoUtils.bytesToHexAddr(this.pub).toLowerCase();
+    }
+    sign_data(data) {
+        let uint_data = Buffer.from(data, 'utf-8');
+        let uint8_sig = tweetnacl.sign.detached(uint_data, // message as uint8
+        this.priv);
+        return loom_js_1.CryptoUtils.Uint8ArrayToB64(uint8_sig);
     }
 }
 exports.Loom = Loom;

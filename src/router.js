@@ -19,6 +19,7 @@ const electron_1 = require("electron");
 const ControllerRegister_1 = require("../controllers/ControllerRegister");
 const var_helper_1 = require("./var_helper");
 const loom_1 = require("../loom/loom");
+const web3_1 = require("../web3/web3");
 class Router {
     constructor(window) {
         this.loading = true;
@@ -30,6 +31,7 @@ class Router {
         this.paths = var_helper_1.helper.paths;
         this.ipcMain = electron_1.ipcMain;
         this.dxmpp = moonshard_core_1.dxmpp.getInstance();
+        this.web3 = web3_1.Web3S.GetInstance();
         this.loom = loom_1.Loom.getInstance();
         this.events = var_helper_1.helper.events;
         this.types = var_helper_1.helper.paths;
@@ -158,6 +160,7 @@ class Router {
             yield this.controller_register.queue_controller('MessagesController', 'message_delivered', message);
         }));
         this.listen_event(this.ipcMain, 'get_chat_msgs', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            console.log(arg);
             yield this.controller_register.run_controller('MessagesController', 'get_chat_messages', arg);
         }));
         this.listen_event(this.ipcMain, 'send_message', (event, arg) => __awaiter(this, void 0, void 0, function* () {
@@ -217,6 +220,19 @@ class Router {
         this.listen_event(this.ipcMain, "change_chats_size", (events, width) => __awaiter(this, void 0, void 0, function* () {
             // console.log("New chats width:", width);
             yield this.controller_register.run_controller('SettingsController', 'change_chats_width', width);
+        }));
+        /** Eth events **/
+        this.listen_event(this.web3, 'received_eth', (tx) => __awaiter(this, void 0, void 0, function* () {
+            console.log(`Received ${tx.value / Math.pow(10, 18)}Eth from ${tx.from.toLowerCase()}`);
+            console.log(tx);
+            let text = `Received transaction
+From: ${tx.from.toLowerCase()}.
+Amount: ${tx.value / Math.pow(10, 18)} Coin.
+Link: https://blocks.moonshard.io/tx/${tx.hash}`;
+            yield this.controller_register.queue_controller('MessagesController', 'received_message', { id: tx.from.toLowerCase(), domain: 'localhost' }, text, Date.now(), []);
+        }));
+        this.listen_event(this.web3, 'received_eth', (one, two, three) => __awaiter(this, void 0, void 0, function* () {
+            console.log(one, two, three);
         }));
     }
 }

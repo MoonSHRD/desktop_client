@@ -25,3 +25,6 @@ yarn-error.log
 
 not_for_git/
 .git-old/
+
+src/css/index.css
+src/css/index.min.css

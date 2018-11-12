@@ -51,7 +51,11 @@ class EventsController extends Controller_1.Controller {
     }
     init_loading() {
         return __awaiter(this, void 0, void 0, function* () {
-            let language = (yield this.get_Settings()).language;
+            let settings = yield this.get_Settings();
+            let language = "en";
+            if (settings) {
+                language = settings.language;
+            }
             let obj = {
                 arg: this.render(`loading/loading.pug`),
                 language: language

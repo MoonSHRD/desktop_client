@@ -39,8 +39,13 @@ class EventsController extends Controller {
     }
 
     async init_loading() {
-        let language = (await this.get_Settings()).language;
-            let obj = {
+    let settings = await this.get_Settings();
+    let language = "en";
+    if (settings) {
+        language = settings.language;
+    }
+
+    let obj = {
           arg:this.render(`loading/loading.pug`),
           language: language
         };

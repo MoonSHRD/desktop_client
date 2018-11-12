@@ -15,36 +15,47 @@ import Notification = Electron.Notification;
 import nativeImage = Electron.nativeImage;
 import ipcRenderer = Electron.ipcRenderer;
 import ipcMain = Electron.ipcMain;
-
-
+import {helper} from "../../src/var_helper";
+import {Grpc} from "../../grpc/grpc";
+// import * as eNotify from 'electron-notify'
+// let eNotify = require('electron-notify');
 
 class MessagesController extends Controller {
 
     async load_join_chat(chat_id: string) {
-        let q_chats = this.controller_register.get_controller_parameter('ChatsController', 'queried_chats');
-        let chat = q_chats[chat_id];
+        let q_chats = this.controller_register.get_controller_parameter('ChatsController', 'found_chats');
+        let chat = q_chats.chats[chat_id];
         chat.type = this.group_chat_types.join_channel;
         this.send_data(this.events.reload_chat, this.render('main/messagingblock/qqq.pug', chat));
     }
 
-    async get_chat_messages(chat_id: string) {
-        console.log('get_chat_messages');
-        let chat = await ChatModel.get_chat_with_events(chat_id);
+    async load_founded_chat(chat_id: string) {
+        let q_chats = this.controller_register.get_controller_parameter('ChatsController', 'found_chats');
+        let chat = q_chats.users[chat_id];
+        this.send_data(this.events.reload_chat, this.render('main/messagingblock/qqq.pug', chat));
+    }
 
-        if (!chat)
-            return this.load_join_chat(chat_id);
-        await this.reading_messages(chat.id);
+    async get_chat_messages({id,type}) {
+        let self_info = await this.get_self_info();
+        console.log('get_chat_messages',id,type);
+        let chat = await ChatModel.get_chat_with_events(id);
 
-        switch (chat.type) {
+
+        switch (type) {
             case this.chat_types.user:
-                await chat.get_user_chat_meta();
+                if (!chat)
+                    return this.load_founded_chat(id);
+                await chat.get_user_chat_meta(self_info.id);
                 break;
+            case this.group_chat_types.join_channel:
+                return this.load_join_chat(id);
         }
         let html = this.render('main/messagingblock/qqq.pug', chat);
-        await chat.save();
+        await this.reading_messages(chat.id);
+        // await chat.save();
         await this.send_data('reload_chat', html);
 
-        await this.render_chat_messages(chat_id);
+        await this.render_chat_messages(chat.id);
     };
 
     private async render_message(message: MessageModel) {
@@ -113,6 +124,30 @@ class MessagesController extends Controller {
     async send_message({id, text, file}) {
         let self_info = await this.get_self_info();
         let chat = await ChatModel.findOne(id);
+        let opp_id=ChatModel.get_chat_opponent_id(id,self_info.id);
+        if (!chat) {
+            let user = this.controller_register.get_controller_parameter('ChatsController','found_chats').users[id];
+            let userModel=await UserModel.findOne(opp_id);
+            if (!userModel) {
+                userModel=new UserModel();
+                userModel.id=opp_id;
+                userModel.domain='localhost';
+                userModel.firstname=user.firstname;
+                userModel.lastname=user.lastname;
+                userModel.name=user.firstname+" "+user.lastname;
+                userModel.avatar=user.avatar;
+                await userModel.save();
+            }
+            chat = new ChatModel();
+            chat.id=id;
+            chat.domain="localhost";
+            chat.type=this.chat_types.user;
+            // chat.users=[userModel,self_info];
+            chat.users=[userModel];
+            if (userModel.id!=self_info.id)
+                chat.users.push(self_info);
+            await chat.save();
+        }
         // let date = new Date();
         let message = new MessageModel();
         message.sender = self_info;
@@ -152,13 +187,31 @@ class MessagesController extends Controller {
 
         if (chat.type === this.chat_types.user) {
             await this.render_message(message);
-            chat.id = await chat.get_user_chat_meta();
+            chat.id = await chat.get_user_chat_meta(self_info.id);
             group = false;
         } else if (Object.values(this.group_chat_types).includes(chat.type)) {
             group = true;
         }
-        this.dxmpp.send(chat, text, group, message.files);
+
+        // if (opp_id=='0x0000000000000000000000000000000000000000'){
+        //     if (text=='claim'){
+        //
+        //     }
+        //     return
+        // }
+
+        console.log("sending to",chat,text);
+        if (opp_id!=self_info.id)
+            this.dxmpp.send(chat, text, group, message.files);
     };
+
+    // async show_message_notification(message_id:string){
+    //     let message = await MessageModel.find({
+    //         where:{id:message_id},
+    //         relations:['sender','chat'],
+    //     })[0];
+    //     message.fill_sender_data();
+    // }
 
     async message_delivered(message_d) {
         let message = await MessageModel.findOne(message_d.userid);
@@ -172,6 +225,36 @@ class MessagesController extends Controller {
         let self_info = await this.get_self_info();
         let userModel = await UserModel.findOne(user.id);
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
+        console.log(chat);
+        if (!userModel || !chat){
+            console.log("retriving user info");
+            let userGR=JSON.parse((await this.grpc.CallMethod("GetObjData",{id: user.id,obj:'user'})).data.data);
+            console.log(userGR);
+            userModel=new UserModel();
+            userModel.id=userGR.id;
+            userModel.domain="localhost";
+            userModel.name=userGR.firstname+(userGR.lastname?" "+userGR.lastname:"");
+            userModel.firstname=userGR.firstname;
+            userModel.lastname=userGR.lastname;
+            userModel.avatar=userGR.avatar;
+            userModel.last_active=userGR.last_active;
+            await userModel.save();
+
+            chat = new ChatModel();
+            chat.id = ChatModel.get_user_chat_id(self_info.id, user.id);
+            chat.type = this.chat_types.user;
+            chat.domain = "localhost";
+            chat.users=[userModel];
+            if (user.id!=self_info.id)
+                chat.users.push(self_info);
+            await chat.save();
+
+            await chat.get_user_chat_meta(self_info.id);
+
+            await this.controller_register.run_controller('ChatsController','load_chat',chat,this.chat_to_menu.user)
+        }
+
+        // let chat = await ChatModel.get_user_chat(self_info.id, user.id);
         chat.unread_messages += 1;
         await chat.save();
         let message = new MessageModel();

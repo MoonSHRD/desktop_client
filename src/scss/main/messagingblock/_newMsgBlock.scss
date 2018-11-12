@@ -236,6 +236,8 @@ a.join_button {
         overflow: hidden;
         background-size: auto 110%;
         background-image: linear-gradient(180deg,hsla(0,0%,95.3%,.9) 0,hsla(0,0%,95.3%,.9)),url(('#{$img}/messBlockBg.jpg'));
+        display: flex;
+        flex-direction: column;
 
     }
 }
@@ -244,13 +246,16 @@ a.join_button {
 
     &__block {
         @include size(100%, auto);
-        @include position(absolute, null null 0);
+        //@include position(absolute, null null 0);
+        margin-top: auto;
         display: flex;
+        flex-shrink: 0;
         //justify-content: space-evenly;
         align-items: center;
         overflow: hidden;
         //padding: 20px 30px 20px 20px;
         background-color: $cf;
+        padding: 0;
         border-top: 1px solid $brand-gray-100;
     }
 
@@ -268,10 +273,10 @@ a.join_button {
         border-radius: 10px;
         border-style: none;
         outline: none;
-        padding: 15px 10px;
+        padding: .25rem .5rem;
         resize: none;
         flex: 1;
-        margin: 0 15px;
+        margin: .5em 15px;
         max-height: 200px;
 
         &::placeholder {
@@ -328,12 +333,12 @@ a.join_button {
  */
 .msgHistory{
     height: auto;
-    max-height: calc(100% - 120px);
+    //max-height: calc(100% - 120px);
     overflow-y: scroll;
     overflow-x: hidden;
     //margin-top: 40px;
-    padding-bottom: 10px;
-    @extend #style-11;
+    //padding-bottom: 10px;
+    @extend .custom-scrollbar;
 
     #dialogDate {
         text-align: center;
@@ -620,9 +625,10 @@ a.join_button {
  */
 
 .head_peer {
-    height: 70px;
+    height: 80px;
     width: 100%;
     background-color: $cf;
+    flex-shrink: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
