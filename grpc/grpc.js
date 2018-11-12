@@ -12,9 +12,8 @@ const grpc = require("grpc");
 const util = require("util");
 const protoLoader = require("@grpc/proto-loader");
 const UserModel_1 = require("../models/UserModel");
-const loom_js_1 = require("loom-js");
-const tweetnacl = require("tweetnacl");
 const env_config_1 = require("../src/env_config");
+const ethers = require("ethers");
 let PROTO_PATH = __dirname + '/proto/moonshard.proto';
 function sleep(ms) {
     return new Promise(resolve => {
@@ -68,20 +67,26 @@ class Grpc {
             }
         });
     }
-    signData(data) {
-        if (!this.privKey) {
-            throw new Error('private key must be set first');
-        }
-        let uint_data = Buffer.from(data, 'utf-8');
-        let uint8_sig = tweetnacl.sign.detached(uint_data, // message as uint8
-        this.privKey);
-        return loom_js_1.CryptoUtils.Uint8ArrayToB64(uint8_sig);
-    }
+    // private signData(data) {
+    //     if (!this.privKey) {
+    //         throw new Error('private key must be set first');
+    //     }
+    //
+    //     let uint_data = Buffer.from(data, 'utf-8');
+    //     let uint8_sig = tweetnacl.sign.detached(
+    //         uint_data, // message as uint8
+    //         this.privKey
+    //     );
+    //     return CryptoUtils.Uint8ArrayToB64(uint8_sig);
+    // }
     SetPrivKey(privKey) {
-        this.privKey = loom_js_1.CryptoUtils.B64ToUint8Array(privKey);
-        let pub = loom_js_1.CryptoUtils.publicKeyFromPrivateKey(this.privKey);
-        this.pubKey = loom_js_1.CryptoUtils.bytesToHexAddr(pub).toLowerCase();
-        this.addr = loom_js_1.LocalAddress.fromPublicKey(pub).toString();
+        let wal = new ethers.Wallet(privKey);
+        this.wal = wal;
+        let addr = wal.address.toLowerCase();
+        let { privateKey, publicKey } = wal['signingKey'].keyPair;
+        this.privKey = privateKey;
+        this.pubKey = publicKey;
+        this.addr = addr;
     }
     CallMethod(method, data) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -96,7 +101,7 @@ class Grpc {
             try {
                 if (data.data) {
                     data.data = JSON.stringify(data.data);
-                    data.sign = this.signData(data.data);
+                    data.sign = yield this.wal.signMessage(data.data);
                 }
                 result.data = yield this.promisedFuncs[method](data);
             }

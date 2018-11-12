@@ -146,7 +146,7 @@ export class Loom {
         return CryptoUtils.B64ToUint8Array(str);
     }
 
-    priv_as_hex(){
+    pub_as_hex(){
         return CryptoUtils.bytesToHexAddr(this.pub).toLowerCase();
     }
 

@@ -39,7 +39,17 @@ class EventsController extends Controller {
     }
 
     async init_loading() {
-        this.send_data(this.events.change_app_state, this.render(`loading/loading.pug`));
+    let settings = await this.get_Settings();
+    let language = "en";
+    if (settings) {
+        language = settings.language;
+    }
+
+    let obj = {
+          arg:this.render(`loading/loading.pug`),
+          language: language
+        };
+        this.send_data(this.events.change_app_state, obj);
     }
 }
 

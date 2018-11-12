@@ -7,6 +7,7 @@ src/env_config.js.map
 
 .eslintignore
 .idea
+.map
 .npmignore
 dist/
 downloads/
@@ -19,7 +20,7 @@ yarn-error.log
 .eslintrc.json
 
 account.json
-sqlite/data.db
+sqlite/
 yarn-error.log
 
 not_for_git/

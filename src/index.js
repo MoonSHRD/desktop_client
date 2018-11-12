@@ -2,6 +2,7 @@ const {ipcRenderer} = require('electron');
 const dict = require('./langs/lang');
 const slick = require('slick-carousel');
 const {dialog} = require('electron').remote;
+const fs = require('fs');
 require('waypoints/lib/noframework.waypoints.min');
 require('waypoints/lib/shortcuts/sticky.min');
 
@@ -198,11 +199,10 @@ window.onload = function () {
         }
     };
 
-    ipcRenderer.on('change_app_state', (event, arg) => {
+    ipcRenderer.on('change_app_state', (event, obj) => {
         console.log('autyh');
-        $('#view').html(arg);
-        $.html5Translate(dict, 'en');
-        // todo: fix some console errors with this func
+        $('#view').html(obj.arg);
+        $.html5Translate(dict, obj.language);
         widthMsgWindow('[data-msgs-window]');
     });
 
@@ -247,7 +247,7 @@ window.onload = function () {
         }
     });
 
-    $(document).on('keydown','.send_message__input',function(e) {
+    $(document).on('keydown',".send_message__input",function(e) {
         if($(this).val() === '') {
             $(this).attr('rows', 1);
         };
@@ -260,16 +260,16 @@ window.onload = function () {
         }
     });
 
-    $(document).on('input','.send_message__input',function(e) {
+    $(document).on('input',".send_message__input",function(e) {
         // console.log('hello!')
         if($(this).val() === '') {
             $(this).attr('rows', 1);
-        };
+        }
 
     });
 
-    $(document).on('paste','.send_message__input',function(e) {
-        console.log('paste!');
+    $(document).on('paste',".send_message__input",function(e) {
+        // console.log('paste!');
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
         let val = $(this).text();
         if($(this).val() !==''){
@@ -373,7 +373,7 @@ window.onload = function () {
             chat.find('[data-name=unread_messages]').hide();
             ipcRenderer.send('reading_messages', obj.id);
 
-            let p_count = ($('p:contains(' + obj.time + ')'));
+            let p_count = ($("p:contains(" + obj.time + ")"));
 
             if (p_count.length === 0) {
                 $('[data-msg-list]').append(obj.html_date);
@@ -474,7 +474,6 @@ window.onload = function () {
         }
     });
 
-
     $(document).on('click', '.walletMenu li', function (e) {
         const $this = $(this);
         $this.addClass('active_wallet').siblings().removeClass('active_wallet');
@@ -531,6 +530,14 @@ window.onload = function () {
             $(this).tooltip('show');
         })
         .on('mouseout', '[data-toogle="tooltip"]', function () {
+            $(this).tooltip('hide');
+        })
+
+        .on('keydown', '[data-toggle="tooltip2"]', function () {
+        $(this).tooltip('show');
+         })
+
+        .on('backspace-down', '[data-toggle="tooltip2"]', function () {
             $(this).tooltip('hide');
         });
 
@@ -621,6 +628,8 @@ window.onload = function () {
     // });
 
     $(document).on('submit', '.modal-content', function (e) {
+        let button = $(this).find(".btn-primary");
+        button.attr("disabled", "disabled");
         e.preventDefault();
         const $this = $(this);
         let groupNameEl = $this.find('[name=\'name\']');
@@ -643,6 +652,8 @@ window.onload = function () {
                 $('#AppModal').modal('toggle');
             }
         }
+        else
+            button.removeAttr("disabled");
     });
 
     $(document).on('focusin', '[data-name="crowdsale__input"]', function (e) {
@@ -828,9 +839,11 @@ window.onload = function () {
     });
 
     $(document).on('mousedown','#resize01',function(e) {
-        console.log('resize_clicked');
-        curr_width = p.width();
+        // console.log('resize_clicked');
         unlock = true;
+        $(document).on('mouseup', function(e) {
+            ipcRenderer.send("change_chats_size", p.width());
+        });
     });
 
     $(document).on('click','[data-id=add_new_user]',function(e) {
@@ -852,10 +865,7 @@ window.onload = function () {
         while ( true ) {
             last = strtocount.indexOf('\n', last+1);
             hard_lines ++;
-            // if ( hard_lines == 10) break;
             if ( last == -1 ) break;
-            // console.log('hi')
-            // console.log(hard_lines)
         }
         var soft_lines = Math.ceil(strtocount.length / (cols-1));
         var hard = eval('hard_lines ' + unescape('%3e') + 'soft_lines;');
@@ -866,7 +876,6 @@ window.onload = function () {
 // функция вызывается при каждом нажатии клавиши в области ввода текста
     function ResizeTextArea(the_form, min_rows) {
         the_form.rows = Math.max(min_rows, countLines(the_form.value,the_form.cols) );
-        console.log(the_form.value, the_form.cols, Math.max(min_rows, countLines(the_form.value,the_form.cols)));
     }
 
     $(document).on('click', '[data-toggle="switcher"]', function(e) {
@@ -917,14 +926,6 @@ window.onload = function () {
         });
     });
 
-    // ipcRenderer.on("change_directory", (event) => {
-    //     dialog.showOpenDialog({
-    //         properties: ["openDirectory","openFile"]
-    //     },async function (fileNames) {
-    //         console.log("file:", fileNames);
-    //         ipcRenderer.send("change_directory");
-    //     })
-    // });
     $(document).on('click', '[data-toggle="scrollDown"]', function (e){
         e.preventDefault();
         scrollDownAnimate();
@@ -946,15 +947,44 @@ window.onload = function () {
         $('.bl-hide-1').css('display', 'none');
         $('.chats').css('height', 'calc(100% - 153px)');
 
-
     });
     $(document).on('off.switch', function () {
         $('.bl-hide').val('');
         $('.bl-hide').css('display', 'none');
         $('.bl-hide-1').css('display', 'block');
         $('.chats').css('height', 'calc(100% - 200px)');
-
     });
 
+    $(window).resize(function(){
+        if ($("#main-menu").length !== 0) {
+            ipcRenderer.send("change_size_window", $(window).width(), $(window).height());
+        }
+    });
 
+    $(document).on('click', '[name=encrypt_database]', function (e) {
+        ipcRenderer.send("encrypt_db");
+    });
+
+    $(document).on('click', '[name=decrypt_database]', function (e) {
+        ipcRenderer.send("decrypt_db");
+    });
+
+    $(document).on('click', '.sendTokenButton', function (e) {
+        // let data_arr=$(this).closest('form');
+        // console.log(data_arr);
+        // return;
+        let data_arr = $(this).closest('tr').find('input').serializeArray();
+        let data = {};
+        data_arr.forEach((el) => {
+            data[el.name] = el.value;
+        });
+        // console.log(data_arr);
+        // console.log(data);
+        ipcRenderer.send('transfer_token', data);
+    });
+
+    $(document).on('click', "button[data-block=\"data-block\"]", function (e) {
+        console.log("Click!");
+        $(this).attr("disabled", true);
+    });
 };

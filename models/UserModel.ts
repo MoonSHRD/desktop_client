@@ -39,6 +39,7 @@ export class UserModel extends BaseEntity {
 
     type: string;
     state: string;
+    eth_balance: number;
 
     @OneToOne(type => AccountModel, account => account.user)
     @JoinColumn()

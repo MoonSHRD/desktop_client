@@ -61,6 +61,8 @@ exports.events = {
     change_chats_width: "change_chats_width",
     set_sizes: "set_sizes",
     update_last_chat: "update_last_chat",
+    decrypt_db: "decrypt_db",
+    encrypt_db: "encrypt_db",
 };
 exports.helper = {
     paths: exports.paths,
