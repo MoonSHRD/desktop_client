@@ -471,20 +471,9 @@ window.onload = function () {
         ) ) {
             ipcRenderer.send('get_chat_msgs', chat);
             $this.addClass('have_history');
-
-
-
-
-            if ( $('.dialogDate').length ) {
-                new Waypoint.Sticky({
-                    element: $('.dialogDate')[0],
-                    entered: function(direction) {
-                        console.log("working");
-                    }
-                });
-            }
         }
     });
+
 
     $(document).on('click', '.walletMenu li', function (e) {
         const $this = $(this);
@@ -902,15 +891,23 @@ window.onload = function () {
     };
 
     document.addEventListener('scroll', function (event) {
-        if (event.target.id === 'messaging_history') { // or any other filtering condition
+
+        if (event.target.id === 'messaging_history') {
             let {bottom, height} = scrollBottom();
             if ( bottom > height ) {
                 $('[data-toggle="scrollDown"]').addClass('show');
             } else {
                 $('[data-toggle="scrollDown"]').removeClass('show');
             }
+
+            /* Скролл даты */
+            if ( $('.dialogDate').length ) {
+                $('.dialogDate').addClass('slicky');
+            }
+            /* /Скролл даты */
         }
-    }, true /*Capture event*/);
+
+    }, true);
 
     $(document).on('click', '[name=change_download]', function (e) {
         dialog.showOpenDialog({

@@ -26,7 +26,7 @@ class AuthController extends Controller_1.Controller {
             if (account)
                 yield this.auth(account);
             else
-                this.send_data(this.events.change_app_state, this.render('auth/123.pug'));
+                this.send_data(this.events.change_app_state, this.render('auth/auth.pug'));
         });
     }
     ;
@@ -56,6 +56,22 @@ class AuthController extends Controller_1.Controller {
                 console.log(user);
                 let suc = yield this.grpc.CallMethod('SetObjData', { pubKey: this.loom.priv_as_hex(), obj: 'user', data: user });
                 // console.log(suc);
+                // let time = 2000;
+                // while (true) {
+                //     try {
+                //         let identyti_tx = await this.loom.set_identity(account.user.name);
+                //         console.log(identyti_tx);
+                //         this.send_data('user_joined_room', `Identity created. <br/> txHash: ${identyti_tx.transactionHash}`);
+                //         break;
+                //     }
+                //     catch (e) {
+                //         console.log("Error with set identity. Reset...");
+                //         await new Promise(resolve => {
+                //             setTimeout(resolve, time);
+                //             time = time*2;
+                //         });
+                //     }
+                // }
             }
             this.grpc.StartPinging();
             this.grpc.StartUserPinging();
@@ -78,12 +94,14 @@ class AuthController extends Controller_1.Controller {
             user.firstname = data.firstname;
             user.lastname = data.lastname;
             user.bio = data.bio;
-            user.avatar = data.avatar ? (yield Helpers_1.resize_b64_img(data.avatar)) : (yield Helpers_1.resize_img_from_path(this.paths.components + 'auth/default-avatar1.jpg'));
+            user.avatar = data.avatar ? (yield Helpers_1.resize_b64_img(data.avatar)) : (yield Helpers_1.resize_img_from_path(this.paths.src + 'img/default-avatar1.jpg'));
             yield user.save();
             let account = new AccountModel_1.AccountModel();
             account.privKey = loom_data.priv;
             account.passphrase = data.mnemonic;
+            account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
             account.user = user;
+            account.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
             yield account.save();
             yield this.auth(account, true);
         });

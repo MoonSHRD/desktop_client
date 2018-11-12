@@ -46,9 +46,12 @@ class ChatsController extends Controller_1.Controller {
                 if (chat.text)
                     chat.text = 'Вы: ' + chat.text;
             }
-            // console.log(chat);
+            // console.log("Load chat:", chat.id);
             let html = this.render('main/chatsblock/chats/imDialog.pug', chat);
-            this.send_data('buddy', { id: chat.id, type: general_chat_type, html: html });
+            yield this.send_data('buddy', { id: chat.id, type: general_chat_type, html: html });
+            if (chat.active === true) {
+                yield this.controller_register.run_controller("MessagesController", "get_chat_messages", { id: chat.id, type: chat.type });
+            }
         });
     }
     user_change_state(user, state, statusText, resource) {
@@ -85,12 +88,11 @@ class ChatsController extends Controller_1.Controller {
             }
         });
     }
-    load_chats(type, first = false) {
+    load_chats(type) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('load_chats');
             let self_info = yield this.get_self_info();
             let chats = yield ChatModel_1.ChatModel.get_chats_with_last_msgs(self_info);
-            // console.log(chats);
             let menu_chat;
             if (type === this.chat_types.user) {
                 menu_chat = this.chat_to_menu.user;
@@ -100,12 +102,14 @@ class ChatsController extends Controller_1.Controller {
             }
             if (!chats.length)
                 return;
-            // console.log(chats);
-            yield chats.forEach((chat) => __awaiter(this, void 0, void 0, function* () {
-                if (chat.id === '0x0000000000000000000000000000000000000000_' + self_info.id && first)
-                    chat.active = true;
-                yield this.load_chat(chat, menu_chat);
-            }));
+            for (let num in chats) {
+                chats[num].active = (chats[num].id === (yield this.get_me(self_info.id)).last_chat);
+                yield this.load_chat(chats[num], menu_chat);
+            }
+            // await chats.forEach(async (chat) => {
+            //     chat.active = (chat.id === (await this.get_me(self_info.id)).last_chat);
+            //     await this.load_chat(chat, menu_chat);
+            // });
         });
     }
     show_chat_info(data) {
@@ -191,13 +195,10 @@ class ChatsController extends Controller_1.Controller {
                 yield this.load_chat(chat, this.chat_types.group);
             }
             else {
-                // await this.load_chat(chat, this.chat_to_menu.group);
                 let count = (messages.length - 1).toString();
                 console.log('count: ', count);
                 for (let num in messages) {
                     let message = messages[num];
-                    // let buf = message.time.split(" ");
-                    // message.time = `${buf[0]} ${buf[1]}`;
                     let room_data = { id: message.sender };
                     let sender = { address: message.sender, domain: "localhost" };
                     console.log('num: ', num);
@@ -210,7 +211,6 @@ class ChatsController extends Controller_1.Controller {
     create_group(group_data) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(group_data);
-            // let group_type=group_data.type?group_data.type:this.group_chat_types.channel;
             if (group_data.substype == 'unfree') {
                 // let price=64;
                 let rate = 1 / group_data.token_price;
@@ -277,7 +277,6 @@ class ChatsController extends Controller_1.Controller {
     found_groups(result) {
         return __awaiter(this, void 0, void 0, function* () {
             this.queried_chats = {};
-            // console.log(result);
             result.forEach((group) => __awaiter(this, void 0, void 0, function* () {
                 console.log(group);
                 const st = group.jid.split('@');
