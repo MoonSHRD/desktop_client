@@ -351,16 +351,6 @@ window.onload = function () {
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
         $('[data-msg-list]').append(obj);
-
-
-        if ( $('.dialogDate').length ) {
-            new Waypoint.Sticky({
-                element: $('.dialogDate')[0],
-                entered: function(direction) {
-                    console.log("working");
-                }
-            });
-        }
         // scrollDown('[data-msg-history]');
     });
 
@@ -377,6 +367,7 @@ window.onload = function () {
                 chat.find('[data-name=unread_messages]').show();
             }
             chat.prependTo($('.chats ul')[0]);
+            console.log('1');
         }
         if ($('.active_dialog').attr('id') === obj.id) {
             chat.find('[data-name=unread_messages]').hide();
@@ -480,6 +471,18 @@ window.onload = function () {
         ) ) {
             ipcRenderer.send('get_chat_msgs', chat);
             $this.addClass('have_history');
+
+
+
+
+            if ( $('.dialogDate').length ) {
+                new Waypoint.Sticky({
+                    element: $('.dialogDate')[0],
+                    entered: function(direction) {
+                        console.log("working");
+                    }
+                });
+            }
         }
     });
 
