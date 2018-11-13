@@ -39,7 +39,7 @@ class EventsController extends Controller {
     }
 
     async init_loading() {
-    let settings = await this.get_Settings();
+    let settings = await this.getSettings();
     let language = "en";
     if (settings) {
         language = settings.language;

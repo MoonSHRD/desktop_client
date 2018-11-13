@@ -37,25 +37,25 @@ class SettingsController extends Controller {
 
     async change_directory(path) {
         if (path == "undefined/") return;
-        let settings = await this.get_Settings();
+        let settings = await this.getSettings();
         settings.downloads = path;
         await settings.save()
     };
     async update_last_chat(chat_id) {
-        let settings = await this.get_Settings();
+        let settings = await this.getSettings();
         settings.last_chat = chat_id;
         await settings.save()
     }
 
     async change_windows_size(width, height) {
-        let settings = await this.get_Settings();
+        let settings = await this.getSettings();
         settings.width = width;
         settings.height = height;
         await settings.save();
     };
 
     async change_chats_width(width) {
-        let settings = await this.get_Settings();
+        let settings = await this.getSettings();
         settings.width_chats = width;
         await settings.save();
     };

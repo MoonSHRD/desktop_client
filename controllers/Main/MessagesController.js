@@ -38,6 +38,9 @@ class MessagesController extends Controller_1.Controller {
     }
     get_chat_messages({ id, type }) {
         return __awaiter(this, void 0, void 0, function* () {
+            let set = yield this.getSettings();
+            set.last_chat = id;
+            yield set.save();
             let self_info = yield this.get_self_info();
             console.log('get_chat_messages', id, type);
             let chat = yield ChatModel_1.ChatModel.get_chat_with_events(id);
@@ -163,7 +166,7 @@ class MessagesController extends Controller_1.Controller {
             let fileModel;
             if (file) {
                 console.log("with file:", file);
-                let settings = yield this.get_Settings();
+                let settings = yield this.getSettings();
                 fileModel = new FileModel_1.FileModel();
                 fileModel.preview = Helpers_1.check_file_preview(file.type);
                 fileModel.hash = yield this.ipfs.add_file(file);
@@ -265,7 +268,7 @@ class MessagesController extends Controller_1.Controller {
             if (files && files.length) {
                 for (let num in files) {
                     let fileModel = new FileModel_1.FileModel();
-                    let settings = yield this.get_Settings();
+                    let settings = yield this.getSettings();
                     // file_info.sender = self_info.id;
                     fileModel.hash = files[num].hash;
                     fileModel.chat = chat;
@@ -312,7 +315,7 @@ class MessagesController extends Controller_1.Controller {
             if (files) {
                 for (let num in files) {
                     yield messageModel.save();
-                    let settings = yield this.get_Settings();
+                    let settings = yield this.getSettings();
                     let fileModel = new FileModel_1.FileModel();
                     // file_info.sender = self_info.id;
                     fileModel.hash = files[num].hash;

@@ -36,6 +36,10 @@ class MessagesController extends Controller {
     }
 
     async get_chat_messages({id,type}) {
+        let set = await this.getSettings();
+        set.last_chat=id;
+        await set.save();
+
         let self_info = await this.get_self_info();
         console.log('get_chat_messages',id,type);
         let chat = await ChatModel.get_chat_with_events(id);
@@ -163,7 +167,7 @@ class MessagesController extends Controller {
         let fileModel;
         if (file) {
             console.log("with file:", file);
-            let settings = await this.get_Settings();
+            let settings = await this.getSettings();
             fileModel = new FileModel();
             fileModel.preview = check_file_preview(file.type);
             fileModel.hash = await this.ipfs.add_file(file);
@@ -271,7 +275,7 @@ class MessagesController extends Controller {
         if (files && files.length) {
             for (let num in files){
                 let fileModel = new FileModel();
-                let settings = await this.get_Settings();
+                let settings = await this.getSettings();
                 // file_info.sender = self_info.id;
                 fileModel.hash = files[num].hash;
                 fileModel.chat = chat;
@@ -317,7 +321,7 @@ class MessagesController extends Controller {
         if (files) {
             for (let num in files){
                 await messageModel.save();
-                let settings = await this.get_Settings();
+                let settings = await this.getSettings();
                 let fileModel = new FileModel();
                 // file_info.sender = self_info.id;
                 fileModel.hash = files[num].hash;

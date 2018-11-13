@@ -16,7 +16,7 @@ let TokenFactoryAbi = require("./abis/TokenFactory");
 let TokenFactoryAddress = '0x4dec573feb329642e2f98043b7eb09ae8265ed0b';
 class Web3S {
     constructor() {
-        this.subs = { NewBlocks: {}, NewTokens: {} };
+        this.subs = {};
         this.web3 = new Web3("ws://" + env_config_1.web3_config.host + ":" + env_config_1.web3_config.port + "");
         this.events = new EventEmitter();
         // this.token_addr = await this.get_token_addr();
@@ -40,7 +40,7 @@ class Web3S {
             this.addr = account.address.toLowerCase();
             yield this.web3.eth.accounts.wallet.add(account);
             this.TokenFactory = new this.web3.eth.Contract(TokenFactoryAbi.abi, TokenFactoryAddress, { from: this.addr });
-            this.subs.NewBlocks = yield this.web3.eth.subscribe('newBlockHeaders', (err, block) => __awaiter(this, void 0, void 0, function* () {
+            this.subs["NewBlocks"] = yield this.web3.eth.subscribe('newBlockHeaders', (err, block) => __awaiter(this, void 0, void 0, function* () {
                 if (err)
                     console.log(err);
                 else {
@@ -54,7 +54,7 @@ class Web3S {
                     }
                 }
             }));
-            this.subs.NewBlocks = yield this.TokenFactory.events.TokenCreated({}, (one, two, three) => __awaiter(this, void 0, void 0, function* () {
+            this.subs["NewTokens"] = yield this.TokenFactory.events.TokenCreated({}, (one, two, three) => __awaiter(this, void 0, void 0, function* () {
                 this.events.emit('token_created', one, two, three);
                 console.log(one, two, three);
             }));

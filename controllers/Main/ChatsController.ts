@@ -17,7 +17,7 @@ class ChatsController extends Controller {
 
     async init_chats() {
         let self_info = await this.get_self_info();
-        let language = (await this.get_Settings()).language;
+        let language = (await this.getSettings()).language;
         let obj = {
             arg:this.render('main/main.pug', {state: ''}),
             language:language
@@ -85,7 +85,7 @@ class ChatsController extends Controller {
     async load_chats(type: string, first: boolean = false) {
         console.log('load_chats');
         let self_info = await this.get_self_info();
-        let settings = await this.get_Settings();
+        let settings = await this.getSettings();
         let chats = await ChatModel.get_chats_with_last_msgs(self_info);
 
 
@@ -174,17 +174,17 @@ class ChatsController extends Controller {
         await this.load_chat(chat, this.chat_to_menu.user);
     }
 
-    async subscribe(user, key) {
-        console.log(`subscribing to user ${user.id}`);
-        this.dxmpp.subscribe(user);
-    }
-
-    async user_subscribed(user, key) {
-        this.dxmpp.acceptSubscription(user);
-        let check = await UserModel.findOne(user.id);
-        if (!check)
-            await this.subscribe(user, key);
-    }
+    // async subscribe(user, key) {
+    //     console.log(`subscribing to user ${user.id}`);
+    //     this.dxmpp.subscribe(user);
+    // }
+    //
+    // async user_subscribed(user, key) {
+    //     this.dxmpp.acceptSubscription(user);
+    //     let check = await UserModel.findOne(user.id);
+    //     if (!check)
+    //         await this.subscribe(user, key);
+    // }
 
     async joined_room(room_data, messages) {
         console.log("Old messages:\n", messages);
@@ -282,7 +282,7 @@ class ChatsController extends Controller {
     }
 
     async join_chat(chat) {
-        this.dxmpp.join(chat)
+        this.dxmpp.join(chat,"")
     }
 
     async found_groups(result: any) {

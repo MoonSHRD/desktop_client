@@ -1,11 +1,11 @@
-import {eth, dxmpp} from 'moonshard_core';
+import {eth, Dxmpp} from 'moonshard_core';
 import {helper} from '../src/var_helper';
 import {config} from '../src/env_config';
 import * as Pug from "pug";
 import {AccountModel} from "../models/AccountModel";
 import {UserModel} from "../models/UserModel";
 import {ControllerRegister} from "./ControllerRegister";
-import {Loom} from "../loom/loom";
+// import {Loom} from "../loom/loom";
 import {Ipfs} from "../ipfs/ipfs";
 import {SettingsModel} from "../models/SettingsModel";
 import {Grpc} from "../grpc/grpc";
@@ -16,7 +16,7 @@ export abstract class Controller {
     protected controller_register = ControllerRegister.getInstance();
     protected window: any;
     protected grpc = Grpc.getIntance();
-    protected dxmpp = dxmpp.getInstance();
+    protected dxmpp = Dxmpp.getInstance();
     protected dxmpp_config = config;
     protected pug_options = helper.pug_options;
     protected paths = helper.paths;
@@ -26,7 +26,7 @@ export abstract class Controller {
     protected chat_to_menu = helper.chat_to_menu;
     protected eth = eth;
     protected web3 = Web3S.GetInstance();
-    protected loom: Loom = Loom.getInstance();
+    // protected loom: Loom = Loom.getInstance();
     protected ipfs: Ipfs = Ipfs.getInstance();
     private self_info: UserModel = null;
     private me: AccountModel = null;
@@ -59,12 +59,12 @@ export abstract class Controller {
     };
 
     protected async get_me() {
-        this.me = (await AccountModel.find({where: {id:1}}))[0];
+        this.me = await AccountModel.findOne(1);
         return this.me;
     }
 
-    protected async get_Settings() {
-        this.settings = (await SettingsModel.find({where: {id:1}}))[0];
+    protected async getSettings():Promise<SettingsModel> {
+        this.settings = await SettingsModel.findOne(1);
         return this.settings;
     }
 }

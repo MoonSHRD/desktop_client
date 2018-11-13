@@ -6,11 +6,11 @@
 
 import "reflect-metadata";
 import {createConnection} from "typeorm";
-import {dxmpp} from "moonshard_core";
+import {Dxmpp} from "moonshard_core";
 import {ipcMain} from "electron";
 import {ControllerRegister} from "../controllers/ControllerRegister";
 import {helper} from "./var_helper";
-import {Loom} from "../loom/loom";
+// import {Loom} from "../loom/loom";
 import {Web3S} from "../web3/web3";
 
 export class Router {
@@ -26,7 +26,7 @@ export class Router {
     private connection_tries: number=0;
     // private connecting: boolean = false;
     private types: any;
-    private loom: Loom = Loom.getInstance();
+    // private loom: Loom = Loom.getInstance();
 
     constructor(window) {
         this.window = window;
@@ -34,9 +34,9 @@ export class Router {
         this.online = false;
         this.paths = helper.paths;
         this.ipcMain = ipcMain;
-        this.dxmpp = dxmpp.getInstance();
+        this.dxmpp = Dxmpp.getInstance();
         this.web3 = Web3S.GetInstance();
-        this.loom = Loom.getInstance();
+        // this.loom = Loom.getInstance();
         this.events = helper.events;
         this.types = helper.paths;
     };
