@@ -9,6 +9,16 @@ export const ipfs_config = {
     port: 5001,
 };
 
+export const grpc_config = {
+    host: '192.168.1.60',
+    port: 50051,
+};
+
+export const web3_config = {
+    host: "192.168.1.21",
+    port: 8546,
+};
+
 export const loom_config = {
     host: 'node1.moonshrd.io',
     port: 46658,

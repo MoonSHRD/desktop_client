@@ -1,0 +1,820 @@
+{
+  "contractName": "SubFactory",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_token",
+          "type": "address"
+        },
+        {
+          "name": "_owner",
+          "type": "address"
+        },
+        {
+          "name": "_crowdsale",
+          "type": "address"
+        }
+      ],
+      "name": "createSubscription",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b5061113b806100206000396000f3006080604052600436106100405763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416635b8a5c2c8114610045575b600080fd5b34801561005157600080fd5b5061007f73ffffffffffffffffffffffffffffffffffffffff600435811690602435811690604435166100a8565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b6000808484846100b661010c565b73ffffffffffffffffffffffffffffffffffffffff938416815291831660208301529091166040808301919091525190819003606001906000f080158015610102573d6000803e3d6000fd5b5095945050505050565b604051610ff38061011d83390190560060806040526000600655600060075534801561001a57600080fd5b50604051606080610ff38339810160408181528251602080850151948301516000805460018054600160a060020a03808816600160a060020a03199283161792839055808b16938216331782169390931784556003805484871692169190911790557f313ce56700000000000000000000000000000000000000000000000000000000885295519497969295169363313ce567936004808501949193918390030190829087803b1580156100cd57600080fd5b505af11580156100e1573d6000803e3d6000fd5b505050506040513d60208110156100f757600080fd5b50516003805460ff909216740100000000000000000000000000000000000000000260a060020a60ff021990921691909117905561013c640100000000610145810204565b50505050610175565b60035474010000000000000000000000000000000000000000900460ff9081166000190116600a0a600455600190565b610e6f806101846000396000f3006080604052600436106100d75763ffffffff60e060020a60003504166303988f8481146100dc57806310d86b1f1461012657806319b05f4914610149578063313ce5671461016157806334adc8751461018c57806358d50fd1146101a1578063602b386e146101c8578063715018a6146101e95780638da5cb5b146101fe5780638fb4b5731461022f578063a87430ba1461024a578063b8adaa111461026b578063bf96ae6314610283578063cc45969614610298578063cd1f8393146102ad578063d35590c2146102c2578063f2fde38b146102f7575b600080fd5b3480156100e857600080fd5b506100f4600435610318565b60408051948552600160a060020a0390931660208501528383019190915261ffff166060830152519081900360800190f35b34801561013257600080fd5b50610147600160a060020a036004351661034d565b005b34801561015557600080fd5b5061014760043561045e565b34801561016d57600080fd5b506101766106a1565b6040805160ff9092168252519081900360200190f35b34801561019857600080fd5b506101476106c2565b3480156101ad57600080fd5b506101b66107ac565b60408051918252519081900360200190f35b3480156101d457600080fd5b506101b6600160a060020a03600435166107b2565b3480156101f557600080fd5b506101476107cd565b34801561020a57600080fd5b50610213610839565b60408051600160a060020a039092168252519081900360200190f35b34801561023b57600080fd5b50610147600435602435610848565b34801561025657600080fd5b506101b6600160a060020a0360043516610a20565b34801561027757600080fd5b50610147600435610a32565b34801561028f57600080fd5b50610147610c6b565b3480156102a457600080fd5b506101b6610d5b565b3480156102b957600080fd5b506101b6610d61565b3480156102ce57600080fd5b506102e3600160a060020a0360043516610d67565b604080519115158252519081900360200190f35b34801561030357600080fd5b50610147600160a060020a0360043516610d7c565b60056020526000908152604090208054600182015460028301546003909301549192600160a060020a039091169161ffff1684565b60008054600160a060020a0316331461036557600080fd5b5060048054600154600354604080517fa9059cbb000000000000000000000000000000000000000000000000000000008152600160a060020a03928316958101959095526024850184905251929391169163a9059cbb916044808201926020929091908290030181600087803b1580156103de57600080fd5b505af11580156103f2573d6000803e3d6000fd5b505050506040513d602081101561040857600080fd5b5050600160a060020a038216600090815260026020908152604080832092909255815133815291517f9c8d83bb7e93e37e8ae1d4ab586b3fc01388d2f345abf3da541506c77f74fba69281900390910190a15050565b610466610e1c565b60008054600160a060020a0316331461047e57600080fd5b6005600084815260200190815260200160002060806040519081016040529081600082015481526020016001820160009054906101000a9004600160a060020a0316600160a060020a0316600160a060020a03168152602001600282015481526020016003820160009054906101000a900461ffff1661ffff1661ffff168152505091506001826060019061ffff16908161ffff16815250508160400151905081600560008581526020019081526020016000206000820151816000015560208201518160010160006101000a815481600160a060020a030219169083600160a060020a031602179055506040820151816002015560608201518160030160006101000a81548161ffff021916908361ffff160217905550905050600160009054906101000a9004600160a060020a0316600160a060020a031663a9059cbb6000809054906101000a9004600160a060020a0316836040518363ffffffff1660e060020a0281526004018083600160a060020a0316600160a060020a0316815260200182815260200192505050602060405180830381600087803b15801561062557600080fd5b505af1158015610639573d6000803e3d6000fd5b505050506040513d602081101561064f57600080fd5b5051151561065c57600080fd5b6040805160018152602081018390528151339286927f7220d8907929bb8016a982fd35aa398aef00f8d7cc79c34083a01e32bc9c74de929081900390910190a3505050565b60035474010000000000000000000000000000000000000000900460ff1681565b60048054600154604080517fa9059cbb000000000000000000000000000000000000000000000000000000008152339481019490945260248401839052519192600160a060020a039091169163a9059cbb916044808201926020929091908290030181600087803b15801561073657600080fd5b505af115801561074a573d6000803e3d6000fd5b505050506040513d602081101561076057600080fd5b505033600081815260026020908152604080832092909255815192835290517f370f9cffd5434a9079bef58a012d7f8b78c9d4b4527c1fe89d7e3f48eff230599281900390910190a150565b60045481565b600160a060020a031660009081526002602052604090205490565b600054600160a060020a031633146107e457600080fd5b60008054604051600160a060020a03909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a26000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031681565b610850610e1c565b5060008281526005602090815260408083208151608081018352815481526001820154600160a060020a03169381019390935260028101549183018290526003015461ffff166060830152909110156108a857600080fd5b600154604080517f23b872dd000000000000000000000000000000000000000000000000000000008152336004820152306024820152604481018590529051600160a060020a03909216916323b872dd916064808201926020929091908290030181600087803b15801561091b57600080fd5b505af115801561092f573d6000803e3d6000fd5b505050506040513d602081101561094557600080fd5b5051151561095257600080fd5b3360208281018281526040808501868152600060608701818152868252600886528382208054600160ff1990911681179091558a835260058752848320895181559551908601805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039092169190911790559151600285015590516003909301805461ffff191661ffff909416939093179092558051918252918101859052815186927f7220d8907929bb8016a982fd35aa398aef00f8d7cc79c34083a01e32bc9c74de928290030190a3505050565b60026020526000908152604090205481565b610a3a610e1c565b600080548190600160a060020a03163314610a5457600080fd5b6005600085815260200190815260200160002060806040519081016040529081600082015481526020016001820160009054906101000a9004600160a060020a0316600160a060020a0316600160a060020a03168152602001600282015481526020016003820160009054906101000a900461ffff1661ffff1661ffff168152505092506002836060019061ffff16908161ffff1681525050826040015191508260200151905082600560008681526020019081526020016000206000820151816000015560208201518160010160006101000a815481600160a060020a030219169083600160a060020a031602179055506040820151816002015560608201518160030160006101000a81548161ffff021916908361ffff160217905550905050600160009054906101000a9004600160a060020a0316600160a060020a031663a9059cbb82846040518363ffffffff1660e060020a0281526004018083600160a060020a0316600160a060020a0316815260200182815260200192505050602060405180830381600087803b158015610bee57600080fd5b505af1158015610c02573d6000803e3d6000fd5b505050506040513d6020811015610c1857600080fd5b50511515610c2557600080fd5b6040805160018152602081018490528151339287927f7220d8907929bb8016a982fd35aa398aef00f8d7cc79c34083a01e32bc9c74de929081900390910190a350505050565b60048054600154604080517f23b872dd000000000000000000000000000000000000000000000000000000008152339481019490945230602485015260448401839052519192600160a060020a03909116916323b872dd916064808201926020929091908290030181600087803b158015610ce557600080fd5b505af1158015610cf9573d6000803e3d6000fd5b505050506040513d6020811015610d0f57600080fd5b505033600081815260026020908152604091829020849055815192835290517f3721e029f6fe30b0b5d24d0cc4c9ee1b744247cf9743e95964dad7c01d6bbc759281900390910190a150565b60065481565b60075481565b60086020526000908152604090205460ff1681565b600054600160a060020a03163314610d9357600080fd5b610d9c81610d9f565b50565b600160a060020a0381161515610db457600080fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b604080516080810182526000808252602082018190529181018290526060810191909152905600a165627a7a723058207825d887de2f5ddd53fca74f62d023c8b5f39275699b7a810ba1ff52768fb9c10029a165627a7a72305820362fffd609a3e098ca20623ab3735cc8e9d8785f9f06ccc9633d65ac1eab1a000029",
+  "deployedBytecode": "0x6080604052600436106100405763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416635b8a5c2c8114610045575b600080fd5b34801561005157600080fd5b5061007f73ffffffffffffffffffffffffffffffffffffffff600435811690602435811690604435166100a8565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b6000808484846100b661010c565b73ffffffffffffffffffffffffffffffffffffffff938416815291831660208301529091166040808301919091525190819003606001906000f080158015610102573d6000803e3d6000fd5b5095945050505050565b604051610ff38061011d83390190560060806040526000600655600060075534801561001a57600080fd5b50604051606080610ff38339810160408181528251602080850151948301516000805460018054600160a060020a03808816600160a060020a03199283161792839055808b16938216331782169390931784556003805484871692169190911790557f313ce56700000000000000000000000000000000000000000000000000000000885295519497969295169363313ce567936004808501949193918390030190829087803b1580156100cd57600080fd5b505af11580156100e1573d6000803e3d6000fd5b505050506040513d60208110156100f757600080fd5b50516003805460ff909216740100000000000000000000000000000000000000000260a060020a60ff021990921691909117905561013c640100000000610145810204565b50505050610175565b60035474010000000000000000000000000000000000000000900460ff9081166000190116600a0a600455600190565b610e6f806101846000396000f3006080604052600436106100d75763ffffffff60e060020a60003504166303988f8481146100dc57806310d86b1f1461012657806319b05f4914610149578063313ce5671461016157806334adc8751461018c57806358d50fd1146101a1578063602b386e146101c8578063715018a6146101e95780638da5cb5b146101fe5780638fb4b5731461022f578063a87430ba1461024a578063b8adaa111461026b578063bf96ae6314610283578063cc45969614610298578063cd1f8393146102ad578063d35590c2146102c2578063f2fde38b146102f7575b600080fd5b3480156100e857600080fd5b506100f4600435610318565b60408051948552600160a060020a0390931660208501528383019190915261ffff166060830152519081900360800190f35b34801561013257600080fd5b50610147600160a060020a036004351661034d565b005b34801561015557600080fd5b5061014760043561045e565b34801561016d57600080fd5b506101766106a1565b6040805160ff9092168252519081900360200190f35b34801561019857600080fd5b506101476106c2565b3480156101ad57600080fd5b506101b66107ac565b60408051918252519081900360200190f35b3480156101d457600080fd5b506101b6600160a060020a03600435166107b2565b3480156101f557600080fd5b506101476107cd565b34801561020a57600080fd5b50610213610839565b60408051600160a060020a039092168252519081900360200190f35b34801561023b57600080fd5b50610147600435602435610848565b34801561025657600080fd5b506101b6600160a060020a0360043516610a20565b34801561027757600080fd5b50610147600435610a32565b34801561028f57600080fd5b50610147610c6b565b3480156102a457600080fd5b506101b6610d5b565b3480156102b957600080fd5b506101b6610d61565b3480156102ce57600080fd5b506102e3600160a060020a0360043516610d67565b604080519115158252519081900360200190f35b34801561030357600080fd5b50610147600160a060020a0360043516610d7c565b60056020526000908152604090208054600182015460028301546003909301549192600160a060020a039091169161ffff1684565b60008054600160a060020a0316331461036557600080fd5b5060048054600154600354604080517fa9059cbb000000000000000000000000000000000000000000000000000000008152600160a060020a03928316958101959095526024850184905251929391169163a9059cbb916044808201926020929091908290030181600087803b1580156103de57600080fd5b505af11580156103f2573d6000803e3d6000fd5b505050506040513d602081101561040857600080fd5b5050600160a060020a038216600090815260026020908152604080832092909255815133815291517f9c8d83bb7e93e37e8ae1d4ab586b3fc01388d2f345abf3da541506c77f74fba69281900390910190a15050565b610466610e1c565b60008054600160a060020a0316331461047e57600080fd5b6005600084815260200190815260200160002060806040519081016040529081600082015481526020016001820160009054906101000a9004600160a060020a0316600160a060020a0316600160a060020a03168152602001600282015481526020016003820160009054906101000a900461ffff1661ffff1661ffff168152505091506001826060019061ffff16908161ffff16815250508160400151905081600560008581526020019081526020016000206000820151816000015560208201518160010160006101000a815481600160a060020a030219169083600160a060020a031602179055506040820151816002015560608201518160030160006101000a81548161ffff021916908361ffff160217905550905050600160009054906101000a9004600160a060020a0316600160a060020a031663a9059cbb6000809054906101000a9004600160a060020a0316836040518363ffffffff1660e060020a0281526004018083600160a060020a0316600160a060020a0316815260200182815260200192505050602060405180830381600087803b15801561062557600080fd5b505af1158015610639573d6000803e3d6000fd5b505050506040513d602081101561064f57600080fd5b5051151561065c57600080fd5b6040805160018152602081018390528151339286927f7220d8907929bb8016a982fd35aa398aef00f8d7cc79c34083a01e32bc9c74de929081900390910190a3505050565b60035474010000000000000000000000000000000000000000900460ff1681565b60048054600154604080517fa9059cbb000000000000000000000000000000000000000000000000000000008152339481019490945260248401839052519192600160a060020a039091169163a9059cbb916044808201926020929091908290030181600087803b15801561073657600080fd5b505af115801561074a573d6000803e3d6000fd5b505050506040513d602081101561076057600080fd5b505033600081815260026020908152604080832092909255815192835290517f370f9cffd5434a9079bef58a012d7f8b78c9d4b4527c1fe89d7e3f48eff230599281900390910190a150565b60045481565b600160a060020a031660009081526002602052604090205490565b600054600160a060020a031633146107e457600080fd5b60008054604051600160a060020a03909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a26000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031681565b610850610e1c565b5060008281526005602090815260408083208151608081018352815481526001820154600160a060020a03169381019390935260028101549183018290526003015461ffff166060830152909110156108a857600080fd5b600154604080517f23b872dd000000000000000000000000000000000000000000000000000000008152336004820152306024820152604481018590529051600160a060020a03909216916323b872dd916064808201926020929091908290030181600087803b15801561091b57600080fd5b505af115801561092f573d6000803e3d6000fd5b505050506040513d602081101561094557600080fd5b5051151561095257600080fd5b3360208281018281526040808501868152600060608701818152868252600886528382208054600160ff1990911681179091558a835260058752848320895181559551908601805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039092169190911790559151600285015590516003909301805461ffff191661ffff909416939093179092558051918252918101859052815186927f7220d8907929bb8016a982fd35aa398aef00f8d7cc79c34083a01e32bc9c74de928290030190a3505050565b60026020526000908152604090205481565b610a3a610e1c565b600080548190600160a060020a03163314610a5457600080fd5b6005600085815260200190815260200160002060806040519081016040529081600082015481526020016001820160009054906101000a9004600160a060020a0316600160a060020a0316600160a060020a03168152602001600282015481526020016003820160009054906101000a900461ffff1661ffff1661ffff168152505092506002836060019061ffff16908161ffff1681525050826040015191508260200151905082600560008681526020019081526020016000206000820151816000015560208201518160010160006101000a815481600160a060020a030219169083600160a060020a031602179055506040820151816002015560608201518160030160006101000a81548161ffff021916908361ffff160217905550905050600160009054906101000a9004600160a060020a0316600160a060020a031663a9059cbb82846040518363ffffffff1660e060020a0281526004018083600160a060020a0316600160a060020a0316815260200182815260200192505050602060405180830381600087803b158015610bee57600080fd5b505af1158015610c02573d6000803e3d6000fd5b505050506040513d6020811015610c1857600080fd5b50511515610c2557600080fd5b6040805160018152602081018490528151339287927f7220d8907929bb8016a982fd35aa398aef00f8d7cc79c34083a01e32bc9c74de929081900390910190a350505050565b60048054600154604080517f23b872dd000000000000000000000000000000000000000000000000000000008152339481019490945230602485015260448401839052519192600160a060020a03909116916323b872dd916064808201926020929091908290030181600087803b158015610ce557600080fd5b505af1158015610cf9573d6000803e3d6000fd5b505050506040513d6020811015610d0f57600080fd5b505033600081815260026020908152604091829020849055815192835290517f3721e029f6fe30b0b5d24d0cc4c9ee1b744247cf9743e95964dad7c01d6bbc759281900390910190a150565b60065481565b60075481565b60086020526000908152604090205460ff1681565b600054600160a060020a03163314610d9357600080fd5b610d9c81610d9f565b50565b600160a060020a0381161515610db457600080fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b604080516080810182526000808252602082018190529181018290526060810191909152905600a165627a7a723058207825d887de2f5ddd53fca74f62d023c8b5f39275699b7a810ba1ff52768fb9c10029a165627a7a72305820362fffd609a3e098ca20623ab3735cc8e9d8785f9f06ccc9633d65ac1eab1a000029",
+  "sourceMap": "117:299:4:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;117:299:4;;;;;;;",
+  "deployedSourceMap": "117:299:4:-;;;;;;;;;;;;;;;;;;;;;;;215:195;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;215:195:4;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;308:7;323:11;362:6;369;376:10;345:42;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;345:42:4;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;-1:-1;323:65:4;215:195;-1:-1:-1;;;;;215:195:4:o;117:299::-;;;;;;;;;;:::o",
+  "source": "pragma solidity ^0.4.24;\n\n/*\n  Factory for deployment new subscription contracts\n\n*/\n\nimport \"./Subscription.sol\";\n\n\ncontract SubFactory {\n  //  address god;\n  //  mapping (address => address[]) public tokens;\n\n\n\n  function createSubscription(address _token,address _owner,address _crowdsale) public returns(address){\n\n    address sub = address(new Subscription(_token,_owner,_crowdsale));\n    return sub;\n\n  }\n\n\n\n\n}\n",
+  "sourcePath": "/home/dirty/Code/Token-Factory/contracts/SubFactory.sol",
+  "ast": {
+    "absolutePath": "/home/dirty/Code/Token-Factory/contracts/SubFactory.sol",
+    "exportedSymbols": {
+      "SubFactory": [
+        445
+      ]
+    },
+    "id": 446,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 418,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:4"
+      },
+      {
+        "absolutePath": "/home/dirty/Code/Token-Factory/contracts/Subscription.sol",
+        "file": "./Subscription.sol",
+        "id": 419,
+        "nodeType": "ImportDirective",
+        "scope": 446,
+        "sourceUnit": 856,
+        "src": "86:28:4",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [
+          855
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 445,
+        "linearizedBaseContracts": [
+          445
+        ],
+        "name": "SubFactory",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 443,
+              "nodeType": "Block",
+              "src": "316:94:4",
+              "statements": [
+                {
+                  "assignments": [
+                    431
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 431,
+                      "name": "sub",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 444,
+                      "src": "323:11:4",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      },
+                      "typeName": {
+                        "id": 430,
+                        "name": "address",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "323:7:4",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 440,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 435,
+                            "name": "_token",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 421,
+                            "src": "362:6:4",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          },
+                          {
+                            "argumentTypes": null,
+                            "id": 436,
+                            "name": "_owner",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 423,
+                            "src": "369:6:4",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          },
+                          {
+                            "argumentTypes": null,
+                            "id": 437,
+                            "name": "_crowdsale",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 425,
+                            "src": "376:10:4",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            },
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            },
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "id": 434,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "NewExpression",
+                          "src": "345:16:4",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_creation_nonpayable$_t_address_$_t_address_$_t_address_$returns$_t_contract$_Subscription_$855_$",
+                            "typeString": "function (address,address,address) returns (contract Subscription)"
+                          },
+                          "typeName": {
+                            "contractScope": null,
+                            "id": 433,
+                            "name": "Subscription",
+                            "nodeType": "UserDefinedTypeName",
+                            "referencedDeclaration": 855,
+                            "src": "349:12:4",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_Subscription_$855",
+                              "typeString": "contract Subscription"
+                            }
+                          }
+                        },
+                        "id": 438,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "345:42:4",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_Subscription_$855",
+                          "typeString": "contract Subscription"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_contract$_Subscription_$855",
+                          "typeString": "contract Subscription"
+                        }
+                      ],
+                      "id": 432,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "lValueRequested": false,
+                      "nodeType": "ElementaryTypeNameExpression",
+                      "src": "337:7:4",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_type$_t_address_$",
+                        "typeString": "type(address)"
+                      },
+                      "typeName": "address"
+                    },
+                    "id": 439,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "typeConversion",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "337:51:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "323:65:4"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 441,
+                    "name": "sub",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 431,
+                    "src": "401:3:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "functionReturnParameters": 429,
+                  "id": 442,
+                  "nodeType": "Return",
+                  "src": "394:10:4"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 444,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "createSubscription",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 426,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 421,
+                  "name": "_token",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 444,
+                  "src": "243:14:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 420,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "243:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 423,
+                  "name": "_owner",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 444,
+                  "src": "258:14:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 422,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "258:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 425,
+                  "name": "_crowdsale",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 444,
+                  "src": "273:18:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 424,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "273:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "242:50:4"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 429,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 428,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 444,
+                  "src": "308:7:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 427,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "308:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "307:9:4"
+            },
+            "scope": 445,
+            "src": "215:195:4",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 446,
+        "src": "117:299:4"
+      }
+    ],
+    "src": "0:417:4"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/dirty/Code/Token-Factory/contracts/SubFactory.sol",
+    "exportedSymbols": {
+      "SubFactory": [
+        445
+      ]
+    },
+    "id": 446,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 418,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:4"
+      },
+      {
+        "absolutePath": "/home/dirty/Code/Token-Factory/contracts/Subscription.sol",
+        "file": "./Subscription.sol",
+        "id": 419,
+        "nodeType": "ImportDirective",
+        "scope": 446,
+        "sourceUnit": 856,
+        "src": "86:28:4",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [
+          855
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 445,
+        "linearizedBaseContracts": [
+          445
+        ],
+        "name": "SubFactory",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 443,
+              "nodeType": "Block",
+              "src": "316:94:4",
+              "statements": [
+                {
+                  "assignments": [
+                    431
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 431,
+                      "name": "sub",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 444,
+                      "src": "323:11:4",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      },
+                      "typeName": {
+                        "id": 430,
+                        "name": "address",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "323:7:4",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 440,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 435,
+                            "name": "_token",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 421,
+                            "src": "362:6:4",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          },
+                          {
+                            "argumentTypes": null,
+                            "id": 436,
+                            "name": "_owner",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 423,
+                            "src": "369:6:4",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          },
+                          {
+                            "argumentTypes": null,
+                            "id": 437,
+                            "name": "_crowdsale",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 425,
+                            "src": "376:10:4",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            },
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            },
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "id": 434,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "NewExpression",
+                          "src": "345:16:4",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_creation_nonpayable$_t_address_$_t_address_$_t_address_$returns$_t_contract$_Subscription_$855_$",
+                            "typeString": "function (address,address,address) returns (contract Subscription)"
+                          },
+                          "typeName": {
+                            "contractScope": null,
+                            "id": 433,
+                            "name": "Subscription",
+                            "nodeType": "UserDefinedTypeName",
+                            "referencedDeclaration": 855,
+                            "src": "349:12:4",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_Subscription_$855",
+                              "typeString": "contract Subscription"
+                            }
+                          }
+                        },
+                        "id": 438,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "345:42:4",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_Subscription_$855",
+                          "typeString": "contract Subscription"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_contract$_Subscription_$855",
+                          "typeString": "contract Subscription"
+                        }
+                      ],
+                      "id": 432,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "lValueRequested": false,
+                      "nodeType": "ElementaryTypeNameExpression",
+                      "src": "337:7:4",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_type$_t_address_$",
+                        "typeString": "type(address)"
+                      },
+                      "typeName": "address"
+                    },
+                    "id": 439,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "typeConversion",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "337:51:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "323:65:4"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 441,
+                    "name": "sub",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 431,
+                    "src": "401:3:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "functionReturnParameters": 429,
+                  "id": 442,
+                  "nodeType": "Return",
+                  "src": "394:10:4"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 444,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "createSubscription",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 426,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 421,
+                  "name": "_token",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 444,
+                  "src": "243:14:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 420,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "243:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 423,
+                  "name": "_owner",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 444,
+                  "src": "258:14:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 422,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "258:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 425,
+                  "name": "_crowdsale",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 444,
+                  "src": "273:18:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 424,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "273:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "242:50:4"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 429,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 428,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 444,
+                  "src": "308:7:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 427,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "308:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "307:9:4"
+            },
+            "scope": 445,
+            "src": "215:195:4",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 446,
+        "src": "117:299:4"
+      }
+    ],
+    "src": "0:417:4"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {
+    "36426": {
+      "events": {},
+      "links": {},
+      "address": "0xcba7a541d78622dc19f165c11f9b7b7f5549b65a",
+      "transactionHash": "0x95b633ddfb57013a636dbe0c242ce19f9a8de4aba65cce7642ab4723135cc37b"
+    }
+  },
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-11-11T13:41:50.461Z"
+}

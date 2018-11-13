@@ -29,28 +29,38 @@ var nativeImage = Electron.nativeImage;
 class MessagesController extends Controller_1.Controller {
     load_join_chat(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let q_chats = this.controller_register.get_controller_parameter('ChatsController', 'queried_chats');
-            let chat = q_chats[chat_id];
+            let q_chats = this.controller_register.get_controller_parameter('ChatsController', 'found_chats');
+            let chat = q_chats.chats[chat_id];
             chat.type = this.group_chat_types.join_channel;
             this.send_data(this.events.reload_chat, this.render('main/messagingblock/qqq.pug', chat));
         });
     }
-    get_chat_messages(chat_id) {
+    load_founded_chat(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('get_chat_messages');
-            let chat = yield ChatModel_1.ChatModel.get_chat_with_events(chat_id);
-            if (!chat)
-                return this.load_join_chat(chat_id);
-            yield this.reading_messages(chat.id);
-            switch (chat.type) {
+            let q_chats = this.controller_register.get_controller_parameter('ChatsController', 'found_chats');
+            let chat = q_chats.users[chat_id];
+            this.send_data(this.events.reload_chat, this.render('main/messagingblock/qqq.pug', chat));
+        });
+    }
+    get_chat_messages({ id, type }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let self_info = yield this.get_self_info();
+            console.log('get_chat_messages', id, type);
+            let chat = yield ChatModel_1.ChatModel.get_chat_with_events(id);
+            switch (type) {
                 case this.chat_types.user:
-                    yield chat.get_user_chat_meta();
+                    if (!chat)
+                        return this.load_founded_chat(id);
+                    yield chat.get_user_chat_meta(self_info.id);
                     break;
+                case this.group_chat_types.join_channel:
+                    return this.load_join_chat(id);
             }
             let html = this.render('main/messagingblock/qqq.pug', chat);
-            yield chat.save();
+            yield this.reading_messages(chat.id);
+            // await chat.save();
             yield this.send_data('reload_chat', html);
-            yield this.render_chat_messages(chat_id);
+            yield this.render_chat_messages(chat.id);
         });
     }
     ;
@@ -69,7 +79,7 @@ class MessagesController extends Controller_1.Controller {
                         message.files[num].file = (yield this.ipfs.get_file(message.files[num].hash)).file;
                         Helpers_1.save_file(message.files[num]);
                     }
-                    console.log(message.files[num]);
+                    // console.log(message.files[num]);
                 }
                 else {
                     if (Helpers_1.check_file_exist(message.files[num]))
@@ -127,6 +137,30 @@ class MessagesController extends Controller_1.Controller {
             console.log(file);
             let self_info = yield this.get_self_info();
             let chat = yield ChatModel_1.ChatModel.findOne(id);
+            let opp_id = ChatModel_1.ChatModel.get_chat_opponent_id(id, self_info.id);
+            if (!chat) {
+                let user = this.controller_register.get_controller_parameter('ChatsController', 'found_chats').users[id];
+                let userModel = yield UserModel_1.UserModel.findOne(opp_id);
+                if (!userModel) {
+                    userModel = new UserModel_1.UserModel();
+                    userModel.id = opp_id;
+                    userModel.domain = 'localhost';
+                    userModel.firstname = user.firstname;
+                    userModel.lastname = user.lastname;
+                    userModel.name = user.firstname + " " + user.lastname;
+                    userModel.avatar = user.avatar;
+                    yield userModel.save();
+                }
+                chat = new ChatModel_1.ChatModel();
+                chat.id = id;
+                chat.domain = "localhost";
+                chat.type = this.chat_types.user;
+                // chat.users=[userModel,self_info];
+                chat.users = [userModel];
+                if (userModel.id != self_info.id)
+                    chat.users.push(self_info);
+                yield chat.save();
+            }
             // let date = new Date();
             let message = new MessageModel_1.MessageModel();
             message.sender = self_info;
@@ -160,13 +194,21 @@ class MessagesController extends Controller_1.Controller {
             }
             if (chat.type === this.chat_types.user) {
                 yield this.render_message(message);
-                chat.id = yield chat.get_user_chat_meta();
+                chat.id = yield chat.get_user_chat_meta(self_info.id);
                 group = false;
             }
             else if (Object.values(this.group_chat_types).includes(chat.type)) {
                 group = true;
             }
-            this.dxmpp.send(chat, text, group, message.files);
+            // if (opp_id=='0x0000000000000000000000000000000000000000'){
+            //     if (text=='claim'){
+            //
+            //     }
+            //     return
+            // }
+            console.log("sending to", chat, text);
+            if (opp_id != self_info.id)
+                this.dxmpp.send(chat, text, group, message.files);
         });
     }
     ;
@@ -191,7 +233,34 @@ class MessagesController extends Controller_1.Controller {
             // console.log("Files:", files);
             let self_info = yield this.get_self_info();
             let userModel = yield UserModel_1.UserModel.findOne(user.id);
+            console.log(userModel);
             let chat = yield ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id);
+            console.log(chat);
+            if (!userModel || !chat) {
+                console.log("retriving user info");
+                let userGR = JSON.parse((yield this.grpc.CallMethod("GetObjData", { id: user.id, obj: 'user' })).data.data);
+                console.log(userGR);
+                userModel = new UserModel_1.UserModel();
+                userModel.id = userGR.id;
+                userModel.domain = "localhost";
+                userModel.name = userGR.firstname + (userGR.lastname ? " " + userGR.lastname : "");
+                userModel.firstname = userGR.firstname;
+                userModel.lastname = userGR.lastname;
+                userModel.avatar = userGR.avatar;
+                userModel.last_active = userGR.last_active;
+                yield userModel.save();
+                chat = new ChatModel_1.ChatModel();
+                chat.id = ChatModel_1.ChatModel.get_user_chat_id(self_info.id, user.id);
+                chat.type = this.chat_types.user;
+                chat.domain = "localhost";
+                chat.users = [userModel];
+                if (user.id != self_info.id)
+                    chat.users.push(self_info);
+                yield chat.save();
+                yield chat.get_user_chat_meta(self_info.id);
+                yield this.controller_register.run_controller('ChatsController', 'load_chat', chat, this.chat_to_menu.user);
+            }
+            // let chat = await ChatModel.get_user_chat(self_info.id, user.id);
             chat.unread_messages += 1;
             yield chat.save();
             let message = new MessageModel_1.MessageModel();

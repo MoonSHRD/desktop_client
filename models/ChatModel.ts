@@ -45,6 +45,7 @@ export class ChatModel extends BaseEntity {
 
     active:boolean=false;
     online:boolean=false;
+    last_active:number=0;
 
     time:Date=null;
     text:string=null;
@@ -126,18 +127,29 @@ export class ChatModel extends BaseEntity {
         return (await ChatModel.get_chat_with_users(chat_id)).users;
     }
 
-    static async get_chat_opponent(chat_id:string):Promise<UserModel>{
-        let opps = await ChatModel.get_chat_users(chat_id);
-        let account_id = 1;
-        let account = (await AccountModel.find({relations: ["user"], where: {id: account_id}, take: 1}))[0].user;
-        return opps.find(x => x.id !== account.id);
+    static async get_chat_opponent(chat_id:string,self_id:string):Promise<UserModel>{
+        let opp_id = await ChatModel.get_chat_opponent_id(chat_id,self_id);
+        return await UserModel.findOne(opp_id);
+        // let account_id = 1;
+        // let account = (await AccountModel.find({relations: ["user"], where: {id: account_id}, take: 1}))[0].user;
     }
 
-    async get_user_chat_meta():Promise<string>{
-        let data:UserModel=(await ChatModel.get_chat_opponent(this.id));
+    static get_chat_opponent_id(chat_id:string,self_id:string):string{
+        let opps = chat_id.split("_");
+        if (opps[0]==self_id) {
+            return opps[1];
+        } else {
+            return opps[0];
+        }
+    }
+
+    async get_user_chat_meta(self_id:string):Promise<string>{
+        let data:UserModel=(await ChatModel.get_chat_opponent(this.id,self_id));
         this.avatar=data.avatar;
         this.name=data.name;
-        this.online=data.online;
+        console.log("active",data.last_active);
+        console.log("data",data);
+        this.online=data.last_active>(Date.now()-1000*60*5);
         this.domain=data.domain;
         return data.id
     }
@@ -147,17 +159,20 @@ export class ChatModel extends BaseEntity {
             .createQueryRunner()
             .query(
                  `select * from 
-                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type, unread_messages
+                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.last_active as last_active, type, unread_messages
                    from chat_model ch
                        inner join (
-                               select name, avatar, id user_id, online, domain
+                               select name, avatar, id user_id, last_active, domain
                                from user_model 
-                               where user_model.id != "${self_info.id}"
                            ) usr 
-                       on instr(ch.id,user_id) > 0
+                       on (
+                         (substr(ch.id,1,42)=user_id and user_id!="${self_info.id}") or
+                         (substr(ch.id,44,42)=user_id and user_id!="${self_info.id}") or 
+                         (substr(ch.id,1,42)="${self_info.id}" and substr(ch.id,44,42)="${self_info.id}" and user_id="${self_info.id}")
+                       )
                        where ch.type == "${chat_types.user}"
                    UNION
-                   select id,domain,name,avatar, 0 as online, type, unread_messages
+                   select id,domain,name,avatar, 0 as last_active, type, unread_messages
                        from chat_model ch1
                        where ch1.type != "${chat_types.user}") ch2
                    left join (

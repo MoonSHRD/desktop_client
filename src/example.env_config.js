@@ -9,6 +9,14 @@ exports.ipfs_config = {
     host: 'ipfs.infura.io',
     port: 5001,
 };
+exports.grpc_config = {
+    host: '192.168.1.60',
+    port: 50051,
+};
+exports.web3_config = {
+    host: "192.168.1.21",
+    port: 8546,
+};
 exports.loom_config = {
     host: 'node1.moonshrd.io',
     port: 46658,

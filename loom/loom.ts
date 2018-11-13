@@ -1,5 +1,6 @@
 import {config, loom_config} from "../src/env_config";
 import {LocalAddress, CryptoUtils} from 'loom-js';
+import * as tweetnacl from 'tweetnacl';
 
 const LoomTruffleProvider = require('loom-truffle-provider');
 const Web3 = require('web3');
@@ -12,7 +13,7 @@ export class Loom {
     private static instance: Loom;
     private provider: any;
     private priv: any;
-    private pub: any;
+    public pub: any;
     public addr: any;
     public token_addr;
     public token_decimals: number;
@@ -143,5 +144,18 @@ export class Loom {
 
     static from_b64(str:string):Uint8Array{
         return CryptoUtils.B64ToUint8Array(str);
+    }
+
+    pub_as_hex(){
+        return CryptoUtils.bytesToHexAddr(this.pub).toLowerCase();
+    }
+
+    sign_data(data) {
+        let uint_data=Buffer.from(data, 'utf-8');
+        let uint8_sig = tweetnacl.sign.detached(
+            uint_data, // message as uint8
+            this.priv
+        );
+        return CryptoUtils.Uint8ArrayToB64(uint8_sig);
     }
 }

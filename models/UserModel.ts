@@ -34,9 +34,12 @@ export class UserModel extends BaseEntity {
     online: boolean = false;
     @Column()
     self: boolean = false;
+    @Column()
+    last_active: number=0;
 
     type: string;
     state: string;
+    eth_balance: number;
 
     @OneToOne(type => AccountModel, account => account.user)
     @JoinColumn()
