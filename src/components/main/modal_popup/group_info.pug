@@ -1,5 +1,5 @@
-style
-    include modal-content.css
+//style
+//    include modal-content.css
 script
     include slick.js
 
@@ -7,31 +7,54 @@ script
 //    //h5.modal-title #{name}
 //    button.close(type='button', data-dismiss='modal', aria-label='Close')
 //        span(aria-hidden='true') ×
-.modal-body
 
+.modal-header.modal-header_img
     if (role !== "moderator")
-
-        .scrollbar#style-10(style='overflow-y: scroll; overflow-x: hidden; height: 630px')
-            .row.m-0.groupInfoHeader
-                .gradient
-                .col-sm-4.text-left
-
-                    .col-sm-6.text-left.m-0.p-0
-                        p.m-0.p-0.pt-2
-                            span
-                                b.mr-1 Section:
-                                | Celebrities
-                        p.m-0.p-0
-                            span
-                                b.mr-1 Category:
-                                | Culture
-                .col-sm-4.o.text-center(style='margin-top: -60px')
-                    img.rounded-circle.avatarBg(src=avatar width=80 height=80)
-                    h5.modal-title #{name}
-                .col-sm-3.offset-1.text-left
-                    img.mr-3(src='components/main/modal_popup/img/bell.png')
-                    p.m-0(style='line-height: 1') Switch on notifications
-
+        .row.m-0.groupInfoHeader
+            .gradient
+            .col-sm-4.text-left
+                .col-sm-6.text-left.m-0.p-0
+                    p.m-0.p-0.pt-2
+                        span
+                            b.mr-1 Section:
+                            | Celebrities
+                    p.m-0.p-0
+                        span
+                            b.mr-1 Category:
+                            | Culture
+            .col-sm-4.o.text-center(style='margin-top: -60px')
+                img.rounded-circle.avatarBg(src=avatar width=80 height=80)
+                h5.modal-title #{name}
+            .col-sm-3.offset-1.text-left
+                img.mr-3(src='components/main/modal_popup/img/bell.png')
+                p.m-0(style='line-height: 1') Switch on notifications
+    else
+        .row.m-0.groupInfoHeader
+            .gradient
+            .col-sm-4.text-left
+                .col-sm-6.text-left.m-0.p-0.position-relative
+                    p.m-0.p-0.pt-2
+                        span.d-flex
+                            b.mr-1 Section:
+                            input(name='sectionName' value='Celebrities' disabled="disabled")
+                            a(href='#')
+                                img(src='components/main/modal_popup/img/edit.png')
+                    p.m-0.p-0
+                        span.d-flex
+                            b.mr-1 Category:
+                            input(name='categoryName' value='Culture' disabled="disabled")
+                            a(href='#')
+                                img(src='components/main/modal_popup/img/edit.png')
+            .col-sm-4.o.text-center(style='margin-top: -60px')
+                img.rounded-circle.avatarBg(src=avatar width=80 height=80)
+                h5.modal-title #{name}
+            .col-sm-3.offset-1.text-left
+                img.mr-3(src='components/main/modal_popup/img/bell.png')
+                p.m-0(style='line-height: 1') Switch on notifications
+.modal-body
+    if (role !== "moderator")
+        //.scrollbar#style-10(style='overflow-y: scroll; overflow-x: hidden; height: 630px')
+        .scrollbar
             .row.mt-3(style='margin-top: 80px !important')
                 .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
                     img(src='components/main/modal_popup/img/groups.png')
@@ -164,31 +187,8 @@ script
 
 
     else
-        .scrollbar#style-10(style='overflow-y: scroll; overflow-x: hidden; height: 630px')
-            .row.m-0.groupInfoHeader
-                .gradient
-                .col-sm-4.text-left
-
-                    .col-sm-6.text-left.m-0.p-0.position-relative
-                        p.m-0.p-0.pt-2
-                            span.d-flex
-                                b.mr-1 Section:
-                                input(name='sectionName' value='Celebrities' disabled="disabled")
-                                a(href='#')
-                                    img(src='components/main/modal_popup/img/edit.png')
-                        p.m-0.p-0
-                            span.d-flex
-                                b.mr-1 Category:
-                                input(name='categoryName' value='Culture' disabled="disabled")
-                                a(href='#')
-                                    img(src='components/main/modal_popup/img/edit.png')
-                .col-sm-4.o.text-center(style='margin-top: -60px')
-                    img.rounded-circle.avatarBg(src=avatar width=80 height=80)
-                    h5.modal-title #{name}
-                .col-sm-3.offset-1.text-left
-                    img.mr-3(src='components/main/modal_popup/img/bell.png')
-                    p.m-0(style='line-height: 1') Switch on notifications
-
+        //.scrollbar#style-10(style='overflow-y: scroll; overflow-x: hidden; height: 630px')
+        .scrollbar
             .row.mt-3(style='margin-top: 85px !important')
                 .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
                     img(src='components/main/modal_popup/img/groups.png')

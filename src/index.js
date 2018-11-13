@@ -5,6 +5,9 @@ const {dialog} = require('electron').remote;
 const fs = require('fs');
 require('waypoints/lib/noframework.waypoints.min');
 require('waypoints/lib/shortcuts/sticky.min');
+require('bootstrap');
+require('bootstrap-notify');
+require('slick-carousel');
 
 let p = null;
 let d = null;
