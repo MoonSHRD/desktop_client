@@ -20,5 +20,5 @@ export const web3_config = {
 };
 
 export const bot_acc={
-    addr:'0x9869eE8F805BE64Bdba53C5557206F631240b752'.toLowerCase(),
+    addr:"0x100FEEB554dADbfe5d97763145807dBe0a5d0e34".toLowerCase(),
 };

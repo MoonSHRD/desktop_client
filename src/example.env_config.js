@@ -18,7 +18,7 @@ exports.web3_config = {
     port: 8546,
 };
 exports.bot_acc = {
-    addr: '0x9869eE8F805BE64Bdba53C5557206F631240b752'.toLowerCase(),
+    addr: "0x100FEEB554dADbfe5d97763145807dBe0a5d0e34".toLowerCase(),
 };
 net_reg_addr: '0x53bcfb143d7737fedd257a8ba1984872025255fa',
 ;
