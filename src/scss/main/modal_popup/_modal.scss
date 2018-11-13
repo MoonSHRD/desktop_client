@@ -89,7 +89,14 @@
         }
 
         &_userinfo{
+            .row{
+                min-height: 40px;
+                border-bottom: 1px solid $brand-gray-400;
 
+                &:last-child{
+                    border-bottom: 0;
+                }
+            }
         }
     }
     &-footer{

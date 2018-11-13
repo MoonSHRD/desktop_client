@@ -16,10 +16,10 @@
     .container-fluid
         .row.align-items-center.flex-nowrap
             .col-3 Username
-            .col-6
-                span#copyTo.d-inline.text-truncate.select-true #{id}
+            .col-6.text-truncate
+                span#copyTo.d-inline.select-true #{id}
             .col-3.text-right
-                button.copyButton.btn.btn-primary(type='button' )
+                button.copyButton.btn.btn-link(type='button')
                     include ../../../img/icons/copy-solid.svg
         .row.align-items-center.flex-nowrap
             .col-3 Firstname
