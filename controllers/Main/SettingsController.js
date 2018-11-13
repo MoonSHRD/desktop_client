@@ -43,7 +43,7 @@ class SettingsController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             if (path == "undefined/")
                 return;
-            let settings = yield this.get_Settings();
+            let settings = yield this.getSettings();
             settings.downloads = path;
             yield settings.save();
         });
@@ -51,14 +51,14 @@ class SettingsController extends Controller_1.Controller {
     ;
     update_last_chat(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let settings = yield this.get_Settings();
+            let settings = yield this.getSettings();
             settings.last_chat = chat_id;
             yield settings.save();
         });
     }
     change_windows_size(width, height) {
         return __awaiter(this, void 0, void 0, function* () {
-            let settings = yield this.get_Settings();
+            let settings = yield this.getSettings();
             settings.width = width;
             settings.height = height;
             yield settings.save();
@@ -67,7 +67,7 @@ class SettingsController extends Controller_1.Controller {
     ;
     change_chats_width(width) {
         return __awaiter(this, void 0, void 0, function* () {
-            let settings = yield this.get_Settings();
+            let settings = yield this.getSettings();
             settings.width_chats = width;
             yield settings.save();
         });

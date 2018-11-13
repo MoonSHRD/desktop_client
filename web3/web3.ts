@@ -1,5 +1,5 @@
 import Web3 = require("web3");
-import {loom_config, web3_config} from "../src/env_config";
+import {web3_config} from "../src/env_config";
 let EventEmitter = require('events').EventEmitter;
 let SubFactoryAbi = require("./abis/SubFactory");
 let TokenFactoryAbi = require("./abis/TokenFactory");
@@ -15,10 +15,7 @@ export class Web3S {
     public events: any;
     public privKey: string;
     private static instance: Web3S;
-    private subs:{
-        NewBlocks:any,
-        NewTokens:any,
-    }={NewBlocks:{},NewTokens:{}};
+    private subs={};
 
     private constructor() {
         this.web3 = new Web3("ws://"+web3_config.host+":"+web3_config.port+"");
@@ -46,7 +43,7 @@ export class Web3S {
         await this.web3.eth.accounts.wallet.add(account);
         this.TokenFactory = new this.web3.eth.Contract(TokenFactoryAbi.abi, TokenFactoryAddress, {from: this.addr});
 
-        this.subs.NewBlocks = await this.web3.eth.subscribe('newBlockHeaders',async (err,block)=>{
+        this.subs["NewBlocks"] = await this.web3.eth.subscribe('newBlockHeaders',async (err,block)=>{
             if (err)
                 console.log(err);
             else {
@@ -61,7 +58,7 @@ export class Web3S {
             }
         });
 
-        this.subs.NewBlocks = await this.TokenFactory.events.TokenCreated({},async (one,two,three)=>{
+        this.subs["NewTokens"] = await this.TokenFactory.events.TokenCreated({},async (one,two,three)=>{
             this.events.emit('token_created',one,two,three);
             console.log(one,two,three);
         });

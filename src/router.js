@@ -18,21 +18,21 @@ const moonshard_core_1 = require("moonshard_core");
 const electron_1 = require("electron");
 const ControllerRegister_1 = require("../controllers/ControllerRegister");
 const var_helper_1 = require("./var_helper");
-const loom_1 = require("../loom/loom");
+// import {Loom} from "../loom/loom";
 const web3_1 = require("../web3/web3");
 class Router {
+    // private loom: Loom = Loom.getInstance();
     constructor(window) {
         this.loading = true;
         this.connection_tries = 0;
-        this.loom = loom_1.Loom.getInstance();
         this.window = window;
         this.controller_register = ControllerRegister_1.ControllerRegister.getInstance(window);
         this.online = false;
         this.paths = var_helper_1.helper.paths;
         this.ipcMain = electron_1.ipcMain;
-        this.dxmpp = moonshard_core_1.dxmpp.getInstance();
+        this.dxmpp = moonshard_core_1.Dxmpp.getInstance();
         this.web3 = web3_1.Web3S.GetInstance();
-        this.loom = loom_1.Loom.getInstance();
+        // this.loom = Loom.getInstance();
         this.events = var_helper_1.helper.events;
         this.types = var_helper_1.helper.paths;
     }

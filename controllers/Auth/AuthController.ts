@@ -2,12 +2,13 @@ import "reflect-metadata";
 import {AccountModel} from "../../models/AccountModel";
 import {Controller} from "../Controller";
 import {UserModel} from "../../models/UserModel";
-import {Loom} from "../../loom/loom";
+// import {Loom} from "../../loom/loom";
 import {TextEncoder,TextDecoder} from 'text-encoding';
 import {resize_b64_img, resize_img_from_path} from "../Helpers";
 import {paths} from "../../src/var_helper";
 import {SettingsModel} from "../../models/SettingsModel";
 import {bot_acc} from "../../src/env_config";
+import {ChatModel} from "../../models/ChatModel";
 const ethers = require('ethers');
 const bip39 = require('bip39');
 // let {TextDecoder} = require('text-encoding');
@@ -50,6 +51,7 @@ class AuthController extends Controller {
         await this.web3.SetAccount(account.privKey);
 
         this.grpc.SetPrivKey(account.privKey);
+        let suc=await this.grpc.CallMethod('SetObjData',{pubKey: this.grpc.pubKey,obj:'user',data:user});
         if (first) {
             // let identyti_tx= await this.loom.set_identity(account.user.name);
             // console.log(identyti_tx);
@@ -60,7 +62,6 @@ class AuthController extends Controller {
         }
         this.grpc.StartPinging();
         this.grpc.StartUserPinging();
-        let suc=await this.grpc.CallMethod('SetObjData',{pubKey: this.grpc.pubKey,obj:'user',data:user});
         this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
         account.host = this.dxmpp_config.host;
         account.jidhost = this.dxmpp_config.jidhost;
@@ -94,7 +95,7 @@ class AuthController extends Controller {
         account.passphrase = data.mnemonic;
         account.user = user;
         // settings.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
-        settings.last_chat = bot_acc.addr+'_' + eth_data.address.toLowerCase();
+        settings.last_chat = ChatModel.get_user_chat_id(user.id,bot_acc.addr);
         await settings.save();
         await account.save();
 
