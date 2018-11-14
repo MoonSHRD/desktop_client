@@ -216,3 +216,71 @@
         }
     }
 }
+
+/* История транзакций - НАЧАЛО*/
+.wallet-history{
+
+    &__header{
+        flex-wrap: nowrap;
+        text-align: center;
+        align-items: center;
+        padding: .85rem 0;
+        font-weight: 500;
+    }
+
+    &__body{
+
+    }
+
+    &__item{
+        border-radius: .85rem;
+        background-color: $cf;
+        width: 100%;
+        [data-toggle="collapse"] {
+            //padding-left: 15px;
+            //padding-right: 15px;
+            text-align: center;
+            @include fz(14);
+
+            .row{
+                width: 100%;
+                align-items: center;
+                flex-wrap: nowrap;
+            }
+        }
+
+        .transaction{
+
+            svg{
+                margin: 0 auto;
+                transform: rotate(0);
+                @include size(1.5rem);
+            }
+            &_in{
+                transform: rotate(180deg);
+                svg{
+                    path{
+                        color: $brand-green;
+                    }
+                }
+            }
+            &_out{
+                svg{
+                    path{
+                        color: $brand-red;
+                    }
+                }
+            }
+        }
+
+        .card{
+            box-shadow: none;
+            background-color: transparent;
+
+            .table{
+                border-spacing: 0
+            }
+        }
+    }
+}
+/* История транзакций - КОНЕЦ */

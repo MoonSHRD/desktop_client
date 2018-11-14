@@ -70,6 +70,28 @@ export class Grpc {
         }
     }
 
+    async GetUser(id:string):Promise<UserModel>{
+        let userModel=await UserModel.findOne(id);
+        if (!userModel) {
+            userModel=new UserModel();
+            let res = await this.CallMethod("GetObjData",{id: id,obj:'user'});
+            userModel.id=id;
+            userModel.domain='localhost';
+            if (res.err){
+                console.log(res.err);
+            } else {
+                let user= JSON.parse(res.data.data);
+                userModel.name=user.name;
+                userModel.last_active=user.last_active;
+                userModel.avatar=user.avatar;
+                userModel.lastname=user.lastname;
+                userModel.firstname=user.firstname;
+                userModel.name=user.firstname+(user.lastname?" "+user.lastname:"");
+            }
+        }
+        return userModel
+    }
+
     // private signData(data) {
     //     if (!this.privKey) {
     //         throw new Error('private key must be set first');

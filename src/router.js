@@ -186,18 +186,18 @@ class Router {
             yield this.controller_register.run_controller('WalletController', 'get_contacts');
         }));
         /** Settings events **/
-        this.listen_event(this.ipcMain, 'change_settings_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            console.log('change_settings_menu');
-            yield this.controller_register.queue_controller('SettingsController', 'change_settings_menu', arg);
-        }));
+        // this.listen_event(this.ipcMain, 'change_settings_menu', async (event, arg) => {
+        //     console.log('change_settings_menu');
+        //     await this.controller_register.queue_controller('SettingsController', 'change_settings_menu', arg);
+        // });
         this.listen_event(this.ipcMain, "change_directory", (event, path) => __awaiter(this, void 0, void 0, function* () {
             // console.log("Change directory:", path);
             yield this.controller_register.run_controller('SettingsController', 'change_directory', path);
         }));
-        this.listen_event(this.ipcMain, "change_last_chat", (event, chat_id) => __awaiter(this, void 0, void 0, function* () {
-            // console.log("Change last chat:", chat_id);
-            yield this.controller_register.run_controller('SettingsController', 'update_last_chat', chat_id);
-        }));
+        // this.listen_event(this.ipcMain, "change_last_chat", async (event, chat_id) => {
+        //     // console.log("Change last chat:", chat_id);
+        //     await this.controller_register.run_controller('SettingsController', 'update_last_chat', chat_id);
+        // });
         /** Menu events **/
         this.listen_event(this.ipcMain, 'change_menu_state', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             console.log('change menu');
@@ -222,18 +222,20 @@ class Router {
             yield this.controller_register.run_controller('SettingsController', 'change_chats_width', width);
         }));
         /** Eth events **/
-        this.listen_event(this.web3, 'received_eth', (tx) => __awaiter(this, void 0, void 0, function* () {
-            console.log(`Received ${tx.value / Math.pow(10, 18)}Eth from ${tx.from.toLowerCase()}`);
-            console.log(tx);
-            let text = `Received transaction
-From: ${tx.from.toLowerCase()}.
-Amount: ${tx.value / Math.pow(10, 18)} Coin.
-Link: https://blocks.moonshard.io/tx/${tx.hash}`;
-            yield this.controller_register.queue_controller('MessagesController', 'received_message', { id: tx.from.toLowerCase(), domain: 'localhost' }, text, Date.now(), []);
+        this.listen_event(this.web3, 'new_transaction', (tx) => __awaiter(this, void 0, void 0, function* () {
+            console.log(`Received ${tx.amount / Math.pow(10, 18)}Eth from ${tx.from.id}`);
+            yield this.controller_register.run_controller('WalletController', 'handle_tx', tx);
+            //             console.log(tx);
+            //             let text=`Transaction
+            // Amount: ${tx.value/Math.pow(10,18)} Coin.
+            // Link: http://blocks.moonshrd.io/tx/${tx.hash}`;
+            //             await this.controller_register.run_controller('MessagesController', 'received_message', {id:tx.from.toLowerCase(),domain:'localhost'}, text, Date.now(), []);
         }));
-        this.listen_event(this.web3, 'received_eth', (one, two, three) => __awaiter(this, void 0, void 0, function* () {
-            console.log(one, two, three);
-        }));
+        // this.events.emit('new_transaction',transactionModel)
+        // this.listen_event(this.web3, 'new_transaction', async (tx)=>{
+        //     // console.log(one,two,three);
+        //
+        // });
     }
 }
 exports.Router = Router;

@@ -1,4 +1,6 @@
 .walletRight{
+    overflow-x: hidden;
+    overflow-y: overlay;
     flex: 1;
     background-color: $brand-gray-100;
     padding: 20px 20px;

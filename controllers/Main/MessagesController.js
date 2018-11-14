@@ -18,9 +18,37 @@ const Helpers_1 = require("../Helpers");
 const Electron = require("electron");
 var Notification = Electron.Notification;
 var nativeImage = Electron.nativeImage;
+const Benchmark = require("benchmark");
+// import {Benchmark} from 'benchmark';
+let benchmark = new Benchmark.Suite;
 // import * as eNotify from 'electron-notify'
 // let eNotify = require('electron-notify');
 class MessagesController extends Controller_1.Controller {
+    benchmarkIt() {
+        return __awaiter(this, void 0, void 0, function* () {
+            benchmark.add('message-one_by_one#test', {
+                defer: true,
+                fn: (deferred) => {
+                    this.render_chat_messages('0x100feeb554dadbfe5d97763145807dbe0a5d0e34_0x7068895138bf0ac16a6cabb3c446ad41ff571da3')
+                        .then(() => {
+                        deferred.resolve();
+                    });
+                }
+            }).add('message-all#test', {
+                defer: true,
+                fn: (deferred) => {
+                    this.render_chat_messages_all('0x100feeb554dadbfe5d97763145807dbe0a5d0e34_0x7068895138bf0ac16a6cabb3c446ad41ff571da3')
+                        .then(() => {
+                        deferred.resolve();
+                    });
+                }
+            }).on('complete', function () {
+                console.log('Fastest is ' + this.filter('fastest').map('name'));
+                console.log(this[0].times);
+                console.log(this[1].times);
+            }).run({ 'async': true });
+        });
+    }
     load_join_chat(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
             let q_chats = this.controller_register.get_controller_parameter('ChatsController', 'found_chats');
@@ -38,6 +66,7 @@ class MessagesController extends Controller_1.Controller {
     }
     get_chat_messages({ id, type }) {
         return __awaiter(this, void 0, void 0, function* () {
+            // this.benchmarkIt();
             let set = yield this.getSettings();
             set.last_chat = id;
             yield set.save();
@@ -71,7 +100,7 @@ class MessagesController extends Controller_1.Controller {
                     message.files[num].preview = true;
                     if (!(yield Helpers_1.read_file(message.files[num]))) {
                         message.files[num].file = (yield this.ipfs.get_file(message.files[num].hash)).file;
-                        Helpers_1.save_file(message.files[num]);
+                        yield Helpers_1.save_file(message.files[num]);
                     }
                     // console.log(message.files[num]);
                 }
@@ -115,12 +144,18 @@ class MessagesController extends Controller_1.Controller {
             }
         });
     }
+    render_chat_messages_all(chat_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let messages = yield MessageModel_1.MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+            yield this.send_data('gwagwa', this.render('main/messagingblock/message_all.pug', { messages: messages }));
+        });
+    }
     download_file(file_id) {
         return __awaiter(this, void 0, void 0, function* () {
             let file = yield FileModel_1.FileModel.findOne(file_id);
             if (!Helpers_1.read_file(file)) {
                 file.file = (yield this.ipfs.get_file(file.hash)).file;
-                Helpers_1.save_file(file);
+                yield Helpers_1.save_file(file);
             }
             this.send_data('file_downloaded', { id: file_id });
         });
@@ -177,7 +212,7 @@ class MessagesController extends Controller_1.Controller {
                 fileModel.type = file.type;
                 fileModel.path = settings.downloads;
                 yield fileModel.save();
-                Helpers_1.save_file(fileModel);
+                yield Helpers_1.save_file(fileModel);
                 message.files = [fileModel];
             }
             // message.fileModel = file_send;
@@ -229,17 +264,10 @@ class MessagesController extends Controller_1.Controller {
             let chat = yield ChatModel_1.ChatModel.get_user_chat(self_info.id, user.id);
             console.log(chat);
             if (!userModel || !chat) {
-                console.log("retriving user info");
-                let userGR = JSON.parse((yield this.grpc.CallMethod("GetObjData", { id: user.id, obj: 'user' })).data.data);
-                console.log(userGR);
-                userModel = new UserModel_1.UserModel();
-                userModel.id = userGR.id;
-                userModel.domain = "localhost";
-                userModel.name = userGR.firstname + (userGR.lastname ? " " + userGR.lastname : "");
-                userModel.firstname = userGR.firstname;
-                userModel.lastname = userGR.lastname;
-                userModel.avatar = userGR.avatar;
-                userModel.last_active = userGR.last_active;
+                // console.log("retriving user info");
+                // let userGR=JSON.parse((await this.grpc.CallMethod("GetObjData",{id: user.id,obj:'user'})).data.data);
+                // console.log(userGR);
+                userModel = yield this.grpc.GetUser(user.id);
                 yield userModel.save();
                 chat = new ChatModel_1.ChatModel();
                 chat.id = ChatModel_1.ChatModel.get_user_chat_id(self_info.id, user.id);
