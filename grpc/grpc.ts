@@ -2,7 +2,7 @@ import * as grpc from 'grpc';
 import * as util from 'util';
 import * as protoLoader from '@grpc/proto-loader';
 import {UserModel} from "../models/UserModel";
-import {LocalAddress, CryptoUtils} from 'loom-js';
+// import {LocalAddress, CryptoUtils} from 'loom-js';
 import * as tweetnacl from 'tweetnacl';
 import {grpc_config} from "../src/env_config";
 import ethers = require('ethers');

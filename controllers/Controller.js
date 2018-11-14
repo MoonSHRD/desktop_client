@@ -14,7 +14,7 @@ const env_config_1 = require("../src/env_config");
 const Pug = require("pug");
 const AccountModel_1 = require("../models/AccountModel");
 const ControllerRegister_1 = require("./ControllerRegister");
-const loom_1 = require("../loom/loom");
+// import {Loom} from "../loom/loom";
 const ipfs_1 = require("../ipfs/ipfs");
 const SettingsModel_1 = require("../models/SettingsModel");
 const grpc_1 = require("../grpc/grpc");
@@ -24,7 +24,7 @@ class Controller {
         this.pug = Pug;
         this.controller_register = ControllerRegister_1.ControllerRegister.getInstance();
         this.grpc = grpc_1.Grpc.getIntance();
-        this.dxmpp = moonshard_core_1.dxmpp.getInstance();
+        this.dxmpp = moonshard_core_1.Dxmpp.getInstance();
         this.dxmpp_config = env_config_1.config;
         this.pug_options = var_helper_1.helper.pug_options;
         this.paths = var_helper_1.helper.paths;
@@ -34,7 +34,7 @@ class Controller {
         this.chat_to_menu = var_helper_1.helper.chat_to_menu;
         this.eth = moonshard_core_1.eth;
         this.web3 = web3_1.Web3S.GetInstance();
-        this.loom = loom_1.Loom.getInstance();
+        // protected loom: Loom = Loom.getInstance();
         this.ipfs = ipfs_1.Ipfs.getInstance();
         this.self_info = null;
         this.me = null;
@@ -65,13 +65,13 @@ class Controller {
     ;
     get_me() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.me = (yield AccountModel_1.AccountModel.find({ where: { id: 1 } }))[0];
+            this.me = yield AccountModel_1.AccountModel.findOne(1);
             return this.me;
         });
     }
-    get_Settings() {
+    getSettings() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.settings = (yield SettingsModel_1.SettingsModel.find({ where: { id: 1 } }))[0];
+            this.settings = yield SettingsModel_1.SettingsModel.findOne(1);
             return this.settings;
         });
     }

@@ -21,7 +21,7 @@ class MenuController extends Controller_1.Controller {
             console.log('init_main');
             yield this.generate_initial_chats();
             let self_info = Object(yield this.get_self_info());
-            let settings = yield this.get_Settings();
+            let settings = yield this.getSettings();
             self_info.width_chats = settings.width_chats;
             self_info.language = settings.language;
             self_info.eth_balance = yield this.web3.GetMyBalance();
@@ -45,24 +45,23 @@ class MenuController extends Controller_1.Controller {
         });
     }
     ;
-    load_menu_user_chats(account) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let self_info = Object(yield this.get_self_info());
-            let settings = yield this.get_Settings();
-            self_info.state = this.chat_to_menu.user;
-            self_info.width_chats = settings.width_chats;
-            console.log("self", self_info);
-            let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
-                this.render('main/messagingblock/messagingblock.pug', { width_chats: settings.width_chats });
-            this.send_data('change_menu_state', html);
-            // this.send_data("set_chats_width", settings.width_chats);
-            yield this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
-        });
-    }
+    // private async load_menu_user_chats(account) {
+    //     let self_info = Object(await this.get_self_info());
+    //     let settings = await this.getSettings();
+    //     self_info.state=this.chat_to_menu.user;
+    //     self_info.width_chats = settings.width_chats;
+    //     console.log("self", self_info);
+    //     let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
+    //         this.render('main/messagingblock/messagingblock.pug', {width_chats:settings.width_chats});
+    //     this.send_data('change_menu_state', html);
+    //     // this.send_data("set_chats_width", settings.width_chats);
+    //     await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
+    // }
     load_menu_chats(account) {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = Object(yield this.get_self_info());
-            let settings = yield this.get_Settings();
+            // let set = await SettingsModel.findOne(1);
+            let settings = yield this.getSettings();
             self_info.state = this.chat_to_menu.group;
             self_info.width_chats = settings.width_chats;
             console.log("self", self_info);
@@ -73,6 +72,7 @@ class MenuController extends Controller_1.Controller {
             this.send_data('change_menu_state', html);
             // this.send_data("set_chats_width", settings.width_chats);
             yield this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.group);
+            yield this.controller_register.run_controller('MessagesController', 'get_chat_messages', { id: settings.last_chat, type: this.chat_types.user });
         });
     }
     load_menu_wallet(account) {
@@ -170,14 +170,14 @@ To receive 100 Coin from our bot - send "claim".`;
     load_menu_initial(first = false) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('load_menu_default');
-            yield this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
+            // await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
             // await this.controller_register.run_controller("AccountController", "set_sizes");
             let self_info = yield this.get_self_info();
-            self_info.eth_balance = yield this.web3.GetMyBalance();
+            // self_info.eth_balance=await this.web3.GetMyBalance();
             console.log(self_info);
             yield this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user, first);
             if (first) {
-                yield this.controller_register.run_controller('MessagesController', 'get_chat_messages', { id: env_config_1.bot_acc.addr + '_' + self_info.id, type: this.chat_types.user });
+                yield this.controller_register.run_controller('MessagesController', 'get_chat_messages', { id: ChatModel_1.ChatModel.get_user_chat_id(self_info.id, env_config_1.bot_acc.addr), type: this.chat_types.user });
             }
         });
     }

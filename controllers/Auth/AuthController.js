@@ -15,6 +15,7 @@ const UserModel_1 = require("../../models/UserModel");
 const Helpers_1 = require("../Helpers");
 const SettingsModel_1 = require("../../models/SettingsModel");
 const env_config_1 = require("../../src/env_config");
+const ChatModel_1 = require("../../models/ChatModel");
 const ethers = require('ethers');
 const bip39 = require('bip39');
 // let {TextDecoder} = require('text-encoding');
@@ -58,6 +59,7 @@ class AuthController extends Controller_1.Controller {
             // console.log('loom connected');
             yield this.web3.SetAccount(account.privKey);
             this.grpc.SetPrivKey(account.privKey);
+            let suc = yield this.grpc.CallMethod('SetObjData', { pubKey: this.grpc.pubKey, obj: 'user', data: user });
             if (first) {
                 // let identyti_tx= await this.loom.set_identity(account.user.name);
                 // console.log(identyti_tx);
@@ -68,7 +70,6 @@ class AuthController extends Controller_1.Controller {
             }
             this.grpc.StartPinging();
             this.grpc.StartUserPinging();
-            let suc = yield this.grpc.CallMethod('SetObjData', { pubKey: this.grpc.pubKey, obj: 'user', data: user });
             this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
             account.host = this.dxmpp_config.host;
             account.jidhost = this.dxmpp_config.jidhost;
@@ -101,7 +102,7 @@ class AuthController extends Controller_1.Controller {
             account.passphrase = data.mnemonic;
             account.user = user;
             // settings.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
-            settings.last_chat = env_config_1.bot_acc.addr + '_' + eth_data.address.toLowerCase();
+            settings.last_chat = ChatModel_1.ChatModel.get_user_chat_id(user.id, env_config_1.bot_acc.addr);
             yield settings.save();
             yield account.save();
             yield this.auth(account, true);

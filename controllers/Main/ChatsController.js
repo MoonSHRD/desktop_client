@@ -24,7 +24,7 @@ class ChatsController extends Controller_1.Controller {
     init_chats() {
         return __awaiter(this, void 0, void 0, function* () {
             let self_info = yield this.get_self_info();
-            let language = (yield this.get_Settings()).language;
+            let language = (yield this.getSettings()).language;
             let obj = {
                 arg: this.render('main/main.pug', { state: '' }),
                 language: language
@@ -93,7 +93,7 @@ class ChatsController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('load_chats');
             let self_info = yield this.get_self_info();
-            let settings = yield this.get_Settings();
+            let settings = yield this.getSettings();
             let chats = yield ChatModel_1.ChatModel.get_chats_with_last_msgs(self_info);
             let menu_chat;
             if (type === this.chat_types.user) {
@@ -186,20 +186,17 @@ class ChatsController extends Controller_1.Controller {
             yield this.load_chat(chat, this.chat_to_menu.user);
         });
     }
-    subscribe(user, key) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log(`subscribing to user ${user.id}`);
-            this.dxmpp.subscribe(user);
-        });
-    }
-    user_subscribed(user, key) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.dxmpp.acceptSubscription(user);
-            let check = yield UserModel_1.UserModel.findOne(user.id);
-            if (!check)
-                yield this.subscribe(user, key);
-        });
-    }
+    // async subscribe(user, key) {
+    //     console.log(`subscribing to user ${user.id}`);
+    //     this.dxmpp.subscribe(user);
+    // }
+    //
+    // async user_subscribed(user, key) {
+    //     this.dxmpp.acceptSubscription(user);
+    //     let check = await UserModel.findOne(user.id);
+    //     if (!check)
+    //         await this.subscribe(user, key);
+    // }
     joined_room(room_data, messages) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Old messages:\n", messages);
@@ -298,7 +295,7 @@ class ChatsController extends Controller_1.Controller {
     }
     join_chat(chat) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.dxmpp.join(chat);
+            this.dxmpp.join(chat, "");
         });
     }
     found_groups(result) {

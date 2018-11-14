@@ -84,7 +84,7 @@
     "l20n": "^5.0.0",
     "loom-js": "^1.4.3",
     "loom-truffle-provider": "^0.5.0",
-    "moonshard_core": "0.1.58",
+    "moonshard_core": "^0.1.61",
     "node-sass": "^4.9.4",
     "peer-id": "^0.11.0",
     "popper.js": "^1.14.4",
@@ -96,8 +96,8 @@
     "sqlite3": "^4.0.3",
     "text-encoding": "^0.7.0",
     "typeorm": "^0.2.7",
-    "web3": "^1.0.0-beta.36",
-    "waypoints": "^4.0.1"
+    "waypoints": "^4.0.1",
+    "web3": "^1.0.0-beta.36"
   },
   "build": {
     "appId": "moonshard",

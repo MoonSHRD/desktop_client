@@ -68,7 +68,7 @@ class WalletController extends Controller_1.Controller {
             message.fresh = true;
             message.text = `Send transaction
 To: ${data.address}.
-Amount: ${data.amount}
+Amount: ${data.amount} Coin.
 Link: https://blocks.moonshard.io/tx/${tx.transactionHash}`;
             message.sender = self_info;
             message.chat = chatModel;
