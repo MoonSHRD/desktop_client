@@ -250,7 +250,7 @@ window.onload = function () {
         }
     });
 
-    $(document).on('keydown',".send_message__input",function(e) {
+    $(document).on('keydown','.send_message__input',function(e) {
         if($(this).val() === '') {
             $(this).attr('rows', 1);
         };
@@ -263,7 +263,7 @@ window.onload = function () {
         }
     });
 
-    $(document).on('input',".send_message__input",function(e) {
+    $(document).on('input','.send_message__input',function(e) {
         // console.log('hello!')
         if($(this).val() === '') {
             $(this).attr('rows', 1);
@@ -271,7 +271,7 @@ window.onload = function () {
 
     });
 
-    $(document).on('paste',".send_message__input",function(e) {
+    $(document).on('paste','.send_message__input',function(e) {
         // console.log('paste!');
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
         let val = $(this).text();
@@ -376,7 +376,7 @@ window.onload = function () {
             chat.find('[data-name=unread_messages]').hide();
             ipcRenderer.send('reading_messages', obj.id);
 
-            let p_count = ($("p:contains(" + obj.time + ")"));
+            let p_count = ($('p:contains(' + obj.time + ')'));
 
             if (p_count.length === 0) {
                 $('[data-msg-list]').append(obj.html_date);
@@ -631,8 +631,8 @@ window.onload = function () {
     // });
 
     $(document).on('submit', '.modal-content', function (e) {
-        let button = $(this).find(".btn-primary");
-        button.attr("disabled", "disabled");
+        let button = $(this).find('.btn-primary');
+        button.attr('disabled', 'disabled');
         e.preventDefault();
         const $this = $(this);
         let groupNameEl = $this.find('[name=\'name\']');
@@ -656,7 +656,7 @@ window.onload = function () {
             }
         }
         else
-            button.removeAttr("disabled");
+            button.removeAttr('disabled');
     });
 
     $(document).on('focusin', '[data-name="crowdsale__input"]', function (e) {
@@ -845,7 +845,7 @@ window.onload = function () {
         // console.log('resize_clicked');
         unlock = true;
         $(document).on('mouseup', function(e) {
-            ipcRenderer.send("change_chats_size", p.width());
+            ipcRenderer.send('change_chats_size', p.width());
         });
     });
 
@@ -959,17 +959,17 @@ window.onload = function () {
     });
 
     $(window).resize(function(){
-        if ($("#main-menu").length !== 0) {
-            ipcRenderer.send("change_size_window", $(window).width(), $(window).height());
+        if ($('#main-menu').length !== 0) {
+            ipcRenderer.send('change_size_window', $(window).width(), $(window).height());
         }
     });
 
     $(document).on('click', '[name=encrypt_database]', function (e) {
-        ipcRenderer.send("encrypt_db");
+        ipcRenderer.send('encrypt_db');
     });
 
     $(document).on('click', '[name=decrypt_database]', function (e) {
-        ipcRenderer.send("decrypt_db");
+        ipcRenderer.send('decrypt_db');
     });
 
     $(document).on('click', '.sendTokenButton', function (e) {

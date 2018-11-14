@@ -20,11 +20,4 @@ exports.web3_config = {
 exports.bot_acc = {
     addr: "0x100FEEB554dADbfe5d97763145807dBe0a5d0e34".toLowerCase(),
 };
-net_reg_addr: '0x53bcfb143d7737fedd257a8ba1984872025255fa',
-;
-;
-exports.bot_acc = {
-    privKey: '0x0d84c638556a898cd439d356538318b8a1b0095b6ba5c838c3846b838c4a2461',
-    addr: '0x9869eE8F805BE64Bdba53C5557206F631240b752'.toLowerCase(),
-};
 //# sourceMappingURL=example.env_config.js.map
