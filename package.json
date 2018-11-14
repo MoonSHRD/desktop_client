@@ -37,6 +37,7 @@
   },
   "includeSources": true,
   "devDependencies": {
+    "benchmark": "^2.1.4",
     "electron": "^2.0.7",
     "electron-builder": "^20.28.4",
     "electron-packager": "^12.1.0",
@@ -96,8 +97,8 @@
     "sqlite3": "^4.0.3",
     "text-encoding": "^0.7.0",
     "typeorm": "^0.2.7",
-    "web3": "^1.0.0-beta.36",
-    "waypoints": "^4.0.1"
+    "waypoints": "^4.0.1",
+    "web3": "^1.0.0-beta.36"
   },
   "build": {
     "appId": "moonshard",
