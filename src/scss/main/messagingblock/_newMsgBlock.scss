@@ -813,56 +813,9 @@ a.join_button {
 }
 
 .groupInfoHeader {
-    @include position(fixed, null null null 50%);
-    @include size(95%, 65px);
-    background-color: $brand-gray-100;
-    z-index: 99;
-    transform: translate(-50%, 0%);
 
     .modal-title {
         margin-top: 15px;
-    }
-}
-
-.gradient {
-    @include position(absolute, 65px 0 null 0);
-    z-index: 2;
-    height: 20px;
-    background: linear-gradient(to top, opacify($cf, 0) 0%, $brand-gray-100 90%);
-}
-
-#style-10 {
-    &::-webkit-scrollbar {
-        width: 2px;
-        background-color: $cf;
-    }
-
-    /**  STYLE 11 */
-    &::-webkit-scrollbar-track {
-        border-radius: 10px;
-        background: rgba(0, 0, 0, 0.1);
-        border: 1px solid #ccc;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background: linear-gradient(left, #fff, #e4e4e4);
-        border: 1px solid #aaa;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-        background: #fff;
-    }
-
-    &::-webkit-scrollbar-thumb:active {
-        background: linear-gradient(left, #22ADD4, #1E98BA);
-    }
-    &:hover{
-        &::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            background: linear-gradient(left, #fff, #e4e4e4);
-            border: 1px solid #aaa;
-        }
     }
 }
 

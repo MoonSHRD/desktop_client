@@ -991,4 +991,18 @@ window.onload = function () {
     //     $(this).attr("disabled", true);
     // });
 
+    /* TODO: Сделать редакрирование полей */
+    // document.addEventListener('click', function (e) {
+    //
+    //     let target =  e.target;
+    //
+    //     if (target.dataset.toggle === 'edit') {
+    //         let targetData = target.dataset;
+    //         let targetDataTarget = targetData.target;
+    //         console.log('done' + targetDataTarget);
+    //
+    //         document.querySelector('[name="' + targetDataTarget + '"]').removeAttribute('disabled');
+    //     }
+    // });
+
 };

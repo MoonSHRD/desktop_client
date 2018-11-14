@@ -239,6 +239,10 @@ img{
     border-radius: .75rem;
     padding: .525rem 1.5rem;
 
+    > * {
+        pointer-events: none;
+    }
+
     &-primary{
         color: $cf;
     }
@@ -246,6 +250,10 @@ img{
     &-lg{
         @include fz(18);
         border-radius: .5rem;
+    }
+
+    &-xs{
+        padding: .25rem .5rem;
     }
 
     &-link{
