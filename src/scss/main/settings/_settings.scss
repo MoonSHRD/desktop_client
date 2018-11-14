@@ -2,7 +2,7 @@
     &__left {
         width: 300px;
         min-width: 300px;
-        padding: 20px;
+        padding: 20px 0px;
         background-color: #FFFFFF;
         border-right: 1px solid #d0d0d0;
         margin-left: 70px;
@@ -151,7 +151,7 @@
             padding: 20px 0;
 
             li {
-                margin-bottom: 2px;
+                margin-bottom: 0px;
 
                 p {
                     margin: 0;
@@ -172,8 +172,8 @@
 
                     a {
                         background-color: $brand-blue;
-                        border-radius: 8px;
-                        color: $cf;
+                        border-radius: 0px;
+                        //color: $cf;
                     }
                 }
             }
@@ -193,9 +193,9 @@
             position: relative;
 
             &:hover{
-                border-radius: 8px;
-                background-color: $brand-blue;
-                color: $cf;
+                border-radius: 0px;
+                background-color: rgba(43, 194, 249, 0.2);
+                //color: $cf;
             }
         }
     }
@@ -337,4 +337,8 @@
         margin: auto;
         text-align: center;
     }
+}
+
+.p-20 {
+    padding: 0 20px;
 }
