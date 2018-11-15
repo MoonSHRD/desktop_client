@@ -21,20 +21,30 @@ class Web3S {
         this.grpc = grpc_1.Grpc.getIntance();
         this.subs = {};
         this.events = new EventEmitter();
-        this.provider = new Web3.providers.WebsocketProvider("ws://" + env_config_1.web3_config.host + ":" + env_config_1.web3_config.port);
-        this.provider.on('end', () => {
-            this.events.emit('disconnect');
-            console.log('web3 disconnected');
-            this.handleisconnect();
-            // this.provider.connection.connect({url: "ws://"+web3_config.host+":"+web3_config.port});
-        });
+        this.setProvider();
         this.web3 = new Web3(this.provider);
         // this.token_addr = await this.get_token_addr();
         // this.MoonshardTokenContract = new this.web3.eth.Contract(token_abi, this.token_addr, {from: this.addr});
         // this.token_decimals = await await this.MoonshardTokenContract.methods.decimals().call();
     }
-    handleisconnect() {
-        this.web3 = new Web3(this.provider);
+    handleDisconnect() {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let i in this.subs) {
+                let sub = this.subs[i];
+                yield sub.unsubscribe();
+            }
+            this.setProvider();
+            this.web3 = new Web3(this.provider);
+        });
+    }
+    setProvider() {
+        this.provider = new Web3.providers.WebsocketProvider("ws://" + env_config_1.web3_config.host + ":" + env_config_1.web3_config.port);
+        this.provider.on('end', () => __awaiter(this, void 0, void 0, function* () {
+            this.events.emit('disconnected');
+            console.log('web3 disconnected, handling');
+            yield this.handleDisconnect();
+            // this.provider.connection.connect({url: "ws://"+web3_config.host+":"+web3_config.port});
+        }));
     }
     static GetInstance() {
         if (!Web3S.instance) {

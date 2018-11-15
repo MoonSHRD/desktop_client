@@ -22,21 +22,31 @@ export class Web3S {
 
     private constructor() {
         this.events= new EventEmitter();
-        this.provider = new Web3.providers.WebsocketProvider("ws://"+web3_config.host+":"+web3_config.port);
-        this.provider.on('end',()=>{
-            this.events.emit('disconnect');
-            console.log('web3 disconnected');
-            this.handleisconnect();
-            // this.provider.connection.connect({url: "ws://"+web3_config.host+":"+web3_config.port});
-        });
+        this.setProvider();
         this.web3 = new Web3(this.provider);
         // this.token_addr = await this.get_token_addr();
         // this.MoonshardTokenContract = new this.web3.eth.Contract(token_abi, this.token_addr, {from: this.addr});
         // this.token_decimals = await await this.MoonshardTokenContract.methods.decimals().call();
     }
 
-    private handleisconnect(){
+    private async handleDisconnect(){
+        for (let i in this.subs) {
+            let sub=this.subs[i];
+            await sub.unsubscribe();
+        }
+
+        this.setProvider();
         this.web3 = new Web3(this.provider);
+    }
+
+    private setProvider(){
+        this.provider = new Web3.providers.WebsocketProvider("ws://"+web3_config.host+":"+web3_config.port);
+        this.provider.on('end',async ()=>{
+            this.events.emit('disconnected');
+            console.log('web3 disconnected, handling');
+            await this.handleDisconnect();
+            // this.provider.connection.connect({url: "ws://"+web3_config.host+":"+web3_config.port});
+        });
     }
 
     static GetInstance() {

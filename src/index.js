@@ -986,11 +986,6 @@ window.onload = function () {
         ipcRenderer.send('transfer_token', data);
     });
 
-    // $(document).on('click', "button[data-block=\"data-block\"]", function (e) {
-    //     console.log("Click!");
-    //     $(this).attr("disabled", true);
-    // });
-
     /* TODO: Сделать редакрирование полей */
     // document.addEventListener('click', function (e) {
     //
