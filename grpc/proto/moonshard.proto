@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.helloworld";
+option java_outer_classname = "HelloWorldProto";
+
+package moonshard;
+
+service Moonshard {
+    rpc SetObjData (ObjSetter) returns (Success) {}
+    rpc GetObjData (ObjGetter) returns (ObjData) {}
+    rpc GetObjsData (ObjsGetter) returns (ObjData) {}
+    rpc Ping (PingSetter) returns (Success) {}
+}
+
+message PingSetter {
+    string pubKey = 1;
+}
+
+message Success {
+    bool success = 1;
+}
+
+message ObjData {
+    string data = 1;
+}
+message ObjGetter {
+    string id = 1;
+    string obj = 2;
+}
+
+message ObjSetter {
+    string pubKey = 1;
+    string obj = 2;
+    string data = 3;
+    string sign = 4;
+}
+
+message ObjsGetter {
+    string str = 1;
+    string obj = 2;
+    int64 prt = 3;
+}

@@ -1,18 +1,22 @@
-import {eth, dxmpp} from 'moonshard_core';
+import {eth, Dxmpp} from 'moonshard_core';
 import {helper} from '../src/var_helper';
 import {config} from '../src/env_config';
 import * as Pug from "pug";
 import {AccountModel} from "../models/AccountModel";
 import {UserModel} from "../models/UserModel";
 import {ControllerRegister} from "./ControllerRegister";
-import {Loom} from "../loom/loom";
+// import {Loom} from "../loom/loom";
 import {Ipfs} from "../ipfs/ipfs";
+import {SettingsModel} from "../models/SettingsModel";
+import {Grpc} from "../grpc/grpc";
+import {Web3S} from "../web3/web3";
 
 export abstract class Controller {
     protected pug = Pug;
     protected controller_register = ControllerRegister.getInstance();
     protected window: any;
-    protected dxmpp = dxmpp.getInstance();
+    protected grpc = Grpc.getIntance();
+    protected dxmpp = Dxmpp.getInstance();
     protected dxmpp_config = config;
     protected pug_options = helper.pug_options;
     protected paths = helper.paths;
@@ -21,10 +25,12 @@ export abstract class Controller {
     protected group_chat_types = helper.group_chat_types;
     protected chat_to_menu = helper.chat_to_menu;
     protected eth = eth;
-    protected loom: Loom = Loom.getInstance();
+    protected web3 = Web3S.GetInstance();
+    // protected loom: Loom = Loom.getInstance();
     protected ipfs: Ipfs = Ipfs.getInstance();
     private self_info: UserModel = null;
     private me: AccountModel = null;
+    private settings = null;
 
     protected constructor(window) {
         this.window = window;
@@ -52,8 +58,13 @@ export abstract class Controller {
         this.window.webContents.send(event, data);
     };
 
-    protected async get_me(id:string) {
-        this.me = (await AccountModel.find({where: {user_id:id}}))[0];
+    protected async get_me() {
+        this.me = await AccountModel.findOne(1);
         return this.me;
+    }
+
+    protected async getSettings():Promise<SettingsModel> {
+        this.settings = await SettingsModel.findOne(1);
+        return this.settings;
     }
 }

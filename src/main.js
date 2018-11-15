@@ -10,16 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 // let Router = require('electron-routes');
 const router_1 = require("./router");
-// let exec = require('child_process').exec;
+const typeorm_1 = require("typeorm");
+require("reflect-metadata");
+const SettingsModel_1 = require("../models/SettingsModel");
 const { app, BrowserWindow } = require('electron');
 const locals = { /* ...*/};
 const setupPug = require('electron-pug');
-const updater = require('electron-simple-updater');
+const { autoUpdater } = require("electron-updater");
 // const Router = require('./router');
-const DownloadManager = require("electron-download-manager");
-DownloadManager.register({
-    downloadFolder: './'
-});
+let mainWindow;
 app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
     try {
         let pug = yield setupPug({ pretty: true }, locals);
@@ -28,34 +27,37 @@ app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
     catch (err) {
         console.log(`Could not initiate 'electron-pug'`);
     }
-    let mainWindow = new BrowserWindow({ width: 1000, minWidth: 1000, height: 750, minHeight: 750, resizable: true, show: false, webPreferences: {
+    let width = 1000;
+    let height = 700;
+    yield typeorm_1.createConnection({
+        type: "sqlite",
+        database: `sqlite/data.db`,
+        entities: [
+            __dirname + '/../models/' + "*.js"
+        ],
+        synchronize: true,
+        logging: false
+    });
+    let settings = (yield SettingsModel_1.SettingsModel.find({ where: { id: 1 } }))[0];
+    if (settings) {
+        width = settings.width;
+        height = settings.height;
+    }
+    mainWindow = new BrowserWindow({ width: width, minWidth: 1000, height: height, minHeight: 700, resizable: true, show: false, webPreferences: {
             nodeIntegration: true
         }, icon: __dirname + '/icon.png' });
     // mainWindow.webContents.openDevTools();
     mainWindow.loadURL(`file://${__dirname}/index.pug`);
     mainWindow.webContents.on('dom-ready', function () {
-        // console.log('finished');
-        mainWindow.show();
-        const router = new router_1.Router(mainWindow);
-        router.start_loading();
+        return __awaiter(this, void 0, void 0, function* () {
+            // console.log('finished');
+            mainWindow.show();
+            const router = new router_1.Router(mainWindow);
+            yield router.init_app();
+        });
     });
     // mainWindow.webContents.openDevTools()
     mainWindow.on('closed', () => {
-        // console.log('closed')
-        // let child = exec(`node ./src/just.js`, function (error, stdout, stderr) {
-        //
-        //
-        //         console.log('stdout: ', stdout);
-        //         console.log('stderr: ', stderr);
-        //         if (error !== null) {
-        //             console.log('exec error: ', error);
-        //         }
-        //     },
-        //     {
-        //         detached: true,
-        //         stdio: ['ignore', 'ignore', 'ignore'],
-        //     })
-        // child.unref();
     });
 }));
 app.on('window-all-closed', function () {

@@ -7,6 +7,7 @@ src/env_config.js.map
 
 .eslintignore
 .idea
+.map
 .npmignore
 dist/
 updates/
@@ -18,10 +19,13 @@ yarn.lock
 yarn-error.log
 .eslintrc
 .eslintrc.json
-
+dev-app-update.yml
 account.json
-sqlite/data.db
+sqlite/
 yarn-error.log
 
 not_for_git/
 .git-old/
+
+src/css/index.css
+src/css/index.min.css

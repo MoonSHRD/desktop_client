@@ -50,6 +50,16 @@
         &.offline {
             background-color: $brand-red;
         }
+
+        //&_channel{
+        //    @include size(1rem);
+        //    background-color: $cf;
+        //    border: none;
+        //
+        //    svg{
+        //        width: .8rem;
+        //    }
+        //}
     }
 
     &__text{
@@ -69,6 +79,17 @@
         font-weight: 700;
         @include fz(14);
         @extend .text-truncate;
+        display: flex;
+        align-items: center;
+
+        svg{
+            height: .9em;
+            flex-shrink: 0;
+            margin-right: .4em;
+            path{
+                fill: $primary-text;
+            }
+        }
     }
 
     &__date{

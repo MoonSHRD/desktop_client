@@ -10,49 +10,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const Controller_1 = require("../Controller");
-const AccountModel_1 = require("../../models/AccountModel");
+const fs = require("fs");
+var encryptor = require('file-encryptor');
 class AccountController extends Controller_1.Controller {
-    update_directory(path) {
+    encrypt_db() {
         return __awaiter(this, void 0, void 0, function* () {
-            let account = (yield AccountModel_1.AccountModel.find({ where: { id: 1 } }))[0];
-            account.downloads = path;
-            yield account.save();
+            let me = yield this.get_me();
+            let key = me.privKey;
+            if (fs.existsSync(`${__dirname}/../../sqlite/data.db`) && !fs.existsSync(`${__dirname}/../../sqlite/encrypted.db`))
+                encryptor.encryptFile(`${__dirname}/../../sqlite/data.db`, `${__dirname}/../../sqlite/encrypted.db`, key, function (err) { });
+            else
+                console.log("File for decrypt not exist or file already created");
         });
     }
-    ;
-    update_last_chat(chat_id) {
+    decrypt_db() {
         return __awaiter(this, void 0, void 0, function* () {
-            let account = (yield AccountModel_1.AccountModel.find({ where: { id: 1 } }))[0];
-            account.last_chat = chat_id;
-            yield account.save();
+            let me = yield this.get_me();
+            let key = me.privKey;
+            if (fs.existsSync(`${__dirname}/../../sqlite/encrypted.db`) && !fs.existsSync(`${__dirname}/../../sqlite/test.db`))
+                encryptor.decryptFile(`${__dirname}/../../sqlite/encrypted.db`, `${__dirname}/../../sqlite/test.db`, key, function (err) { });
+            else
+                console.log("File for encrypt not exist or file already created");
         });
     }
-    change_windows_size(width, height) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let account = (yield AccountModel_1.AccountModel.find({ where: { id: 1 } }))[0];
-            account.width = width;
-            account.height = height;
-            yield account.save();
-        });
-    }
-    ;
-    change_chats_width(width) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let account = (yield AccountModel_1.AccountModel.find({ where: { id: 1 } }))[0];
-            account.width_chats = width;
-            yield account.save();
-        });
-    }
-    ;
-    set_sizes(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let me = yield this.get_me(id);
-            yield this.send_data("set_chats_width", me.width_chats);
-            let sizes = { width: me.width, height: me.height };
-            yield this.send_data("set_windows_size", sizes);
-        });
-    }
-    ;
 }
 module.exports = AccountController;
 //# sourceMappingURL=AccountController.js.map

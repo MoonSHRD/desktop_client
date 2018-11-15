@@ -12,13 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const UserModel_1 = require("./UserModel");
 let AccountModel = class AccountModel extends typeorm_1.BaseEntity {
-    constructor() {
-        super(...arguments);
-        this.downloads = "./downloads/";
-        this.width = 1000;
-        this.height = 700;
-        this.width_chats = 370;
-    }
 };
 __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
@@ -31,27 +24,7 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], AccountModel.prototype, "downloads", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", String)
 ], AccountModel.prototype, "passphrase", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", Number)
-], AccountModel.prototype, "width", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", Number)
-], AccountModel.prototype, "height", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", Number)
-], AccountModel.prototype, "width_chats", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", String)
-], AccountModel.prototype, "last_chat", void 0);
 __decorate([
     typeorm_1.OneToOne(type => UserModel_1.UserModel, user => user.account),
     typeorm_1.JoinColumn(),

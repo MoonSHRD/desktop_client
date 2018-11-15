@@ -4,8 +4,8 @@ const os = require('os');
 var fs = require('fs');
 var unzip = require('unzip');
 import {download} from 'electron-download-manager';
-const updater = require('electron-simple-updater');
-
+const log = require('electron-log');
+const {autoUpdater} = require("electron-updater");
 
 import {UserModel} from "../../models/UserModel";
 import {Controller} from "../Controller";
@@ -13,7 +13,15 @@ import {ChatModel} from "../../models/ChatModel";
 import {EventModel} from "../../models/EventModel";
 import {helper} from "../../src/var_helper";
 
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
+
+
+
 class EventsController extends Controller {
+
     async user_joined_room(user, room_data, date) {
         let chat = await ChatModel.findOne(room_data.id);
         let event=new EventModel();
@@ -31,7 +39,10 @@ class EventsController extends Controller {
         this.send_data('get_notice', {id: chat.id, html: html});
     }
 
+
+
     async get_chat_events(chat_id:string) {
+
         // let chat = await ChatModel.findOne(room_data.id);
         // let event=new EventModel();
         // let text = `user ${user.id} joined`;
@@ -47,115 +58,70 @@ class EventsController extends Controller {
     }
 
     async init_loading() {
-        this.send_data(this.events.change_app_state, this.render(`loading/loading.pug`));
-    }
+        let settings = await this.getSettings();
+        let language = "en";
+        if (settings) {
+            language = settings.language;
+        }
 
-    async update_server(os, file){
-
-        // axios.get(`http://localhost:8081/updates/${os}/${file}`)
-        //     .then( (response) => {
-        //         download({
-        //             url: `http://localhost:8081/updates/${os}/${file}`,
-        //             onProgress:  (percentage) => {
-        //                 console.log("percentage : " + percentage );
-        //                 this.send_data('get_updates', percentage);
-        //             }
-        //         }, function (error, info) {
-        //             if (error) {
-        //                 console.log(error);
-        //                 return;
-        //             }
-        //
-        //             var dirPath  = __dirname + `/../../updates/${file}`;
-        //
-        //             var destPath = __dirname + `/../../updates/arch`;
-        //
-        //             fs.createReadStream(dirPath).pipe(unzip.Extract({ path: destPath }));
-        //
-        //
-        //
-        //             console.log("DONE: " + info.url);
-        //         });
-        //
-        //
-        //     })
-        //     .catch(function (error) {
-        //         // handle error
-        //         console.log(error);
-        //     })
-        //     .then(function () {
-        //         // always executed
-        //     });
-
+        let obj = {
+            arg:this.render(`loading/loading.pug`),
+            language: language
+        };
+        this.send_data(this.events.change_app_state, obj);
     }
 
 
     async checking_updates() {
 
-        updater.init({
-            autoDownload: false,
-            url:'http://localhost:8081/update.json',
-            checkUpdateOnStart: true
-        });
+        autoUpdater.autoDownload = false;
+        autoUpdater.autoInstallOnAppQuit = false;
+
+        autoUpdater.checkForUpdates();
 
 
-        updater.on('update-not-available', () =>
-        {
-            this.send_data('checking_updates', false);
-            console.log('Update is not available');
-        })
+        autoUpdater.on('update-available', (ev, info) => {
 
-
-        updater.on('update-available', (meta) => {
-
-            // this.send_data('get_updates', stringf);
-            //
+            console.log('update-available')
             this.send_data('checking_updates', true);
 
-            console.log('Update available')
-        });
+        })
+        autoUpdater.on('update-not-available', (ev, info) => {
 
-        }
+            this.send_data('checking_updates', false);
+            console.log('update-not-available')
 
+        })
 
-        async get_updates() {
-            // const stringf = 'update-not-available'
-            // console.log('211111111111111111111113')
-            updater.downloadUpdate()
+        autoUpdater.on('download-progress', (progressObj) => {
 
-            console.log('435345345345345345345')
+            console.log(progressObj.percent)
 
-            download({
-                url: `http://localhost:8081/updates/Linux/Moonshard_0.0.2.AppImage`,
-                onProgress:  (percentage) => {
-                    console.log("percentage : " + percentage );
-                    this.send_data('get_updates', percentage);
-                }
-            }, function (error, info) {
-                if (error) {
-                    console.log(error);
-                    return;
-                }
+        })
 
-                // console.log('Downloading update:', meta);
+        autoUpdater.on('update-downloaded', (ev, info) => {
 
-            });
+            console.log('dsfdsfsdfdsfsdfdsfs')
+            this.send_data('get_updates', 100);
 
-        // updater.init('http://localhost:8081/update.json');
+        })
+    }
 
-        // updater.on('checking-for-update', () => console.log('Checking for updates...'));
+    async get_updates() {
 
+        autoUpdater.downloadUpdate()
 
+    };
 
+    async install_updates() {
 
-        };
+        autoUpdater.quitAndInstall();
 
-
-        async install_updates() {
-
-            updater.quitAndInstall()
-        }
+    }
 
 }
+
+
+
 
 module.exports = EventsController;

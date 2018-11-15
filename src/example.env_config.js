@@ -9,9 +9,15 @@ exports.ipfs_config = {
     host: 'ipfs.infura.io',
     port: 5001,
 };
-exports.loom_config = {
-    host: 'node1.moonshrd.io',
-    port: 46658,
-    net_reg_addr: '0x53bcfb143d7737fedd257a8ba1984872025255fa',
+exports.grpc_config = {
+    host: "104.248.67.155",
+    port: 50051,
+};
+exports.web3_config = {
+    host: "104.248.67.155",
+    port: 8546,
+};
+exports.bot_acc = {
+    addr: "0x100FEEB554dADbfe5d97763145807dBe0a5d0e34".toLowerCase(),
 };
 //# sourceMappingURL=example.env_config.js.map

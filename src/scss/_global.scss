@@ -295,35 +295,84 @@ img{
 /**  old STYLE 11 */
 .custom-scrollbar {
     overflow: auto;
+    transition: .2s ease;
     &::-webkit-scrollbar-track {
         //border-radius: 10px;
-        background: opacify($brand-gray-100, 0.3);
+        background-color: transparent;
         //border: 1px solid rgba($brand-gray-400, 0.1);
         transition: .2s ease;
     }
     &::-webkit-scrollbar {
         //width: 2px;
-        width: 6px;
-        background-color: $cf;
+        position: absolute;
+        width: 4px;
+        background-color: transparent;
         transition: .2s ease;
+        right: 4px;
+    }
+    &::-webkit-scrollbar-thumb{
+        background-color: transparent;
+        border-radius: 10px;
+        transition: .12s ease;
     }
 
     &:hover{
+        &::-webkit-scrollbar-track {
+            background: opacify($brand-gray-100, 0.3);
+        }
         &::-webkit-scrollbar-thumb{
-            border-radius: 10px;
+            //border-radius: 10px;
             //background: linear-gradient(left, #fff, #e4e4e4);
             background-color: rgba($primary-text, .6);
             //border: 1px solid $primary-text;
         }
     }
-    &::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        //background: linear-gradient(left, #fff, #e4e4e4);
-        background-color: rgba($primary-text, .25);
-        transition: .2s ease;
+    //&::-webkit-scrollbar-thumb {
+    //    //background: linear-gradient(left, #fff, #e4e4e4);
+    //    background-color: rgba($primary-text, .25);
+    //    transition: .2s ease;
+    //
+    //    &:active {
+    //        //background: linear-gradient(left, #22ADD4, #1E98BA);
+    //    }
+    //}
+}
 
-        &:active {
-            //background: linear-gradient(left, #22ADD4, #1E98BA);
+/* Tooltips */
+.tooltip{
+
+    &-inner {
+        background-color: $brand-gray-700;
+        @include fz(14);
+        border-radius: .85em;
+        color: $primary-text;
+    }
+}
+.bs-tooltip-top {
+    .arrow {
+        &::before {
+            border-top-color: $brand-gray-700;
+        }
+    }
+}
+.bs-tooltip-right {
+    .arrow {
+        &::before {
+            border-right-color: $brand-gray-700;
+        }
+    }
+}
+.bs-tooltip-bottom {
+    .arrow {
+        &::before {
+            border-bottom-color: $brand-gray-700;
+        }
+    }
+}
+.bs-tooltip-left {
+    .arrow {
+        &::before {
+            border-left-color: $brand-gray-700;
         }
     }
 }

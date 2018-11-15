@@ -22,7 +22,6 @@ const typeorm_1 = require("typeorm");
 const MessageModel_1 = require("./MessageModel");
 const UserModel_1 = require("./UserModel");
 const var_helper_1 = require("../src/var_helper");
-const AccountModel_1 = require("./AccountModel");
 const EventModel_1 = require("./EventModel");
 const FileModel_1 = require("./FileModel");
 // helper
@@ -40,6 +39,7 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
         this.unread_messages = 0;
         this.active = false;
         this.online = false;
+        this.last_active = 0;
         this.time = null;
         this.text = null;
         this.senderId = null;
@@ -128,20 +128,31 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
             return (yield ChatModel_1.get_chat_with_users(chat_id)).users;
         });
     }
-    static get_chat_opponent(chat_id) {
+    static get_chat_opponent(chat_id, self_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let opps = yield ChatModel_1.get_chat_users(chat_id);
-            let account_id = 1;
-            let account = (yield AccountModel_1.AccountModel.find({ relations: ["user"], where: { id: account_id }, take: 1 }))[0].user;
-            return opps.find(x => x.id !== account.id);
+            let opp_id = yield ChatModel_1.get_chat_opponent_id(chat_id, self_id);
+            return yield UserModel_1.UserModel.findOne(opp_id);
+            // let account_id = 1;
+            // let account = (await AccountModel.find({relations: ["user"], where: {id: account_id}, take: 1}))[0].user;
         });
     }
-    get_user_chat_meta() {
+    static get_chat_opponent_id(chat_id, self_id) {
+        let opps = chat_id.split("_");
+        if (opps[0] == self_id) {
+            return opps[1];
+        }
+        else {
+            return opps[0];
+        }
+    }
+    get_user_chat_meta(self_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let data = (yield ChatModel_1.get_chat_opponent(this.id));
+            let data = (yield ChatModel_1.get_chat_opponent(this.id, self_id));
             this.avatar = data.avatar;
             this.name = data.name;
-            this.online = data.online;
+            console.log("active", data.last_active);
+            console.log("data", data);
+            this.online = data.last_active > (Date.now() - 1000 * 60 * 5);
             this.domain = data.domain;
             return data.id;
         });
@@ -151,17 +162,20 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
             return (yield typeorm_1.getConnection()
                 .createQueryRunner()
                 .query(`select * from 
-                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.online as online, type, unread_messages
+                   ((select id,usr.domain as domain,usr.name as name,usr.avatar as avatar, usr.last_active as last_active, type, unread_messages
                    from chat_model ch
                        inner join (
-                               select name, avatar, id user_id, online, domain
+                               select name, avatar, id user_id, last_active, domain
                                from user_model 
-                               where user_model.id != "${self_info.id}"
                            ) usr 
-                       on instr(ch.id,user_id) > 0
+                       on (
+                         (substr(ch.id,1,42)=user_id and user_id!="${self_info.id}") or
+                         (substr(ch.id,44,42)=user_id and user_id!="${self_info.id}") or 
+                         (substr(ch.id,1,42)="${self_info.id}" and substr(ch.id,44,42)="${self_info.id}" and user_id="${self_info.id}")
+                       )
                        where ch.type == "${var_helper_1.chat_types.user}"
                    UNION
-                   select id,domain,name,avatar, 0 as online, type, unread_messages
+                   select id,domain,name,avatar, 0 as last_active, type, unread_messages
                        from chat_model ch1
                        where ch1.type != "${var_helper_1.chat_types.user}") ch2
                    left join (

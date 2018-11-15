@@ -1,11 +1,9 @@
-div(class="dialogs")
+div(class="dialogs", style = "width: " + width_chats + "px")
     div(class='dialogsHeader')
         include infopanel/infopanel.pug
-        include nearby/nearby.pug
+        //include nearby/nearby.pug
 
     div(class ='im_dialogs_col_wrap')
         include chats/men.pug
         //include chats/groups.pug
     div(id="resize01")
-
-
