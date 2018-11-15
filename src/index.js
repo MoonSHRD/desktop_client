@@ -251,16 +251,16 @@ window.onload = function () {
     });
 
     $(document).on('keydown','.send_message__input',function(e) {
+        autoResizeTextarea();
         if($(this).val() === '') {
             $(this).attr('rows', 1);
-        };
-        if($(this).val() === '' && event.keyCode == 13) {
-            event.preventDefault();
-        };
-
-        if ( event.keyCode === 13 && $(this).val()!=='') {
-            ResizeTextArea(this,0);
         }
+        if($(this).val() === '' && event.keyCode === 13) {
+            event.preventDefault();
+        }
+        // if ( event.keyCode === 13 && $(this).val()!=='') {
+        //     ResizeTextArea(this,0);
+        // }
     });
 
     $(document).on('input','.send_message__input',function(e) {
@@ -275,19 +275,20 @@ window.onload = function () {
         // console.log('paste!');
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
         let val = $(this).text();
-        if($(this).val() !==''){
-            $(this).attr('rows', $(this).attr('rows'));
-        } else {
-            ResizeTextArea(this,1);
-        }
+        // if($(this).val() !==''){
+        //     $(this).attr('rows', $(this).attr('rows'));
+        // } else {
+        //     ResizeTextArea(this,1);
+        // }
         console.log(text);
 
     });
 
 
     $(document).on('click', '[data-toggle="send-msg"]', function () {
-        $('[data-msg="data-msg"]').focus();
         send_message();
+        autoResizeTextarea();
+        $('[data-msg="data-msg"]').focus();
     });
 
     function send_message(){
@@ -867,7 +868,7 @@ window.onload = function () {
         while ( true ) {
             last = strtocount.indexOf('\n', last+1);
             hard_lines ++;
-            if ( last == -1 ) break;
+            if ( last === -1 ) break;
         }
         var soft_lines = Math.ceil(strtocount.length / (cols-1));
         var hard = eval('hard_lines ' + unescape('%3e') + 'soft_lines;');
@@ -876,9 +877,17 @@ window.onload = function () {
     }
 
 // функция вызывается при каждом нажатии клавиши в области ввода текста
-    function ResizeTextArea(the_form, min_rows) {
-        the_form.rows = Math.max(min_rows, countLines(the_form.value,the_form.cols) );
-    }
+//     function ResizeTextArea(the_form, min_rows) {
+//         the_form.rows = Math.max(min_rows, countLines(the_form.value,the_form.cols) );
+//     }
+    let autoResizeTextarea = (element = '[data-msg]') => {
+        let el = document.querySelector(element);
+        let offset = el.offsetHeight - el.clientHeight;
+        console.log(el.scrollHeight + offset, offset);
+        setTimeout( function() {
+            $(element).css('height', 'auto').css('height', el.scrollHeight + offset);
+        }, 0);
+    };
 
     $(document).on('click', '[data-toggle="switcher"]', function(e) {
         let $this = $(this);

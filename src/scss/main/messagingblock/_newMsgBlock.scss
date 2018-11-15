@@ -269,6 +269,9 @@ a.join_button {
     }
 
     &__input {
+        @extend .custom-scrollbar;
+        overflow-x: hidden;
+        overflow-y: overlay;
         @include size(auto, auto);
         border-radius: 10px;
         border-style: none;
