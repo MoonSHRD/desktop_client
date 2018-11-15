@@ -325,7 +325,6 @@ img{
         border-radius: 10px;
         transition: .12s ease;
     }
-
     &:hover{
         &::-webkit-scrollbar-track {
             background: opacify($brand-gray-100, 0.3);

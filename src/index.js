@@ -191,7 +191,7 @@ window.onload = function () {
         console.log(arg);
     });
 
-    let widthMsgWindow = (target) => {
+    let widthMsgWindow = (target = '[data-msgs-window]') => {
         let msgWindow =  document.querySelector(target);
         if ( msgWindow ) {
             if (msgWindow.offsetWidth > 900) {
@@ -399,6 +399,7 @@ window.onload = function () {
         // }
         const chat_box = $('.chats ul');
         const user = chat_box.find('#' + obj.id);
+        widthMsgWindow();
         if (user.length) {
             user.replaceWith(obj.html);
         } else {
