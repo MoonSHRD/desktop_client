@@ -186,10 +186,10 @@ class Router {
             yield this.controller_register.run_controller('WalletController', 'get_contacts');
         }));
         /** Settings events **/
-        // this.listen_event(this.ipcMain, 'change_settings_menu', async (event, arg) => {
-        //     console.log('change_settings_menu');
-        //     await this.controller_register.queue_controller('SettingsController', 'change_settings_menu', arg);
-        // });
+        this.listen_event(this.ipcMain, 'change_settings_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {
+            console.log('change_settings_menu');
+            yield this.controller_register.queue_controller('SettingsController', 'change_settings_menu', arg);
+        }));
         this.listen_event(this.ipcMain, "change_directory", (event, path) => __awaiter(this, void 0, void 0, function* () {
             // console.log("Change directory:", path);
             yield this.controller_register.run_controller('SettingsController', 'change_directory', path);

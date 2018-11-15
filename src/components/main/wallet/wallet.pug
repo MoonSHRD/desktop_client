@@ -20,28 +20,28 @@ div.walletLeft
 
     div.walletMenu
         ul
-            li.active_wallet(data-name="wallet_token")
-                a(href='#')
+            li.active_wallet
+                button(type="button" data-name="wallet_token")
                     //img(src='img/wallet/first.png', width='40', height='40')
                     include ../../../img/wallet/icons/tokens.svg
                     p My Tokens
-            li(data-name="wallet_transfer")
-                a(href='#')
+            li
+                button(type="button" data-name="wallet_transfer")
                     //img(src='img/wallet/second.png', width='40', height='40')
                     include ../../../img/wallet/icons/transfer.svg
                     p Transfer
-            li(data-name="wallet_history")
-                a(href='#')
+            li
+                button(type="button" data-name="wallet_history")
                     //img(src='img/wallet/third.png', width='40', height='40')
                     include ../../../img/wallet/icons/history.svg
                     p Transaction history
-            li(data-name="wallet_subscriptions")
-                a(href='#')
+            li
+                button(type="button" data-name="wallet_subscriptions")
                     //img(src='img/wallet/fourth.png', width='40', height='40')
                     include ../../../img/wallet/icons/subscriptions.svg
                     p My subscriptions
-            li(data-name="wallet_services")
-                a(href='#')
+            li
+                button(type="button" data-name="wallet_services")
                     //img(src='img/wallet/fifth.png', width='40', height='40')
                     include ../../../img/wallet/icons/services.svg
                     p Services

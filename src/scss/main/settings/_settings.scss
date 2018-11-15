@@ -151,7 +151,30 @@
             padding: 20px 0;
 
             li {
-                margin-bottom: 0px;
+                margin-bottom: 0;
+
+                a, button {
+                    cursor: pointer;
+                    @include size(100%,57px);
+                    @include fz(14);
+                    border: 0;
+                    background-color: transparent;
+                    display: flex;
+                    align-items: center;
+                    padding: 0 20px 0 20px;
+                    color: $primary-text;
+                    text-decoration: none;
+                    font-family: $ff-1;
+                    transition: all 0.1s ease;
+                    overflow: hidden;
+                    position: relative;
+
+                    &:hover{
+                        border-radius: 0;
+                        background-color: rgba($brand-blue-100, 0.2);
+                        //color: $cf;
+                    }
+                }
 
                 p {
                     margin: 0;
@@ -170,32 +193,12 @@
 
                 &.active_settings {
 
-                    a {
+                    a, button {
                         background-color: $brand-blue;
-                        border-radius: 0px;
+                        border-radius: 0;
                         //color: $cf;
                     }
                 }
-            }
-        }
-
-        a {
-            height: 57px;
-            display: flex;
-            align-items: center;
-            padding: 0 20px 0 20px;
-            color: $primary-text;
-            text-decoration: none;
-            font-size: 13px;
-            font-family: $ff-1;
-            transition: all 0.1s ease;
-            overflow: hidden;
-            position: relative;
-
-            &:hover{
-                border-radius: 0px;
-                background-color: rgba(43, 194, 249, 0.2);
-                //color: $cf;
             }
         }
     }

@@ -240,10 +240,10 @@ export class Router {
 
         /** Settings events **/
 
-        // this.listen_event(this.ipcMain, 'change_settings_menu', async (event, arg) => {
-        //     console.log('change_settings_menu');
-        //     await this.controller_register.queue_controller('SettingsController', 'change_settings_menu', arg);
-        // });
+        this.listen_event(this.ipcMain, 'change_settings_menu', async (event, arg) => {
+            console.log('change_settings_menu');
+            await this.controller_register.queue_controller('SettingsController', 'change_settings_menu', arg);
+        });
 
         this.listen_event(this.ipcMain, "change_directory", async (event, path) => {
             // console.log("Change directory:", path);

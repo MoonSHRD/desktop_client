@@ -477,16 +477,14 @@ window.onload = function () {
         }
     });
 
-    $(document).on('click', '.walletMenu li', function (e) {
-        const $this = $(this);
-        $this.addClass('active_wallet').siblings().removeClass('active_wallet');
-    });
+    // $(document).on('click', '.walletMenu li', function (e) {
+    // });
 
-    $(document).on('click', '.settingsMenu li', function (e) {
-
-        const $this = $(this);
-        $this.addClass('active_settings').siblings().removeClass('active_settings');
-    });
+    // $(document).on('click', '.settingsMenu li', function (e) {
+    //
+    //     const $this = $(this);
+    //     $this.addClass('active_settings').siblings().removeClass('active_settings');
+    // });
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
         $('.modal-content').html(data);
@@ -1000,11 +998,23 @@ window.onload = function () {
     //     }
     // });
 
-    $(document).on('click','.walletMenu li',function (e) {
-        // console.log('change wallet menu wallet');
-        let type = $(this).attr('data-name');
-        ipcRenderer.send('change_wallet_menu', type);
+    /*
+     * WALLET
+     */
+    $(document).on('click','.walletMenu [data-name]',function (e) {
+        let target = $(this).data('name');
+        let parent = $(this).parent();
+        ipcRenderer.send('change_wallet_menu', target);
+        parent.siblings().removeClass('active_wallet');
+        parent.addClass('active_wallet');
     });
+
+    ipcRenderer.on('change_wallet_menu', (event, obj) => {
+        $('.walletRight').html(obj);
+    });
+    /*
+     * /WALLET
+     */
 
     // $(document).off('input', 'input[name=amount]');
 
@@ -1020,10 +1030,6 @@ window.onload = function () {
                 return false;
             }
         }
-    });
-
-    ipcRenderer.on('change_wallet_menu', (event, obj) => {
-        $('.walletRight').html(obj);
     });
 
     ipcRenderer.on('load_tx_history', (event, obj) => {
