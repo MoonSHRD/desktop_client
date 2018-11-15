@@ -19,29 +19,29 @@ div.walletLeft
         button.btn.btn-primary.balanceBtn(type="button") Add to Balance
 
     div.walletMenu
-        ul
-            li.active_wallet
-                button(type="button" data-name="wallet_token")
+        ul.nav.nav_menu
+            li.active
+                button(type="button" data-toggle="nav" data-nav="wallet" data-name="wallet_token")
                     //img(src='img/wallet/first.png', width='40', height='40')
                     include ../../../img/wallet/icons/tokens.svg
                     p My Tokens
             li
-                button(type="button" data-name="wallet_transfer")
+                button(type="button" data-toggle="nav" data-nav="wallet" data-name="wallet_transfer")
                     //img(src='img/wallet/second.png', width='40', height='40')
                     include ../../../img/wallet/icons/transfer.svg
                     p Transfer
             li
-                button(type="button" data-name="wallet_history")
+                button(type="button" data-toggle="nav" data-nav="wallet" data-name="wallet_history")
                     //img(src='img/wallet/third.png', width='40', height='40')
                     include ../../../img/wallet/icons/history.svg
                     p Transaction history
             li
-                button(type="button" data-name="wallet_subscriptions")
+                button(type="button" data-toggle="nav" data-nav="wallet" data-name="wallet_subscriptions")
                     //img(src='img/wallet/fourth.png', width='40', height='40')
                     include ../../../img/wallet/icons/subscriptions.svg
                     p My subscriptions
             li
-                button(type="button" data-name="wallet_services")
+                button(type="button" data-toggle="nav" data-nav="wallet" data-name="wallet_services")
                     //img(src='img/wallet/fifth.png', width='40', height='40')
                     include ../../../img/wallet/icons/services.svg
                     p Services

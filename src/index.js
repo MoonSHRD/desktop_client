@@ -999,21 +999,40 @@ window.onload = function () {
     // });
 
     /*
-     * WALLET
+     * WALLET/SETTINGS MENU
      */
-    $(document).on('click','.walletMenu [data-name]',function (e) {
-        let target = $(this).data('name');
-        let parent = $(this).parent();
-        ipcRenderer.send('change_wallet_menu', target);
-        parent.siblings().removeClass('active_wallet');
-        parent.addClass('active_wallet');
-    });
 
+    document.addEventListener('click', function (e) {
+        let target = e.target;
+        if (target.dataset.toggle === 'nav') {
+            let nav = target.dataset.nav; // data-nav
+            let name = target.dataset.name; // data-name
+            let parent = target.parentNode; // родитель - li
+            let parentList = parent.parentNode; // родитель - ul
+
+            ipcRenderer.send(`change_${nav}_menu`, name);
+
+            let sibling = parentList.firstChild; // первый элемент (li) в списке (ul)
+            // Перебераем весь список элементов
+            while (sibling) {
+                // Удаляем все активные классы
+                if (sibling.nodeType === 1)
+                    sibling.classList.remove('active');
+                // Добавляем активный класс для назатого пункта
+                if (sibling.nodeType === 1 && target.parentNode === sibling )
+                    sibling.classList.add('active');
+                sibling = sibling.nextSibling;
+            }
+        }
+    });
     ipcRenderer.on('change_wallet_menu', (event, obj) => {
         $('.walletRight').html(obj);
     });
+    ipcRenderer.on('change_settings_menu', (event, obj) => {
+        $('.settings__right').html(obj);
+    });
     /*
-     * /WALLET
+     * /WALLET/SETTINGS MENU
      */
 
     // $(document).off('input', 'input[name=amount]');

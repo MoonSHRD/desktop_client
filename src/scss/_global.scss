@@ -368,3 +368,65 @@ img{
         }
     }
 }
+
+/* NAV MENU (Settings/Wallet) */
+.nav {
+
+    &_menu {
+        list-style: none;
+        margin: 0;
+        padding: 20px 0;
+        flex-direction: column;
+
+        li {
+
+            a, button {
+                cursor: pointer;
+                @include size(100%, 57px);
+                @include fz(14);
+                border: 0;
+                background-color: transparent;
+                display: flex;
+                align-items: center;
+                padding: 0 20px 0 20px;
+                color: $primary-text;
+                text-decoration: none;
+                font-family: $ff-1;
+                transition: all 0.1s ease;
+                overflow: hidden;
+                position: relative;
+
+                > *{
+                    pointer-events: none;
+                }
+
+                &:hover {
+                    border-radius: 0;
+                    background-color: rgba($brand-blue-100, 0.2);
+                }
+            }
+            p {
+                margin: 0;
+                padding: 0 10px;
+                position: relative;
+                z-index: 10;
+            }
+            img {
+                position: relative;
+                z-index: 10;
+            }
+            svg {
+                @include size(40px);
+                flex-shrink: 0;
+            }
+
+            &.active {
+                a, button {
+                    background-color: $brand-blue;
+                    border-radius: 0;
+                }
+            }
+        }
+    }
+}
+/* NAV MENU (Settings/Wallet) */

@@ -1,14 +1,5 @@
 (function(){
 
-    $('[data-name]').on('click', function (e) {
-        let target = $(this).data('name');
-        let parent = $(this).parent();
-        ipcRenderer.send('change_settings_menu', target);
-        console.log(target);
-        parent.siblings().removeClass('active_settings');
-        parent.addClass('active_settings');
-    });
-
     let pinText = '';
 
     $(document).on('click', '.singlePin', function () {
@@ -33,11 +24,6 @@
                 $(this).val('');
             }
         }
-    });
-
-    ipcRenderer.on('change_settings_menu', (event, obj) => {
-        console.log(obj);
-        $('.settings__right').html(obj);
     });
 
 })();
