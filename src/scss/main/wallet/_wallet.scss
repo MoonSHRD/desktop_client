@@ -1,14 +1,14 @@
 .walletLeft{
     width: 300px;
     min-width: 300px;
-    padding: 0 20px;
+    padding: 0 0px;
     background-color: $cf;
     border-right: 1px solid $brand-gray-400;
     margin-left: 70px;
 }
 
 .walletInfo {
-    margin: 20px 0;
+    margin: 20px 20px;
 }
 
 .walletMenu {
@@ -26,9 +26,8 @@
         position: relative;
 
         &:hover {
-            border-radius: 8px;
-            background-color: $brand-blue;
-            color: $cf;
+            border-radius: 0px;
+            background-color: rgba(43, 194, 249, 0.2);
         }
     }
     ul {
@@ -37,7 +36,7 @@
         padding: 20px 0;
 
         li {
-            margin-bottom: 2px;
+            margin-bottom: 0px;
             p {
                 margin: 0;
                 padding: 0 10px;
@@ -52,9 +51,9 @@
     }
 }
 
-.active_wallet a{
-    color: $cf !important;
-}
+//.active_wallet a{
+//    color: $cf !important;
+//}
 
 .balanceBtn{
     margin: 20px 0;
@@ -67,7 +66,7 @@
 
 .active_wallet {
     background-color: $brand-blue;
-    border-radius: 8px;
+    border-radius: 0px;
 }
 
 
