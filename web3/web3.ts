@@ -30,10 +30,10 @@ export class Web3S {
     }
 
     private async handleDisconnect(){
-        for (let i in this.subs) {
-            let sub=this.subs[i];
-            await sub.unsubscribe();
-        }
+        // for (let i in this.subs) {
+        //     let sub=this.subs[i];
+        //     await sub.unsubscribe();
+        // }
 
         this.setProvider();
         this.web3 = new Web3(this.provider);
@@ -91,6 +91,8 @@ export class Web3S {
                 let tx=await this.web3.eth.getTransaction(txId);
                 console.log('tx data:',tx);
                 let from=tx.from.toLowerCase();
+                if (tx.to==null)
+                    return;
                 let to=tx.to.toLowerCase();
                 if (from==this.addr || to==this.addr) {
                     let transactionModel=new TransactionModel();

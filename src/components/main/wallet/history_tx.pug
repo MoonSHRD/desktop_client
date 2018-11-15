@@ -1,11 +1,70 @@
-tr.table_02_history.t02
-    td.td_namb #{mine?"out":"in"}
-    td.blue_font(class='td-token') #{p_opponent}
-    //td.grey_font #{operation} Transaction
-    td.grey_font #{amount} Coin
-    td.blue_font #{id}
-    //td.grey_font #{gas} Coin
-    //td.grey_font #{status} Sent
-    td.td_history_time.grey_font #{p_time.date}
-        br
-        | #{p_time.time}
+//- tr.table_02_history.t02
+//-     td.td_namb #{mine?"out":"in"}
+//-     td.blue_font(class='td-token') #{p_opponent}
+//-     //- td.grey_font #{operation} Transaction
+//-     td.grey_font #{amount} Coin
+//-     td.blue_font #{id}
+//-     //- td.grey_font #{gas} Coin
+//-     //- td.grey_font #{status} Sent
+//-     td.td_history_time.grey_font #{p_time.date}
+//-         br
+//-         | #{p_time.time}
+
+
+.wallet-history__item.mb-3
+    button.btn.btn-link.btn-block(
+        type="button"
+        data-toggle="collapse"
+        data-target="#id_"+id
+        aria-expanded="false"
+        aria-controls="#id_"+id
+    )
+        .row.m-0
+            .col-1
+                div(class=mine?"transaction transaction_out":"transaction transaction_in")
+                    include ../../../img/icons/arrow-circle.svg
+            .col-2.text-truncate #{p_opponent}
+            .col-2 #{amount} Coin
+            .col-5.text-truncate #{id}
+            .col-2 #{p_time.date}
+                br
+                | #{p_time.time}
+    .collapse(id="id_"+id)
+        .card.card-body
+            div.table-responsive.custom-scrollbar
+                table.table.table-striped
+                    tbody
+                        tr
+                            td Hash:
+                            td #{id}
+                        tr
+                            td Block hash:
+                            td #{id}065
+                        tr
+                            td Block number:
+                            td 6361
+                        tr
+                            td From:
+                            td 0x100feeb554dadbfe5d97763145807dbe0a5d0e34
+                        tr
+                            td To:
+                            td 0xc305da6bd6f6a706ae07d08ccc2db5b2939c4f4b
+                        tr
+                            td Amount:
+                            td #{amount} Coin
+                        tr
+                            td Nonce:
+                            td 48
+                        tr
+                            td Gas Limit:
+                            td 1000000
+                        tr
+                            td Gas Used:
+                            td 0
+                        tr
+                            td Gas Price:
+                            td 0 ETH
+                        tr
+                            td Fee:
+                            td 0 ETH
+

@@ -138,7 +138,7 @@ export class Router {
 
         this.listen_event(this.ipcMain, 'show_popup', async (event, arg) => {
             console.log('show_popup');
-            await this.controller_register.queue_controller('ChatsController', 'show_chat_info', arg);
+            await this.controller_register.run_controller('ChatsController', 'show_chat_info', arg);
         });
 
         this.listen_event(this.ipcMain, 'find_groups', async (event, group_name) => {
@@ -225,11 +225,11 @@ export class Router {
 
         this.listen_event(this.ipcMain, 'change_wallet_menu', async (event, arg) => {
             console.log('change_wallet_menu');
-            await this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
+            await this.controller_register.run_controller('WalletController', 'change_wallet_menu', arg);
         });
 
         this.listen_event(this.ipcMain, 'transfer_token', async (event, arg) => {
-            await this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
+            await this.controller_register.run_controller('WalletController', 'transfer_token', arg);
         });
 
         this.listen_event(this.ipcMain, 'get_contacts', async () => {
@@ -267,11 +267,11 @@ export class Router {
         /** Account events **/
 
         this.listen_event(this.ipcMain, "decrypt_db", async (event) => {
-            this.controller_register.run_controller('AccountController', 'decrypt_db');
+            await this.controller_register.run_controller('AccountController', 'decrypt_db');
         });
 
         this.listen_event(this.ipcMain, "encrypt_db", async (event) => {
-            this.controller_register.run_controller('AccountController', 'encrypt_db');
+            await this.controller_register.run_controller('AccountController', 'encrypt_db');
         });
 
 

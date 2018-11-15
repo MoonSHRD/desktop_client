@@ -12,22 +12,22 @@ $(function() {
         // centerMode: true,
         variableWidth: true,
         slidesToShow: 3,
-        slidesToScroll: 3
+        slidesToScroll: 1
 
     });
 
     $('#list > li > a').click(function (event) {
-        $(this).parent().children("img").toggleClass('rotate')
-        $(this).parent().children("ul").slideToggle();
+        $(this).parent().children('img').toggleClass('rotate');
+        $(this).parent().children('ul').slideToggle();
         event.stopPropagation();
     });
 
     $('#listGallery > li > a').click(function (event) {
-        $(this).parent().children("img").toggleClass('rotate')
-        $(this).parent().children("ul").slideToggle();
+        $(this).parent().children('img').toggleClass('rotate');
+        $(this).parent().children('ul').slideToggle();
         event.stopPropagation();
     });
 
-$('.listOfParticipants').tooltip('enable')
-$('.blockedParticipants').tooltip('enable')
-})
+$('.listOfParticipants').tooltip('enable');
+$('.blockedParticipants').tooltip('enable');
+});

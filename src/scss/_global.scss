@@ -239,6 +239,10 @@ img{
     border-radius: .75rem;
     padding: .525rem 1.5rem;
 
+    > * {
+        pointer-events: none;
+    }
+
     &-primary{
         color: $cf;
     }
@@ -246,6 +250,14 @@ img{
     &-lg{
         @include fz(18);
         border-radius: .5rem;
+    }
+
+    &-xs{
+        padding: .25rem .5rem;
+    }
+
+    &-link{
+        color: $brand-blue;
     }
 }
 
@@ -346,31 +358,13 @@ img{
         color: $primary-text;
     }
 }
-.bs-tooltip-top {
-    .arrow {
-        &::before {
-            border-top-color: $brand-gray-700;
-        }
-    }
-}
-.bs-tooltip-right {
-    .arrow {
-        &::before {
-            border-right-color: $brand-gray-700;
-        }
-    }
-}
-.bs-tooltip-bottom {
-    .arrow {
-        &::before {
-            border-bottom-color: $brand-gray-700;
-        }
-    }
-}
-.bs-tooltip-left {
-    .arrow {
-        &::before {
-            border-left-color: $brand-gray-700;
+
+@each $positions in top,right,bottom,left{
+    .bs-tooltip-#{$positions} {
+        .arrow {
+            &::before {
+                border-#{$positions}-color: $brand-gray-700;
+            }
         }
     }
 }
