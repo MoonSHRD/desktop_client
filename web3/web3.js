@@ -29,10 +29,10 @@ class Web3S {
     }
     handleDisconnect() {
         return __awaiter(this, void 0, void 0, function* () {
-            for (let i in this.subs) {
-                let sub = this.subs[i];
-                yield sub.unsubscribe();
-            }
+            // for (let i in this.subs) {
+            //     let sub=this.subs[i];
+            //     await sub.unsubscribe();
+            // }
             this.setProvider();
             this.web3 = new Web3(this.provider);
         });
@@ -86,6 +86,8 @@ class Web3S {
                     let tx = yield this.web3.eth.getTransaction(txId);
                     console.log('tx data:', tx);
                     let from = tx.from.toLowerCase();
+                    if (tx.to == null)
+                        return;
                     let to = tx.to.toLowerCase();
                     if (from == this.addr || to == this.addr) {
                         let transactionModel = new TransactionModel_1.TransactionModel();

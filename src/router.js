@@ -113,7 +113,7 @@ class Router {
         }));
         this.listen_event(this.ipcMain, 'show_popup', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             console.log('show_popup');
-            yield this.controller_register.queue_controller('ChatsController', 'show_chat_info', arg);
+            yield this.controller_register.run_controller('ChatsController', 'show_chat_info', arg);
         }));
         this.listen_event(this.ipcMain, 'find_groups', (event, group_name) => __awaiter(this, void 0, void 0, function* () {
             console.log('finding groups');
@@ -176,10 +176,10 @@ class Router {
         /** Wallet events **/
         this.listen_event(this.ipcMain, 'change_wallet_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             console.log('change_wallet_menu');
-            yield this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
+            yield this.controller_register.run_controller('WalletController', 'change_wallet_menu', arg);
         }));
         this.listen_event(this.ipcMain, 'transfer_token', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            yield this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
+            yield this.controller_register.run_controller('WalletController', 'transfer_token', arg);
         }));
         this.listen_event(this.ipcMain, 'get_contacts', () => __awaiter(this, void 0, void 0, function* () {
             console.log('get_contacts');
@@ -205,10 +205,10 @@ class Router {
         }));
         /** Account events **/
         this.listen_event(this.ipcMain, "decrypt_db", (event) => __awaiter(this, void 0, void 0, function* () {
-            this.controller_register.run_controller('AccountController', 'decrypt_db');
+            yield this.controller_register.run_controller('AccountController', 'decrypt_db');
         }));
         this.listen_event(this.ipcMain, "encrypt_db", (event) => __awaiter(this, void 0, void 0, function* () {
-            this.controller_register.run_controller('AccountController', 'encrypt_db');
+            yield this.controller_register.run_controller('AccountController', 'encrypt_db');
         }));
         /** Window events **/
         this.listen_event(this.ipcMain, "change_size_window", (events, width, height) => __awaiter(this, void 0, void 0, function* () {

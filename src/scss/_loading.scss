@@ -1,0 +1,42 @@
+.app{
+    &_loading {
+        display: block;
+        @include position(relative, 50% null null 50%);
+        @include size(150px);
+        margin: -75px 0 0 -75px;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        border-top-color: #1980b3;
+        z-index: 2001;
+        -webkit-animation: spinLoad 2s linear infinite;
+        animation: spinLoad 2s linear infinite;
+
+        &:before {
+            content: "";
+            @include position(absolute, 5px 5px 5px 5px);
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #3399cc;
+            -webkit-animation: spinLoad 3s linear infinite;
+            animation: spinLoad 3s linear infinite;
+        }
+
+        &:after {
+            content: "";
+            @include position(absolute, 15px 15px 15px 15px);
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #70b7da;
+            -webkit-animation: spinLoad 1.5s linear infinite;
+            animation: spinLoad 1.5s linear infinite;
+        }
+
+        &_wrapper {
+            @include position(fixed, 0 0 0 0);
+            @include size(100%);
+            background: $primary-text;
+            z-index: 2000;
+        }
+    }
+}
+
