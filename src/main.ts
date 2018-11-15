@@ -19,7 +19,6 @@ const { autoUpdater } = require("electron-updater")
 
 let mainWindow
 app.on('ready', async () => {
-
     try {
         let pug = await setupPug({pretty: true}, locals);
         pug.on('error', err => console.error('electron-pug error', err))
@@ -45,7 +44,7 @@ app.on('ready', async () => {
         height = settings.height;
     }
 
-    mainWindow = new BrowserWindow({ width: width, minWidth: 1000, height: height, minHeight: 700, resizable: true, show: false, webPreferences: {
+    let mainWindow = new BrowserWindow({ width: width, minWidth: 1100, height: height, minHeight: 700, resizable: true, show: false, webPreferences: {
             nodeIntegration: true   }, icon: __dirname + '/icon.png' });
 
     // mainWindow.webContents.openDevTools();
@@ -56,17 +55,6 @@ app.on('ready', async () => {
         const router = new Router(mainWindow);
         await router.init_app();
     });
-
-    // mainWindow.webContents.openDevTools()
-
-
-    mainWindow.on('closed', () => {
-
-
-    })
-
-
-
 });
 
 

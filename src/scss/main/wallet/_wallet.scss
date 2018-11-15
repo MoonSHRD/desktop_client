@@ -1,60 +1,71 @@
 .walletLeft{
     width: 300px;
     min-width: 300px;
-    padding: 0 20px;
+    padding: 0 0px;
     background-color: $cf;
     border-right: 1px solid $brand-gray-400;
     margin-left: 70px;
 }
 
 .walletInfo {
-    margin: 20px 0;
+    margin: 20px 20px;
 }
 
 .walletMenu {
-    a {
-        height: 57px;
-        display: flex;
-        align-items: center;
-        padding: 0 20px 0 20px;
-        color: $primary-text;
-        text-decoration: none;
-        @include fz(13);
-        font-family: $ff-1;
-        transition: all 0.1s ease;
-        overflow: hidden;
-        position: relative;
 
-        &:hover {
-            border-radius: 8px;
-            background-color: $brand-blue;
-            color: $cf;
-        }
-    }
-    ul {
-        list-style: none;
-        margin: 0;
-        padding: 20px 0;
-
-        li {
-            margin-bottom: 2px;
-            p {
-                margin: 0;
-                padding: 0 10px;
-                position: relative;
-                z-index: 10;
-            }
-            img {
-                position: relative;
-                z-index: 10;
-            }
-        }
-    }
+    //ul {
+    //    list-style: none;
+    //    margin: 0;
+    //    padding: 20px 0;
+    //
+    //    li {
+    //        margin-bottom: 0px;
+    //        p {
+    //            margin: 0;
+    //            padding: 0 10px;
+    //            position: relative;
+    //            z-index: 10;
+    //        }
+    //        img {
+    //            position: relative;
+    //            z-index: 10;
+    //        }
+    //        a, button {
+    //            cursor: pointer;
+    //            @include size(100%,57px);
+    //            @include fz(14);
+    //            border: 0;
+    //            background-color: transparent;
+    //            display: flex;
+    //            align-items: center;
+    //            padding: 0 20px 0 20px;
+    //            color: $primary-text;
+    //            text-decoration: none;
+    //            font-family: $ff-1;
+    //            transition: all 0.1s ease;
+    //            overflow: hidden;
+    //            position: relative;
+    //
+    //            &:hover {
+    //                border-radius: 0;
+    //                background-color: rgba($brand-blue-100, 0.2);
+    //            }
+    //        }
+    //
+    //        &.active_wallet {
+    //
+    //            a, button {
+    //                background-color: $brand-blue;
+    //                border-radius: 0;
+    //            }
+    //        }
+    //    }
+    //}
 }
 
-.active_wallet a{
-    color: $cf !important;
-}
+//.active_wallet a{
+//    color: $cf !important;
+//}
 
 .balanceBtn{
     margin: 20px 0;
@@ -63,11 +74,6 @@
 .userBar span{
     //margin-left: 10px;
     color: $primary-text;
-}
-
-.active_wallet {
-    background-color: $brand-blue;
-    border-radius: 8px;
 }
 
 
@@ -216,3 +222,71 @@
         }
     }
 }
+
+/* История транзакций - НАЧАЛО*/
+.wallet-history{
+
+    &__header{
+        flex-wrap: nowrap;
+        text-align: center;
+        align-items: center;
+        padding: .85rem 0;
+        font-weight: 500;
+    }
+
+    &__body{
+
+    }
+
+    &__item{
+        border-radius: .85rem;
+        background-color: $cf;
+        width: 100%;
+        [data-toggle="collapse"] {
+            //padding-left: 15px;
+            //padding-right: 15px;
+            text-align: center;
+            @include fz(14);
+
+            .row{
+                width: 100%;
+                align-items: center;
+                flex-wrap: nowrap;
+            }
+        }
+
+        .transaction{
+
+            svg{
+                margin: 0 auto;
+                transform: rotate(0);
+                @include size(1.5rem);
+            }
+            &_in{
+                transform: rotate(180deg);
+                svg{
+                    path{
+                        color: $brand-green;
+                    }
+                }
+            }
+            &_out{
+                svg{
+                    path{
+                        color: $brand-red;
+                    }
+                }
+            }
+        }
+
+        .card{
+            box-shadow: none;
+            background-color: transparent;
+
+            .table{
+                border-spacing: 0
+            }
+        }
+    }
+}
+/* История транзакций - КОНЕЦ */

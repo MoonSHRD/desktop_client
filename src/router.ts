@@ -151,7 +151,7 @@ export class Router {
 
         this.listen_event(this.ipcMain, 'show_popup', async (event, arg) => {
             console.log('show_popup');
-            await this.controller_register.queue_controller('ChatsController', 'show_chat_info', arg);
+            await this.controller_register.run_controller('ChatsController', 'show_chat_info', arg);
         });
 
         this.listen_event(this.ipcMain, 'find_groups', async (event, group_name) => {
@@ -238,11 +238,11 @@ export class Router {
 
         this.listen_event(this.ipcMain, 'change_wallet_menu', async (event, arg) => {
             console.log('change_wallet_menu');
-            await this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
+            await this.controller_register.run_controller('WalletController', 'change_wallet_menu', arg);
         });
 
         this.listen_event(this.ipcMain, 'transfer_token', async (event, arg) => {
-            await this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
+            await this.controller_register.run_controller('WalletController', 'transfer_token', arg);
         });
 
         this.listen_event(this.ipcMain, 'get_contacts', async () => {
@@ -263,10 +263,10 @@ export class Router {
             await this.controller_register.run_controller('SettingsController', 'change_directory', path);
         });
 
-        this.listen_event(this.ipcMain, "change_last_chat", async (event, chat_id) => {
-            // console.log("Change last chat:", chat_id);
-            await this.controller_register.run_controller('SettingsController', 'update_last_chat', chat_id);
-        });
+        // this.listen_event(this.ipcMain, "change_last_chat", async (event, chat_id) => {
+        //     // console.log("Change last chat:", chat_id);
+        //     await this.controller_register.run_controller('SettingsController', 'update_last_chat', chat_id);
+        // });
 
 
         /** Menu events **/
@@ -280,11 +280,11 @@ export class Router {
         /** Account events **/
 
         this.listen_event(this.ipcMain, "decrypt_db", async (event) => {
-            this.controller_register.run_controller('AccountController', 'decrypt_db');
+            await this.controller_register.run_controller('AccountController', 'decrypt_db');
         });
 
         this.listen_event(this.ipcMain, "encrypt_db", async (event) => {
-            this.controller_register.run_controller('AccountController', 'encrypt_db');
+            await this.controller_register.run_controller('AccountController', 'encrypt_db');
         });
 
 
@@ -303,19 +303,21 @@ export class Router {
 
 
         /** Eth events **/
-        this.listen_event(this.web3, 'received_eth', async (tx)=>{
-            console.log(`Received ${tx.value/Math.pow(10,18)}Eth from ${tx.from.toLowerCase()}`);
-            console.log(tx);
-            let text=`Received transaction
-From: ${tx.from.toLowerCase()}.
-Amount: ${tx.value/Math.pow(10,18)} Coin.
-Link: https://blocks.moonshard.io/tx/${tx.hash}`;
-            await this.controller_register.queue_controller('MessagesController', 'received_message', {id:tx.from.toLowerCase(),domain:'localhost'}, text, Date.now(), []);
+        this.listen_event(this.web3, 'new_transaction', async (tx)=>{
+            console.log(`Received ${tx.amount/Math.pow(10,18)}Eth from ${tx.from.id}`);
+            await this.controller_register.run_controller('WalletController', 'handle_tx', tx);
+//             console.log(tx);
+//             let text=`Transaction
+// Amount: ${tx.value/Math.pow(10,18)} Coin.
+// Link: http://blocks.moonshrd.io/tx/${tx.hash}`;
+//             await this.controller_register.run_controller('MessagesController', 'received_message', {id:tx.from.toLowerCase(),domain:'localhost'}, text, Date.now(), []);
         });
 
-        this.listen_event(this.web3, 'received_eth', async (one,two,three)=>{
-            console.log(one,two,three);
-        });
+        // this.events.emit('new_transaction',transactionModel)
+        // this.listen_event(this.web3, 'new_transaction', async (tx)=>{
+        //     // console.log(one,two,three);
+        //
+        // });
     }
 }
 

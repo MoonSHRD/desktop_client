@@ -5,10 +5,7 @@ import {Controller} from "../Controller";
 import {MessageModel} from "../../models/MessageModel";
 import {ChatModel} from "../../models/ChatModel";
 import {AccountModel} from "../../models/AccountModel";
-
-
 import {FileModel} from "../../models/FileModel";
-
 import {b64img_to_buff, check_file_exist, check_file_preview, Helper, read_file, save_file} from "../Helpers";
 import * as Electron from 'electron'
 import Notification = Electron.Notification;
@@ -17,10 +14,37 @@ import ipcRenderer = Electron.ipcRenderer;
 import ipcMain = Electron.ipcMain;
 import {helper} from "../../src/var_helper";
 import {Grpc} from "../../grpc/grpc";
+import Benchmark = require('benchmark');
+// import {Benchmark} from 'benchmark';
+let benchmark=new Benchmark.Suite;
 // import * as eNotify from 'electron-notify'
 // let eNotify = require('electron-notify');
 
 class MessagesController extends Controller {
+
+    async benchmarkIt(){
+        benchmark.add('message-one_by_one#test', {
+            defer: true,
+            fn:(deferred)=>{
+                this.render_chat_messages('0x100feeb554dadbfe5d97763145807dbe0a5d0e34_0x7068895138bf0ac16a6cabb3c446ad41ff571da3')
+                    .then(()=>{
+                    deferred.resolve();
+                })
+            }
+        }).add('message-all#test', {
+            defer: true,
+            fn:(deferred)=>{
+                this.render_chat_messages_all('0x100feeb554dadbfe5d97763145807dbe0a5d0e34_0x7068895138bf0ac16a6cabb3c446ad41ff571da3')
+                    .then(()=>{
+                    deferred.resolve();
+                })
+            }
+        }).on('complete', function () {
+            console.log('Fastest is ' + this.filter('fastest').map('name'));
+            console.log(this[0].times);
+            console.log(this[1].times)
+        }).run({ 'async': true })
+    }
 
     async load_join_chat(chat_id: string) {
         let q_chats = this.controller_register.get_controller_parameter('ChatsController', 'found_chats');
@@ -36,6 +60,7 @@ class MessagesController extends Controller {
     }
 
     async get_chat_messages({id,type}) {
+        // this.benchmarkIt();
         let set = await this.getSettings();
         set.last_chat=id;
         await set.save();
@@ -71,7 +96,7 @@ class MessagesController extends Controller {
                 message.files[num].preview=true;
                 if (!await read_file(message.files[num])) {
                     message.files[num].file = (await this.ipfs.get_file(message.files[num].hash)).file;
-                    save_file(message.files[num]);
+                    await save_file(message.files[num]);
                 }
                 // console.log(message.files[num]);
             } else {
@@ -116,11 +141,16 @@ class MessagesController extends Controller {
         }
     }
 
+    private async render_chat_messages_all(chat_id: string) {
+        let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+        await this.send_data('gwagwa', this.render('main/messagingblock/message_all.pug',{messages:messages}));
+    }
+
     async download_file(file_id: string) {
         let file = await FileModel.findOne(file_id);
         if (!read_file(file)) {
             file.file = (await this.ipfs.get_file(file.hash)).file;
-            save_file(file);
+            await save_file(file);
         }
         this.send_data('file_downloaded',{id:file_id});
     }
@@ -178,7 +208,7 @@ class MessagesController extends Controller {
             fileModel.type = file.type;
             fileModel.path = settings.downloads;
             await fileModel.save();
-            save_file(fileModel);
+            await save_file(fileModel);
 
             message.files=[fileModel];
         }
@@ -231,17 +261,10 @@ class MessagesController extends Controller {
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
         console.log(chat);
         if (!userModel || !chat){
-            console.log("retriving user info");
-            let userGR=JSON.parse((await this.grpc.CallMethod("GetObjData",{id: user.id,obj:'user'})).data.data);
-            console.log(userGR);
-            userModel=new UserModel();
-            userModel.id=userGR.id;
-            userModel.domain="localhost";
-            userModel.name=userGR.firstname+(userGR.lastname?" "+userGR.lastname:"");
-            userModel.firstname=userGR.firstname;
-            userModel.lastname=userGR.lastname;
-            userModel.avatar=userGR.avatar;
-            userModel.last_active=userGR.last_active;
+            // console.log("retriving user info");
+            // let userGR=JSON.parse((await this.grpc.CallMethod("GetObjData",{id: user.id,obj:'user'})).data.data);
+            // console.log(userGR);
+            userModel=await this.grpc.GetUser(user.id);
             await userModel.save();
 
             chat = new ChatModel();

@@ -5,6 +5,9 @@ const {dialog} = require('electron').remote;
 const fs = require('fs');
 require('waypoints/lib/noframework.waypoints.min');
 require('waypoints/lib/shortcuts/sticky.min');
+require('bootstrap');
+require('bootstrap-notify');
+require('slick-carousel');
 
 let p = null;
 let d = null;
@@ -247,7 +250,7 @@ window.onload = function () {
         }
     });
 
-    $(document).on('keydown',".send_message__input",function(e) {
+    $(document).on('keydown','.send_message__input',function(e) {
         if($(this).val() === '') {
             $(this).attr('rows', 1);
         };
@@ -260,7 +263,7 @@ window.onload = function () {
         }
     });
 
-    $(document).on('input',".send_message__input",function(e) {
+    $(document).on('input','.send_message__input',function(e) {
         // console.log('hello!')
         if($(this).val() === '') {
             $(this).attr('rows', 1);
@@ -268,7 +271,7 @@ window.onload = function () {
 
     });
 
-    $(document).on('paste',".send_message__input",function(e) {
+    $(document).on('paste','.send_message__input',function(e) {
         // console.log('paste!');
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
         let val = $(this).text();
@@ -373,7 +376,7 @@ window.onload = function () {
             chat.find('[data-name=unread_messages]').hide();
             ipcRenderer.send('reading_messages', obj.id);
 
-            let p_count = ($("p:contains(" + obj.time + ")"));
+            let p_count = ($('p:contains(' + obj.time + ')'));
 
             if (p_count.length === 0) {
                 $('[data-msg-list]').append(obj.html_date);
@@ -474,16 +477,14 @@ window.onload = function () {
         }
     });
 
-    $(document).on('click', '.walletMenu li', function (e) {
-        const $this = $(this);
-        $this.addClass('active_wallet').siblings().removeClass('active_wallet');
-    });
+    // $(document).on('click', '.walletMenu li', function (e) {
+    // });
 
-    $(document).on('click', '.settingsMenu li', function (e) {
-
-        const $this = $(this);
-        $this.addClass('active_settings').siblings().removeClass('active_settings');
-    });
+    // $(document).on('click', '.settingsMenu li', function (e) {
+    //
+    //     const $this = $(this);
+    //     $this.addClass('active_settings').siblings().removeClass('active_settings');
+    // });
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
         $('.modal-content').html(data);
@@ -628,8 +629,8 @@ window.onload = function () {
     // });
 
     $(document).on('submit', '.modal-content', function (e) {
-        let button = $(this).find(".btn-primary");
-        button.attr("disabled", "disabled");
+        let button = $(this).find('.btn-primary');
+        button.attr('disabled', 'disabled');
         e.preventDefault();
         const $this = $(this);
         let groupNameEl = $this.find('[name=\'name\']');
@@ -653,7 +654,7 @@ window.onload = function () {
             }
         }
         else
-            button.removeAttr("disabled");
+            button.removeAttr('disabled');
     });
 
     $(document).on('focusin', '[data-name="crowdsale__input"]', function (e) {
@@ -916,7 +917,7 @@ window.onload = function () {
         // console.log('resize_clicked');
         unlock = true;
         $(document).on('mouseup', function(e) {
-            ipcRenderer.send("change_chats_size", p.width());
+            ipcRenderer.send('change_chats_size', p.width());
         });
     });
 
@@ -1030,17 +1031,17 @@ window.onload = function () {
     });
 
     $(window).resize(function(){
-        if ($("#main-menu").length !== 0) {
-            ipcRenderer.send("change_size_window", $(window).width(), $(window).height());
+        if ($('#main-menu').length !== 0) {
+            ipcRenderer.send('change_size_window', $(window).width(), $(window).height());
         }
     });
 
     $(document).on('click', '[name=encrypt_database]', function (e) {
-        ipcRenderer.send("encrypt_db");
+        ipcRenderer.send('encrypt_db');
     });
 
     $(document).on('click', '[name=decrypt_database]', function (e) {
-        ipcRenderer.send("decrypt_db");
+        ipcRenderer.send('decrypt_db');
     });
 
     $(document).on('click', '.sendTokenButton', function (e) {
@@ -1057,8 +1058,89 @@ window.onload = function () {
         ipcRenderer.send('transfer_token', data);
     });
 
-    // $(document).on('click', "button[data-block=\"data-block\"]", function (e) {
-    //     console.log("Click!");
-    //     $(this).attr("disabled", true);
+    /* TODO: Сделать редакрирование полей */
+    // document.addEventListener('click', function (e) {
+    //
+    //     let target =  e.target;
+    //
+    //     if (target.dataset.toggle === 'edit') {
+    //         let targetData = target.dataset;
+    //         let targetDataTarget = targetData.target;
+    //         console.log('done' + targetDataTarget);
+    //
+    //         document.querySelector('[name="' + targetDataTarget + '"]').removeAttribute('disabled');
+    //     }
     // });
+
+    /*
+     * WALLET/SETTINGS MENU
+     */
+    document.addEventListener('click', function (e) {
+        let target = e.target;
+        if (target.dataset.toggle === 'nav') {
+            let nav = target.dataset.nav; // data-nav
+            let name = target.dataset.name; // data-name
+            let parent = target.parentNode; // родитель - li
+            let parentList = parent.parentNode; // родитель - ul
+
+            ipcRenderer.send(`change_${nav}_menu`, name);
+
+            let sibling = parentList.firstChild; // первый элемент (li) в списке (ul)
+            // Перебераем весь список элементов
+            while (sibling) {
+                // Удаляем все активные классы
+                if (sibling.nodeType === 1)
+                    sibling.classList.remove('active');
+                // Добавляем активный класс для назатого пункта
+                if (sibling.nodeType === 1 && target.parentNode === sibling )
+                    sibling.classList.add('active');
+                sibling = sibling.nextSibling;
+            }
+        }
+    });
+    ipcRenderer.on('change_wallet_menu', (event, obj) => {
+        $('.walletRight').html(obj);
+    });
+    ipcRenderer.on('change_settings_menu', (event, obj) => {
+        $('.settings__right').html(obj);
+    });
+    /*
+     * /WALLET/SETTINGS MENU
+     */
+
+    // $(document).off('input', 'input[name=amount]');
+
+    $(document).on('input', 'input[name=amount]', function (e) {
+        const $this = $(this);
+        $this.css('box-shadow', 'none');
+        if($this.val() != '') {
+            var regexp = /^[0-9\.]*$/;
+            if (!regexp.test($this.val())) {
+                e.preventDefault();
+                $this.css('box-shadow', '0px 0px 16px 0px rgba(255, 59, 0, 0.6) inset');
+                // alert("введите латинские символы");
+                return false;
+            }
+        }
+    });
+
+    ipcRenderer.on('load_tx_history', (event, obj) => {
+        $('[data-name="tx_history_table"]').append(obj);
+    });
+
+    $(document).on('input', '[data-name=group_search]', function (e) {
+        // let menu = 'menu_chats';
+        let group = $(this).val();
+        if (!group) {
+            ipcRenderer.send('load_chats','group_chat');
+        } else {
+            $('.chats ul').empty();
+        }
+        if (group.length > 2) {
+            ipcRenderer.send('find_groups', group);
+        }
+        if (group.length === 0) {
+            $('.chats ul').empty();
+        }
+    });
 };

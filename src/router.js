@@ -120,7 +120,7 @@ class Router {
         }));
         this.listen_event(this.ipcMain, 'show_popup', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             console.log('show_popup');
-            yield this.controller_register.queue_controller('ChatsController', 'show_chat_info', arg);
+            yield this.controller_register.run_controller('ChatsController', 'show_chat_info', arg);
         }));
         this.listen_event(this.ipcMain, 'find_groups', (event, group_name) => __awaiter(this, void 0, void 0, function* () {
             console.log('finding groups');
@@ -183,10 +183,10 @@ class Router {
         /** Wallet events **/
         this.listen_event(this.ipcMain, 'change_wallet_menu', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             console.log('change_wallet_menu');
-            yield this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
+            yield this.controller_register.run_controller('WalletController', 'change_wallet_menu', arg);
         }));
         this.listen_event(this.ipcMain, 'transfer_token', (event, arg) => __awaiter(this, void 0, void 0, function* () {
-            yield this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
+            yield this.controller_register.run_controller('WalletController', 'transfer_token', arg);
         }));
         this.listen_event(this.ipcMain, 'get_contacts', () => __awaiter(this, void 0, void 0, function* () {
             console.log('get_contacts');
@@ -201,10 +201,10 @@ class Router {
             // console.log("Change directory:", path);
             yield this.controller_register.run_controller('SettingsController', 'change_directory', path);
         }));
-        this.listen_event(this.ipcMain, "change_last_chat", (event, chat_id) => __awaiter(this, void 0, void 0, function* () {
-            // console.log("Change last chat:", chat_id);
-            yield this.controller_register.run_controller('SettingsController', 'update_last_chat', chat_id);
-        }));
+        // this.listen_event(this.ipcMain, "change_last_chat", async (event, chat_id) => {
+        //     // console.log("Change last chat:", chat_id);
+        //     await this.controller_register.run_controller('SettingsController', 'update_last_chat', chat_id);
+        // });
         /** Menu events **/
         this.listen_event(this.ipcMain, 'change_menu_state', (event, arg) => __awaiter(this, void 0, void 0, function* () {
             console.log('change menu');
@@ -212,10 +212,10 @@ class Router {
         }));
         /** Account events **/
         this.listen_event(this.ipcMain, "decrypt_db", (event) => __awaiter(this, void 0, void 0, function* () {
-            this.controller_register.run_controller('AccountController', 'decrypt_db');
+            yield this.controller_register.run_controller('AccountController', 'decrypt_db');
         }));
         this.listen_event(this.ipcMain, "encrypt_db", (event) => __awaiter(this, void 0, void 0, function* () {
-            this.controller_register.run_controller('AccountController', 'encrypt_db');
+            yield this.controller_register.run_controller('AccountController', 'encrypt_db');
         }));
         /** Window events **/
         this.listen_event(this.ipcMain, "change_size_window", (events, width, height) => __awaiter(this, void 0, void 0, function* () {
@@ -229,18 +229,20 @@ class Router {
             yield this.controller_register.run_controller('SettingsController', 'change_chats_width', width);
         }));
         /** Eth events **/
-        this.listen_event(this.web3, 'received_eth', (tx) => __awaiter(this, void 0, void 0, function* () {
-            console.log(`Received ${tx.value / Math.pow(10, 18)}Eth from ${tx.from.toLowerCase()}`);
-            console.log(tx);
-            let text = `Received transaction
-From: ${tx.from.toLowerCase()}.
-Amount: ${tx.value / Math.pow(10, 18)} Coin.
-Link: https://blocks.moonshard.io/tx/${tx.hash}`;
-            yield this.controller_register.queue_controller('MessagesController', 'received_message', { id: tx.from.toLowerCase(), domain: 'localhost' }, text, Date.now(), []);
+        this.listen_event(this.web3, 'new_transaction', (tx) => __awaiter(this, void 0, void 0, function* () {
+            console.log(`Received ${tx.amount / Math.pow(10, 18)}Eth from ${tx.from.id}`);
+            yield this.controller_register.run_controller('WalletController', 'handle_tx', tx);
+            //             console.log(tx);
+            //             let text=`Transaction
+            // Amount: ${tx.value/Math.pow(10,18)} Coin.
+            // Link: http://blocks.moonshrd.io/tx/${tx.hash}`;
+            //             await this.controller_register.run_controller('MessagesController', 'received_message', {id:tx.from.toLowerCase(),domain:'localhost'}, text, Date.now(), []);
         }));
-        this.listen_event(this.web3, 'received_eth', (one, two, three) => __awaiter(this, void 0, void 0, function* () {
-            console.log(one, two, three);
-        }));
+        // this.events.emit('new_transaction',transactionModel)
+        // this.listen_event(this.web3, 'new_transaction', async (tx)=>{
+        //     // console.log(one,two,three);
+        //
+        // });
     }
 }
 exports.Router = Router;

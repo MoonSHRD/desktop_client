@@ -1,9 +1,4 @@
 import "reflect-metadata";
-const axios = require('axios');
-const os = require('os');
-var fs = require('fs');
-var unzip = require('unzip');
-import {download} from 'electron-download-manager';
 const log = require('electron-log');
 const {autoUpdater} = require("electron-updater");
 

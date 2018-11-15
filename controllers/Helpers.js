@@ -153,9 +153,6 @@ class Helper {
                 return formated_date;
             case 'chat':
                 day_diff = now.getDate() - date.getDate();
-                // console.log(`year ${date.getFullYear()} - ${now.getFullYear()}`);
-                // console.log(`month ${date.getMonth()} - ${now.getMonth()}`);
-                // console.log(`day ${date.getDate()} - ${now.getDate()}`);
                 if (date.getFullYear() < now.getFullYear() || date.getMonth() < now.getMonth() || day_diff > 6) {
                     formated_date = `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
                     return formated_date;
@@ -165,6 +162,19 @@ class Helper {
                     return formated_date;
                 }
                 formated_date = `${date.getHours()}:${get_minutes(date)}`;
+                return formated_date;
+            case 'transaction':
+                formated_date = { time: `${date.getHours()}:${get_minutes(date)}` };
+                day_diff = now.getDate() - date.getDate();
+                if (date.getFullYear() < now.getFullYear() || date.getMonth() < now.getMonth() || day_diff > 6) {
+                    formated_date.date = `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
+                    return formated_date;
+                }
+                if (day_diff > 0) {
+                    formated_date.date = this.day_to_locale[options.locale][date.getDay()];
+                    return formated_date;
+                }
+                formated_date.date = `Сегодня`;
                 return formated_date;
             case "dialog_date":
                 day_diff = now.getDate() - date.getDate();

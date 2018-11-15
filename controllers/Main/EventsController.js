@@ -9,10 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
-const axios = require('axios');
-const os = require('os');
-var fs = require('fs');
-var unzip = require('unzip');
 const log = require('electron-log');
 const { autoUpdater } = require("electron-updater");
 const Controller_1 = require("../Controller");
