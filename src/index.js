@@ -1001,7 +1001,6 @@ window.onload = function () {
     /*
      * WALLET/SETTINGS MENU
      */
-
     document.addEventListener('click', function (e) {
         let target = e.target;
         if (target.dataset.toggle === 'nav') {
