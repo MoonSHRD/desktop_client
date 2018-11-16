@@ -3,7 +3,6 @@
     -webkit-user-drag: none;
     -webkit-app-region: no-drag;
     user-select: none;
-
     &:before,
     &:after{
         @extend *;
@@ -432,3 +431,7 @@ img{
     }
 }
 /* NAV MENU (Settings/Wallet) */
+
+.p-10t {
+    padding: 10px 0;
+}
