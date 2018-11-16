@@ -12,9 +12,10 @@ import Notification = Electron.Notification;
 import nativeImage = Electron.nativeImage;
 import ipcRenderer = Electron.ipcRenderer;
 import ipcMain = Electron.ipcMain;
-import {helper} from "../../src/var_helper";
+import {chat_types, helper} from "../../src/var_helper";
 import {Grpc} from "../../grpc/grpc";
 import Benchmark = require('benchmark');
+import {getConnection} from "typeorm";
 // import {Benchmark} from 'benchmark';
 let benchmark=new Benchmark.Suite;
 // import * as eNotify from 'electron-notify'
@@ -132,12 +133,82 @@ class MessagesController extends Controller {
         }
     }
 
+    private async render_transaction(message) {
+        let self_info = await this.get_self_info();
+        message.mine = message.senderId ? (self_info.id === message.senderId) : false;
+        // message.fill_sender_data();
+        for (let num in message.files){
+            if (check_file_preview(message.files[num].type)) {
+                message.files[num].preview=true;
+                if (!await read_file(message.files[num])) {
+                    message.files[num].file = (await this.ipfs.get_file(message.files[num].hash)).file;
+                    await save_file(message.files[num]);
+                }
+                // console.log(message.files[num]);
+            } else {
+                if (check_file_exist(message.files[num]))
+                    message.files[num].downloaded=true;
+            }
+        }
+        let date_time = await Helper.formate_date(new Date(message.time), {locale:"ru:",for:"dialog_date"});
+        message.time=Helper.formate_date(new Date(message.time),{locale:'ru',for:'message'});
+        let html = this.render('main/messagingblock/message.pug', message);
+        let html_date = this.render("main/messagingblock/dialog_date.pug", {time:date_time});
+
+        if (message.mine)
+            message.text='Вы: '+message.text;
+
+        const data = {
+            id: message.chat.id,
+            html: html,
+            html_date: html_date,
+            message:message,
+            time: date_time,
+            unread_messages:message.chat.unread_messages
+        };
+        await this.send_data('received_message', data);
+
+        if (message.notificate){
+            let notif = new Notification({
+                title:message.sender_name,
+                body:message.text,
+                icon:nativeImage.createFromBuffer(b64img_to_buff(message.sender_avatar))
+            });
+            notif.show();
+        }
+    }
+
+    private async getMsgTxs(chat_id:string){
+        let self_info = await this.get_self_info();
+        let opp_id=ChatModel.get_chat_opponent_id(chat_id,self_info.id);
+        return await getConnection()
+            .createQueryRunner()
+            .query(
+                `select *, "${chat_id}" as chatId from 
+                   ((select id,"message" as type, text, time, senderId, null as amount
+                       from message_model msg
+                       where msg.chatId == "${chat_id}"
+                   UNION
+                   select id,"transaction" as type, null as text, time, fromId as senderId, amount
+                       from transaction_model tx
+                       where tx.fromId="${opp_id}" or tx.toId="${opp_id}") msgs
+                   left join (
+                       select id as senderId,avatar from user_model
+                   ) user on user.senderId=msgs.senderId)
+                   order by msgs.time`
+            );
+    }
+
     private async render_chat_messages(chat_id: string) {
-        let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+        // let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+        let messages = await this.getMsgTxs(chat_id);
         let last_time;
         for (let num = messages.length - 1; num >= 0; --num) {
-            if (last_time!==new Date(messages[num].time))
-            await this.render_message(messages[num]);
+            // if (last_time!==new Date(messages[num].time))
+            if (messages[num].type=='message')
+                await this.render_message(messages[num]);
+            if (messages[num].type=='transaction')
+                await this.render_transaction(messages[num]);
         }
     }
 
