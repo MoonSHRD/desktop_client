@@ -773,43 +773,43 @@ window.onload = function () {
 
     ipcRenderer.on('checking_updates', (event, data) => {
         // $('#download_updates').css('width', obj+'%')
-        console.log(data)
+        console.log(data);
         if(data) {
             setTimeout(() => {
-                if (data) $('#update_button').fadeIn().addClass('update_animate')
+                if (data) $('#update_button').fadeIn().addClass('update_animate');
 
-                update_notify( 'New Version !', 'A new version of the Moonshard is available')
+                update_notify( 'New Version !', 'A new version of the Moonshard is available');
 
 
 
-            }, 1000)
+            }, 1000);
         }
     });
 
     ipcRenderer.on('get_updates', (event, obj) => {
 
-        console.log(typeof(obj))
+        console.log(typeof(obj));
         if(obj == 100){
 
-            update_notify( 'Install updates', 'Now you can install updates')
+            update_notify( 'Install updates', 'Now you can install updates');
 
             $('#update_button').fadeIn();
-            $('[data-name=download_updates]').attr('data-name','install_updates')
+            $('[data-name=download_updates]').attr('data-name','install_updates');
             setTimeout(()=>{
-                $('#download_img').fadeOut()
+                $('#download_img').fadeOut();
 
                 setTimeout(()=>{
-                    $('#update_img').fadeIn()
-                },500)
-            },500)
+                    $('#update_img').fadeIn();
+                },500);
+            },500);
 
         }
-        $('#download_updates').css('width', obj+'%')
+        $('#download_updates').css('width', obj+'%');
     });
 
     $(document).on('click', '[data-name=download_updates]', function (e) {
         $('#update_button').fadeOut();
-        update_notify('Download updates', 'Updates will download in the background')
+        update_notify('Download updates', 'Updates will download in the background');
 
         ipcRenderer.send('get_updates', {});
     });
