@@ -1,6 +1,6 @@
 {
   "name": "moonshard",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Messanger desktop client",
   "main": "./src/main.js",
   "contributors": [
