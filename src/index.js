@@ -1061,14 +1061,21 @@ window.onload = function () {
         // let data_arr=$(this).closest('form');
         // console.log(data_arr);
         // return;
+        let sendTo = document.getElementById('sendTokenTo');
         let data_arr = $(this).closest('tr').find('input').serializeArray();
         let data = {};
         data_arr.forEach((el) => {
             data[el.name] = el.value;
         });
         // console.log(data_arr);
-        // console.log(data);
-        ipcRenderer.send('transfer_token', data);
+        // console.log(sendTo.value.length);
+        if (sendTo.value.length > 0) {
+            sendTo.classList.remove('error');
+            ipcRenderer.send('transfer_token', data);
+        } else {
+            sendTo.classList.add('error');
+            sendTo.focus();
+        }
     });
 
     /* TODO: Сделать редакрирование полей */
