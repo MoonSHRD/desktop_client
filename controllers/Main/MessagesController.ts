@@ -93,11 +93,11 @@ class MessagesController extends Controller {
         let self_info = await this.get_self_info();
         message.mine = message.senderId ? (self_info.id === message.senderId) : false;
         // message.fill_sender_data();
-        console.log('message:',message);
+        // console.log('message:',message);
         // message.
         // message.files=await FileModel.find({where:{messageId:message.id}});
         // await MessageModel.getFiles(message);
-        console.log(message.files);
+        // console.log(message.files);
         for (let num in message.files){
             if (check_file_preview(message.files[num].type)) {
                 message.files[num].preview=true;
@@ -142,7 +142,7 @@ class MessagesController extends Controller {
     private async render_transaction(message) {
         let self_info = await this.get_self_info();
         message.mine = message.senderId ? (self_info.id === message.senderId) : false;
-        console.log('tx message:',message);
+        // console.log('tx message:',message);
         message.amount=TransactionModel.NormalizeValue(message.amount);
         let date_time = await Helper.formate_date(new Date(message.time), {locale:"ru:",for:"dialog_date"});
         message.time=Helper.formate_date(new Date(message.time),{locale:'ru',for:'message'});
@@ -197,7 +197,7 @@ class MessagesController extends Controller {
     private async render_chat_messages(chat_id: string) {
         // let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
         let messages = await this.getMsgTxs(chat_id);
-        console.log(messages);
+        // console.log(messages);
         let last_time;
         for (let num = messages.length - 1; num >= 0; --num) {
             // if (last_time!==new Date(messages[num].time))
