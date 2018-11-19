@@ -201,15 +201,16 @@ class MessagesController extends Controller_1.Controller {
     }
     render_chat_messages(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            // let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
-            let messages = yield this.getMsgTxs(chat_id);
+            let messages = yield MessageModel_1.MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+            // let messages = await this.getMsgTxs(chat_id);
             let last_time;
             for (let num = messages.length - 1; num >= 0; --num) {
                 // if (last_time!==new Date(messages[num].time))
-                if (messages[num].type == 'message')
-                    yield this.render_message(messages[num]);
-                if (messages[num].type == 'transaction')
-                    yield this.render_transaction(messages[num]);
+                yield this.render_message(messages[num]);
+                // if (messages[num].type=='message')
+                //     await this.render_message(messages[num]);
+                // if (messages[num].type=='transaction')
+                //     await this.render_transaction(messages[num]);
             }
         });
     }

@@ -18,6 +18,8 @@ const locals = { /* ...*/};
 const setupPug = require('electron-pug');
 // const Router = require('./router');
 app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
+    let path = app.getPath('userData');
+    console.log(path);
     try {
         let pug = yield setupPug({ pretty: true }, locals);
         pug.on('error', err => console.error('electron-pug error', err));
@@ -29,7 +31,8 @@ app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
     let height = 700;
     yield typeorm_1.createConnection({
         type: "sqlite",
-        database: `${__dirname}/../sqlite/data.db`,
+        // database: `${__dirname}/../sqlite/data.db`,
+        database: path + '/data.db',
         entities: [
             __dirname + '/../models/' + "*.js"
         ],

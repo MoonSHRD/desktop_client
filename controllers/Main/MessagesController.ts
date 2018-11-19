@@ -200,15 +200,16 @@ class MessagesController extends Controller {
     }
 
     private async render_chat_messages(chat_id: string) {
-        // let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
-        let messages = await this.getMsgTxs(chat_id);
+        let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+        // let messages = await this.getMsgTxs(chat_id);
         let last_time;
         for (let num = messages.length - 1; num >= 0; --num) {
             // if (last_time!==new Date(messages[num].time))
-            if (messages[num].type=='message')
-                await this.render_message(messages[num]);
-            if (messages[num].type=='transaction')
-                await this.render_transaction(messages[num]);
+            await this.render_message(messages[num]);
+            // if (messages[num].type=='message')
+            //     await this.render_message(messages[num]);
+            // if (messages[num].type=='transaction')
+            //     await this.render_transaction(messages[num]);
         }
     }
 
