@@ -44,7 +44,7 @@ app.on('ready', async () => {
         height = settings.height;
     }
 
-    let mainWindow = new BrowserWindow({ width: width, minWidth: 1100, height: height, minHeight: 700, resizable: true, show: false, webPreferences: {
+    let mainWindow = new BrowserWindow({ width: width, minWidth: 1000, height: height, minHeight: 700, resizable: true, show: false, webPreferences: {
             nodeIntegration: true   }, icon: __dirname + '/icon.png' });
 
     // mainWindow.webContents.openDevTools();
