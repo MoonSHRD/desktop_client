@@ -974,7 +974,7 @@ window.onload = function () {
     });
 
     $('[data-toggle="collapse"]').collapse('toggle');
-    $(document).on('click', '[data-toggle="collapse"] a', function () {
+    $(document).on('click', '[data-toggle="collapse"] a', function (e) {
         e.preventDefault();
     });
 
@@ -998,13 +998,25 @@ window.onload = function () {
             }
 
             /* Скролл даты */
-            if ( $('.dialogDate').length ) {
-                $('.dialogDate').addClass('slicky');
-            }
+            // if ( $('.dialogDate').length ) {
+            //     $('.dialogDate').addClass('slicky');
+            // }
             /* /Скролл даты */
         }
 
     }, true);
+
+
+    const wayElem = document.getElementsByClassName('dialogDate');
+    if (wayElem.length > 0) {
+        let waypoint = new Waypoint({
+            element: wayElem[0],
+            handler: function(direction) {
+                console.log('Direction: ' + direction);
+            },
+            context: document.querySelector('data-msg-list'),
+        });
+    }
 
     $(document).on('click', '[name=change_download]', function (e) {
         dialog.showOpenDialog({
