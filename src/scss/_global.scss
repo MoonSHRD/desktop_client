@@ -431,6 +431,9 @@ img{
 }
 /* NAV MENU (Settings/Wallet) */
 
-.p-10t {
-    padding: 10px 0;
+.pv10 {
+    padding: ($fz-num / 10)rem 0;
+}
+.ph10{
+    padding: 0 ($fz-num / 10)rem;
 }
