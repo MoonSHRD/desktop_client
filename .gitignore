@@ -10,6 +10,7 @@ src/env_config.js.map
 .map
 .npmignore
 dist/
+updates/
 downloads/
 release-builds/
 Makefile
@@ -18,7 +19,7 @@ yarn.lock
 yarn-error.log
 .eslintrc
 .eslintrc.json
-
+dev-app-update.yml
 account.json
 sqlite/
 yarn-error.log

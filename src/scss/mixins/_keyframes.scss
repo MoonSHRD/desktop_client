@@ -21,3 +21,22 @@
         transform: translateX(1.5em)
     }
 }
+
+
+
+@keyframes pulse2 {
+    from {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+
+    50% {
+        -webkit-transform: scale3d(1.30, 1.30, 1.30);
+        transform: scale3d(1.30, 1.30, 1.30);
+    }
+
+    to {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}

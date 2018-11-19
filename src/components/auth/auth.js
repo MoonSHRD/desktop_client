@@ -386,6 +386,13 @@ $(document).on('click', '#generate_mnemonic', function () {
 
 });
 
+$(document).on('keydown', '#input_mnemonic', function () {
+    // console.log('keydown');//
+    let mnemonicClr = $(this).val().replace(/\s\s/g, " ");
+    // console.log(mnemonicClr);
+    $(this).val(mnemonicClr);
+});
+
 $(document).on('click', '#input_mnemonic_next', function () {
 
     // if (!($('#input_mnemonic').hasClass('invalid')))

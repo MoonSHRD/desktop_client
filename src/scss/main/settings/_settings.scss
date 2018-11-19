@@ -2,7 +2,7 @@
     &__left {
         width: 300px;
         min-width: 300px;
-        padding: 20px;
+        padding: 20px 0px;
         background-color: #FFFFFF;
         border-right: 1px solid #d0d0d0;
         margin-left: 70px;
@@ -145,59 +145,7 @@
     }
     &__menu {
 
-        ul {
-            list-style: none;
-            margin: 0;
-            padding: 20px 0;
 
-            li {
-                margin-bottom: 2px;
-
-                p {
-                    margin: 0;
-                    padding: 0 10px;
-                    position: relative;
-                    z-index: 10;
-                }
-                img {
-                     position: relative;
-                     z-index: 10;
-                }
-                svg{
-                    @include size(40px);
-                    flex-shrink: 0;
-                }
-
-                &.active_settings {
-
-                    a {
-                        background-color: $brand-blue;
-                        border-radius: 8px;
-                        color: $cf;
-                    }
-                }
-            }
-        }
-
-        a {
-            height: 57px;
-            display: flex;
-            align-items: center;
-            padding: 0 20px 0 20px;
-            color: $primary-text;
-            text-decoration: none;
-            font-size: 13px;
-            font-family: $ff-1;
-            transition: all 0.1s ease;
-            overflow: hidden;
-            position: relative;
-
-            &:hover{
-                border-radius: 8px;
-                background-color: $brand-blue;
-                color: $cf;
-            }
-        }
     }
 
     &__right{
@@ -337,4 +285,8 @@
         margin: auto;
         text-align: center;
     }
+}
+
+.p-20 {
+    padding: 0 20px;
 }

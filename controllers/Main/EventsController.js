@@ -9,10 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
+const log = require('electron-log');
+const { autoUpdater } = require("electron-updater");
 const Controller_1 = require("../Controller");
 const ChatModel_1 = require("../../models/ChatModel");
 const EventModel_1 = require("../../models/EventModel");
 const var_helper_1 = require("../../src/var_helper");
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
 class EventsController extends Controller_1.Controller {
     user_joined_room(user, room_data, date) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -61,6 +66,39 @@ class EventsController extends Controller_1.Controller {
                 language: language
             };
             this.send_data(this.events.change_app_state, obj);
+        });
+    }
+    checking_updates() {
+        return __awaiter(this, void 0, void 0, function* () {
+            autoUpdater.autoDownload = false;
+            autoUpdater.autoInstallOnAppQuit = false;
+            autoUpdater.checkForUpdates();
+            autoUpdater.on('update-available', (ev, info) => {
+                console.log('update-available');
+                this.send_data('checking_updates', true);
+            });
+            autoUpdater.on('update-not-available', (ev, info) => {
+                this.send_data('checking_updates', false);
+                console.log('update-not-available');
+            });
+            autoUpdater.on('download-progress', (progressObj) => {
+                console.log(progressObj.percent);
+            });
+            autoUpdater.on('update-downloaded', (ev, info) => {
+                console.log('dsfdsfsdfdsfsdfdsfs');
+                this.send_data('get_updates', 100);
+            });
+        });
+    }
+    get_updates() {
+        return __awaiter(this, void 0, void 0, function* () {
+            autoUpdater.downloadUpdate();
+        });
+    }
+    ;
+    install_updates() {
+        return __awaiter(this, void 0, void 0, function* () {
+            autoUpdater.quitAndInstall();
         });
     }
 }
