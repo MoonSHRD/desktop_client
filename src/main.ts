@@ -20,7 +20,7 @@ const { autoUpdater } = require("electron-updater")
 let mainWindow
 app.on('ready', async () => {
     let path = app.getPath('userData');
-    console.log(path);
+    console.log(`path ${path}`);
     try {
         let pug = await setupPug({pretty: true}, locals);
         pug.on('error', err => console.error('electron-pug error', err))

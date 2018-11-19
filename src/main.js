@@ -16,10 +16,12 @@ const SettingsModel_1 = require("../models/SettingsModel");
 const { app, BrowserWindow } = require('electron');
 const locals = { /* ...*/};
 const setupPug = require('electron-pug');
+const { autoUpdater } = require("electron-updater");
 // const Router = require('./router');
+let mainWindow;
 app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
     let path = app.getPath('userData');
-    console.log(path);
+    console.log(`path ${path}`);
     try {
         let pug = yield setupPug({ pretty: true }, locals);
         pug.on('error', err => console.error('electron-pug error', err));
