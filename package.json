@@ -1,6 +1,6 @@
 {
-  "name": "messanger_desktop_client",
-  "version": "0.0.1",
+  "name": "moonshard",
+  "version": "1.0.0",
   "description": "Messanger desktop client",
   "main": "./src/main.js",
   "contributors": [
@@ -33,7 +33,8 @@
     "dev:css": "node-sass --watch --include-path scss src/scss/index.scss src/css/index.min.css --source-map-embed true compressed",
     "prebuild:css": "node-sass --include-path scss src/scss/index.scss src/css/index.css --source-map-embed true",
     "build:css": "postcss --use autoprefixer -b \"last 2 versions\" < src/css/index.css | postcss --use cssnano > src/css/index.min.css",
-    "css": "npm run prebuild:css | npm run build:css"
+    "css": "npm run prebuild:css | npm run build:css",
+    "postinstall": "electron-builder install-app-deps"
   },
   "includeSources": true,
   "devDependencies": {

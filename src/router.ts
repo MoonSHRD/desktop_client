@@ -86,7 +86,7 @@ export class Router {
             this.online = true;
             if (this.loading) {
                 await this.controller_register.queue_controller('MenuController', 'init_main');
-                await this.controller_register.queue_controller('EventsController', 'checking_updates');
+                await this.controller_register.run_controller('EventsController', 'checking_updates');
 
                 this.loading=false;
             }

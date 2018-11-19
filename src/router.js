@@ -77,7 +77,7 @@ class Router {
             this.online = true;
             if (this.loading) {
                 yield this.controller_register.queue_controller('MenuController', 'init_main');
-                yield this.controller_register.queue_controller('EventsController', 'checking_updates');
+                yield this.controller_register.run_controller('EventsController', 'checking_updates');
                 this.loading = false;
             }
         }));

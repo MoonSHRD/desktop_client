@@ -3,7 +3,6 @@
     -webkit-user-drag: none;
     -webkit-app-region: no-drag;
     user-select: none;
-
     &:before,
     &:after{
         @extend *;
@@ -327,7 +326,6 @@ img{
         border-radius: 10px;
         transition: .12s ease;
     }
-
     &:hover{
         &::-webkit-scrollbar-track {
             background: opacify($brand-gray-100, 0.3);
@@ -432,3 +430,10 @@ img{
     }
 }
 /* NAV MENU (Settings/Wallet) */
+
+.pv10 {
+    padding: (10rem/$fz-num) 0;
+}
+.ph10{
+    padding: 0 (10rem / $fz-num);
+}
