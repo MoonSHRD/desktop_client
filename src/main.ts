@@ -11,8 +11,13 @@ import {SettingsModel} from "../models/SettingsModel";
 const {app, BrowserWindow} = require('electron');
 const locals = {/* ...*/};
 const setupPug = require('electron-pug');
+
+const { autoUpdater } = require("electron-updater")
+
+
 // const Router = require('./router');
 
+let mainWindow
 app.on('ready', async () => {
     try {
         let pug = await setupPug({pretty: true}, locals);
@@ -26,7 +31,7 @@ app.on('ready', async () => {
 
     await createConnection({
         type: "sqlite",
-        database: `${__dirname}/../sqlite/data.db`,
+        database: `sqlite/data.db`,
         entities: [
             __dirname + '/../models/' + "*.js"
         ],

@@ -1,6 +1,6 @@
 {
   "name": "messanger_desktop_client",
-  "version": "1.0.0",
+  "version": "0.0.5",
   "description": "Messanger desktop client",
   "main": "./src/main.js",
   "contributors": [
@@ -21,7 +21,7 @@
     "dist-win": "electron-builder --win",
     "start": "electron .",
     "npm_install": "npm install; ./node_modules/.bin/electron-rebuild  -f -w sqlite3",
-    "yarn_install": "yarn install; ./node_modules/.bin/electron-rebuild  -f -w sqlite3",
+    "yarn_install": "yarn install",
     "yarn_update": "yarn add moonshard_core@latest; ./node_modules/.bin/electron-rebuild  -f -w sqlite3",
     "package-linux": "electron-packager . Moonshard --overwrite --asar=true --platform=linux --arch=x64 --prune=true --out=release-builds --icon=src/icon.png --version-string.ProductName=\"Moonshard\"",
     "package-mac": "electron-packager . Moonshard --overwrite --asar=true --platform=darwin --arch=x64 --prune=true --out=release-builds --version-string.ProductName=\"Moonshard\"",
@@ -33,13 +33,13 @@
     "dev:css": "node-sass --watch --include-path scss src/scss/index.scss src/css/index.min.css --source-map-embed true compressed",
     "prebuild:css": "node-sass --include-path scss src/scss/index.scss src/css/index.css --source-map-embed true",
     "build:css": "postcss --use autoprefixer -b \"last 2 versions\" < src/css/index.css | postcss --use cssnano > src/css/index.min.css",
-    "css": "npm run prebuild:css | npm run build:css"
+    "css": "npm run prebuild:css | npm run build:css",
+    "postinstall": "electron-builder install-app-deps"
   },
   "includeSources": true,
   "devDependencies": {
-    "benchmark": "^2.1.4",
-    "electron": "^2.0.7",
-    "electron-builder": "^20.28.4",
+    "electron": "^3.0.8",
+    "electron-builder": "^20.33.2",
     "electron-packager": "^12.1.0",
     "electron-rebuild": "^1.8.2"
   },
@@ -68,12 +68,15 @@
     "animate.css": "^3.7.0",
     "autoprefixer": "^9.2.1",
     "autoresize-textarea": "^1.1.3",
+    "benchmark": "^2.1.4",
     "better-queue": "^3.8.10",
     "bootstrap": "^4.1.3",
     "bootstrap-notify": "^3.1.3",
     "bourbon": "^5.1.0",
     "cssnano": "^4.1.5",
+    "electron-log": "^2.2.17",
     "electron-pug": "^2.0.0",
+    "electron-updater": "^3.2.3",
     "ethers": "^4.0.10",
     "file-encryptor": "^0.1.1",
     "grpc": "^1.16.0",
@@ -101,6 +104,13 @@
     "web3": "^1.0.0-beta.36"
   },
   "build": {
+    "publish": [
+      {
+        "useMultipleRangeRequest": false,
+        "provider": "generic",
+        "url": "http://mnshrd.vialfeps.ru/updates/"
+      }
+    ],
     "appId": "moonshard",
     "linux": {
       "target": [

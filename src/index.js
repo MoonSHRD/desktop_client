@@ -537,8 +537,8 @@ window.onload = function () {
         })
 
         .on('keydown', '[data-toggle="tooltip2"]', function () {
-        $(this).tooltip('show');
-         })
+            $(this).tooltip('show');
+        })
 
         .on('backspace-down', '[data-toggle="tooltip2"]', function () {
             $(this).tooltip('hide');
@@ -683,6 +683,29 @@ window.onload = function () {
         ipcRenderer.send('show_popup', {id, type});
     });
 
+    function update_notify(title, message){
+        $.notify({
+            icon:  __dirname + '/img/navbar/img/logo.svg',
+            title: title,
+            message: message
+        },{
+
+            placement: {
+                from: 'bottom',
+                align: 'right'
+            },
+            type: 'minimalist',
+            delay: 5000,
+            icon_type: 'image',
+            template: '<div data-notify="container" class="col-xs-11 col-sm-5 alert alert-{0}" role="alert">' +
+                '<img data-notify="icon" class="float-left">' +
+                '<span data-notify="title">{1}</span>' +
+                '<span data-notify="message">{2}</span>' +
+                '</div>'
+        });
+    }
+
+
     // $(document).on('click', '[data-name=submit_suggest_to_channel]', function () {
     //     let textbox = $('[data-name=suggest_to_channel]');
     //     let text = textbox.val();
@@ -747,6 +770,57 @@ window.onload = function () {
             $('.notifyBlock').append((obj.html));
         }
     });
+
+    ipcRenderer.on('checking_updates', (event, data) => {
+        // $('#download_updates').css('width', obj+'%')
+        console.log(data)
+        if(data) {
+            setTimeout(() => {
+                if (data) $('#update_button').fadeIn().addClass('update_animate')
+
+                update_notify( 'New Version !', 'A new version of the Moonshard is available')
+
+
+
+            }, 1000)
+        }
+    });
+
+    ipcRenderer.on('get_updates', (event, obj) => {
+
+        console.log(typeof(obj))
+        if(obj == 100){
+
+            update_notify( 'Install updates', 'Now you can install updates')
+
+            $('#update_button').fadeIn();
+            $('[data-name=download_updates]').attr('data-name','install_updates')
+            setTimeout(()=>{
+                $('#download_img').fadeOut()
+
+                setTimeout(()=>{
+                    $('#update_img').fadeIn()
+                },500)
+            },500)
+
+        }
+        $('#download_updates').css('width', obj+'%')
+    });
+
+    $(document).on('click', '[data-name=download_updates]', function (e) {
+        $('#update_button').fadeOut();
+        update_notify('Download updates', 'Updates will download in the background')
+
+        ipcRenderer.send('get_updates', {});
+    });
+
+    $(document).on('click', '[data-name=install_updates]', function (e) {
+        ipcRenderer.send('install_updates', {});
+
+    });
+
+
+
 
     // Context menu
     $(document).mousedown(function (event) {

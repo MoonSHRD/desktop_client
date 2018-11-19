@@ -12,8 +12,7 @@
 
 
 .wallet-history__item.mb-3
-    button.btn.btn-link.btn-block(
-        type="button"
+    .btn-link.btn-block.p-10t(
         data-toggle="collapse"
         data-target="#id_"+id
         aria-expanded="false"
@@ -25,7 +24,8 @@
                     include ../../../img/icons/arrow-circle.svg
             .col-2.text-truncate #{p_opponent}
             .col-2 #{amount} Coin
-            .col-5.text-truncate #{id}
+            .col-5.text-truncate
+                a(href="http://ya.ru/" target="_blank") #{id}
             .col-2 #{p_time.date}
                 br
                 | #{p_time.time}

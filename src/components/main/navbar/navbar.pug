@@ -57,6 +57,18 @@
                     include ../../../img/navbar/img/notification.svg
                 span.text (data-translate-key="NOTIFICATIONS") Notifications
 
+        li#update_button(style='display:none' data-name='download_updates')
+            a.menu__item.not_active(data-id="" style='padding: 0')
+                .progress
+                    #download_updates.progress-bar(role="progressbar", aria-valuenow="70", aria-valuemin="0", aria-valuemax="100", style="width:0%")
+                        div#download_img(class='image' style='width: 100%; position: absolute; display: block')
+                            //img(src="https://image.flaticon.com/icons/svg/875/875100.svg")
+                            include ../../../img/navbar/img/download.svg
+                            //span.text (data-translate-key="NOTIFICATIONS") Notifications
+                        div#update_img(class='image' style='width: 100%; position: absolute; display:none')
+                            //img(src="https://image.flaticon.com/icons/svg/875/875100.svg")
+                            include ../../../img/navbar/img/refresh.svg
+
         li(class='exit')
             a.menu__item.menu__item_exit.not_active
                 div(class='image')

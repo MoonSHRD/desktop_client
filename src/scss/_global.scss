@@ -3,7 +3,6 @@
     -webkit-user-drag: none;
     -webkit-app-region: no-drag;
     user-select: none;
-
     &:before,
     &:after{
         @extend *;
@@ -316,9 +315,11 @@ img{
     }
     &::-webkit-scrollbar {
         //width: 2px;
+        position: absolute;
         width: 4px;
         background-color: transparent;
         transition: .2s ease;
+        right: 4px;
     }
     &::-webkit-scrollbar-thumb{
         background-color: transparent;
@@ -429,3 +430,7 @@ img{
     }
 }
 /* NAV MENU (Settings/Wallet) */
+
+.p-10t {
+    padding: 10px 0;
+}

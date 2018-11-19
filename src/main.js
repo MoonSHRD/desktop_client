@@ -16,7 +16,9 @@ const SettingsModel_1 = require("../models/SettingsModel");
 const { app, BrowserWindow } = require('electron');
 const locals = { /* ...*/};
 const setupPug = require('electron-pug');
+const { autoUpdater } = require("electron-updater");
 // const Router = require('./router');
+let mainWindow;
 app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
     try {
         let pug = yield setupPug({ pretty: true }, locals);
@@ -29,7 +31,7 @@ app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
     let height = 700;
     yield typeorm_1.createConnection({
         type: "sqlite",
-        database: `${__dirname}/../sqlite/data.db`,
+        database: `sqlite/data.db`,
         entities: [
             __dirname + '/../models/' + "*.js"
         ],
