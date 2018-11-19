@@ -974,6 +974,9 @@ window.onload = function () {
     });
 
     $('[data-toggle="collapse"]').collapse('toggle');
+    $(document).on('click', '[data-toggle="collapse"] a', function () {
+        e.preventDefault();
+    });
 
     let scrollBottom = (target = '[data-msg-history]', child = '[data-msg-list]') => {
         let param = {
