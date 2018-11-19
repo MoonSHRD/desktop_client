@@ -374,8 +374,8 @@ window.onload = function () {
                 chat.find('[data-name=chat_last_text]').text(obj.message.text);
                 console.log(obj);
 
-                chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
-                chat.find('[data-name=unread_messages]').show();
+                // chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
+                // chat.find('[data-name=unread_messages]').show();
             }
             chat.prependTo($('.chats ul')[0]);
             console.log('1');
@@ -393,7 +393,18 @@ window.onload = function () {
             $('[data-msg-list]').append(obj.html);
             scrollDown('[data-msg-history]');
         } else {
-            chat.find('[data-name=unread_messages]').text(obj.unread_messages);
+            // chat.find('[data-name=unread_messages]').text(obj.unread_messages);
+            if (obj.message.fresh) {
+                let un_m=chat.find('[data-name=unread_messages]');
+                let txt_now=un_m.text();
+                if (txt_now=='0')
+                    un_m.text(1);
+                else
+                    un_m.text(un_m.text()+1);
+                un_m.show();
+                // chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
+                // chat.find('[data-name=unread_messages]').show();
+            }
         }
         // ipcRenderer.send('load_chat s', 'menu_chats');
     });

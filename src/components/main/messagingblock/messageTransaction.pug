@@ -2,8 +2,13 @@ div.message(class=mine ? "message_out" : "message_in")
     .message__avatar
         img.rounded-circle.d-block(src = sender_avatar width = 44 height = 44)
     .message__bubble
-        .message__text.message__text_transaction
-            h3.h4 Transaction Details
-            .transaction__send Sent: 239490.33 Zilliqa(ZIL)
-            .transaction__id TO:0x45df2c54935a90bbcae388c7c74c5e250804ab4d
-        .message__date.d-block #{time.toLocaleString()}
+        .message__text Transaction !{"\n"}
+            //| Transaction
+            | Amount: #{amount} Coin !{"\n"}
+            a(href='http://blocks.moonshrd.io/tx/'+id) Block explorer
+        //.message__text.message__text_transaction
+        //    h3.h4 Transaction
+        //    .transaction__send Amount: #{amount} Coin
+        //    .transaction__id
+        //        a(href='http://blocks.moonshrd.io/tx/'+id) Block explorer link
+        .message__date.d-block #{time}

@@ -32,6 +32,7 @@ export class FileModel extends BaseEntity {
     @ManyToOne(type => ChatModel, chat => chat.files)
     chat: ChatModel;
 
+    messageId:string;
     file:any=null;
     preview:boolean=false;
     downloaded:boolean=false;

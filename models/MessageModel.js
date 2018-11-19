@@ -50,6 +50,11 @@ let MessageModel = MessageModel_1 = class MessageModel extends typeorm_1.BaseEnt
             });
         });
     }
+    static getFiles(message) {
+        return __awaiter(this, void 0, void 0, function* () {
+            message.files = (yield MessageModel_1.findOne(message.id, { relations: ['files'] })).files;
+        });
+    }
     fill_sender_data() {
         if (this.sender && (this.chat.type !== var_helper_1.group_chat_types.channel || this.mine)) {
             this.sender_avatar = this.sender.avatar;
