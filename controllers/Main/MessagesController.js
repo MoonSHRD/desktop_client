@@ -19,6 +19,7 @@ const Electron = require("electron");
 var Notification = Electron.Notification;
 var nativeImage = Electron.nativeImage;
 const Benchmark = require("benchmark");
+const typeorm_1 = require("typeorm");
 // import {Benchmark} from 'benchmark';
 let benchmark = new Benchmark.Suite;
 // import * as eNotify from 'electron-notify'
@@ -134,13 +135,82 @@ class MessagesController extends Controller_1.Controller {
             }
         });
     }
+    render_transaction(message) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let self_info = yield this.get_self_info();
+            message.mine = message.senderId ? (self_info.id === message.senderId) : false;
+            // message.fill_sender_data();
+            for (let num in message.files) {
+                if (Helpers_1.check_file_preview(message.files[num].type)) {
+                    message.files[num].preview = true;
+                    if (!(yield Helpers_1.read_file(message.files[num]))) {
+                        message.files[num].file = (yield this.ipfs.get_file(message.files[num].hash)).file;
+                        yield Helpers_1.save_file(message.files[num]);
+                    }
+                    // console.log(message.files[num]);
+                }
+                else {
+                    if (Helpers_1.check_file_exist(message.files[num]))
+                        message.files[num].downloaded = true;
+                }
+            }
+            let date_time = yield Helpers_1.Helper.formate_date(new Date(message.time), { locale: "ru:", for: "dialog_date" });
+            message.time = Helpers_1.Helper.formate_date(new Date(message.time), { locale: 'ru', for: 'message' });
+            let html = this.render('main/messagingblock/message.pug', message);
+            let html_date = this.render("main/messagingblock/dialog_date.pug", { time: date_time });
+            if (message.mine)
+                message.text = 'Вы: ' + message.text;
+            const data = {
+                id: message.chat.id,
+                html: html,
+                html_date: html_date,
+                message: message,
+                time: date_time,
+                unread_messages: message.chat.unread_messages
+            };
+            yield this.send_data('received_message', data);
+            if (message.notificate) {
+                let notif = new Notification({
+                    title: message.sender_name,
+                    body: message.text,
+                    icon: nativeImage.createFromBuffer(Helpers_1.b64img_to_buff(message.sender_avatar))
+                });
+                notif.show();
+            }
+        });
+    }
+    getMsgTxs(chat_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let self_info = yield this.get_self_info();
+            let opp_id = ChatModel_1.ChatModel.get_chat_opponent_id(chat_id, self_info.id);
+            return yield typeorm_1.getConnection()
+                .createQueryRunner()
+                .query(`select *, "${chat_id}" as chatId from 
+                   ((select id,"message" as type, text, time, senderId, null as amount
+                       from message_model msg
+                       where msg.chatId == "${chat_id}"
+                   UNION
+                   select id,"transaction" as type, null as text, time, fromId as senderId, amount
+                       from transaction_model tx
+                       where tx.fromId="${opp_id}" or tx.toId="${opp_id}") msgs
+                   left join (
+                       select id as senderId,avatar from user_model
+                   ) user on user.senderId=msgs.senderId)
+                   order by msgs.time`);
+        });
+    }
     render_chat_messages(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
             let messages = yield MessageModel_1.MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+            // let messages = await this.getMsgTxs(chat_id);
             let last_time;
             for (let num = messages.length - 1; num >= 0; --num) {
-                if (last_time !== new Date(messages[num].time))
-                    yield this.render_message(messages[num]);
+                // if (last_time!==new Date(messages[num].time))
+                yield this.render_message(messages[num]);
+                // if (messages[num].type=='message')
+                //     await this.render_message(messages[num]);
+                // if (messages[num].type=='transaction')
+                //     await this.render_transaction(messages[num]);
             }
         });
     }

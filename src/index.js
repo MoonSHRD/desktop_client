@@ -9,6 +9,9 @@ require('bootstrap');
 require('bootstrap-notify');
 require('slick-carousel');
 
+const shell = require('electron').shell;
+//open links externally by default
+
 let p = null;
 let d = null;
 let r = null;
@@ -50,6 +53,11 @@ window.onload = function () {
         });
 
     };
+
+    $(document).on('click', 'a[href^="http"]', function(event) {
+        event.preventDefault();
+        shell.openExternal(this.href);
+    });
 
     $(document).on('click','.copyButton',function () {
         // if (document.selection) {
