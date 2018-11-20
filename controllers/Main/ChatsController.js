@@ -123,11 +123,14 @@ class ChatsController extends Controller_1.Controller {
                 }
             }
             else if (data.type === this.chat_types.user) {
-                let user;
-                try {
-                    user = yield ChatModel_1.ChatModel.get_chat_opponent(data.id, self_info.id);
-                }
-                catch (e) {
+                // let user=new UserModel();
+                // try {
+                //     user = await ChatModel.get_chat_opponent(data.id,self_info.id);
+                // } catch (e) {
+                //     user = this.controller_register.get_controller_parameter('ChatsController', 'found_chats').users[data.id];
+                // }
+                let user = yield ChatModel_1.ChatModel.get_chat_opponent(data.id, self_info.id);
+                if (!user) {
                     user = this.controller_register.get_controller_parameter('ChatsController', 'found_chats').users[data.id];
                     user.id = ChatModel_1.ChatModel.get_chat_opponent_id(data.id, self_info.id);
                 }

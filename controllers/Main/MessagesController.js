@@ -75,7 +75,8 @@ class MessagesController extends Controller_1.Controller {
             let self_info = yield this.get_self_info();
             console.log('get_chat_messages', id, type);
             let chat = yield ChatModel_1.ChatModel.get_chat_with_events(id);
-            switch (chat.type) {
+            // let switcher=chat?chat.type:type;
+            switch (chat ? chat.type : type) {
                 case this.chat_types.user:
                     if (!chat)
                         return this.load_founded_chat(id);
@@ -193,18 +194,16 @@ class MessagesController extends Controller_1.Controller {
     }
     render_chat_messages(chat_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            // let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+            let chat = yield ChatModel_1.ChatModel.findOne(chat_id);
+            let self_info = yield this.get_self_info();
             let messages = yield this.getMsgTxs(chat_id);
-            // console.log(messages);
-            let last_time;
             for (let num = messages.length - 1; num >= 0; --num) {
-                // if (last_time!==new Date(messages[num].time))
-                // await this.render_message(messages[num]);
+                if (chat.type == this.group_chat_types.channel && messages[num].senderId != self_info.id) {
+                    messages[num].sender_avatar = chat.avatar;
+                }
                 if (messages[num].type == 'message')
                     yield this.render_message(messages[num]);
                 if (messages[num].type == 'transaction') {
-                    console.log(`'transaction' == ${messages[num].type}`);
-                    console.log(`'transaction'`);
                     messages[num].text = 'Транзакция';
                     yield this.render_transaction(messages[num]);
                 }
@@ -384,6 +383,10 @@ class MessagesController extends Controller_1.Controller {
                     message.files.push(fileModel);
                 }
             }
+            message.senderId = userModel.id;
+            message.sender_avatar = userModel.avatar;
+            message.sender_name = userModel.name;
+            message.chatId = chat.id;
             yield this.render_message(message);
         });
     }
@@ -431,6 +434,7 @@ class MessagesController extends Controller_1.Controller {
                     messageModel.files.push(fileModel);
                 }
             }
+            messageModel.sender_avatar = chat.avatar;
             yield this.render_message(messageModel);
         });
     }
