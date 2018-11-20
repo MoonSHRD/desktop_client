@@ -3,7 +3,7 @@ import {web3_config} from "../src/env_config";
 import {TransactionModel} from "../models/TransactionModel";
 import {Grpc} from "../grpc/grpc";
 let EventEmitter = require('events').EventEmitter;
-let SubFactoryAbi = require("./abis/SubFactory");
+// let SubFactoryAbi = require("./abis/SubFactory");
 let TokenFactoryAbi = require("./abis/TokenFactory");
 let TokenFactoryAddress='0x4dec573feb329642e2f98043b7eb09ae8265ed0b';
 
@@ -83,17 +83,17 @@ export class Web3S {
         // });
 
         this.subs["newTransaction"] = await this.web3.eth.subscribe('pendingTransactions',async (err,txId)=>{
-            console.log('pending tx');
+            // console.log('pending tx');
             if (err)
                 console.log(err);
             else {
-                console.log('txId:',txId);
+                // console.log('txId:',txId);
                 let tx=await this.web3.eth.getTransaction(txId);
-                console.log('tx data:',tx);
-                let from=tx.from.toLowerCase();
-                if (tx.to==null)
+                // console.log('tx data:',tx);
+                if (!tx || !tx.to || !tx.from)
                     return;
                 let to=tx.to.toLowerCase();
+                let from=tx.from.toLowerCase();
                 if (from==this.addr || to==this.addr) {
                     let transactionModel=new TransactionModel();
                     transactionModel.id=tx.hash;
@@ -123,7 +123,7 @@ export class Web3S {
     }
 
     async CreateToken(data) {
-        console.log(data);
+        // console.log(data);
         return await this.TokenFactory.methods.createTokensaleToken(
             data['t-name'],
             data['t-symbol'],

@@ -69,7 +69,7 @@ class ChatsController extends Controller {
             userModel.domain = user.domain;
             userModel.online = true;
             console.log('saving new user ' + userModel.id);
-            console.log(userModel);
+            // console.log(userModel);
             await userModel.save();
 
             let user_chat = new ChatModel();
@@ -100,6 +100,8 @@ class ChatsController extends Controller {
         for (let num in chats) {
             chats[num].active = (chats[num].id === settings.last_chat);
             await this.load_chat(chats[num], menu_chat);
+            if (chats[num].active)
+                await this.controller_register.run_controller('MessagesController', 'get_chat_messages', {id:chats[num].id,type:this.chat_types.user});
         }
     }
 
@@ -227,7 +229,7 @@ class ChatsController extends Controller {
     }
 
     async create_group(group_data) {
-        console.log(group_data);
+        // console.log(group_data);
         // let group_type=group_data.type?group_data.type:this.group_chat_types.channel;
         if (group_data.openPrivate=='on'){
             // let price=64;
@@ -252,9 +254,9 @@ class ChatsController extends Controller {
         let data = await this.grpc.CallMethod('GetObjsData',{str: group_name,obj:'all',prt:0});
         if (data.err)
             throw data.err;
-        console.log(data);
+        // console.log(data);
         let fData=JSON.parse(data.data.data);
-        console.log(fData);
+        // console.log(fData);
         let users=fData.Users;
         for (let i in users){
             let user = users[i];

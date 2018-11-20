@@ -228,7 +228,7 @@ export class Router {
         });
 
         this.listen_event(this.ipcMain, "reading_messages", async (event, chat_id) => {
-            console.log("Reading msg from", chat_id);
+            // console.log("Reading msg from", chat_id);
             await this.controller_register.run_controller("MessagesController", "reading_messages", chat_id);
         });
 
