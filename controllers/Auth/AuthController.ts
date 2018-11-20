@@ -15,7 +15,7 @@ const bip39 = require('bip39');
 
 class AuthController extends Controller {
 
-    private connection_tries:number=-1;
+    // private connection_tries:number=-1;
 
     async init_auth() {
         let account = await AccountModel.findOne(1);
@@ -38,10 +38,10 @@ class AuthController extends Controller {
     private async auth(account: AccountModel,first:boolean=false) {
         let user=await this.get_self_info();
         // let user_json=JSON.stringify(user);
-        if (this.connection_tries === 9)
-            this.connection_tries=0;
-        else
-            this.connection_tries+=1;
+        // if (this.connection_tries === 9)
+        //     this.connection_tries=0;
+        // else
+        //     this.connection_tries+=1;
         await this.ipfs.connect();
         console.log('IPFS connected');
         // console.log(account);
@@ -65,7 +65,7 @@ class AuthController extends Controller {
         this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
         account.host = this.dxmpp_config.host;
         account.jidhost = this.dxmpp_config.jidhost;
-        account.port = this.dxmpp_config.port+this.connection_tries;
+        account.port = this.dxmpp_config.port;
         await this.dxmpp.connect(account);
     }
 
