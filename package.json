@@ -1,6 +1,6 @@
 {
   "name": "messanger_desktop_client",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "Messanger desktop client",
   "main": "./src/main.js",
   "contributors": [
@@ -21,7 +21,7 @@
     "dist-win": "electron-builder --win",
     "start": "electron .",
     "npm_install": "npm install; ./node_modules/.bin/electron-rebuild  -f -w sqlite3",
-    "yarn_install": "yarn install",
+    "yarn_install": "yarn install; ./node_modules/.bin/electron-rebuild  -f -w sqlite3",
     "yarn_update": "yarn add moonshard_core@latest; ./node_modules/.bin/electron-rebuild  -f -w sqlite3",
     "package-linux": "electron-packager . Moonshard --overwrite --asar=true --platform=linux --arch=x64 --prune=true --out=release-builds --icon=src/icon.png --version-string.ProductName=\"Moonshard\"",
     "package-mac": "electron-packager . Moonshard --overwrite --asar=true --platform=darwin --arch=x64 --prune=true --out=release-builds --version-string.ProductName=\"Moonshard\"",

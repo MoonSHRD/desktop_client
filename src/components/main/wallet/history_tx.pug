@@ -24,7 +24,8 @@
                     include ../../../img/icons/arrow-circle.svg
             .col-2.text-truncate #{p_opponent}
             .col-2 #{amount} Coin
-            .col-5.text-truncate #{id}
+            .col-5.text-truncate
+                a(href="http://blocks.moonshrd.io/tx/"+id) #{id}
             .col-2 #{p_time.date}
                 br
                 | #{p_time.time}

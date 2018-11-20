@@ -19,6 +19,8 @@ const { autoUpdater } = require("electron-updater")
 
 let mainWindow
 app.on('ready', async () => {
+    let path = app.getPath('userData');
+    console.log(path);
     try {
         let pug = await setupPug({pretty: true}, locals);
         pug.on('error', err => console.error('electron-pug error', err))
@@ -31,7 +33,8 @@ app.on('ready', async () => {
 
     await createConnection({
         type: "sqlite",
-        database: `sqlite/data.db`,
+        // database: `${__dirname}/../sqlite/data.db`,
+        database: path+'/data.db',
         entities: [
             __dirname + '/../models/' + "*.js"
         ],
