@@ -326,7 +326,6 @@ img{
         border-radius: 10px;
         transition: .12s ease;
     }
-
     &:hover{
         &::-webkit-scrollbar-track {
             background: opacify($brand-gray-100, 0.3);
@@ -432,6 +431,17 @@ img{
 }
 /* NAV MENU (Settings/Wallet) */
 
-.p-10t {
-    padding: 10px 0;
+.pv10 {
+    padding: (10rem/$fz-num) 0;
 }
+.ph10{
+    padding: 0 (10rem / $fz-num);
+}
+
+/* FOR BILD */
+//.bild-none{
+//    display: none!important;
+//}
+//.bild-hidden{
+//    visibility: hidden!important;
+//}

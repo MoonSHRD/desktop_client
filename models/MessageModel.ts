@@ -38,9 +38,12 @@ export class MessageModel extends BaseEntity {
     mine:boolean;
     sender_avatar:string;
     sender_name:string;
+    senderId:string;
+    chatId:string;
 
     notificate:boolean=false;
     fresh:boolean=false;
+    amount:number;
 
     static async get_chat_messages_with_sender(chat_id:string):Promise<MessageModel[]>{
         return await MessageModel.find({relations:['sender'],where:{chat:chat_id}})
@@ -55,6 +58,10 @@ export class MessageModel extends BaseEntity {
                 id: "DESC"
             }
         });
+    }
+
+    static async getFiles(message){
+        message.files=(await MessageModel.findOne(message.id,{relations:['files']})).files;
     }
 
     fill_sender_data(){

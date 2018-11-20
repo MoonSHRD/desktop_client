@@ -84,18 +84,24 @@ class WalletController extends Controller {
             // userModel=user;
             return;
         }
-        let transaction=new TransactionModel();
+        // let transaction=new TransactionModel();
         let message=new MessageModel();
         message.time=Date.now();
         message.notificate=false;
         message.fresh=true;
-        message.text=`Transaction
-Amount: ${data.amount} Coin.
-Link: http://blocks.moonshrd.io/tx/${tx.transactionHash}`;
-        message.sender=self_info;
-        message.chat=chatModel;
-        await message.save();
-        await this.controller_register.run_controller('MessagesController','render_message',message)
+        message.amount=data.amount;
+//         message.text=`Transaction
+// Amount: ${data.amount} Coin.
+// Link: http://blocks.moonshrd.io/tx/${tx.transactionHash}`;
+        message.senderId=self_info.id;
+        message.sender_avatar=self_info.avatar;
+        message.sender_name=self_info.name;
+        message.chatId=chatModel.id;
+        message.mine=true;
+        message.text='Транзакция';
+        // await message.save();
+        // await this.controller_register.run_controller('MessagesController','render_message',message);
+        await this.controller_register.run_controller('MessagesController','render_transaction',message);
     }
 
     async get_contacts() {
@@ -106,12 +112,29 @@ Link: http://blocks.moonshrd.io/tx/${tx.transactionHash}`;
 
     async handle_tx(tx:TransactionModel) {
         let self_info=await this.get_self_info();
-        console.log(tx);
-        let text=`Transaction
-Amount: ${TransactionModel.NormalizeValue(tx.amount)} Coin.
-Link: http://blocks.moonshrd.io/tx/${tx.id}`;
-        if (tx.from.id!=self_info.id)
-            await this.controller_register.run_controller('MessagesController', 'received_message', {id:tx.from.id,domain:'localhost'}, text, Date.now(), []);
+        if (tx.from.id==self_info.id)
+            return;
+//         console.log(tx);
+//         let text=`Transaction
+// Amount: ${TransactionModel.NormalizeValue(tx.amount)} Coin.
+// Link: http://blocks.moonshrd.io/tx/${tx.id}`;
+
+        let message=new MessageModel();
+        message.time=Date.now();
+        message.notificate=true;
+        message.fresh=true;
+        message.amount=tx.amount;
+        message.text='Транзакция';
+//         message.text=`Transaction
+// Amount: ${data.amount} Coin.
+// Link: http://blocks.moonshrd.io/tx/${tx.transactionHash}`;
+        message.senderId=tx.from.id;
+        message.sender_avatar=tx.from.avatar;
+        message.sender_name=tx.from.name;
+        message.chatId=ChatModel.get_user_chat_id(self_info.id,tx.from.id);
+        message.mine=false;
+        // if (tx.from.id!=self_info.id)
+        await this.controller_register.run_controller('MessagesController', 'render_transaction', message);
 
     };
 }

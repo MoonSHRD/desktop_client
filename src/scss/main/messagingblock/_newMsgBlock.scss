@@ -269,6 +269,9 @@ a.join_button {
     }
 
     &__input {
+        @extend .custom-scrollbar;
+        overflow-x: hidden;
+        overflow-y: auto;
         @include size(auto, auto);
         border-radius: 10px;
         border-style: none;
@@ -374,7 +377,7 @@ a.join_button {
         padding: 15px;
         position: relative;
 
-        .btn{
+        [data-toggle="scrollDown"]{
             @include size(2.5rem);
             border-radius: 50%;
             display: flex;
@@ -430,7 +433,7 @@ a.join_button {
         box-shadow: 0 0 13px rgba(214, 214, 214, 0.5);
         position: relative;
         display: inline-block;
-        padding: 10px 15px;
+        padding: (10rem/$fz-num) (15rem/$fz-num);
         border-radius: 10px;
         font-size: 1.2em;
         max-width: 400px;
@@ -495,6 +498,63 @@ a.join_button {
     &_in {
     }
 }
+/* Сообщение о транзакции */
+.transaction{
+    padding: 0;
+
+    &__header{
+        border-bottom: 1px solid rgba($c0, .1);
+        padding: (5rem/$fz-num) (15rem/$fz-num);
+        *{
+            margin: 0;
+        }
+    }
+
+    &__title{
+        font-size: 1.25rem;
+        margin: 0;
+    }
+
+    &__body{
+        padding: (5rem/$fz-num) (15rem/$fz-num);
+    }
+
+    &__footer{
+        border-top: 1px solid rgba($c0, .1);
+        padding: 0;
+        overflow: hidden;
+
+        > .btn{
+            border-radius: 0 0 10px 10px;
+            box-shadow : none;
+            background-color: lighten($brand-primary,35%);
+            border-color: lighten($brand-primary,35%);
+            color: $cf;
+
+            &:hover,
+            &:active{
+                background-color: lighten($brand-primary,15%);
+                border-color: lighten($brand-primary,15%);
+            }
+
+            .message_out &{
+                background-color: darken($brand-blue,20%);
+                border-color: darken($brand-blue,20%);
+
+                &:hover,
+                &:active{
+                    background-color: darken($brand-blue,30%);
+                    border-color: darken($brand-blue,30%);
+                }
+            }
+        }
+
+        .message__date{
+            padding: 0 (15rem/$fz-num);
+        }
+    }
+}
+/* /Сообщение о транзакции */
 
 .imageOutputFile {
     margin-top: 10px;

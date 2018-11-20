@@ -21,7 +21,7 @@ const { autoUpdater } = require("electron-updater");
 let mainWindow;
 app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
     let path = app.getPath('userData');
-    console.log(path);
+    console.log(`path ${path}`);
     try {
         let pug = yield setupPug({ pretty: true }, locals);
         pug.on('error', err => console.error('electron-pug error', err));
@@ -46,7 +46,7 @@ app.on('ready', () => __awaiter(this, void 0, void 0, function* () {
         width = settings.width;
         height = settings.height;
     }
-    let mainWindow = new BrowserWindow({ width: width, minWidth: 1100, height: height, minHeight: 700, resizable: true, show: false, webPreferences: {
+    let mainWindow = new BrowserWindow({ width: width, minWidth: 1000, height: height, minHeight: 700, resizable: true, show: false, webPreferences: {
             nodeIntegration: true
         }, icon: __dirname + '/icon.png' });
     // mainWindow.webContents.openDevTools();

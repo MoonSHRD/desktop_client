@@ -199,7 +199,7 @@ window.onload = function () {
         console.log(arg);
     });
 
-    let widthMsgWindow = (target) => {
+    let widthMsgWindow = (target = '[data-msgs-window]') => {
         let msgWindow =  document.querySelector(target);
         if ( msgWindow ) {
             if (msgWindow.offsetWidth > 900) {
@@ -259,16 +259,16 @@ window.onload = function () {
     });
 
     $(document).on('keydown','.send_message__input',function(e) {
+        autoResizeTextarea();
         if($(this).val() === '') {
             $(this).attr('rows', 1);
-        };
-        if($(this).val() === '' && event.keyCode == 13) {
-            event.preventDefault();
-        };
-
-        if ( event.keyCode === 13 && $(this).val()!=='') {
-            ResizeTextArea(this,0);
         }
+        if($(this).val() === '' && event.keyCode === 13) {
+            event.preventDefault();
+        }
+        // if ( event.keyCode === 13 && $(this).val()!=='') {
+        //     ResizeTextArea(this,0);
+        // }
     });
 
     $(document).on('input','.send_message__input',function(e) {
@@ -283,19 +283,20 @@ window.onload = function () {
         // console.log('paste!');
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
         let val = $(this).text();
-        if($(this).val() !==''){
-            $(this).attr('rows', $(this).attr('rows'));
-        } else {
-            ResizeTextArea(this,1);
-        }
+        // if($(this).val() !==''){
+        //     $(this).attr('rows', $(this).attr('rows'));
+        // } else {
+        //     ResizeTextArea(this,1);
+        // }
         console.log(text);
 
     });
 
 
     $(document).on('click', '[data-toggle="send-msg"]', function () {
-        $('[data-msg="data-msg"]').focus();
         send_message();
+        autoResizeTextarea();
+        $('[data-msg="data-msg"]').focus();
     });
 
     function send_message(){
@@ -374,8 +375,8 @@ window.onload = function () {
                 chat.find('[data-name=chat_last_text]').text(obj.message.text);
                 console.log(obj);
 
-                chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
-                chat.find('[data-name=unread_messages]').show();
+                // chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
+                // chat.find('[data-name=unread_messages]').show();
             }
             chat.prependTo($('.chats ul')[0]);
             console.log('1');
@@ -393,7 +394,18 @@ window.onload = function () {
             $('[data-msg-list]').append(obj.html);
             scrollDown('[data-msg-history]');
         } else {
-            chat.find('[data-name=unread_messages]').text(obj.unread_messages);
+            // chat.find('[data-name=unread_messages]').text(obj.unread_messages);
+            if (obj.message.fresh) {
+                let un_m=chat.find('[data-name=unread_messages]');
+                let txt_now=un_m.text();
+                if (txt_now=='0')
+                    un_m.text(1);
+                else
+                    un_m.text(un_m.text()+1);
+                un_m.show();
+                // chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
+                // chat.find('[data-name=unread_messages]').show();
+            }
         }
         // ipcRenderer.send('load_chat s', 'menu_chats');
     });
@@ -407,6 +419,7 @@ window.onload = function () {
         // }
         const chat_box = $('.chats ul');
         const user = chat_box.find('#' + obj.id);
+        widthMsgWindow();
         if (user.length) {
             user.replaceWith(obj.html);
         } else {
@@ -779,43 +792,43 @@ window.onload = function () {
 
     ipcRenderer.on('checking_updates', (event, data) => {
         // $('#download_updates').css('width', obj+'%')
-        console.log(data)
+        console.log(data);
         if(data) {
             setTimeout(() => {
-                if (data) $('#update_button').fadeIn().addClass('update_animate')
+                if (data) $('#update_button').fadeIn().addClass('update_animate');
 
-                update_notify( 'New Version !', 'A new version of the Moonshard is available')
+                update_notify( 'New Version !', 'A new version of the Moonshard is available');
 
 
 
-            }, 1000)
+            }, 1000);
         }
     });
 
     ipcRenderer.on('get_updates', (event, obj) => {
 
-        console.log(typeof(obj))
+        console.log(typeof(obj));
         if(obj == 100){
 
-            update_notify( 'Install updates', 'Now you can install updates')
+            update_notify( 'Install updates', 'Now you can install updates');
 
             $('#update_button').fadeIn();
-            $('[data-name=download_updates]').attr('data-name','install_updates')
+            $('[data-name=download_updates]').attr('data-name','install_updates');
             setTimeout(()=>{
-                $('#download_img').fadeOut()
+                $('#download_img').fadeOut();
 
                 setTimeout(()=>{
-                    $('#update_img').fadeIn()
-                },500)
-            },500)
+                    $('#update_img').fadeIn();
+                },500);
+            },500);
 
         }
-        $('#download_updates').css('width', obj+'%')
+        $('#download_updates').css('width', obj+'%');
     });
 
     $(document).on('click', '[data-name=download_updates]', function (e) {
         $('#update_button').fadeOut();
-        update_notify('Download updates', 'Updates will download in the background')
+        update_notify('Download updates', 'Updates will download in the background');
 
         ipcRenderer.send('get_updates', {});
     });
@@ -948,7 +961,7 @@ window.onload = function () {
         while ( true ) {
             last = strtocount.indexOf('\n', last+1);
             hard_lines ++;
-            if ( last == -1 ) break;
+            if ( last === -1 ) break;
         }
         var soft_lines = Math.ceil(strtocount.length / (cols-1));
         var hard = eval('hard_lines ' + unescape('%3e') + 'soft_lines;');
@@ -957,9 +970,17 @@ window.onload = function () {
     }
 
 // функция вызывается при каждом нажатии клавиши в области ввода текста
-    function ResizeTextArea(the_form, min_rows) {
-        the_form.rows = Math.max(min_rows, countLines(the_form.value,the_form.cols) );
-    }
+//     function ResizeTextArea(the_form, min_rows) {
+//         the_form.rows = Math.max(min_rows, countLines(the_form.value,the_form.cols) );
+//     }
+    let autoResizeTextarea = (element = '[data-msg]') => {
+        let el = document.querySelector(element);
+        let offset = el.offsetHeight - el.clientHeight;
+        console.log(el.scrollHeight + offset, offset);
+        setTimeout( function() {
+            $(element).css('height', 'auto').css('height', el.scrollHeight + offset);
+        }, 0);
+    };
 
     $(document).on('click', '[data-toggle="switcher"]', function(e) {
         let $this = $(this);
@@ -972,6 +993,9 @@ window.onload = function () {
     });
 
     $('[data-toggle="collapse"]').collapse('toggle');
+    $(document).on('click', '[data-toggle="collapse"] a', function (e) {
+        e.preventDefault();
+    });
 
     let scrollBottom = (target = '[data-msg-history]', child = '[data-msg-list]') => {
         let param = {
@@ -993,13 +1017,25 @@ window.onload = function () {
             }
 
             /* Скролл даты */
-            if ( $('.dialogDate').length ) {
-                $('.dialogDate').addClass('slicky');
-            }
+            // if ( $('.dialogDate').length ) {
+            //     $('.dialogDate').addClass('slicky');
+            // }
             /* /Скролл даты */
         }
 
     }, true);
+
+
+    const wayElem = document.getElementsByClassName('dialogDate');
+    if (wayElem.length > 0) {
+        let waypoint = new Waypoint({
+            element: wayElem[0],
+            handler: function(direction) {
+                console.log('Direction: ' + direction);
+            },
+            context: document.querySelector('data-msg-list'),
+        });
+    }
 
     $(document).on('click', '[name=change_download]', function (e) {
         dialog.showOpenDialog({
@@ -1056,29 +1092,22 @@ window.onload = function () {
         // let data_arr=$(this).closest('form');
         // console.log(data_arr);
         // return;
+        let sendTo = document.getElementById('sendTokenTo');
         let data_arr = $(this).closest('tr').find('input').serializeArray();
         let data = {};
         data_arr.forEach((el) => {
             data[el.name] = el.value;
         });
         // console.log(data_arr);
-        // console.log(data);
-        ipcRenderer.send('transfer_token', data);
+        // console.log(sendTo.value.length);
+        if (sendTo.value.length > 0) {
+            sendTo.classList.remove('error');
+            ipcRenderer.send('transfer_token', data);
+        } else {
+            sendTo.classList.add('error');
+            sendTo.focus();
+        }
     });
-
-    /* TODO: Сделать редакрирование полей */
-    // document.addEventListener('click', function (e) {
-    //
-    //     let target =  e.target;
-    //
-    //     if (target.dataset.toggle === 'edit') {
-    //         let targetData = target.dataset;
-    //         let targetDataTarget = targetData.target;
-    //         console.log('done' + targetDataTarget);
-    //
-    //         document.querySelector('[name="' + targetDataTarget + '"]').removeAttribute('disabled');
-    //     }
-    // });
 
     /*
      * WALLET/SETTINGS MENU

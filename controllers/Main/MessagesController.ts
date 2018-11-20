@@ -16,6 +16,7 @@ import {chat_types, helper} from "../../src/var_helper";
 import {Grpc} from "../../grpc/grpc";
 import Benchmark = require('benchmark');
 import {getConnection} from "typeorm";
+import {TransactionModel} from "../../models/TransactionModel";
 // import {Benchmark} from 'benchmark';
 let benchmark=new Benchmark.Suite;
 // import * as eNotify from 'electron-notify'
@@ -71,7 +72,7 @@ class MessagesController extends Controller {
         let chat = await ChatModel.get_chat_with_events(id);
 
 
-        switch (type) {
+        switch (chat.type) {
             case this.chat_types.user:
                 if (!chat)
                     return this.load_founded_chat(id);
@@ -90,8 +91,13 @@ class MessagesController extends Controller {
 
     private async render_message(message: MessageModel) {
         let self_info = await this.get_self_info();
-        message.mine = message.sender ? (self_info.id === message.sender.id) : false;
-        message.fill_sender_data();
+        message.mine = message.senderId ? (self_info.id === message.senderId) : false;
+        // message.fill_sender_data();
+        // console.log('message:',message);
+        // message.
+        // message.files=await FileModel.find({where:{messageId:message.id}});
+        // await MessageModel.getFiles(message);
+        // console.log(message.files);
         for (let num in message.files){
             if (check_file_preview(message.files[num].type)) {
                 message.files[num].preview=true;
@@ -114,12 +120,12 @@ class MessagesController extends Controller {
             message.text='Вы: '+message.text;
 
         const data = {
-            id: message.chat.id,
+            id: message.chatId,
             html: html,
             html_date: html_date,
             message:message,
             time: date_time,
-            unread_messages:message.chat.unread_messages
+            // unread_messages:message.chat.unread_messages
         };
         await this.send_data('received_message', data);
 
@@ -136,35 +142,23 @@ class MessagesController extends Controller {
     private async render_transaction(message) {
         let self_info = await this.get_self_info();
         message.mine = message.senderId ? (self_info.id === message.senderId) : false;
-        // message.fill_sender_data();
-        for (let num in message.files){
-            if (check_file_preview(message.files[num].type)) {
-                message.files[num].preview=true;
-                if (!await read_file(message.files[num])) {
-                    message.files[num].file = (await this.ipfs.get_file(message.files[num].hash)).file;
-                    await save_file(message.files[num]);
-                }
-                // console.log(message.files[num]);
-            } else {
-                if (check_file_exist(message.files[num]))
-                    message.files[num].downloaded=true;
-            }
-        }
+        // console.log('tx message:',message);
+        message.amount=TransactionModel.NormalizeValue(message.amount);
         let date_time = await Helper.formate_date(new Date(message.time), {locale:"ru:",for:"dialog_date"});
         message.time=Helper.formate_date(new Date(message.time),{locale:'ru',for:'message'});
-        let html = this.render('main/messagingblock/message.pug', message);
+        let html = this.render('main/messagingblock/messageTransaction.pug', message);
         let html_date = this.render("main/messagingblock/dialog_date.pug", {time:date_time});
 
         if (message.mine)
             message.text='Вы: '+message.text;
 
         const data = {
-            id: message.chat.id,
+            id: message.chatId,
             html: html,
             html_date: html_date,
             message:message,
             time: date_time,
-            unread_messages:message.chat.unread_messages
+            // unread_messages:message.chat.unread_messages
         };
         await this.send_data('received_message', data);
 
@@ -193,23 +187,29 @@ class MessagesController extends Controller {
                        from transaction_model tx
                        where tx.fromId="${opp_id}" or tx.toId="${opp_id}") msgs
                    left join (
-                       select id as senderId,avatar from user_model
+                       select id as senderId,avatar as sender_avatar,name as sender_name from user_model
                    ) user on user.senderId=msgs.senderId)
-                   order by msgs.time`
+                   order by msgs.time DESC
+                   limit 15`
             );
     }
 
     private async render_chat_messages(chat_id: string) {
-        let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
-        // let messages = await this.getMsgTxs(chat_id);
+        // let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+        let messages = await this.getMsgTxs(chat_id);
+        // console.log(messages);
         let last_time;
         for (let num = messages.length - 1; num >= 0; --num) {
             // if (last_time!==new Date(messages[num].time))
-            await this.render_message(messages[num]);
-            // if (messages[num].type=='message')
-            //     await this.render_message(messages[num]);
-            // if (messages[num].type=='transaction')
-            //     await this.render_transaction(messages[num]);
+            // await this.render_message(messages[num]);
+            if (messages[num].type=='message')
+                await this.render_message(messages[num]);
+            if (messages[num].type=='transaction') {
+                console.log(`'transaction' == ${messages[num].type}`);
+                console.log(`'transaction'`);
+                messages[num].text = 'Транзакция';
+                await this.render_transaction(messages[num]);
+            }
         }
     }
 
@@ -284,15 +284,19 @@ class MessagesController extends Controller {
 
             message.files=[fileModel];
         }
+        message.fill_sender_data();
+        message.senderId=message.sender.id;
+        message.chatId=message.chat.id;
+        await this.render_message(message);
 
         // message.fileModel = file_send;
         // await message.save();
-        if (chat.type == this.group_chat_types.channel) {
-            await this.render_message(message);
-        }
+        // if (chat.type == this.group_chat_types.channel) {
+        //     await this.render_message(message);
+        // }
 
         if (chat.type === this.chat_types.user) {
-            await this.render_message(message);
+            // await this.render_message(message);
             chat.id = await chat.get_user_chat_meta(self_info.id);
             group = false;
         } else if (Object.values(this.group_chat_types).includes(chat.type)) {
