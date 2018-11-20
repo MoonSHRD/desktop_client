@@ -527,6 +527,26 @@ a.join_button {
         > .btn{
             border-radius: 0 0 10px 10px;
             box-shadow : none;
+            background-color: lighten($brand-primary,35%);
+            border-color: lighten($brand-primary,35%);
+            color: $cf;
+
+            &:hover,
+            &:active{
+                background-color: lighten($brand-primary,15%);
+                border-color: lighten($brand-primary,15%);
+            }
+
+            .message_out &{
+                background-color: darken($brand-blue,20%);
+                border-color: darken($brand-blue,20%);
+
+                &:hover,
+                &:active{
+                    background-color: darken($brand-blue,30%);
+                    border-color: darken($brand-blue,30%);
+                }
+            }
         }
 
         .message__date{
