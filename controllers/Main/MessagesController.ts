@@ -364,7 +364,7 @@ class MessagesController extends Controller {
         message.text = text;
         message.sender = userModel;
         message.chat = chat;
-        message.time = stamp;
+        message.time = Date.now();
         message.fresh = true;
         message.notificate = true;
         message.files=[];
@@ -396,6 +396,7 @@ class MessagesController extends Controller {
         message.sender_avatar=userModel.avatar;
         message.sender_name=userModel.name;
         message.chatId=chat.id;
+        console.log(message,stamp);
         await this.render_message(message);
     };
 
@@ -415,7 +416,7 @@ class MessagesController extends Controller {
         messageModel.text = message;
         messageModel.sender = userModel;
         messageModel.chat = chat;
-        messageModel.time = stamp;
+        messageModel.time = Date.now();
         messageModel.files = [];
         messageModel.fresh = fresh;
         messageModel.notificate = notificate;
