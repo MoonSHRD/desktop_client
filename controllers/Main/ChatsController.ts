@@ -114,12 +114,16 @@ class ChatsController extends Controller {
                 }
             }
         } else if (data.type === this.chat_types.user) {
-            let user;
-            try {
-                user = await ChatModel.get_chat_opponent(data.id,self_info.id);
-            } catch (e) {
+            // let user=new UserModel();
+            // try {
+            //     user = await ChatModel.get_chat_opponent(data.id,self_info.id);
+            // } catch (e) {
+            //     user = this.controller_register.get_controller_parameter('ChatsController', 'found_chats').users[data.id];
+            // }
+            let user = await ChatModel.get_chat_opponent(data.id,self_info.id);
+            if (!user) {
                 user = this.controller_register.get_controller_parameter('ChatsController', 'found_chats').users[data.id];
-                user.id=ChatModel.get_chat_opponent_id(data.id,self_info.id)
+                user.id=ChatModel.get_chat_opponent_id(data.id,self_info.id);
             }
             user.eth_balance=await this.web3.GetUserBalance(user.id);
             this.send_data('get_my_vcard', this.render('main/modal_popup/modal_content.pug', user));

@@ -20,10 +20,7 @@ const ethers = require('ethers');
 const bip39 = require('bip39');
 // let {TextDecoder} = require('text-encoding');
 class AuthController extends Controller_1.Controller {
-    constructor() {
-        super(...arguments);
-        this.connection_tries = -1;
-    }
+    // private connection_tries:number=-1;
     init_auth() {
         return __awaiter(this, void 0, void 0, function* () {
             let account = yield AccountModel_1.AccountModel.findOne(1);
@@ -47,10 +44,10 @@ class AuthController extends Controller_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             let user = yield this.get_self_info();
             // let user_json=JSON.stringify(user);
-            if (this.connection_tries === 9)
-                this.connection_tries = 0;
-            else
-                this.connection_tries += 1;
+            // if (this.connection_tries === 9)
+            //     this.connection_tries=0;
+            // else
+            //     this.connection_tries+=1;
             yield this.ipfs.connect();
             console.log('IPFS connected');
             // console.log(account);
@@ -73,7 +70,7 @@ class AuthController extends Controller_1.Controller {
             this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
             account.host = this.dxmpp_config.host;
             account.jidhost = this.dxmpp_config.jidhost;
-            account.port = this.dxmpp_config.port + this.connection_tries;
+            account.port = this.dxmpp_config.port;
             yield this.dxmpp.connect(account);
         });
     }
