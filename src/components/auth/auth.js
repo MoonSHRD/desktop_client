@@ -7,7 +7,7 @@ let data = {}; //flag to prevent quick multi-click glitches
 let mnemonic_text = '';
 let array_mnemonic_text = [];
 
-$('.next').click(function(){
+$(document).on('click', '.next', function(){
     if (check_fields($(this).closest('fieldset'))) return;
 
     if(animating) return false;
@@ -54,7 +54,7 @@ $('.next').click(function(){
     });
 });
 
-$('.previous').click(function(){
+$(document).on('click', '.previous', function(){
     if(animating) return false;
     animating = true;
 
@@ -107,13 +107,13 @@ $(document).on('submit', '#profile_form', function (e) {
 
 document.querySelector('html').classList.add('js');
 
-let fileInput  = document.querySelector( '.input-file' ),
-    button     = document.querySelector( '.input-file-trigger' );
-
-button.addEventListener( 'click', function( event ) {
-    fileInput.focus();
-    return false;
-});
+// let fileInput  = document.querySelector( '.input-file' ),
+//     button     = document.querySelector( '.input-file-trigger' );
+//
+// button.addEventListener( 'click', function( event ) {
+//     fileInput.focus();
+//     return false;
+// });
 
 function check_fields(fieldset) {
     let err = false;
@@ -121,10 +121,9 @@ function check_fields(fieldset) {
     let els = $this.serializeArray();
     if (els.length===0) return err;
 
-
-    console.log(els);
-    console.log(array_mnemonic_text);
-    console.log(mnemonic_text);
+    // console.log(els);
+    // console.log(array_mnemonic_text);
+    // console.log(mnemonic_text);
     els.forEach(function (elem) {
         // console.log(window['validate_'+elem.name]);
         if (window['validate_'+elem.name]!==undefined){
@@ -138,7 +137,6 @@ function check_fields(fieldset) {
             }
         }
         data[elem.name] = elem.value;
-
     });
 
     return err;
@@ -172,28 +170,69 @@ $('textarea[name=mnemonic]').bind('input', function (e) {
 });
 
 $('textarea[name=confirm_mnemonic]').bind('input', function (e) {
-    console.log($(this).val());
+    // console.log($(this).val());
     if (!validate_confirm_mnemonic($(this).val()) === mnemonic_text + ' ') $(this).addClass('invalid');
     else $(this).removeClass('invalid');
-
 });
 
+document.addEventListener('click', (e) => {
+    // console.log(`e.click`);
+    // console.log(e);
 
-$(document).on('click', '#generate_mnemonic', function () {
+    if (e.target.id === 'generate_mnemonic') {
+        ipcRenderer.send('generate_mnemonic');
+        document.getElementById('input_mnemonic_next').focus();
+    }
 
-    ipcRenderer.send('generate_mnemonic');
-    $( '#input_mnemonic_next' ).focus();
+    else if (e.target.id === 'input_mnemonic_next') {
+        let mnemonicVal = document.getElementById('input_mnemonic').value;
+        if (validate_mnemonic(mnemonicVal)) {
+            mnemonic_text = mnemonicVal.trim();
+            array_mnemonic_text = mnemonic_text.split(' ');
+            console.log(array_mnemonic_text);
+            array_mnemonic_text.sort().map(function (item) {
+                let a = document.createElement('a');
+                a.innerText = item;
+                a.classList.add('mnemonic__item');
+                document.querySelector('.words').appendChild(a);
+            });
+        }
+    }
 
+    else if (e.target.classList.contains('mnemonic__item')){
+        let $this = e.target;
+        let confirmMnemonic = document.getElementById('confirm_input_mnemonic');
+        let confirmMnemonicText = confirmMnemonic.value;
 
+        if(!$this.classList.contains('mnemonic__item_use')){
+            console.log('this is item');
+            confirmMnemonicText += ($this.innerText + ' ');
+            confirmMnemonic.value = confirmMnemonicText;
+            $this.classList.add('mnemonic__item_use');
+            console.log(`confirmMnemonicText : ${confirmMnemonicText}`);
+            console.log(mnemonic_text);
+            if(confirmMnemonicText === mnemonic_text + ' '){
+                confirmMnemonic.classList.remove('invalid');
+            }
+        }else {
+            console.log('this is item USE');
+            let text = confirmMnemonicText.replace($this.innerText + ' ','');
+            confirmMnemonic.value = text;
+            $this.classList.remove('mnemonic__item_use');
+            console.log(text);
+            if(!(text === mnemonic_text + ' ')){
+                confirmMnemonic.classList.add('invalid');
+            }
+        }
+    }
 });
 
 ipcRenderer.on('generate_mnemonic', (event, arg) => {
-    const mnemonic = $('#input_mnemonic');
-    mnemonic.val(arg);
-    mnemonic.removeClass('invalid');
-
+    // const mnemonic = $('#input_mnemonic');
+    const mnemonic = document.getElementById('input_mnemonic');
+    mnemonic.value = arg;
+    mnemonic.classList.remove('invalid');
 });
-
 
 function validate_mnemonic(mnem) {
     if (!mnem) return false;
@@ -208,38 +247,34 @@ function validate_mnemonic(mnem) {
     return (words_count === 12 && !err);
 }
 
-$(document).on('click', '#generate_mnemonic', function () {
-    ipcRenderer.send('generate_mnemonic');
-
+document.addEventListener('keydown', (e) => {
+    if (e.target.id === 'input_mnemonic'){
+        let mnemonicClr = e.target.value.replace(/\s\s/g, " ");
+        console.log(`vanilla keydown : ${mnemonicClr}`);
+        e.target.value = mnemonicClr;
+    } else if (e.target.id === 'confirm_input_mnemonic') {
+        e.preventDefault();
+        e.target.blur();
+    }
 });
 
-$(document).on('keydown', '#input_mnemonic', function () {
-    // console.log('keydown');//
-    let mnemonicClr = $(this).val().replace(/\s\s/g, " ");
-    // console.log(mnemonicClr);
-    $(this).val(mnemonicClr);
-});
+/*$(document).on('click', '#input_mnemonic_next', function () {
+    let mnemonicVal = $('#input_mnemonic').val();
+    if (validate_mnemonic(mnemonicVal)) {
+        mnemonic_text = mnemonicVal.trim();
+        array_mnemonic_text = mnemonic_text.split(' ');
+        console.log(array_mnemonic_text);
 
-$(document).on('click', '#input_mnemonic_next', function () {
-
-    mnemonic_text  = $('#input_mnemonic').val().trim();
-    array_mnemonic_text = mnemonic_text.split(' ');
-    console.log(array_mnemonic_text);
-
-    array_mnemonic_text.sort().map(function (item) {
-
-        $('.words').prepend(`<a>${item}</a>`);
-
-    });
-});
-
-
-$(document).on('click', '.words a', function () {
+        array_mnemonic_text.sort().map(function (item) {
+            $('.words').prepend(`<a>${item}</a>`);
+        });
+    }
+});*/
+/*$(document).on('click', '.mnemonic__item', function () {
     let $this = $(this);
     let text = $('#confirm_input_mnemonic').val();
 
     if(!$this.hasClass('use')){
-
         text += ($this.text() + ' ');
         $('#confirm_input_mnemonic').val(text);
     }else {
@@ -251,9 +286,9 @@ $(document).on('click', '.words a', function () {
     if(text == mnemonic_text + ' '){
         $('#confirm_input_mnemonic').removeClass('invalid');
     }
-});
+});*/
 
-$(document).on('click', '.words .use', function () {
+/*$(document).on('click', '.words .use', function () {
     let $this = $(this);
     let text = $('#confirm_input_mnemonic').val().replace($this.text() + ' ','');
 
@@ -265,19 +300,20 @@ $(document).on('click', '.words .use', function () {
         $('#confirm_input_mnemonic').addClass('invalid');
     }
 
-});
+});*/
 
-ipcRenderer.on('generate_mnemonic', (event, arg) => {
-    const mnemonic = $('#input_mnemonic');
-    mnemonic.val(arg);
-    mnemonic.removeClass('invalid');
-});
+/*ipcRenderer.on('generate_mnemonic', (event, arg) => {
+    // const mnemonic = $('#input_mnemonic');
+    const mnemonic = document.getElementById('input_mnemonic');
+    mnemonic.value = arg;
+    mnemonic.classList.remove('invalid');
+});*/
 
-$('#confirm_input_mnemonic').keydown(function(e){
+/*$('#confirm_input_mnemonic').keydown(function(e){
     e.preventDefault();
-});
+});*/
 
-$('#confirm_input_mnemonic').on('focus', function() {
+/*$('#confirm_input_mnemonic').on('focus', function() {
     $(this).blur();
-});
+});*/
 
