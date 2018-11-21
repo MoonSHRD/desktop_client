@@ -119,13 +119,27 @@ class WalletController extends Controller {
 // Amount: ${TransactionModel.NormalizeValue(tx.amount)} Coin.
 // Link: http://blocks.moonshrd.io/tx/${tx.id}`;
 
+<<<<<<< HEAD
+<<<<<<< HEAD
         let message=Object();
+=======
+        let message=new MessageModel();
+>>>>>>> remotes/origin/branch-145
+=======
+        let message=new MessageModel();
+>>>>>>> remotes/origin/branch-145
         message.time=Date.now();
         message.notificate=true;
         message.fresh=true;
         message.amount=tx.amount;
         message.text='Транзакция';
+<<<<<<< HEAD
+<<<<<<< HEAD
         message.id=tx.id;
+=======
+>>>>>>> remotes/origin/branch-145
+=======
+>>>>>>> remotes/origin/branch-145
 //         message.text=`Transaction
 // Amount: ${data.amount} Coin.
 // Link: http://blocks.moonshrd.io/tx/${tx.transactionHash}`;

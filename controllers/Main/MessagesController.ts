@@ -71,8 +71,16 @@ class MessagesController extends Controller {
         console.log('get_chat_messages',id,type);
         let chat = await ChatModel.get_chat_with_events(id);
 
+<<<<<<< HEAD
         // let switcher=chat?chat.type:type;
         switch (chat?chat.type:type) {
+=======
+
+        switch (chat.type) {
+<<<<<<< HEAD
+>>>>>>> remotes/origin/branch-145
+=======
+>>>>>>> remotes/origin/branch-145
             case this.chat_types.user:
                 if (!chat)
                     return this.load_founded_chat(id);
@@ -195,6 +203,8 @@ class MessagesController extends Controller {
     }
 
     private async render_chat_messages(chat_id: string) {
+<<<<<<< HEAD
+<<<<<<< HEAD
         let chat = await ChatModel.findOne(chat_id);
         let self_info = await this.get_self_info();
         let messages = await this.getMsgTxs(chat_id);
@@ -207,6 +217,25 @@ class MessagesController extends Controller {
             if (messages[num].type=='message')
                 await this.render_message(messages[num]);
             if (messages[num].type=='transaction') {
+=======
+=======
+>>>>>>> remotes/origin/branch-145
+        // let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
+        let messages = await this.getMsgTxs(chat_id);
+        // console.log(messages);
+        let last_time;
+        for (let num = messages.length - 1; num >= 0; --num) {
+            // if (last_time!==new Date(messages[num].time))
+            // await this.render_message(messages[num]);
+            if (messages[num].type=='message')
+                await this.render_message(messages[num]);
+            if (messages[num].type=='transaction') {
+                console.log(`'transaction' == ${messages[num].type}`);
+                console.log(`'transaction'`);
+<<<<<<< HEAD
+>>>>>>> remotes/origin/branch-145
+=======
+>>>>>>> remotes/origin/branch-145
                 messages[num].text = 'Транзакция';
                 await this.render_transaction(messages[num]);
             }
