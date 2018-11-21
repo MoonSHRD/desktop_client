@@ -89,9 +89,11 @@ $(document).on('click', '.previous', function(){
     });
 });
 
-$(document).on('submit', '#profile_form', function (e) {
+/*$(document).on('submit', '#profile_form', function (e) {
     e.preventDefault();
-    if ($('fieldset.active')!==$('fieldset').last()) $('.next').toggle('click');
+    if ($('fieldset.active')!==$('fieldset').last()) {
+        $('.next').toggle('click');
+    }
     let obj = $(this).serializeArray();
     let prof = {};
 
@@ -103,7 +105,34 @@ $(document).on('submit', '#profile_form', function (e) {
         prof.avatar = $('#avatar_preview').attr('src');
     console.log('Msg1', prof);
     ipcRenderer.send('submit_profile', prof);
+});*/
+
+/* Отправка формы */
+document.addEventListener('submit', (e) => {
+    const $this = e.target;
+    if ($this.id === 'profile_form') {
+        e.preventDefault();
+        let fieldsetArr = document.querySelectorAll('fieldset');
+        for (let i=0; i < fieldsetArr.length; i++) {
+            if (fieldsetArr[i].classList.contains('active') !== fieldsetArr[fieldsetArr.length - 1]){
+                console.log('done');
+                document.querySelector('.next').click();
+            }
+        }
+        let obj = serializeArray($this);
+        console.log(obj);
+        let prof = {};
+        obj.forEach(function (elem) {
+            prof[elem.name] = elem.value;
+        });
+        prof.avatar = null;
+        if ($this.querySelector('[name=avatar]').files.length)
+            prof.avatar = $this.querySelector('#avatar_preview').getAttribute('src');
+        console.log('Msg1', prof);
+        ipcRenderer.send('submit_profile', prof);
+    }
 });
+/* /Отправка формы */
 
 document.querySelector('html').classList.add('js');
 
@@ -117,23 +146,21 @@ document.querySelector('html').classList.add('js');
 
 function check_fields(fieldset) {
     let err = false;
-    const $this=$(fieldset);
-    let els = $this.serializeArray();
+    const $this=document.querySelector(fieldset);
+    // let els = $this.serializeArray();
+    let els = serializeArray($this);
     if (els.length===0) return err;
 
-    // console.log(els);
-    // console.log(array_mnemonic_text);
-    // console.log(mnemonic_text);
     els.forEach(function (elem) {
         // console.log(window['validate_'+elem.name]);
         if (window['validate_'+elem.name]!==undefined){
             const $element = $this.find(`[name=${elem.name}]`);
             // console.log($element)
             if (!window['validate_'+elem.name](elem.value)){
-                $element.addClass('invalid');
+                $element.classList.add('invalid');
                 err = true;
             } else {
-                $element.removeClass('invalid');
+                $element.classList.remove('invalid');
             }
         }
         data[elem.name] = elem.value;
@@ -148,13 +175,12 @@ function validate_firstname(val) {
 
 function validate_confirm_mnemonic(val) {
     // return true;
-    if (val.trim() == mnemonic_text) {
+    if (val.trim() === mnemonic_text.trim()) {
         console.log(val);
         console.log(mnemonic_text);
         return (val);
     }
 }
-
 
 $('input[name=firstname]').bind('input', function (e) {
     // console.log($(this).val());
@@ -176,8 +202,6 @@ $('textarea[name=confirm_mnemonic]').bind('input', function (e) {
 });
 
 document.addEventListener('click', (e) => {
-    // console.log(`e.click`);
-    // console.log(e);
 
     if (e.target.id === 'generate_mnemonic') {
         ipcRenderer.send('generate_mnemonic');
@@ -205,7 +229,7 @@ document.addEventListener('click', (e) => {
         let confirmMnemonicText = confirmMnemonic.value;
 
         if(!$this.classList.contains('mnemonic__item_use')){
-            console.log('this is item');
+            // console.log('this is item');
             confirmMnemonicText += ($this.innerText + ' ');
             confirmMnemonic.value = confirmMnemonicText;
             $this.classList.add('mnemonic__item_use');
@@ -214,8 +238,8 @@ document.addEventListener('click', (e) => {
             if(confirmMnemonicText === mnemonic_text + ' '){
                 confirmMnemonic.classList.remove('invalid');
             }
-        }else {
-            console.log('this is item USE');
+        } else {
+            // console.log('this is item USE');
             let text = confirmMnemonicText.replace($this.innerText + ' ','');
             confirmMnemonic.value = text;
             $this.classList.remove('mnemonic__item_use');
@@ -317,3 +341,44 @@ document.addEventListener('keydown', (e) => {
     $(this).blur();
 });*/
 
+/*!
+ * Serialize all form data into an array
+ * (c) 2018 Chris Ferdinandi, MIT License, https://gomakethings.com
+ * @param  {Node}   form The form to serialize
+ * @return {String}      The serialized form data
+ */
+let serializeArray = (form) => {
+
+    // Setup our serialized data
+    let serialized = [];
+
+    // Loop through each field in the form
+    for (let i = 0; i < form.elements.length; i++) {
+
+        let field = form.elements[i];
+
+        // Don't serialize fields without a name, submits, buttons, file and reset inputs, and disabled fields
+        if (!field.name || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') continue;
+
+        // If a multi-select, get all selections
+        if (field.type === 'select-multiple') {
+            for (let n = 0; n < field.options.length; n++) {
+                if (!field.options[n].selected) continue;
+                serialized.push({
+                    name: field.name.trim(),
+                    value: field.options[n].value.trim()
+                });
+            }
+        }
+
+        // Convert field data to a query string
+        else if ((field.type !== 'checkbox' && field.type !== 'radio') || field.checked) {
+            serialized.push({
+                name: field.name.trim(),
+                value: field.value.trim()
+            });
+        }
+    }
+
+    return serialized;
+};
