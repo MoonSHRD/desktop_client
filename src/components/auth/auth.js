@@ -8,7 +8,7 @@ let mnemonic_text = '';
 let array_mnemonic_text = [];
 
 $(document).on('click', '.next', function(){
-    if (check_fields($(this).closest('fieldset'))) return;
+    if ( check_fields(this.closest('fieldset')) ) return;
 
     if(animating) return false;
     animating = true;
@@ -89,24 +89,6 @@ $(document).on('click', '.previous', function(){
     });
 });
 
-/*$(document).on('submit', '#profile_form', function (e) {
-    e.preventDefault();
-    if ($('fieldset.active')!==$('fieldset').last()) {
-        $('.next').toggle('click');
-    }
-    let obj = $(this).serializeArray();
-    let prof = {};
-
-    obj.forEach(function (elem) {
-        prof[elem.name] = elem.value;
-    });
-    prof.avatar = null;
-    if ($('[name=avatar]').prop('files').length)
-        prof.avatar = $('#avatar_preview').attr('src');
-    console.log('Msg1', prof);
-    ipcRenderer.send('submit_profile', prof);
-});*/
-
 /* Отправка формы */
 document.addEventListener('submit', (e) => {
     const $this = e.target;
@@ -136,17 +118,9 @@ document.addEventListener('submit', (e) => {
 
 document.querySelector('html').classList.add('js');
 
-// let fileInput  = document.querySelector( '.input-file' ),
-//     button     = document.querySelector( '.input-file-trigger' );
-//
-// button.addEventListener( 'click', function( event ) {
-//     fileInput.focus();
-//     return false;
-// });
-
 function check_fields(fieldset) {
     let err = false;
-    const $this=document.querySelector(fieldset);
+    const $this=document.querySelector(`[data-step="${fieldset.dataset.step}"]`);
     // let els = $this.serializeArray();
     let els = serializeArray($this);
     if (els.length===0) return err;
@@ -154,7 +128,7 @@ function check_fields(fieldset) {
     els.forEach(function (elem) {
         // console.log(window['validate_'+elem.name]);
         if (window['validate_'+elem.name]!==undefined){
-            const $element = $this.find(`[name=${elem.name}]`);
+            const $element = $this.querySelector(`[name=${elem.name}]`);
             // console.log($element)
             if (!window['validate_'+elem.name](elem.value)){
                 $element.classList.add('invalid');
@@ -173,6 +147,19 @@ function validate_firstname(val) {
     return (val);
 }
 
+function validate_mnemonic(mnem) {
+    if (!mnem) return false;
+    let mnemTrim = mnem.trim();
+    console.log(`validate_mnemonic : ${mnem}`);
+    if (mnem.search(/[А-яЁё]/) !== -1) return false;
+    const words_count=mnemTrim.split(/\s+/).length;
+    console.log(`menemonik : ${words_count}`);
+    // const err=mnem.substr(-1,1)===' ';
+    let err = words_count !== 12;
+    console.log(err);
+    return (words_count === 12 && !err);
+}
+
 function validate_confirm_mnemonic(val) {
     // return true;
     if (val.trim() === mnemonic_text.trim()) {
@@ -182,23 +169,29 @@ function validate_confirm_mnemonic(val) {
     }
 }
 
-$('input[name=firstname]').bind('input', function (e) {
-    // console.log($(this).val());
-    if (!$(this).val()) $(this).addClass('invalid');
-    else $(this).removeClass('invalid');
-});
-
-$('textarea[name=mnemonic]').bind('input', function (e) {
-    // console.log($(this).val());
-    if (!validate_mnemonic($(this).val())) $(this).addClass('invalid');
-    else $(this).removeClass('invalid');
-
-});
-
-$('textarea[name=confirm_mnemonic]').bind('input', function (e) {
-    // console.log($(this).val());
-    if (!validate_confirm_mnemonic($(this).val()) === mnemonic_text + ' ') $(this).addClass('invalid');
-    else $(this).removeClass('invalid');
+document.addEventListener('input', (e) => {
+    let $this = e.target;
+    if ( $this.getAttribute(name) === 'firstname' ){
+        if (!$this.value) {
+            $this.classList.add('invalid');
+        } else {
+            $this.classList.remove('invalid');
+        }
+    }
+    else if ( $this.getAttribute(name) === 'mnemonic' ){
+        if (!validate_mnemonic($this.value)) {
+            $this.classList.add('invalid');
+        } else {
+            $this.classList.remove('invalid');
+        }
+    }
+    else if ( $this.getAttribute(name) === 'confirm_mnemonic '){
+        if (!validate_confirm_mnemonic($this.value) === mnemonic_text + ' ') {
+            $this.classList.add('invalid');
+        } else {
+            $this.classList.remove('invalid');
+        }
+    }
 });
 
 document.addEventListener('click', (e) => {
@@ -252,24 +245,10 @@ document.addEventListener('click', (e) => {
 });
 
 ipcRenderer.on('generate_mnemonic', (event, arg) => {
-    // const mnemonic = $('#input_mnemonic');
     const mnemonic = document.getElementById('input_mnemonic');
     mnemonic.value = arg;
     mnemonic.classList.remove('invalid');
 });
-
-function validate_mnemonic(mnem) {
-    if (!mnem) return false;
-    let mnemTrim = mnem.trim();
-    console.log(`validate_mnemonic : ${mnem}`);
-    if (mnem.search(/[А-яЁё]/) !== -1) return false;
-    const words_count=mnemTrim.split(/\s+/).length;
-    console.log(`menemonik : ${words_count}`);
-    // const err=mnem.substr(-1,1)===' ';
-    let err = words_count !== 12;
-    console.log(err);
-    return (words_count === 12 && !err);
-}
 
 document.addEventListener('keydown', (e) => {
     if (e.target.id === 'input_mnemonic'){
@@ -281,65 +260,6 @@ document.addEventListener('keydown', (e) => {
         e.target.blur();
     }
 });
-
-/*$(document).on('click', '#input_mnemonic_next', function () {
-    let mnemonicVal = $('#input_mnemonic').val();
-    if (validate_mnemonic(mnemonicVal)) {
-        mnemonic_text = mnemonicVal.trim();
-        array_mnemonic_text = mnemonic_text.split(' ');
-        console.log(array_mnemonic_text);
-
-        array_mnemonic_text.sort().map(function (item) {
-            $('.words').prepend(`<a>${item}</a>`);
-        });
-    }
-});*/
-/*$(document).on('click', '.mnemonic__item', function () {
-    let $this = $(this);
-    let text = $('#confirm_input_mnemonic').val();
-
-    if(!$this.hasClass('use')){
-        text += ($this.text() + ' ');
-        $('#confirm_input_mnemonic').val(text);
-    }else {
-
-    }
-    $this.addClass('use');
-    console.log(text);
-    console.log(mnemonic_text);
-    if(text == mnemonic_text + ' '){
-        $('#confirm_input_mnemonic').removeClass('invalid');
-    }
-});*/
-
-/*$(document).on('click', '.words .use', function () {
-    let $this = $(this);
-    let text = $('#confirm_input_mnemonic').val().replace($this.text() + ' ','');
-
-    $('#confirm_input_mnemonic').val(text);
-    $this.removeClass('use');
-    console.log(text);
-
-    if(!(text == mnemonic_text + ' ')){
-        $('#confirm_input_mnemonic').addClass('invalid');
-    }
-
-});*/
-
-/*ipcRenderer.on('generate_mnemonic', (event, arg) => {
-    // const mnemonic = $('#input_mnemonic');
-    const mnemonic = document.getElementById('input_mnemonic');
-    mnemonic.value = arg;
-    mnemonic.classList.remove('invalid');
-});*/
-
-/*$('#confirm_input_mnemonic').keydown(function(e){
-    e.preventDefault();
-});*/
-
-/*$('#confirm_input_mnemonic').on('focus', function() {
-    $(this).blur();
-});*/
 
 /*!
  * Serialize all form data into an array

@@ -15,7 +15,7 @@
                         li
                         li
                     // fieldsets
-                    fieldset.fs
+                    fieldset.fs(data-step="1")
                         h2.fs__title.h2 Step 1
                         h3.fs__subtitle.mb-4 Enter 12 words of backup phrase to restore your account or generate new one with a button below.
                         textarea.invalid.fs__textarea(rows='4', name='mnemonic', placeholder='Enter any 12 words in a space, or click the "Generate" button' id='input_mnemonic' required=true)
@@ -25,7 +25,7 @@
                             include ../../img/warning.svg
                         //h2.fs__next-title.next-step-title Step 2
                         button.next.fs__next-btn.action-button.btn.btn-dark.btn-lg.btn-block(type='button', name='next', id='input_mnemonic_next') Step 2
-                    fieldset.fs
+                    fieldset.fs(data-step="2")
                         h2.fs__title.h2 Step 2
                         h3.fs__subtitle.mb-4 Confirm your 12 words.
                         textarea.invalid.fs__textarea(rows='4', name='confirm_mnemonic', placeholder='Enter any 12 words in a space, or click the "Generate" button' id='confirm_input_mnemonic' required=true )
@@ -33,7 +33,7 @@
 
                         //h2.next-step-title Step 3
                         button.next.fs__next-btn.action-button.btn.btn-dark.btn-lg.btn-block(type='button', name='next', id='') Step 3
-                    fieldset.fs
+                    fieldset.fs(data-step="3")
                         h2.fs__title.h2 Step 3
                         h3.fs__subtitle.mb-4 How we can call you?
                         input.invalid.fs__textarea(name='firstname', placeholder='Firstname', type='text' required=true)
@@ -41,7 +41,7 @@
                         textarea.fs__textarea(rows='5', name='bio', placeholder='Enter bio')
                         //h2.next-step-title Step 4
                         button.next.fs__next-btn.action-button.btn.btn-dark.btn-lg.btn-block(type='button', name='next') Step 4
-                    fieldset.fs
+                    fieldset.fs(data-step="4")
                         h2.fs__title.h2 Step 4
                         h3.fs__subtitle.mb-4.text-center You can upload your photo
                         .avatar_preview.fs__avatar
