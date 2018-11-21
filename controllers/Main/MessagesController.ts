@@ -335,7 +335,7 @@ class MessagesController extends Controller {
         let self_info = await this.get_self_info();
         let userModel = await UserModel.findOne(user.id);
         let chat = await ChatModel.get_user_chat(self_info.id, user.id);
-        console.log(chat);
+        // console.log(chat);
         if (!userModel || !chat){
             // console.log("retriving user info");
             // let userGR=JSON.parse((await this.grpc.CallMethod("GetObjData",{id: user.id,obj:'user'})).data.data);
@@ -396,7 +396,7 @@ class MessagesController extends Controller {
         message.sender_avatar=userModel.avatar;
         message.sender_name=userModel.name;
         message.chatId=chat.id;
-        console.log(message,stamp);
+        // console.log(message,stamp);
         await this.render_message(message);
     };
 
