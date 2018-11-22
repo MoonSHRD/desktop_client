@@ -738,7 +738,7 @@ window.onload = function () {
     ipcRenderer.on('reload_chat', (event, obj) => {
         // $('#messaging_block').html(obj);
         document.getElementById('messaging_block').innerHTML = obj;
-        $('[data-msg]').focus();
+        document.querySelector('[data-msg]').focus();
     });
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
@@ -748,6 +748,26 @@ window.onload = function () {
     ipcRenderer.on('join_channel_html', (event, obj) => {
         $('.send_message_block').html(obj);
     });
+
+    /* Очистка поиска при вводе сообщения */
+    document.addEventListener('input', (e) => {
+        let $this = e.target;
+        let searchInput = document.querySelector('.searchInput'); // Поле поиска
+        let chatsList = document.querySelector('.chats__list'); // Список чатов
+        let msgLength = 2; // Число введенных символов сообщения
+        if ( $this.dataset.msg ){
+            // Проверим длинну введенного сообщения
+            if ( $this.value.length > msgLength ){
+                searchInput.value = ''; // Очистим поле поиска
+                // Удалим результаты поиска
+                while (chatsList.firstChild) {
+                    chatsList.removeChild(chatsList.firstChild)
+                }
+                ipcRenderer.send('load_chats', 'group_chat'); // Загружаем наши чаты
+            }
+        }
+    });
+    /* Очистка поиска при вводе сообщения */
 
     $(document).on('click', '[data-name=join_channel]', function () {
         $(this).attr('disabled', 'disabled');
@@ -785,10 +805,8 @@ window.onload = function () {
         let $this = e.target;
         if ( $this.classList.contains('chats__item') ){
             console.log('chat_clicked');
-            // const $this = $(this);
 
             let parent = $this.parentNode; // родитель
-            // let parentList = parent.parentNode; // родитель родителя
             let sibling = parent.firstChild;
 
             // Перебераем весь список элементов
@@ -1505,6 +1523,7 @@ window.onload = function () {
             let group = $this.value;
             let chatsList = document.querySelector('.chats__list');
             if (!group) {
+                // console.log(`!group`);
                 ipcRenderer.send('load_chats', 'group_chat');
             } else {
                 // $('.chats ul').empty();
@@ -1514,6 +1533,7 @@ window.onload = function () {
             }
 
             if (group.length > 2) {
+                // console.log(`length > 2`);
                 ipcRenderer.send('find_groups', group);
             } else if (group.length === 0) {
                 // $('.chats ul').empty();
