@@ -518,7 +518,8 @@ window.onload = function () {
 
     ipcRenderer.on('change_app_state', (event, obj) => {
         console.log('autyh', obj);
-        $('#view').html(obj.arg);
+        // $('#view').html(obj.arg);
+        document.getElementById('view').innerHTML = obj.arg;
         // $.html5Translate(dict, obj.language);
         widthMsgWindow('[data-msgs-window]');
     });
@@ -735,7 +736,8 @@ window.onload = function () {
     });
 
     ipcRenderer.on('reload_chat', (event, obj) => {
-        $('#messaging_block').html(obj);
+        // $('#messaging_block').html(obj);
+        document.getElementById('messaging_block').innerHTML = obj;
         $('[data-msg]').focus();
     });
 
@@ -779,39 +781,46 @@ window.onload = function () {
         }).addClass('rippleEffect');
     }
 
+    document.addEventListener('click', (e) => {
+        let $this = e.target;
+        if ( $this.classList.contains('chats__item') ){
+            console.log('chat_clicked');
+            // const $this = $(this);
 
-    $(document).on('click', '.chats li', function (e) {
-        console.log('chat_clicked');
-        const $this = $(this);
+            let parent = $this.parentNode; // родитель
+            // let parentList = parent.parentNode; // родитель родителя
+            let sibling = parent.firstChild;
 
-        $this.siblings().removeClass('have_history');
-        $this.addClass('active_dialog').siblings().removeClass('active_dialog');
-        let chat = {
-            id : $this.attr('id'),
-            type : $this.data('type')
-        };
+            // Перебераем весь список элементов
+            while (sibling) {
+                // Удаляем все активные классы
+                if (sibling.nodeType === 1)
+                    sibling.classList.remove('have_history', 'active_dialog');
+                // Добавляем активный класс для назатого пункта
+                if (sibling.nodeType === 1 && $this === sibling)
+                    sibling.classList.add('active_dialog');
+                sibling = sibling.nextSibling;
+            }
 
-        $this.find('[data-name="unread_messages"]').hide();
-        $this.find('[data-name="unread_messages"]').text('0');
+            let chat = {
+                id : $this.getAttribute('id'),
+                type : $this.dataset.type
+            };
 
-        if ( !(
-            $this.hasClass('active_dialog')
-            &&
-            $this.hasClass('have_history')
-        ) ) {
-            ipcRenderer.send('get_chat_msgs', chat);
-            $this.addClass('have_history');
+            $this.querySelector('[data-name="unread_messages"]').style.display = 'none';
+            $this.querySelector('[data-name="unread_messages"]').innerText = '0';
+
+            if ( !(
+                $this.classList.contains('active_dialog')
+                &&
+                $this.classList.contains('have_history')
+            ) ) {
+                ipcRenderer.send('get_chat_msgs', chat);
+                $this.classList.add('have_history');
+            }
         }
     });
 
-    // $(document).on('click', '.walletMenu li', function (e) {
-    // });
-
-    // $(document).on('click', '.settingsMenu li', function (e) {
-    //
-    //     const $this = $(this);
-    //     $this.addClass('active_settings').siblings().removeClass('active_settings');
-    // });
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
         $('.modal-content').html(data);
@@ -1471,19 +1480,47 @@ window.onload = function () {
         $('[data-name="tx_history_table"]').append(obj);
     });
 
-    $(document).on('input', '[data-name=group_search]', function (e) {
+    // $(document).on('input', '[data-name=group_search]', function (e) {
+    //     // let menu = 'menu_chats';
+    //     console.log('hello MF');
+    //     // let group = $(this).val();
+    //     let group = $(this).val();
+    //     if (!group) {
+    //         ipcRenderer.send('load_chats','group_chat');
+    //     } else {
+    //         $('.chats ul').empty();
+    //     }
+    //     if (group.length > 2) {
+    //         ipcRenderer.send('find_groups', group);
+    //     }
+    //     if (group.length === 0) {
+    //         $('.chats ul').empty();
+    //     }
+    // });
+
+    document.addEventListener('input', (e) => {
         // let menu = 'menu_chats';
-        let group = $(this).val();
-        if (!group) {
-            ipcRenderer.send('load_chats','group_chat');
-        } else {
-            $('.chats ul').empty();
-        }
-        if (group.length > 2) {
-            ipcRenderer.send('find_groups', group);
-        }
-        if (group.length === 0) {
-            $('.chats ul').empty();
+        let $this = e.target;
+        if ($this.dataset.name === 'group_search') {
+            let group = $this.value;
+            let chatsList = document.querySelector('.chats__list');
+            if (!group) {
+                ipcRenderer.send('load_chats', 'group_chat');
+            } else {
+                // $('.chats ul').empty();
+                while (chatsList.firstChild) {
+                    chatsList.removeChild(chatsList.firstChild)
+                }
+            }
+
+            if (group.length > 2) {
+                ipcRenderer.send('find_groups', group);
+            } else if (group.length === 0) {
+                // $('.chats ul').empty();
+                while (chatsList.firstChild) {
+                    chatsList.removeChild(chatsList.firstChild)
+                }
+            }
         }
     });
 
