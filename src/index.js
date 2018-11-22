@@ -18,6 +18,15 @@ let r = null;
 let curr_width = null;
 let unlock = false;
 
+/* AUTH VARIABLES */
+let current_fs, next_fs, previous_fs; //fieldsets
+let left, opacity, scale; //fieldset properties which we will animate
+let animating; //flag to prevent quick multi-click glitches
+let data = {}; //flag to prevent quick multi-click glitches
+let mnemonic_text = '';
+let array_mnemonic_text = [];
+/* /AUTH VARIABLES */
+
 function validate_totalSupply(val) {
     let regexp = /^[0-9\.]*$/;
     if (regexp.test(val)){
@@ -62,8 +71,7 @@ function validate_mnemonic(mnem) {
 }
 
 function validate_confirm_mnemonic(val) {
-    // return true;
-    if (val.trim() === mnemonic_text.trim()) {
+    if (val.trim() === mnemonic_text) {
         console.log(val);
         console.log(mnemonic_text);
         return (val);
@@ -81,15 +89,6 @@ window.onload = function () {
     // };
 
     /* AUTH.js */
-    // const {ipcRenderer} = require('electron');
-//jQuery time
-    let current_fs, next_fs, previous_fs; //fieldsets
-    let left, opacity, scale; //fieldset properties which we will animate
-    let animating; //flag to prevent quick multi-click glitches
-    let data = {}; //flag to prevent quick multi-click glitches
-    let mnemonic_text = '';
-    let array_mnemonic_text = [];
-
     $(document).on('click', '.next', function(){
         if ( check_fields(this.closest('fieldset')) ) return;
 
