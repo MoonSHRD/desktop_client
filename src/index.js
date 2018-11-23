@@ -676,6 +676,8 @@ window.onload = function () {
     ipcRenderer.on('received_message', (event, obj) => {
         let chat = $('#'+obj.id);
 
+        console.log(obj);
+
         if (obj.message.fresh) {
             if (chat) {
                 chat.find('[data-name=chat_last_time]').text(obj.message.time);
@@ -738,7 +740,9 @@ window.onload = function () {
     ipcRenderer.on('reload_chat', (event, obj) => {
         // $('#messaging_block').html(obj);
         document.getElementById('messaging_block').innerHTML = obj;
-        document.querySelector('[data-msg]').focus();
+        if (document.querySelector('[data-msg]')) {
+            document.querySelector('[data-msg]').focus();
+        }
     });
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
@@ -752,7 +756,7 @@ window.onload = function () {
     });
 
     /* Очистка поиска при вводе сообщения */
-    document.addEventListener('input', (e) => {
+    /*document.addEventListener('input', (e) => {
         let $this = e.target;
         let searchInput = document.querySelector('.searchInput'); // Поле поиска
         let chatsList = document.querySelector('.chats__list'); // Список чатов
@@ -770,10 +774,10 @@ window.onload = function () {
                 }
             }
         }
-    });
+    });*/
     /* Очистка поиска при вводе сообщения */
 
-    $(document).on('click', '[data-name=join_channel]', function () {
+    /*$(document).on('click', '[data-name=join_channel]', function () {
         $(this).attr('disabled', 'disabled');
         let active_dialog = $('.active_dialog');
         ipcRenderer.send('join_channel', {
@@ -781,9 +785,34 @@ window.onload = function () {
             domain: active_dialog.attr('data-domain'),
             contract_address: active_dialog.attr('data-contract_address')
         });
+    });*/
+
+    document.addEventListener('click', (e) =>{
+        let $this = e.target;
+        let activeDialog = document.querySelector('.active_dialog');
+        let searchInput = document.querySelector('.searchInput'); // Поле поиска
+        let chatsList = document.querySelector('.chats__list'); // Список чатов
+
+        if ( $this.dataset.name === 'join_channel' ){
+            if ( searchInput.value ) {
+                // Проверим длинну введенного сообщения
+                searchInput.value = ''; // Очистим поле поиска
+                // Удалим результаты поиска
+                while (chatsList.firstChild) {
+                    chatsList.removeChild(chatsList.firstChild)
+                }
+                $this.setAttribute('disabled', 'disabled');
+                ipcRenderer.send('join_channel', {
+                    id: activeDialog.getAttribute('id'),
+                    domain: activeDialog.dataset.domain,
+                    contract_address: activeDialog.dataset.contract_address
+                });
+                ipcRenderer.send('load_chats', 'group_chat'); // Загружаем наши чаты
+            }
+        }
     });
 
-    function click_anim(e){
+    /*let click_anim = (e) => {
         $('.ripple').remove();
         var posX = $(this).offset().left,
             posY = $(this).offset().top,
@@ -803,7 +832,7 @@ window.onload = function () {
             top: y + 'px',
             left: x + 'px'
         }).addClass('rippleEffect');
-    }
+    };*/
 
     document.addEventListener('click', (e) => {
         let $this = e.target;
@@ -891,11 +920,9 @@ window.onload = function () {
         .on('mouseout', '[data-toogle="tooltip"]', function () {
             $(this).tooltip('hide');
         })
-
         .on('keydown', '[data-toggle="tooltip2"]', function () {
             $(this).tooltip('show');
         })
-
         .on('backspace-down', '[data-toggle="tooltip2"]', function () {
             $(this).tooltip('hide');
         });
@@ -904,7 +931,7 @@ window.onload = function () {
      * Форма создная группы/канала
      */
 
-    function validationInputs(target = '[data-require]'){
+    /*function validationInputs(target = '[data-require]'){
         const $this = $(target);
         const minChars = $this.attr('minlength');
         const maxChars = $this.attr('maxlength');
@@ -941,7 +968,7 @@ window.onload = function () {
                 $this.removeClass('error').addClass('correct');
             }
         }
-    };
+    };*/
 
     function checkFields(fieldset) {
         let err = false;
@@ -953,7 +980,6 @@ window.onload = function () {
             err:true,
             data:{}
         };
-
 
         els.forEach(function (elem) {
             const $element = $this.find(`[name=${elem.name}]`);
@@ -981,10 +1007,6 @@ window.onload = function () {
 
         return ret;
     }
-
-    // $(document).on('keyup', '[data-require="true"]', function (){
-    //     validationInputs(this);
-    // });
 
     $(document).on('submit', '.modal-content', function (e) {
         let button = $(this).find('.btn-primary');
@@ -1145,16 +1167,16 @@ window.onload = function () {
     ipcRenderer.on('get_updates', (event, obj) => {
 
         console.log(typeof(obj));
-        if(obj == 100){
+        if(obj === 100){
 
             update_notify( 'Install updates', 'Now you can install updates');
 
             $('#update_button').fadeIn();
             $('[data-name=download_updates]').attr('data-name','install_updates');
-            setTimeout(()=>{
+            setTimeout(() => {
                 $('#download_img').fadeOut();
 
-                setTimeout(()=>{
+                setTimeout(() => {
                     $('#update_img').fadeIn();
                 },500);
             },500);
