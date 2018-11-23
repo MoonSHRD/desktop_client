@@ -135,7 +135,6 @@ export class ChatModel extends BaseEntity {
     }
 
     static get_chat_opponent_id(chat_id:string,self_id:string):string{
-        console.log(chat_id, self_id);
         let opps = chat_id.split("_");
         if (opps[0]==self_id) {
             return opps[1];

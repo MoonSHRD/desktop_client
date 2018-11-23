@@ -251,12 +251,15 @@ class ChatsController extends Controller {
         this.found_chats.users={};
         this.found_chats.chats={};
         let self_info = await this.get_self_info();
-        let data = await this.grpc.CallMethod('GetObjsData',{str: group_name,obj:'all',prt:0});
+        let data = await this.grpc.CallMethod('GetObjsData',{
+            str: group_name,
+            obj:'all',
+            prt:0
+        });
         if (data.err)
             throw data.err;
         // console.log(data);
         let fData=JSON.parse(data.data.data);
-        // console.log(fData);
         let users=fData.Users;
         for (let i in users){
             let user = users[i];
