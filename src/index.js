@@ -742,11 +742,13 @@ window.onload = function () {
     });
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
-        $('[data-msg-list]').prepend(obj);
+        // $('[data-msg-list]').prepend(obj);
+        document.querySelector('[data-msg-list]').prepend(obj);
     });
 
     ipcRenderer.on('join_channel_html', (event, obj) => {
-        $('.send_message_block').html(obj);
+        // $('.send_message_block').html(obj);
+        document.querySelector('.send_message_block').innerHTML = obj;
     });
 
     /* Очистка поиска при вводе сообщения */
@@ -756,14 +758,16 @@ window.onload = function () {
         let chatsList = document.querySelector('.chats__list'); // Список чатов
         let msgLength = 2; // Число введенных символов сообщения
         if ( $this.dataset.msg ){
-            // Проверим длинну введенного сообщения
-            if ( $this.value.length > msgLength ){
-                searchInput.value = ''; // Очистим поле поиска
-                // Удалим результаты поиска
-                while (chatsList.firstChild) {
-                    chatsList.removeChild(chatsList.firstChild)
+            if ( searchInput.value ) {
+                // Проверим длинну введенного сообщения
+                if ($this.value.length > msgLength) {
+                    searchInput.value = ''; // Очистим поле поиска
+                    // Удалим результаты поиска
+                    while (chatsList.firstChild) {
+                        chatsList.removeChild(chatsList.firstChild)
+                    }
+                    ipcRenderer.send('load_chats', 'group_chat'); // Загружаем наши чаты
                 }
-                ipcRenderer.send('load_chats', 'group_chat'); // Загружаем наши чаты
             }
         }
     });
