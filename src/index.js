@@ -1,5 +1,5 @@
 const {ipcRenderer} = require('electron');
-const dict = require('./langs/lang');
+// const dict = require('./langs/lang');
 const slick = require('slick-carousel');
 const {dialog} = require('electron').remote;
 const fs = require('fs');
@@ -18,181 +18,526 @@ let r = null;
 let curr_width = null;
 let unlock = false;
 
-function validate_totalSupply(val) {
+/* AUTH VARIABLES */
+let current_fs, next_fs, previous_fs; //fieldsets
+let left, opacity, scale; //fieldset properties which we will animate
+let animating; //flag to prevent quick multi-click glitches
+let data = {}; //flag to prevent quick multi-click glitches
+let mnemonic_text = '';
+let array_mnemonic_text = [];
+/* /AUTH VARIABLES */
+
+let validate_totalSupply = (val) => {
     let regexp = /^[0-9\.]*$/;
     if (regexp.test(val)){
         console.log(val);
         return (val);
     }
-}
+};
 
-function validate_subscriptionPrice(val) {
+let validate_subscriptionPrice = (val) => {
     let regexp = /^[0-9\.]*$/;
     if (regexp.test(val)){
         console.log(val);
         return (val);
     }
-}
+};
 
-function validate_tokenPrice(val) {
+let validate_tokenPrice = (val) => {
     let regexp = /^[0-9]*\.?[0-9]*$/;
-    if (regexp.test(val)){
+    if (regexp.test(val)) {
         console.log(val);
         return (val);
     }
-}
+};
 
+let validate_firstname = (val) => {
+    return (val);
+};
 
+let validate_mnemonic = (mnem) => {
+    if (!mnem) return false;
+    let mnemTrim = mnem.trim();
+    console.log(`validate_mnemonic : ${mnem}`);
+    if (mnem.search(/[А-яЁё]/) !== -1) return false;
+    const words_count=mnemTrim.split(/\s+/).length;
+    console.log(`menemonik : ${words_count}`);
+    // const err=mnem.substr(-1,1)===' ';
+    let err = words_count !== 12;
+    console.log(err);
+    return (words_count === 12 && !err);
+};
+
+let validate_confirm_mnemonic = (val) => {
+    if (val.trim() === mnemonic_text) {
+        console.log(val);
+        console.log(mnemonic_text);
+        return (val);
+    }
+};
 
 window.onload = function () {
 
-    $.html5Translate = function(dict, lang){
+    // $.html5Translate = function(dict, lang){
+    //
+    //     $('[data-translate-key]').each(function(){
+    //         $(this).html( dict[ lang ][ $(this).data('translateKey') ] );
+    //     });
+    //
+    // };
 
-        $('[data-translate-key]').each(function(){
-            $(this).html( dict[ lang ][ $(this).data('translateKey') ] );
+    /* AUTH.js */
+    $(document).on('click', '.next', function(){
+        if ( check_fields(this.closest('fieldset')) ) return;
+
+        if(animating) return false;
+        animating = true;
+
+        current_fs = $(this).parent();
+        next_fs = $(this).parent().next();
+
+        //activate next step on progressbar using the index of next_fs
+        $('#progressbar li').eq($('fieldset').index(next_fs)).addClass('active');
+
+        //show the next fieldset
+        next_fs.show();
+        //hide the current fieldset with style
+        current_fs.animate({opacity: 0}, {
+            step: function(now, mx) {
+                // console.log(current_fs.offset().top);
+                //as the opacity of current_fs reduces to 0 - stored in "now"
+                //1. scale current_fs down to 80%
+                scale = 1 - (1 - now) * 0.4;
+                //2. bring next_fs from the right(50%)
+                // left = (now * 50)+'%';
+                //3. increase opacity of next_fs to 1 as it moves in
+                opacity = 1 - now;
+                current_fs.css({
+                    'transform': 'scale('+scale+')',
+                    'width' : current_fs.width(),
+                    'position': 'absolute',
+                    'top' : current_fs.offset().top
+                });
+                next_fs.css({
+                    // 'left': left,
+                    'opacity': opacity
+                });
+            },
+            duration: 800,
+            complete: function(){
+                current_fs.hide();
+                animating = false;
+            },
+            //this comes from the custom easing plugin
+            // easing: 'easeInOutBack'
+            easing : 'linear'
         });
-
-    };
-
-    $(document).on('click', 'a[href^="http"]', function(event) {
-        event.preventDefault();
-        shell.openExternal(this.href);
     });
 
-    $(document).on('click','.copyButton',function () {
-        // if (document.selection) {
-        //     var range = document.body.createTextRange();
-        //     range.moveToElementText(document.getElementById('copyTo'));
-        //     range.select().createTextRange();
-        //     document.execCommand("Copy");
-        //
-        // } else if (window.getSelection) {
-        //     var range = document.createRange();
-        //     range.selectNode(document.getElementById('copyTo'));
-        //     window.getSelection().addRange(range);
-        //     document.execCommand("Copy");
-        let elem = document.getElementById('copyTo');
-        let body = document.body, range, sel;
+    $(document).on('click', '.previous', function(){
+        if(animating) return false;
+        animating = true;
 
-        if(document.createRange && window.getSelection) {
-            range = document.createRange();
-            sel = window.getSelection();
-            sel.removeAllRanges();
-            try {
-                range.selectNodeContents(elem);
-                sel.addRange(range);
-            } catch (e) {
-                range.selectNode(elem);
-                sel.addRange(range);
+        current_fs = $(this).parent();
+        previous_fs = $(this).parent().prev();
+
+        //de-activate current step on progressbar
+        $('#progressbar li').eq($('fieldset').index(current_fs)).removeClass('active');
+
+        //show the previous fieldset
+        previous_fs.show();
+        //hide the current fieldset with style
+        current_fs.animate({opacity: 0}, {
+            step: function(now, mx) {
+                //as the opacity of current_fs reduces to 0 - stored in "now"
+                //1. scale previous_fs from 80% to 100%
+                scale = 0.8 + (1 - now) * 0.2;
+                //2. take current_fs to the right(50%) - from 0%
+                left = ((1-now) * 50)+'%';
+                //3. increase opacity of previous_fs to 1 as it moves in
+                opacity = 1 - now;
+                current_fs.css({'left': left});
+                previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
+            },
+            duration: 800,
+            complete: function(){
+                current_fs.hide();
+                animating = false;
+            },
+            //this comes from the custom easing plugin
+            easing: 'easeInOutBack'
+        });
+    });
+
+    /* Отправка формы */
+    document.addEventListener('submit', (e) => {
+        const $this = e.target;
+        if ($this.id === 'profile_form') {
+            e.preventDefault();
+            let fieldsetArr = document.querySelectorAll('fieldset');
+            for (let i=0; i < fieldsetArr.length; i++) {
+                if (fieldsetArr[i].classList.contains('active') !== fieldsetArr[fieldsetArr.length - 1]){
+                    console.log('done');
+                    document.querySelector('.next').click();
+                }
             }
-        } else if (body.createTextRange) {
-            range = body.createTextRange();
-            range.moveToElementText(elem);
-            range.select();
+            let obj = serializeArray($this);
+            console.log(obj);
+            let prof = {};
+            obj.forEach(function (elem) {
+                prof[elem.name] = elem.value;
+            });
+            prof.avatar = null;
+            if ($this.querySelector('[name=avatar]').files.length)
+                prof.avatar = $this.querySelector('#avatar_preview').getAttribute('src');
+            console.log('Msg1', prof);
+            ipcRenderer.send('submit_profile', prof);
         }
-        document.execCommand('copy');
-        console.log(range, sel, elem);
+    });
+    /* /Отправка формы */
 
-        $.notify('address copied \n' + range, {
+    document.querySelector('html').classList.add('js');
 
-            placement: {
-                from: 'bottom',
-                align: 'right'
-            },
-            animate: {
-                enter: 'animated fadeInRight',
-                exit: 'animated fadeOutRight'
-            },
-            z_index: 10031,
-            offset: 20,
-            spacing: 10
+    function check_fields(fieldset) {
+        let err = false;
+        const $this=document.querySelector(`[data-step="${fieldset.dataset.step}"]`);
+        // let els = $this.serializeArray();
+        let els = serializeArray($this);
+        if (els.length===0) return err;
+
+        els.forEach(function (elem) {
+            // console.log(window['validate_'+elem.name]);
+            if (window['validate_'+elem.name]!==undefined){
+                const $element = $this.querySelector(`[name=${elem.name}]`);
+                // console.log($element)
+                if (!window['validate_'+elem.name](elem.value)){
+                    $element.classList.add('invalid');
+                    err = true;
+                } else {
+                    $element.classList.remove('invalid');
+                }
+            }
+            data[elem.name] = elem.value;
         });
-        // }
+
+        return err;
+    }
+
+    document.addEventListener('input', (e) => {
+        let $this = e.target;
+        if ( $this.getAttribute('name') === 'firstname' ){
+            if (!$this.value) {
+                $this.classList.add('invalid');
+            } else {
+                $this.classList.remove('invalid');
+            }
+        }
+        else if ( $this.getAttribute('name') === 'mnemonic' ){
+            if (!validate_mnemonic($this.value)) {
+                $this.classList.add('invalid');
+            } else {
+                $this.classList.remove('invalid');
+            }
+        }
+        else if ( $this.getAttribute('name') === 'confirm_mnemonic '){
+            if (!validate_confirm_mnemonic($this.value) === mnemonic_text + ' ') {
+                $this.classList.add('invalid');
+            } else {
+                $this.classList.remove('invalid');
+            }
+        }
     });
 
-    $(document).on('click','.attachFileToChat',function () {
-        $('input[id=\'attachFileToChat\']').trigger('click');
+    document.addEventListener('click', (e) => {
+
+        if (e.target.id === 'generate_mnemonic') {
+            ipcRenderer.send('generate_mnemonic');
+            document.getElementById('input_mnemonic_next').focus();
+        }
+
+        else if (e.target.id === 'input_mnemonic_next') {
+            let mnemonicVal = document.getElementById('input_mnemonic').value;
+            if (validate_mnemonic(mnemonicVal)) {
+                mnemonic_text = mnemonicVal.trim();
+                array_mnemonic_text = mnemonic_text.split(' ');
+                console.log(array_mnemonic_text);
+                array_mnemonic_text.sort().map(function (item) {
+                    let a = document.createElement('a');
+                    a.innerText = item;
+                    a.classList.add('mnemonic__item');
+                    document.querySelector('.words').appendChild(a);
+                });
+            }
+        }
+
+        else if (e.target.classList.contains('mnemonic__item')){
+            let $this = e.target;
+            let confirmMnemonic = document.getElementById('confirm_input_mnemonic');
+            let confirmMnemonicText = confirmMnemonic.value;
+
+            if(!$this.classList.contains('mnemonic__item_use')){
+                // console.log('this is item');
+                confirmMnemonicText += ($this.innerText + ' ');
+                confirmMnemonic.value = confirmMnemonicText;
+                $this.classList.add('mnemonic__item_use');
+                console.log(`confirmMnemonicText : ${confirmMnemonicText}`);
+                console.log(mnemonic_text);
+                if(confirmMnemonicText === mnemonic_text + ' '){
+                    confirmMnemonic.classList.remove('invalid');
+                }
+            } else {
+                // console.log('this is item USE');
+                let text = confirmMnemonicText.replace($this.innerText + ' ','');
+                confirmMnemonic.value = text;
+                $this.classList.remove('mnemonic__item_use');
+                console.log(text);
+                if(!(text === mnemonic_text + ' ')){
+                    confirmMnemonic.classList.add('invalid');
+                }
+            }
+        }
     });
 
-    $(document).on('click','.attachFileToGroup',function () {
-        $('input[id=\'attachFileToGroup\']').trigger('click');
+    /* Загрузка аватарки */
+    document.addEventListener('change', (e) => {
+        let $this = e.target;
+
+        if ( $this.name === 'avatar' ) {
+            console.log('change avatar');
+            const file = $this.files[0];
+            let fileType = file.type;
+            if (file) {
+                let reader = new FileReader();
+                reader.onloadend = function () {
+                    // var image = new Image();
+                    // image.src = reader.result;
+                    document
+                        .getElementById('avatar_preview')
+                        .setAttribute('src', reader.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    });
+    /* /Загрузка аватарки */
+
+    ipcRenderer.on('generate_mnemonic', (event, arg) => {
+        const mnemonic = document.getElementById('input_mnemonic');
+        mnemonic.value = arg;
+        mnemonic.classList.remove('invalid');
     });
 
-
-    $(document).on('change','input[id="attachFileToChat"], input[id="attachFileToGroup"]',function () {
-        console.log('Selected files', this.files);
+    document.addEventListener('keydown', (e) => {
+        if (e.target.id === 'input_mnemonic'){
+            let mnemonicClr = e.target.value.replace(/\s\s/g, " ");
+            console.log(`vanilla keydown : ${mnemonicClr}`);
+            e.target.value = mnemonicClr;
+        } else if (e.target.id === 'confirm_input_mnemonic') {
+            e.preventDefault();
+            e.target.blur();
+        }
     });
 
+    /*!
+     * Serialize all form data into an array
+     * (c) 2018 Chris Ferdinandi, MIT License, https://gomakethings.com
+     * @param  {Node}   form The form to serialize
+     * @return {String}      The serialized form data
+     */
+    let serializeArray = (form) => {
 
-    $(document).on('click', '[data-id=menu_user_chats]', function () {
-        const type = $(this).attr('data-id');
-        ipcRenderer.send('change_state', type);
+        // Setup our serialized data
+        let serialized = [];
+
+        // Loop through each field in the form
+        for (let i = 0; i < form.elements.length; i++) {
+
+            let field = form.elements[i];
+
+            // Don't serialize fields without a name, submits, buttons, file and reset inputs, and disabled fields
+            if (!field.name || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') continue;
+
+            // If a multi-select, get all selections
+            if (field.type === 'select-multiple') {
+                for (let n = 0; n < field.options.length; n++) {
+                    if (!field.options[n].selected) continue;
+                    serialized.push({
+                        name: field.name.trim(),
+                        value: field.options[n].value.trim()
+                    });
+                }
+            }
+
+            // Convert field data to a query string
+            else if ((field.type !== 'checkbox' && field.type !== 'radio') || field.checked) {
+                serialized.push({
+                    name: field.name.trim(),
+                    value: field.value.trim()
+                });
+            }
+        }
+
+        return serialized;
+    };
+    /* /AUTH.js*/
+
+    document.addEventListener('click', (e) => {
+        let $this = e.target;
+        /* Обработка ссылок */
+        if ( $this.hasAttribute('href') ) {
+            let url = $this.getAttribute('href');
+            let rgx = new RegExp("^(http|https)://", "i")
+            if (rgx.test(url)) {
+                shell.openExternal($this.href);
+            }
+        }
+        /* /Обработка ссылок */
+
+        /* Копирование id пользователя */
+        else if ( $this.classList.contains('copyButton') ){
+            let elem = document.getElementById('copyTo');
+            let body = document.body, range, sel;
+
+            if(document.createRange && window.getSelection) {
+                range = document.createRange();
+                sel = window.getSelection();
+                sel.removeAllRanges();
+                try {
+                    range.selectNodeContents(elem);
+                    sel.addRange(range);
+                } catch (e) {
+                    range.selectNode(elem);
+                    sel.addRange(range);
+                }
+            } else if (body.createTextRange) {
+                range = body.createTextRange();
+                range.moveToElementText(elem);
+                range.select();
+            }
+            document.execCommand('copy');
+            console.log(range, sel, elem);
+
+            $.notify('address copied \n' + range, {
+
+                placement: {
+                    from: 'bottom',
+                    align: 'right'
+                },
+                animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                },
+                z_index: 10031,
+                offset: 20,
+                spacing: 10
+            });
+        }
+        /* /Копирование id пользователя */
+
+        /* Обработка клика на добавление файлов/картинок в чат */
+        else if ( $this.classList.contains('attachFileToChat') ){
+            console.log('hello MF');
+            document.getElementById('attachFileToChat').click();
+        }
+        else if ( $this.classList.contains('attachFileToGroup') ){
+            console.log('hello MF');
+            document.getElementById('attachFileToGroup').click();
+        }
+        /* /Обработка клика на добавление файлов/картинок в чат */
+
+        /* Обработка клика на меню */
+        else if ( $this.classList.contains('menu__item') ){
+            const type = $this.dataset.id;
+
+            if (!$this.classList.contains('active_menu') && type) {
+                console.log($this.classList.contains('active_menu'), type);
+                ipcRenderer.send('change_menu_state', type);
+            }
+
+            if (
+                (type !== 'menu_create_chat')
+                &&
+                !$this.classList.contains('not_active')
+            ) {
+                // $this.classList.add('active_menu');
+                let parent = $this.parentNode; // родитель - li
+                let parentList = parent.parentNode; // родитель - ul
+                let sibling = parentList.firstChild;
+
+                console.log(parent, parentList, sibling, sibling.childNodes);
+
+                // Перебераем весь список элементов
+                while (sibling) {
+                    // Удаляем все активные классы
+                    if (sibling.nodeType === 1)
+                        sibling.children[0].classList.remove('active_menu');
+                    // Добавляем активный класс для назатого пункта
+                    if (sibling.nodeType === 1 && $this === sibling.children[0])
+                        sibling.children[0].classList.add('active_menu');
+                    sibling = sibling.nextSibling;
+                }
+            }
+        }
+        /* /Обработка клика на меню */
     });
 
-
-    $(document).on('change', 'input[id="attachFileToChat"], input[id="attachFileToGroup"]', function () {
-        readURL(this);
+    /* Обработка добавления файлов/картинок в чат */
+    document.addEventListener('change', (e) => {
+        let $this = e.target;
+        if ( $this.getAttribute('id') === 'attachFileToChat' ){
+            console.log('Selected files', $this.files);
+            readURL($this);
+        } else if ( $this.getAttribute('id') === 'attachFileToGroup' ){
+            console.log('Selected files', $this.files);
+            readURL($this);
+        }
     });
+    /* /Обработка добавления файлов/картинок в чат */
 
+    /* Считывание урла на файл/картинку */
+    let readURL = (input) => {
 
-    function readURL(input) {
-
-        let imgFileMsg = $('#upload_file');
+        // let imgFileMsg = $('#upload_file');
+        let imgFileMsg = document.getElementById('upload_file');
 
         if (input.files && input.files[0]) {
-            var reader = new FileReader();
+            let reader = new FileReader();
 
-            reader.onload = function (e) {
-                imgFileMsg
-                    .addClass('added')
-                    .attr('src', e.target.result)
-                    .css('cursor', 'pointer');
+            reader.onload = (e) => {
+                imgFileMsg.classList.add('added');
+                imgFileMsg.setAttribute('src', e.target.result);
+                imgFileMsg.style.cursor = 'pointer';
             };
 
             reader.readAsDataURL(input.files[0]);
         }
-    }
+    };
+    /* /Считывание урла на файл/картинку */
 
-    $(document).on('click', '#upload_file', function () {
-        let imgFileMsg = $(this);
+    // $(document).on('click', '#upload_file', function () {
+    //     let imgFileMsg = $(this);
+    //
+    //     imgFileMsg
+    //         .removeClass('added')
+    //         .attr('src', '')
+    //         .css('cursor', 'default');
+    //     $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
+    // });
 
-        imgFileMsg
-            .removeClass('added')
-            .attr('src', '')
-            .css('cursor', 'default');
-        $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
-    });
-
-    $(document).on('click', '.menu a', function () {
-        const $this = $(this);
-        const type = $this.data('id');
-
-        if (!$this.hasClass('active_menu') && type) {
-            console.log($this.hasClass('active_menu'), type);
-
-            ipcRenderer.send('change_menu_state', type);
-        }
-
-        if (
-            (type !== 'menu_create_chat')
-            &&
-            !$this.hasClass('not_active')
-        ) {
-            $this
-                .addClass('active_menu')
-                .parent()
-                .siblings('li')
-                .children()
-                .removeClass('active_menu');
-        }
-    });
-
-    $(document).on('click','[data-id=menu_create_chat]',function (e) {
+    /*$(document).on('click','[data-id=menu_create_chat]',function (e) {
         ipcRenderer.send('change_menu_state', 'menu_create_chat');
+    });*/
+
+    document.addEventListener('click', (e) => {
+        let $this = e.target;
+        if ( $this.dataset.id === 'menu_create_chat' ){
+            ipcRenderer.send('change_menu_state', 'menu_create_chat');
+        }
     });
 
     ipcRenderer.on('change_menu_state', (event, arg) => {
-        $('#working_side').html(arg);
+        // console.log('change_menu_state', arg);
+        document.getElementById('working_side').innerHTML = arg;
     });
 
     ipcRenderer.on('online', (event, arg) => {
@@ -211,9 +556,10 @@ window.onload = function () {
     };
 
     ipcRenderer.on('change_app_state', (event, obj) => {
-        console.log('autyh');
-        $('#view').html(obj.arg);
-        $.html5Translate(dict, obj.language);
+        console.log('autyh', obj);
+        // $('#view').html(obj.arg);
+        document.getElementById('view').innerHTML = obj.arg;
+        // $.html5Translate(dict, obj.language);
         widthMsgWindow('[data-msgs-window]');
     });
 
@@ -222,24 +568,10 @@ window.onload = function () {
         e.preventDefault();
     });
 
-    $(document).on('change', '[name=avatar]', function () {
-        const file = this.files[0];
-        let fileType = file.type;
-        if (file) {
-            let reader = new FileReader();
-            reader.onloadend = function () {
-                // var image = new Image();
-                // image.src = reader.result;
-                $('#avatar_preview').attr('src', reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    $(document).on('click', '.menuBtn', function () {
+    /*$(document).on('click', '.menuBtn', function () {
         $('.dialogs').toggleClass('resize1', 400);
         $('.icon-bar').toggleClass('resize', 400);
-    });
+    });*/
 
     $(document).on('click', 'a.infopanel', function () {
         ipcRenderer.send('get_my_vcard');
@@ -271,15 +603,15 @@ window.onload = function () {
         // }
     });
 
-    $(document).on('input','.send_message__input',function(e) {
+    /*$(document).on('input','.send_message__input',function(e) {
         // console.log('hello!')
         if($(this).val() === '') {
             $(this).attr('rows', 1);
         }
 
-    });
+    });*/
 
-    $(document).on('paste','.send_message__input',function(e) {
+    /*$(document).on('paste','.send_message__input',function(e) {
         // console.log('paste!');
         var text = $(this).outerHeight();   //помещаем в var text содержимое текстареи
         let val = $(this).text();
@@ -290,7 +622,7 @@ window.onload = function () {
         // }
         console.log(text);
 
-    });
+    });*/
 
 
     $(document).on('click', '[data-toggle="send-msg"]', function () {
@@ -317,7 +649,11 @@ window.onload = function () {
             group: $('.active_dialog').attr('data-type') === 'channel',
         };
 
-        obj = {id: active_dialog.attr('id'), text: msg_input.val().trim()};
+        obj = {
+            id: active_dialog.attr('id'),
+            text: msg_input.val().trim()
+        };
+
         // console.log(obj);
         let files = $('#attachFileToChat').prop('files');
         if (files && files[0]) {
@@ -344,9 +680,10 @@ window.onload = function () {
             .removeClass('added');
     }
 
-    ipcRenderer.on('add_out_msg', (event, obj) => {
+    /*ipcRenderer.on('add_out_msg', (event, obj) => {
+        console.log(obj);
         $('[data-msg-list]').append(obj);
-    });
+    });*/
 
     let scrollDown = (target) => {
         let targetBlock = document.querySelector(target);
@@ -354,26 +691,53 @@ window.onload = function () {
     };
 
     let scrollDownAnimate = (target = '[data-msg-history]', list = '[data-msg-list]') => {
-        const targetBlock = $(target);
-        let targetHeight = $(list).outerHeight();
-        targetBlock.animate({
-            scrollTop: targetHeight
-        }, 600);
+        const targetBlock = document.querySelector(target);
+        let targetHeight = document.querySelector(list).offsetHeight;
+        animate(targetBlock, "scrollTop", "", targetBlock.scrollTop, targetHeight, 1000, true);
     };
 
-    ipcRenderer.on('get_chat_msgs', (event, obj) => {
-        $('[data-msg-list]').append(obj);
-        // scrollDown('[data-msg-history]');
-    });
+    let animate = (elem, style, unit, from, to, time, prop) => {
+        if (!elem) return;
+        let start = new Date().getTime();
+        let timer = setInterval(function () {
+            let step = Math.min(1, (new Date().getTime() - start) / time);
+
+            if (prop) {
+                elem[style] = (from + step * (to - from))+unit;
+            } else {
+                elem.style[style] = (from + step * (to - from))+unit;
+            }
+
+            if (step === 1) {
+                clearInterval(timer);
+            }
+        }, 25);
+
+        if (prop) {
+            elem[style] = from+unit;
+        } else {
+            elem.style[style] = from+unit;
+        }
+    };
+
+    // ipcRenderer.on('get_chat_msgs', (event, obj) => {
+    //     console.log(obj);
+    //     $('[data-msg-list]').append(obj);
+    //     // scrollDown('[data-msg-history]');
+    // });
 
     ipcRenderer.on('received_message', (event, obj) => {
         let chat = $('#'+obj.id);
+
+        console.log(obj);
+
+        //console.log('received_message', obj);
 
         if (obj.message.fresh) {
             if (chat) {
                 chat.find('[data-name=chat_last_time]').text(obj.message.time);
                 chat.find('[data-name=chat_last_text]').text(obj.message.text);
-                console.log(obj);
+                // console.log(obj);
 
                 // chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
                 // chat.find('[data-name=unread_messages]').show();
@@ -429,19 +793,45 @@ window.onload = function () {
     });
 
     ipcRenderer.on('reload_chat', (event, obj) => {
-        $('#messaging_block').html(obj);
-        $('[data-msg]').focus();
+        // $('#messaging_block').html(obj);
+        document.getElementById('messaging_block').innerHTML = obj;
+        if (document.querySelector('[data-msg]')) {
+            document.querySelector('[data-msg]').focus();
+        }
     });
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
-        $('[data-msg-list]').prepend(obj);
+        document.querySelector('[data-msg-list]').prepend(obj);
     });
 
     ipcRenderer.on('join_channel_html', (event, obj) => {
-        $('.send_message_block').html(obj);
+        // $('.send_message_block').html(obj);
+        document.querySelector('.send_message_block').innerHTML = obj;
     });
 
-    $(document).on('click', '[data-name=join_channel]', function () {
+    /* Очистка поиска при вводе сообщения */
+    /*document.addEventListener('input', (e) => {
+        let $this = e.target;
+        let searchInput = document.querySelector('.searchInput'); // Поле поиска
+        let chatsList = document.querySelector('.chats__list'); // Список чатов
+        let msgLength = 2; // Число введенных символов сообщения
+        if ( $this.dataset.msg ){
+            if ( searchInput.value ) {
+                // Проверим длинну введенного сообщения
+                if ($this.value.length > msgLength) {
+                    searchInput.value = ''; // Очистим поле поиска
+                    // Удалим результаты поиска
+                    while (chatsList.firstChild) {
+                        chatsList.removeChild(chatsList.firstChild)
+                    }
+                    ipcRenderer.send('load_chats', 'group_chat'); // Загружаем наши чаты
+                }
+            }
+        }
+    });*/
+    /* Очистка поиска при вводе сообщения */
+
+    /*$(document).on('click', '[data-name=join_channel]', function () {
         $(this).attr('disabled', 'disabled');
         let active_dialog = $('.active_dialog');
         ipcRenderer.send('join_channel', {
@@ -449,9 +839,34 @@ window.onload = function () {
             domain: active_dialog.attr('data-domain'),
             contract_address: active_dialog.attr('data-contract_address')
         });
+    });*/
+
+    document.addEventListener('click', (e) =>{
+        let $this = e.target;
+        let activeDialog = document.querySelector('.active_dialog');
+        // let searchInput = document.querySelector('.searchInput'); // Поле поиска
+        // let chatsList = document.querySelector('.chats__list'); // Список чатов
+
+        if ( $this.dataset.name === 'join_channel' ){
+            /*if ( searchInput.value ) {
+                // Проверим длинну введенного сообщения
+                searchInput.value = ''; // Очистим поле поиска
+                // Удалим результаты поиска
+                while (chatsList.firstChild) {
+                    chatsList.removeChild(chatsList.firstChild)
+                }*/
+            $this.setAttribute('disabled', 'disabled');
+            ipcRenderer.send('join_channel', {
+                id: activeDialog.getAttribute('id'),
+                domain: activeDialog.dataset.domain,
+                contract_address: activeDialog.dataset.contract_address
+            });
+            /*    ipcRenderer.send('load_chats', 'group_chat'); // Загружаем наши чаты
+            }*/
+        }
     });
 
-    function click_anim(e){
+    /*let click_anim = (e) => {
         $('.ripple').remove();
         var posX = $(this).offset().left,
             posY = $(this).offset().top,
@@ -471,41 +886,47 @@ window.onload = function () {
             top: y + 'px',
             left: x + 'px'
         }).addClass('rippleEffect');
-    }
+    };*/
 
+    document.addEventListener('click', (e) => {
+        let $this = e.target;
+        if ( $this.classList.contains('chats__item') ){
+            console.log('chat_clicked');
 
-    $(document).on('click', '.chats li', function (e) {
-        console.log('chat_clicked');
-        const $this = $(this);
+            let parent = $this.parentNode; // родитель
+            let sibling = parent.firstChild;
 
-        $this.siblings().removeClass('have_history');
-        $this.addClass('active_dialog').siblings().removeClass('active_dialog');
-        let chat = {
-            id : $this.attr('id'),
-            type : $this.data('type')
-        };
+            // Перебераем весь список элементов
+            while (sibling) {
+                // Удаляем все активные классы
+                if (sibling.nodeType === 1)
+                    sibling.classList.remove('have_history', 'active_dialog');
+                // Добавляем активный класс для назатого пункта
+                if (sibling.nodeType === 1 && $this === sibling)
+                    sibling.classList.add('active_dialog');
+                sibling = sibling.nextSibling;
+            }
 
-        $this.find('[data-name="unread_messages"]').hide();
-        $this.find('[data-name="unread_messages"]').text('0');
+            let chat = {
+                id : $this.getAttribute('id'),
+                type : $this.dataset.type
+            };
 
-        if ( !(
-            $this.hasClass('active_dialog')
-            &&
-            $this.hasClass('have_history')
-        ) ) {
-            ipcRenderer.send('get_chat_msgs', chat);
-            $this.addClass('have_history');
+            $this.querySelector('[data-name="unread_messages"]').style.display = 'none';
+            $this.querySelector('[data-name="unread_messages"]').innerText = '0';
+
+            if ( !(
+                $this.classList.contains('active_dialog')
+                &&
+                $this.classList.contains('have_history')
+            ) ) {
+                ipcRenderer.send('get_chat_msgs', chat);
+                console.log(chat);
+                $this.classList.add('have_history');
+            }
         }
     });
 
-    // $(document).on('click', '.walletMenu li', function (e) {
-    // });
-
-    // $(document).on('click', '.settingsMenu li', function (e) {
-    //
-    //     const $this = $(this);
-    //     $this.addClass('active_settings').siblings().removeClass('active_settings');
-    // });
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
         $('.modal-content').html(data);
@@ -554,11 +975,9 @@ window.onload = function () {
         .on('mouseout', '[data-toogle="tooltip"]', function () {
             $(this).tooltip('hide');
         })
-
         .on('keydown', '[data-toggle="tooltip2"]', function () {
             $(this).tooltip('show');
         })
-
         .on('backspace-down', '[data-toggle="tooltip2"]', function () {
             $(this).tooltip('hide');
         });
@@ -567,7 +986,7 @@ window.onload = function () {
      * Форма создная группы/канала
      */
 
-    function validationInputs(target = '[data-require]'){
+    /*function validationInputs(target = '[data-require]'){
         const $this = $(target);
         const minChars = $this.attr('minlength');
         const maxChars = $this.attr('maxlength');
@@ -604,7 +1023,7 @@ window.onload = function () {
                 $this.removeClass('error').addClass('correct');
             }
         }
-    };
+    };*/
 
     function checkFields(fieldset) {
         let err = false;
@@ -616,7 +1035,6 @@ window.onload = function () {
             err:true,
             data:{}
         };
-
 
         els.forEach(function (elem) {
             const $element = $this.find(`[name=${elem.name}]`);
@@ -644,10 +1062,6 @@ window.onload = function () {
 
         return ret;
     }
-
-    // $(document).on('keyup', '[data-require="true"]', function (){
-    //     validationInputs(this);
-    // });
 
     $(document).on('submit', '.modal-content', function (e) {
         let button = $(this).find('.btn-primary');
@@ -815,16 +1229,16 @@ window.onload = function () {
     ipcRenderer.on('get_updates', (event, obj) => {
 
         console.log(typeof(obj));
-        if(obj == 100){
+        if(obj === 100){
 
             update_notify( 'Install updates', 'Now you can install updates');
 
             $('#update_button').fadeIn();
             $('[data-name=download_updates]').attr('data-name','install_updates');
-            setTimeout(()=>{
+            setTimeout(() => {
                 $('#download_img').fadeOut();
 
-                setTimeout(()=>{
+                setTimeout(() => {
                     $('#update_img').fadeIn();
                 },500);
             },500);
@@ -1053,13 +1467,18 @@ window.onload = function () {
         });
     });
 
-    $(document).on('click', '[data-toggle="scrollDown"]', function (e){
+    /*$(document).on('click', '[data-toggle="scrollDown"]', function (e){
         e.preventDefault();
         scrollDownAnimate();
+    });*/
+    document.addEventListener('click', (e) => {
+        let $this = e.target;
+        if ( $this.dataset.toggle === 'scrollDown' ) {
+            scrollDownAnimate();
+        }
     });
 
-
-    $(document).on('click', '.switch-btn', function () {
+    /*$(document).on('click', '.switch-btn', function () {
         $(this).toggleClass('switch-on');
         if ($(this).hasClass('switch-on')) {
             $(this).trigger('on.switch');
@@ -1080,21 +1499,37 @@ window.onload = function () {
         $('.bl-hide').css('display', 'none');
         $('.bl-hide-1').css('display', 'block');
         $('.chats').css('height', 'calc(100% - 200px)');
-    });
+    });*/
 
-    $(window).resize(function(){
-        if ($('#main-menu').length !== 0) {
-            ipcRenderer.send('change_size_window', $(window).width(), $(window).height());
+    /* Ресайз окна мессенджера */
+    window.addEventListener('resize', (e) => {
+        let mainMenu = document.getElementById('main-menu');
+        // if ( mainMenu.length !== 0 ) {
+        if ( mainMenu ) {
+            // console.log('resize',  window.innerWidth, window.innerHeight);
+            ipcRenderer.send('change_size_window', window.innerWidth, window.innerHeight);
         }
     });
+    /* /Ресайз окна мессенджера */
 
-    $(document).on('click', '[name=encrypt_database]', function (e) {
+    /* Зашифровать/Разшифровть данные */
+    document.addEventListener('click', (e) => {
+        let $this = e.target;
+        if ( $this.getAttribute('name') === 'encrypt_database' ){
+            ipcRenderer.send('encrypt_db');
+        } else if ( $this.getAttribute('name') === 'decrypt_database' ) {
+            ipcRenderer.send('decrypt_db');
+        }
+    });
+    /* /Зашифровать/Разшифровть данные */
+
+    /*$(document).on('click', '[name=encrypt_database]', function (e) {
         ipcRenderer.send('encrypt_db');
     });
 
     $(document).on('click', '[name=decrypt_database]', function (e) {
         ipcRenderer.send('decrypt_db');
-    });
+    });*/
 
     $(document).on('click', '.sendTokenButton', function (e) {
         // let data_arr=$(this).closest('form');
@@ -1143,19 +1578,22 @@ window.onload = function () {
             }
         }
     });
+    let renderRight = (selector, content) => {
+        let $this = document.querySelector(selector);
+        $this.innerHTML = content;
+    };
     ipcRenderer.on('change_wallet_menu', (event, obj) => {
-        $('.walletRight').html(obj);
+        renderRight('.walletRight', obj);
+
     });
     ipcRenderer.on('change_settings_menu', (event, obj) => {
-        $('.settings__right').html(obj);
+        renderRight('.settings__right', obj);
     });
     /*
      * /WALLET/SETTINGS MENU
      */
 
-    // $(document).off('input', 'input[name=amount]');
-
-    $(document).on('input', 'input[name=amount]', function (e) {
+    /*$(document).on('input', 'input[name=amount]', function (e) {
         const $this = $(this);
         $this.css('box-shadow', 'none');
         if($this.val() != '') {
@@ -1167,25 +1605,96 @@ window.onload = function () {
                 return false;
             }
         }
+    });*/
+
+    document.addEventListener('input', (e) => {
+        let $this = e.target;
+        if ( $this.getAttribute('name') === 'amount') {
+            $this.style.boxShadow = 'none';
+
+            if ( $this.value.length > 0 ) {
+                let regexp = /^[0-9\.]*$/;
+                if ( !regexp.test($this.value) ){
+                    // $this.style.boxShadow = '0px 0px 16px 0px rgba(255, 59, 0, 0.6) inset';
+                    $this.classList.add('error');
+                    return false;
+                } else {
+                    $this.classList.remove('error');
+                }
+            }
+        }
     });
 
+    /* Вывод истории транзакций */
     ipcRenderer.on('load_tx_history', (event, obj) => {
-        $('[data-name="tx_history_table"]').append(obj);
+        let history = document.querySelector('[data-name="tx_history_table"]');
+        history.insertAdjacentHTML('beforeend', obj);
     });
+    /* /Вывод истории транзакций */
 
-    $(document).on('input', '[data-name=group_search]', function (e) {
+    /* Поиск каналов и пользователей */
+    document.addEventListener('input', (e) => {
         // let menu = 'menu_chats';
-        let group = $(this).val();
-        if (!group) {
-            ipcRenderer.send('load_chats','group_chat');
-        } else {
-            $('.chats ul').empty();
+        let $this = e.target;
+        if ($this.dataset.name === 'group_search') {
+            let group = $this.value;
+            let chatsList = document.querySelector('.chats__list');
+            if (!group) {
+                // console.log(`!group`);
+                ipcRenderer.send('load_chats', 'group_chat');
+            } else {
+                // $('.chats ul').empty();
+                while (chatsList.firstChild) {
+                    chatsList.removeChild(chatsList.firstChild)
+                }
+            }
+
+            if (group.length > 2) {
+                // console.log(`length > 2`);
+                ipcRenderer.send('find_groups', group);
+            } else if (group.length === 0) {
+                // $('.chats ul').empty();
+                while (chatsList.firstChild) {
+                    chatsList.removeChild(chatsList.firstChild)
+                }
+            }
         }
-        if (group.length > 2) {
-            ipcRenderer.send('find_groups', group);
-        }
-        if (group.length === 0) {
-            $('.chats ul').empty();
+    });
+    /* /Поиск каналов и пользователей */
+
+    $(document).on('mousedown',function(event) {
+
+        // Убираем css класс selected-html-element у абсолютно всех элементов на странице с помощью селектора "*":
+        $('*').removeClass('selected-html-element');
+        // Удаляем предыдущие вызванное контекстное меню:
+        $('.context-menu').remove();
+
+        // Проверяем нажата ли именно правая кнопка мыши:
+        if (event.which === 3)  {
+
+            // Получаем элемент на котором был совершен клик:
+            var target = $(event.target);
+
+            // Добавляем класс selected-html-element что бы наглядно показать на чем именно мы кликнули (исключительно для тестирования):
+            target.addClass('selected-html-element');
+
+            // Создаем меню:
+            $('<div/>', {
+                class: 'context-menu' // Присваиваем блоку наш css класс контекстного меню:
+            })
+                .css({
+                    left: event.pageX+'px', // Задаем позицию меню на X
+                    top: event.pageY+'px' // Задаем позицию меню по Y
+                })
+                .appendTo('body') // Присоединяем наше меню к body документа:
+                .append( // Добавляем пункты меню:
+                    $('<ul/>').append('<li><a href="#">Remove element</a></li>')
+                        .append('<li><a href="#">Add element</a></li>')
+                        .append('<li><a href="#">Element style</a></li>')
+                        .append('<li><a href="#">Element props</a></li>')
+                        .append('<li><a href="#">Open Inspector</a></li>')
+                )
+                .show('fast'); // Показываем меню с небольшим стандартным эффектом jQuery. Как раз очень хорошо подходит для меню
         }
     });
 };

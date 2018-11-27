@@ -9,8 +9,8 @@ import {paths} from "../../src/var_helper";
 import {SettingsModel} from "../../models/SettingsModel";
 import {bot_acc} from "../../src/env_config";
 import {ChatModel} from "../../models/ChatModel";
-const ethers = require('ethers');
-const bip39 = require('bip39');
+import ethers = require('ethers');
+import bip39 = require('bip39');
 // let {TextDecoder} = require('text-encoding');
 
 class AuthController extends Controller {
@@ -77,7 +77,7 @@ class AuthController extends Controller {
         let mnem=bip39.generateMnemonic();
         const eth_data=ethers.Wallet.fromMnemonic(mnem);
         console.log(eth_data);
-        let {privateKey,publicKey}=eth_data.signingKey.keyPair;
+        let {privateKey,publicKey}=eth_data['signingKey'].keyPair;
         let user = new UserModel();
         user.id = eth_data.address.toLowerCase();
         user.domain = 'localhost';

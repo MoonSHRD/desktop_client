@@ -103,7 +103,7 @@
                     display: flex;
                     flex-wrap: wrap;
 
-                    a{
+                    .mnemonic__item{
                         @include fz(18);
                         border-radius: .45em;
                         border: 1px solid $auth-primary-text;
@@ -117,7 +117,7 @@
                         margin: 5px;
                         display: inline-block;
 
-                        &.use{
+                        &_use{
                             background-color: $auth-primary-text;
                             color: $cf;
                         }

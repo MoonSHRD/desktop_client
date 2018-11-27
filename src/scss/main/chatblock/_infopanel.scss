@@ -4,7 +4,10 @@ a.infopanel {
     text-decoration: none;
     padding: 15px 20px;
     transition: 0.5s;
-
+    cursor: pointer;
+    *{
+        pointer-events: none;
+    }
 }
 
 .infopanel:hover .infopanel > b  {
