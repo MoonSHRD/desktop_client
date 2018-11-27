@@ -858,6 +858,7 @@ window.onload = function () {
 
 
     $(document).on('mousedown', '.chats li', function (e) {
+        console.log('sdfsdfdsfsdfsdfsd')
         $('*').removeClass('selected-html-element');
         $('.context-menu').remove();
         if (e.which === 3) {
