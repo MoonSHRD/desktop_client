@@ -298,6 +298,29 @@ window.onload = function () {
         }
     });
 
+    /* Загрузка аватарки */
+    document.addEventListener('change', (e) => {
+        let $this = e.target;
+
+        if ( $this.name === 'avatar' ) {
+            console.log('change avatar');
+            const file = $this.files[0];
+            let fileType = file.type;
+            if (file) {
+                let reader = new FileReader();
+                reader.onloadend = function () {
+                    // var image = new Image();
+                    // image.src = reader.result;
+                    document
+                        .getElementById('avatar_preview')
+                        .setAttribute('src', reader.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    });
+    /* /Загрузка аватарки */
+
     ipcRenderer.on('generate_mnemonic', (event, arg) => {
         const mnemonic = document.getElementById('input_mnemonic');
         mnemonic.value = arg;
@@ -421,6 +444,41 @@ window.onload = function () {
             document.getElementById('attachFileToGroup').click();
         }
         /* /Обработка клика на добавление файлов/картинок в чат */
+
+        /* Обработка клика на меню */
+        else if ( $this.classList.contains('menu__item') ){
+            const type = $this.dataset.id;
+
+            if (!$this.classList.contains('active_menu') && type) {
+                console.log($this.classList.contains('active_menu'), type);
+                ipcRenderer.send('change_menu_state', type);
+            }
+
+            if (
+                (type !== 'menu_create_chat')
+                &&
+                !$this.classList.contains('not_active')
+            ) {
+                // $this.classList.add('active_menu');
+                let parent = $this.parentNode; // родитель - li
+                let parentList = parent.parentNode; // родитель - ul
+                let sibling = parentList.firstChild;
+
+                console.log(parent, parentList, sibling, sibling.childNodes);
+
+                // Перебераем весь список элементов
+                while (sibling) {
+                    // Удаляем все активные классы
+                    if (sibling.nodeType === 1)
+                        sibling.children[0].classList.remove('active_menu');
+                    // Добавляем активный класс для назатого пункта
+                    if (sibling.nodeType === 1 && $this === sibling.children[0])
+                        sibling.children[0].classList.add('active_menu');
+                    sibling = sibling.nextSibling;
+                }
+            }
+        }
+        /* /Обработка клика на меню */
     });
 
     /* Обработка добавления файлов/картинок в чат */
@@ -466,36 +524,20 @@ window.onload = function () {
     //     $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
     // });
 
-    $(document).on('click', '.menu a', function () {
-        const $this = $(this);
-        const type = $this.data('id');
-
-        if (!$this.hasClass('active_menu') && type) {
-            console.log($this.hasClass('active_menu'), type);
-
-            ipcRenderer.send('change_menu_state', type);
-        }
-
-        if (
-            (type !== 'menu_create_chat')
-            &&
-            !$this.hasClass('not_active')
-        ) {
-            $this
-                .addClass('active_menu')
-                .parent()
-                .siblings('li')
-                .children()
-                .removeClass('active_menu');
-        }
-    });
-
-    $(document).on('click','[data-id=menu_create_chat]',function (e) {
+    /*$(document).on('click','[data-id=menu_create_chat]',function (e) {
         ipcRenderer.send('change_menu_state', 'menu_create_chat');
+    });*/
+
+    document.addEventListener('click', (e) => {
+        let $this = e.target;
+        if ( $this.dataset.id === 'menu_create_chat' ){
+            ipcRenderer.send('change_menu_state', 'menu_create_chat');
+        }
     });
 
     ipcRenderer.on('change_menu_state', (event, arg) => {
-        $('#working_side').html(arg);
+        // console.log('change_menu_state', arg);
+        document.getElementById('working_side').innerHTML = arg;
     });
 
     ipcRenderer.on('online', (event, arg) => {
@@ -526,24 +568,10 @@ window.onload = function () {
         e.preventDefault();
     });
 
-    $(document).on('change', '[name=avatar]', function () {
-        const file = this.files[0];
-        let fileType = file.type;
-        if (file) {
-            let reader = new FileReader();
-            reader.onloadend = function () {
-                // var image = new Image();
-                // image.src = reader.result;
-                $('#avatar_preview').attr('src', reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    $(document).on('click', '.menuBtn', function () {
+    /*$(document).on('click', '.menuBtn', function () {
         $('.dialogs').toggleClass('resize1', 400);
         $('.icon-bar').toggleClass('resize', 400);
-    });
+    });*/
 
     $(document).on('click', 'a.infopanel', function () {
         ipcRenderer.send('get_my_vcard');
