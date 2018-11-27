@@ -1,16 +1,22 @@
 import Web3 = require("web3");
 import {web3_config} from "../src/env_config";
 import {TransactionModel} from "../models/TransactionModel";
+let fs = require("fs");
 import {Grpc} from "../grpc/grpc";
 let EventEmitter = require('events').EventEmitter;
 let SubFactoryAbi = require("./abis/SubFactory");
 let TokenFactoryAbi = require("./abis/TokenFactory");
-let TokenFactoryAddress='0x4dec573feb329642e2f98043b7eb09ae8265ed0b';
+let TokenAbi = require("./abis/Token");
+
+// let TokenFactoryAddress='0x4dec573feb329642e2f98043b7eb09ae8265ed0b';
+
+let TokenFactoryAddress='0xd2116a1075b057f3f0cf68b8310a1ca4a07f9d96';
 
 
 export class Web3S {
     private web3: Web3;
     private TokenFactory: any;
+    private Token: any;
     private grpc=Grpc.getIntance();
     // public eth: any;
     public addr: string;
@@ -122,16 +128,33 @@ export class Web3S {
         return (await this.web3.eth.getBalance(this.addr))/(Math.pow(10,18));
     }
 
-    async CreateToken(data) {
-        console.log(data);
-        return await this.TokenFactory.methods.createTokensaleToken(
-            data['t-name'],
-            data['t-symbol'],
-            data['decimals'],
-            Number(data['totalSupply']),
-            data['rate'],
-            this.addr,
-        ).send({gas:100000});
+    async CreateToken(createToken, data) {
+
+        if(createToken) {
+            console.log(data);
+            let tr =  await this.TokenFactory.methods.createCommunityToken(
+                data['t-name'],
+                data['t-symbol'],
+                18,
+                data['totalSupply'],
+                0,
+                this.addr
+            ).send({gas: 2000000}, function (error, result) {
+                if(error) {
+                    console.log(error)
+                }
+
+            });
+            console.log(tr)
+        }
+
+
+        // console.log(await this.TokenFactory.methods.getTokens(this.addr).call())
+
+        let allUserTokens = await this.TokenFactory.methods.getTokens(this.addr).call();
+        let lastCreateToken = allUserTokens[allUserTokens.length - 1];
+        return lastCreateToken;
+
     }
 
     async GetUserBalance(user_id:string) {
@@ -140,5 +163,29 @@ export class Web3S {
 
     async SendEth(to:string,amount:number) {
         return await this.web3.eth.sendTransaction({to:to, from:this.addr, value:amount*Math.pow(10,18), gas:100000});
+    }
+
+
+
+    async getTokenValue(tokenAddress) {
+
+        this.Token = new this.web3.eth.Contract(TokenAbi.abi, tokenAddress, {from: this.addr});
+
+
+        return await this.Token.methods.balanceOf(this.addr).call((error, result) => {
+            // console.log(result)
+        })
+
+    }
+
+    async transferTokens(tokenAddress, toAddress, tokenAmount) {
+
+        this.Token = new this.web3.eth.Contract(TokenAbi.abi, tokenAddress, {from: this.addr});
+
+        await this.Token.methods.transfer(toAddress, tokenAmount).send({
+            from: this.addr,
+            gas: 2000000
+        });
+
     }
 }

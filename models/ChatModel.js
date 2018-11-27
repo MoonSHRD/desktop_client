@@ -37,6 +37,7 @@ let ChatModel = ChatModel_1 = class ChatModel extends typeorm_1.BaseEntity {
         this.type = '';
         this.contract_address = '';
         this.unread_messages = 0;
+        this.total_supply = '';
         this.active = false;
         this.online = false;
         this.last_active = 0;
@@ -225,6 +226,10 @@ __decorate([
     typeorm_1.Column(),
     __metadata("design:type", Number)
 ], ChatModel.prototype, "unread_messages", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], ChatModel.prototype, "total_supply", void 0);
 __decorate([
     typeorm_1.OneToMany(type => MessageModel_1.MessageModel, messages => messages.chat),
     __metadata("design:type", Array)

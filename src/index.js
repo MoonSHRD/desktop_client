@@ -672,6 +672,13 @@ window.onload = function () {
                 ipcRenderer.send('create_group', data);
                 console.log(data);
                 $('#AppModal').modal('toggle');
+                // if (openPrivateRadio.val() === 'off' ) {
+                //
+                // }else{
+                //     ipcRenderer.send('create_group', data);
+                //     console.log(data);
+                //     $('#AppModal').modal('toggle');
+                // }
             }
         }
         else
@@ -926,7 +933,7 @@ window.onload = function () {
         let change = curr_width + (e.clientX - curr_width);
         widthMsgWindow('[data-msgs-window]');
         if(unlock) {
-            if(change > 369 && change < 599) {
+            if(change > 369 && change < 501) {
 
                 p.css('width', change);
                 d.css('margin-left', change);

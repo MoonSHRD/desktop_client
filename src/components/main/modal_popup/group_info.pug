@@ -6,7 +6,7 @@ script
 .modal-header
     if (role !== "moderator")
         .row.w-100.flex-nowrap.m-0.align-items-end
-            .col-4
+            .col-4.bild-hidden
                 .group-info.group-info_section
                     strong.mr-1 Section:
                     span Celebrities
@@ -18,7 +18,7 @@ script
                     img.rounded-circle.avatarBg(src=avatar width=80 height=80)
                 .modal-header__name
                     h5.modal-title #{name}
-            .col-4.text-right
+            .col-4.text-right.bild-hidden
                 button.btn.btn-link.group-notification(type="button")
                     //div.group-notification__icon.group-notification__icon_notie
                     //    include ../../../img/icons/bell.svg
@@ -29,7 +29,7 @@ script
                     span Switch on <br /> notifications
     else
         .row.w-100.flex-nowrap.m-0.align-items-end
-            .col-4
+            .col-4.bild-hidden
                 .group-info.group-info_section
                     strong.mr-1 Section:
                     input.form-control(name='sectionName' value='Celebrities' disabled="disabled")
@@ -45,7 +45,7 @@ script
                     img.rounded-circle.avatarBg(src=avatar width=80 height=80)
                 .modal-header__name
                     h5.modal-title #{name}
-            .col-4.text-right
+            .col-4.text-right.bild-hidden
                 button.btn.btn-link.group-notification(type="button")
                     //div.group-notification__icon.group-notification__icon_notie
                     //    include ../../../img/icons/bell.svg
@@ -54,7 +54,7 @@ script
                         include ../../../img/icons/bell.svg
                         span.group-notification__notie
                     span Switch on <br /> notifications
-.modal-body
+.modal-body.bild-none
     if (role !== "moderator")
         //.scrollbar#style-10(style='overflow-y: scroll; overflow-x: hidden; height: 630px')
         .scrollbar
@@ -85,7 +85,7 @@ script
                             p.my-3
                                 b Total supply
                         .col-sm-6
-                            p.my-3 gordon_token
+                            p.my-3 #{name}
                             p.my-3 100 000
                         button.getMoreTokens.col-sm-6.offset-3 Get more tokens
 
@@ -228,7 +228,7 @@ script
                             p.my-3
                                 b Total supply
                         .col-sm-6
-                            p.my-3 gordon_token
+                            p.my-3 #{name}
                             p.my-3 100 000
                 .col-sm-5.cardInfo.p-0.m-0.p-3.pl-5
                     .row

@@ -11,11 +11,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Web3 = require("web3");
 const env_config_1 = require("../src/env_config");
 const TransactionModel_1 = require("../models/TransactionModel");
+let fs = require("fs");
 const grpc_1 = require("../grpc/grpc");
 let EventEmitter = require('events').EventEmitter;
 let SubFactoryAbi = require("./abis/SubFactory");
 let TokenFactoryAbi = require("./abis/TokenFactory");
-let TokenFactoryAddress = '0x4dec573feb329642e2f98043b7eb09ae8265ed0b';
+let TokenAbi = require("./abis/Token");
+// let TokenFactoryAddress='0x4dec573feb329642e2f98043b7eb09ae8265ed0b';
+let TokenFactoryAddress = '0xd2116a1075b057f3f0cf68b8310a1ca4a07f9d96';
 class Web3S {
     constructor() {
         this.grpc = grpc_1.Grpc.getIntance();
@@ -117,10 +120,21 @@ class Web3S {
             return (yield this.web3.eth.getBalance(this.addr)) / (Math.pow(10, 18));
         });
     }
-    CreateToken(data) {
+    CreateToken(createToken, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(data);
-            return yield this.TokenFactory.methods.createTokensaleToken(data['t-name'], data['t-symbol'], data['decimals'], Number(data['totalSupply']), data['rate'], this.addr).send({ gas: 100000 });
+            if (createToken) {
+                console.log(data);
+                let tr = yield this.TokenFactory.methods.createCommunityToken(data['t-name'], data['t-symbol'], 18, data['totalSupply'], 0, this.addr).send({ gas: 2000000 }, function (error, result) {
+                    if (error) {
+                        console.log(error);
+                    }
+                });
+                console.log(tr);
+            }
+            // console.log(await this.TokenFactory.methods.getTokens(this.addr).call())
+            let allUserTokens = yield this.TokenFactory.methods.getTokens(this.addr).call();
+            let lastCreateToken = allUserTokens[allUserTokens.length - 1];
+            return lastCreateToken;
         });
     }
     GetUserBalance(user_id) {
@@ -131,6 +145,23 @@ class Web3S {
     SendEth(to, amount) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.web3.eth.sendTransaction({ to: to, from: this.addr, value: amount * Math.pow(10, 18), gas: 100000 });
+        });
+    }
+    getTokenValue(tokenAddress) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.Token = new this.web3.eth.Contract(TokenAbi.abi, tokenAddress, { from: this.addr });
+            return yield this.Token.methods.balanceOf(this.addr).call((error, result) => {
+                // console.log(result)
+            });
+        });
+    }
+    transferTokens(tokenAddress, toAddress, tokenAmount) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.Token = new this.web3.eth.Contract(TokenAbi.abi, tokenAddress, { from: this.addr });
+            yield this.Token.methods.transfer(toAddress, tokenAmount).send({
+                from: this.addr,
+                gas: 2000000
+            });
         });
     }
 }

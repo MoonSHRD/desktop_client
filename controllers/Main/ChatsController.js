@@ -95,6 +95,7 @@ class ChatsController extends Controller_1.Controller {
             let self_info = yield this.get_self_info();
             let settings = yield this.getSettings();
             let chats = yield ChatModel_1.ChatModel.get_chats_with_last_msgs(self_info);
+            console.log(chats);
             let menu_chat;
             if (type === this.chat_types.user) {
                 menu_chat = this.chat_to_menu.user;
@@ -203,18 +204,24 @@ class ChatsController extends Controller_1.Controller {
     joined_room(room_data, messages) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Old messages:\n", messages);
-            let chat = new ChatModel_1.ChatModel();
-            chat.id = room_data.id;
-            chat.domain = room_data.domain;
+            let chat = yield ChatModel_1.ChatModel.findOne(room_data.id);
+            console.log("chat : ", chat);
+            if (!chat || chat.id != room_data.id) {
+                chat = new ChatModel_1.ChatModel();
+                chat.id = room_data.id;
+                chat.domain = room_data.domain;
+                chat.name = room_data.name;
+                chat.type = room_data.channel ? this.group_chat_types.channel : this.group_chat_types.group;
+                chat.role = room_data.role;
+                if (room_data.bio)
+                    chat.bio = room_data.bio;
+                if (room_data.contractaddress)
+                    chat.contract_address = room_data.contractaddress;
+            }
             chat.avatar = room_data.avatar;
-            chat.name = room_data.name;
-            chat.type = room_data.channel ? this.group_chat_types.channel : this.group_chat_types.group;
-            chat.role = room_data.role;
-            if (room_data.bio)
-                chat.bio = room_data.bio;
-            if (room_data.contractaddress)
-                chat.contract_address = room_data.contractaddress;
             yield chat.save();
+            console.log('chat: ', chat);
+            console.log('room_data: ', room_data);
             if (room_data.role === 'moderator') {
                 yield this.grpc.CallMethod('SetObjData', { pubKey: this.grpc.pubKey, obj: 'community', data: chat });
                 yield this.load_chat(chat, this.chat_types.group);
@@ -227,32 +234,53 @@ class ChatsController extends Controller_1.Controller {
                     let room_data = { id: message.sender };
                     let sender = { address: message.sender, domain: "localhost" };
                     console.log('num: ', num);
-                    yield this.controller_register.run_controller("MessagesController", "received_group_message", { room_data, message: message.message, sender, stamp: message.time, files: message.files, fresh: (num === count), notificate: false });
+                    yield this.controller_register.run_controller("MessagesController", "received_group_message", {
+                        room_data,
+                        message: message.message,
+                        sender,
+                        stamp: message.time,
+                        files: message.files,
+                        fresh: (num === count),
+                        notificate: false
+                    });
                 }
-                yield this.controller_register.run_controller("MessagesController", "get_chat_messages", { id: room_data.id, type: room_data.type });
+                yield this.controller_register.run_controller("MessagesController", "get_chat_messages", {
+                    id: room_data.id,
+                    type: room_data.type
+                });
             }
         });
     }
     create_group(group_data) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(group_data);
+            console.log('group_data: ', group_data);
             // let group_type=group_data.type?group_data.type:this.group_chat_types.channel;
             if (group_data.openPrivate == 'on') {
                 // let price=64;
-                group_data.rate = 1 / group_data.subscriptionPrice;
-                group_data.decimals = 18;
-                if (group_data.rate < 1) {
-                    group_data.decimals += group_data.rate.toString().match(/[0.]*[1-9]/)[0].length - 2;
-                }
-                else {
-                    group_data.decimals -= (Math.floor(group_data.rate).toString().length - 1);
-                }
-                console.log('rate: ', group_data.rate, ' decimals: ', group_data.decimals);
-                console.log(yield this.web3.CreateToken(group_data));
+                // group_data.rate = 1/group_data.subscriptionPrice;
+                //
+                // if (group_data.rate<1){
+                //     group_data.decimals += group_data.rate.toString().match(/[0.]*[1-9]/)[0].length-2;
+                // } else {
+                //     group_data.decimals -= (Math.floor(group_data.rate).toString().length-1);
+                // }
+                // console.log('rate: ',group_data.rate,' decimals: ',group_data.decimals);
+                let tokenAddress = yield this.web3.CreateToken(true, group_data);
+                console.log('tokenAddress: ', tokenAddress);
+                let group = new ChatModel_1.ChatModel();
+                group.name = group_data.name;
+                group.total_supply = group_data.totalSupply;
+                group.id = tokenAddress;
+                group.domain = 'localhost';
+                group.bio = '';
+                group.avatar = '';
+                group.role = 'moderator';
+                group.type = this.group_chat_types.channel;
+                group.contract_address = tokenAddress;
+                group.unread_messages = 0;
+                yield group.save();
             }
-            else {
-                this.dxmpp.register_channel(group_data, '');
-            }
+            this.dxmpp.register_channel(group_data, '');
         });
     }
     find_groups(group_name) {

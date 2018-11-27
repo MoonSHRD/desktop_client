@@ -12,25 +12,25 @@ div.settings__left.custom-scrollbar
         .collapse.show#options-list
             .card.card-body
                 ul()
-                    li
+                    li.bild-none
                         label
                             input(type='checkbox', name='option3', value='a3')
                             span Screenshots of your messages
                             span.checkmark
 
-                    li
+                    li.bild-none
                         label
                             input(type='checkbox', name='option3', value='a3')
                             span Show status
                             span.checkmark
 
-                    li
+                    li.bild-none
                         label
                             input(type='checkbox', name='option3', value='a3')
                             span Visibility in the “People nearby”
                             span.checkmark
 
-                    li
+                    li.bild-none
                         label
                             input(type='checkbox', name='option3', value='a3')
                             span Visibility in the “Nearby channels”
@@ -39,11 +39,11 @@ div.settings__left.custom-scrollbar
                         label
                             button.btn.btn-primary.btn-block(type="button", name="change_download") Change directory for files
 
-                    li
+                    li.bild-none
                         label
                             button.btn.btn-secondary.btn-block(type="button", name="encrypt_database") Encrypt database
 
-                    li
+                    li.bild-none
                         label
                             button.btn.btn-secondary.btn-block(type="button", name="decrypt_database") Decrypt database
 
@@ -53,7 +53,7 @@ div.settings__left.custom-scrollbar
 
 
 
-    div.settings__menu
+    div.settings__menu.bild-none
         strong.my-2.d-block.p-20 Basic options
         ul.nav.nav_menu
             li.active
@@ -117,7 +117,7 @@ div.settings__left.custom-scrollbar
                     include ../../../img/settings/icons/devices.svg
                     p Connected devices & sessions
 
-div.p-3.walletRight.settings__right.custom-scrollbar
+div.p-3.walletRight.settings__right.custom-scrollbar.bild-none
     include settings_identification
 script
     include settings.js
