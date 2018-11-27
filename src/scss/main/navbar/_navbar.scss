@@ -82,6 +82,10 @@
                 text-align: center;
                 position: relative;
 
+                * {
+                    pointer-events: none;
+                }
+
                 .image {
                     width: 40px;
                     //display: flex;

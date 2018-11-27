@@ -260,6 +260,13 @@ img{
     }
 }
 
+button{
+
+    > * {
+        pointer-events: none;
+    }
+}
+
 /*
  * Collapse
  */
