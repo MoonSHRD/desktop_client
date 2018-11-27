@@ -27,37 +27,35 @@ let mnemonic_text = '';
 let array_mnemonic_text = [];
 /* /AUTH VARIABLES */
 
-function validate_totalSupply(val) {
+let validate_totalSupply = (val) => {
     let regexp = /^[0-9\.]*$/;
     if (regexp.test(val)){
         console.log(val);
         return (val);
     }
-}
+};
 
-function validate_subscriptionPrice(val) {
+let validate_subscriptionPrice = (val) => {
     let regexp = /^[0-9\.]*$/;
     if (regexp.test(val)){
         console.log(val);
         return (val);
     }
-}
+};
 
-function validate_tokenPrice(val) {
+let validate_tokenPrice = (val) => {
     let regexp = /^[0-9]*\.?[0-9]*$/;
-    if (regexp.test(val)){
+    if (regexp.test(val)) {
         console.log(val);
         return (val);
     }
-}
+};
 
-
-
-function validate_firstname(val) {
+let validate_firstname = (val) => {
     return (val);
-}
+};
 
-function validate_mnemonic(mnem) {
+let validate_mnemonic = (mnem) => {
     if (!mnem) return false;
     let mnemTrim = mnem.trim();
     console.log(`validate_mnemonic : ${mnem}`);
@@ -68,15 +66,15 @@ function validate_mnemonic(mnem) {
     let err = words_count !== 12;
     console.log(err);
     return (words_count === 12 && !err);
-}
+};
 
-function validate_confirm_mnemonic(val) {
+let validate_confirm_mnemonic = (val) => {
     if (val.trim() === mnemonic_text) {
         console.log(val);
         console.log(mnemonic_text);
         return (val);
     }
-}
+};
 
 window.onload = function () {
 
@@ -362,6 +360,7 @@ window.onload = function () {
 
     document.addEventListener('click', (e) => {
         let $this = e.target;
+        /* Обработка ссылок */
         if ( $this.hasAttribute('href') ) {
             let url = $this.getAttribute('href');
             let rgx = new RegExp("^(http|https)://", "i")
@@ -369,6 +368,9 @@ window.onload = function () {
                 shell.openExternal($this.href);
             }
         }
+        /* /Обработка ссылок */
+
+        /* Копирование id пользователя */
         else if ( $this.classList.contains('copyButton') ){
             let elem = document.getElementById('copyTo');
             let body = document.body, range, sel;
@@ -407,121 +409,62 @@ window.onload = function () {
                 spacing: 10
             });
         }
-        /*else if ( $this.classList.contains('attachFileToChat') ){
+        /* /Копирование id пользователя */
+
+        /* Обработка клика на добавление файлов/картинок в чат */
+        else if ( $this.classList.contains('attachFileToChat') ){
             console.log('hello MF');
             document.getElementById('attachFileToChat').click();
         }
         else if ( $this.classList.contains('attachFileToGroup') ){
             console.log('hello MF');
             document.getElementById('attachFileToGroup').click();
-        }*/
-    });
-
-    /*$(document).on('click','.copyButton',function () {
-        /!*if (document.selection) {
-            var range = document.body.createTextRange();
-            range.moveToElementText(document.getElementById('copyTo'));
-            range.select().createTextRange();
-            document.execCommand("Copy");
-
-        } else if (window.getSelection) {
-            var range = document.createRange();
-            range.selectNode(document.getElementById('copyTo'));
-            window.getSelection().addRange(range);
-            document.execCommand("Copy");*!/
-        let elem = document.getElementById('copyTo');
-        let body = document.body, range, sel;
-
-        if(document.createRange && window.getSelection) {
-            range = document.createRange();
-            sel = window.getSelection();
-            sel.removeAllRanges();
-            try {
-                range.selectNodeContents(elem);
-                sel.addRange(range);
-            } catch (e) {
-                range.selectNode(elem);
-                sel.addRange(range);
-            }
-        } else if (body.createTextRange) {
-            range = body.createTextRange();
-            range.moveToElementText(elem);
-            range.select();
         }
-        document.execCommand('copy');
-        console.log(range, sel, elem);
-
-        $.notify('address copied \n' + range, {
-
-            placement: {
-                from: 'bottom',
-                align: 'right'
-            },
-            animate: {
-                enter: 'animated fadeInRight',
-                exit: 'animated fadeOutRight'
-            },
-            z_index: 10031,
-            offset: 20,
-            spacing: 10
-        });
-        // }
-    });*/
-
-    $(document).on('click','.attachFileToChat',function () {
-        $('input[id=\'attachFileToChat\']').trigger('click');
+        /* /Обработка клика на добавление файлов/картинок в чат */
     });
 
-    $(document).on('click','.attachFileToGroup',function () {
-        $('input[id=\'attachFileToGroup\']').trigger('click');
+    /* Обработка добавления файлов/картинок в чат */
+    document.addEventListener('change', (e) => {
+        let $this = e.target;
+        if ( $this.getAttribute('id') === 'attachFileToChat' ){
+            console.log('Selected files', $this.files);
+            readURL($this);
+        } else if ( $this.getAttribute('id') === 'attachFileToGroup' ){
+            console.log('Selected files', $this.files);
+            readURL($this);
+        }
     });
+    /* /Обработка добавления файлов/картинок в чат */
 
-    // document.addEventListener('change', (e) => {
-    //     let $this = e.target;
-    //     if ( $this.getAttribute('id') === 'attachFileToChat' ){
-    //         console.log('Selected files', $this.files);
-    //     } else if ( $this.getAttribute('id') === 'attachFileToGroup' ){
-    //         console.log('Selected files', $this.files);
-    //     }
-    // });
-
-    $(document).on('change','input[id="attachFileToChat"], input[id="attachFileToGroup"]',function () {
-        console.log('Selected files', this.files);
-    });
-
-
-    $(document).on('change', 'input[id="attachFileToChat"], input[id="attachFileToGroup"]', function () {
-        readURL(this);
-    });
-
-
+    /* Считывание урла на файл/картинку */
     let readURL = (input) => {
 
-        let imgFileMsg = $('#upload_file');
+        // let imgFileMsg = $('#upload_file');
+        let imgFileMsg = document.getElementById('upload_file');
 
         if (input.files && input.files[0]) {
-            var reader = new FileReader();
+            let reader = new FileReader();
 
-            reader.onload = function (e) {
-                imgFileMsg
-                    .addClass('added')
-                    .attr('src', e.target.result)
-                    .css('cursor', 'pointer');
+            reader.onload = (e) => {
+                imgFileMsg.classList.add('added');
+                imgFileMsg.setAttribute('src', e.target.result);
+                imgFileMsg.style.cursor = 'pointer';
             };
 
             reader.readAsDataURL(input.files[0]);
         }
-    }
+    };
+    /* /Считывание урла на файл/картинку */
 
-    $(document).on('click', '#upload_file', function () {
-        let imgFileMsg = $(this);
-
-        imgFileMsg
-            .removeClass('added')
-            .attr('src', '')
-            .css('cursor', 'default');
-        $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
-    });
+    // $(document).on('click', '#upload_file', function () {
+    //     let imgFileMsg = $(this);
+    //
+    //     imgFileMsg
+    //         .removeClass('added')
+    //         .attr('src', '')
+    //         .css('cursor', 'default');
+    //     $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
+    // });
 
     $(document).on('click', '.menu a', function () {
         const $this = $(this);
@@ -678,7 +621,11 @@ window.onload = function () {
             group: $('.active_dialog').attr('data-type') === 'channel',
         };
 
-        obj = {id: active_dialog.attr('id'), text: msg_input.val().trim()};
+        obj = {
+            id: active_dialog.attr('id'),
+            text: msg_input.val().trim()
+        };
+
         // console.log(obj);
         let files = $('#attachFileToChat').prop('files');
         if (files && files[0]) {
