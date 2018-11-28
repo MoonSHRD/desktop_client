@@ -202,27 +202,13 @@ class MessagesController extends Controller {
             if (chat.type == this.group_chat_types.channel && messages[num].senderId != self_info.id) {
                 messages[num].sender_avatar = chat.avatar;
             }
-
-
             if (messages[num].type == 'message')
                 await this.render_message(messages[num]);
             if (messages[num].type == 'transaction') {
-                // let messages = await MessageModel.get_chat_messages_with_sender_chat_files(chat_id);
-                let messages = await this.getMsgTxs(chat_id);
-                // console.log(messages);
-                let last_time;
-                for (let num = messages.length - 1; num >= 0; --num) {
-                    // if (last_time!==new Date(messages[num].time))
-                    // await this.render_message(messages[num]);
-                    if (messages[num].type == 'message')
-                        await this.render_message(messages[num]);
-                    if (messages[num].type == 'transaction') {
-                        console.log(`'transaction' == ${messages[num].type}`);
-                        console.log(`'transaction'`);
-                        messages[num].text = 'Транзакция';
-                        await this.render_transaction(messages[num]);
-                    }
-                }
+                console.log(`'transaction' == ${messages[num].type}`);
+                console.log(`'transaction'`);
+                messages[num].text = 'Транзакция';
+                await this.render_transaction(messages[num]);
             }
         }
     }
