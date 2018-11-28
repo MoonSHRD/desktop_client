@@ -249,13 +249,14 @@ window.onload = function () {
     });
 
     document.addEventListener('click', (e) => {
+        let $this = e.target;
 
-        if (e.target.id === 'generate_mnemonic') {
+        if ($this.id === 'generate_mnemonic') {
             ipcRenderer.send('generate_mnemonic');
             document.getElementById('input_mnemonic_next').focus();
         }
 
-        else if (e.target.id === 'input_mnemonic_next') {
+        else if ($this.id === 'input_mnemonic_next') {
             let mnemonicVal = document.getElementById('input_mnemonic').value;
             if (validate_mnemonic(mnemonicVal)) {
                 mnemonic_text = mnemonicVal.trim();
@@ -270,8 +271,7 @@ window.onload = function () {
             }
         }
 
-        else if (e.target.classList.contains('mnemonic__item')){
-            let $this = e.target;
+        else if ($this.classList.contains('mnemonic__item')){
             let confirmMnemonic = document.getElementById('confirm_input_mnemonic');
             let confirmMnemonicText = confirmMnemonic.value;
 
@@ -639,6 +639,13 @@ window.onload = function () {
     document.addEventListener('keyup', (e) => {
         let $this = e.target;
         if ( $this.dataset.msg ){
+            autoResizeTextarea();
+            if($this.value === '') {
+                $this.setAttribute('rows', 1);
+            }
+            if($this.value === '' && event.keyCode === 13) {
+                event.preventDefault();
+            }
             if (event.ctrlKey && event.keyCode === 13 ) {
                 $this.setAttribute('rows', 1);
             }
@@ -651,7 +658,7 @@ window.onload = function () {
         }
     });*/
 
-    $(document).on('keydown','.send_message__input',function(e) {
+    /*$(document).on('keydown','.send_message__input',function(e) {
         autoResizeTextarea();
         if($(this).val() === '') {
             $(this).attr('rows', 1);
@@ -662,7 +669,7 @@ window.onload = function () {
         // if ( event.keyCode === 13 && $(this).val()!=='') {
         //     ResizeTextArea(this,0);
         // }
-    });
+    });*/
 
     /*$(document).on('input','.send_message__input',function(e) {
         // console.log('hello!')
