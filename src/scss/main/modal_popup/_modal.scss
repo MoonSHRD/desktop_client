@@ -31,10 +31,11 @@
     &-header{
         position: relative;
         border-bottom: 0;
+        display: block;
 
         .group {
             &-info {
-                display: flex;
+                //display: flex;
                 flex-wrap: nowrap;
                 align-items: center;
                 @include fz(14);
@@ -132,13 +133,13 @@
 
         &__img{
             @include size(5rem);
-            @include gradient-y($brand-blue, $brand-blue-100);
-            @include position(absolute, 0 null null 50%);
+            //@include gradient-y($brand-blue, $brand-blue-100);
+            //@include position(absolute, 0 null null 50%);
             line-height: 73px;
             border-radius: 50%;
             text-align: center;
-            transform: translate(-50%,-50%);
-            box-shadow: 2px 2px 20px $brand-blue;
+            //transform: translate(-50%,-50%);
+            //box-shadow: 2px 2px 20px $brand-blue;
 
             img{
                 @include size(100%);
@@ -146,8 +147,8 @@
         }
 
         &__name{
-            width: 96%;
-            margin: 0 auto;
+            width: 100%;
+            //margin: 0 auto;
 
             .form-control{
                 text-align: center;
@@ -157,7 +158,7 @@
             }
 
             .modal-title{
-                text-align: center;
+                //text-align: center;
             }
         }
 

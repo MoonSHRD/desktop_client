@@ -91,6 +91,7 @@
     "qbox": "^0.1.7",
     "react": "^16.4.2",
     "reflect-metadata": "^0.1.12",
+    "simple-scrollbar": "^0.4.0",
     "slick-carousel": "^1.8.1",
     "sqlite3": "^4.0.3",
     "text-encoding": "^0.7.0",

@@ -8,6 +8,8 @@ require('waypoints/lib/shortcuts/sticky.min');
 require('bootstrap');
 require('bootstrap-notify');
 require('slick-carousel');
+const SimpleScrollbar = require('simple-scrollbar');
+
 
 const shell = require('electron').shell;
 //open links externally by default
@@ -1027,7 +1029,11 @@ window.onload = function () {
     ipcRenderer.on('get_my_vcard', (event, data) => {
         $('.modal-content').html(data);
         $('#AppModal').modal('toggle');
-
+        let el = document.querySelectorAll('.modal-content');
+        for (let i = 0; i<el.length; i++) {
+            SimpleScrollbar.initEl(el[i]);
+            console.log(el[i]);
+        }
     });
 
     ipcRenderer.on('offer_publication', (event, data) => {
@@ -1676,6 +1682,8 @@ window.onload = function () {
     });
     ipcRenderer.on('change_settings_menu', (event, obj) => {
         renderRight('.settings__right', obj);
+        var el = document.querySelector('.settings__left');
+        SimpleScrollbar.initEl(el);
     });
     /*
      * /WALLET/SETTINGS MENU

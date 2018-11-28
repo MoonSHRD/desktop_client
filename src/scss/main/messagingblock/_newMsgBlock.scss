@@ -869,7 +869,10 @@ a.join_button {
 }
 
 .modal-content {
-    border-radius: 30px;
+    border-radius: 5px;
+    &:hover {
+      background-color: #435f7a;
+    }
 }
 
 .groupInfoHeader {
@@ -896,15 +899,15 @@ a.join_button {
 
 .offerPublication,
 .getMoreTokens {
-    @include size(50%,40px);
-    background-color: $brand-blue;
+    @include size(100%,40px);
+    background-color: $brand-primary;
     border: 0;
     background-size: 18px;
-    border-radius: 10px;
+    //border-radius: 10px;
     color: $cf;
     outline: none;
     cursor: pointer;
-    box-shadow: 0 0 13px rgba(0, 123, 255, 0.5);
+    //box-shadow: 0 0 13px rgba(0, 123, 255, 0.5);
 }
 
 .showOnMapChannel {
