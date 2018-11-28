@@ -98,10 +98,19 @@ class ChatsController extends Controller {
 
         if (!chats.length) return;
         for (let num in chats) {
-            chats[num].active = (chats[num].id === settings.last_chat);
+            let act =(!first && chats[num].id === settings.last_chat);
+            chats[num].active = act;
             await this.load_chat(chats[num], menu_chat);
-            if (chats[num].active)
+            if (act) {
                 await this.controller_register.run_controller('MessagesController', 'get_chat_messages', {id:chats[num].id,type:this.chat_types.user});
+            }
+            // if (chats[num].active)
+            //     await this.controller_register.run_controller('MessagesController', 'get_chat_messages', {id:chats[num].id,type:this.chat_types.user});
+        }
+
+        /* Первая загрузка мессенджера */
+        if ( first ){
+            this.send_data('firstLoad',this.render('main/start/start.pug'));
         }
     }
 

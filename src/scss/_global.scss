@@ -438,11 +438,37 @@ button{
 }
 /* NAV MENU (Settings/Wallet) */
 
+/* CARD */
+.card{
+
+    &-footer{
+        padding: 0;
+
+        .btn{
+            outline: none !important;
+            box-shadow: none !important;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+
+        }
+    }
+}
+/* /CARD */
+
 .pv10 {
     padding: (10rem/$fz-num) 0;
 }
 .ph10{
     padding: 0 (10rem / $fz-num);
+}
+.ph15{
+    padding: 0 (15rem / $fz-num);
+}
+.pv15{
+    padding: (15rem / $fz-num) 0;
+}
+.p15{
+    padding: (15rem / $fz-num);
 }
 
 /* FOR BILD */
