@@ -511,9 +511,14 @@ window.onload = function () {
         let callback = (e) => {
             // let e = window.e || e;
             console.log(e);
-            if (e.target.localName === 'a') {
-                e.preventDefault();
-                shell.openExternal(e.target.href);
+            let $this = e.target;
+            let url = $this.getAttribute('href');
+            let rgx = new RegExp("^(http|https)://", "i");
+            if (e.which === 2) {
+                if ($this.localName === 'a' && rgx.test(url)) {
+                    e.preventDefault();
+                    shell.openExternal($this.href);
+                }
             }
             return
         };
@@ -1387,6 +1392,7 @@ window.onload = function () {
                 )
                 .fadeIn(300);
         }
+        e.preventDefault();
     });
 
     $(document).on('click', '.dropDown_menu > ul > li ', function (e) {
