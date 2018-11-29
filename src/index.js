@@ -387,6 +387,13 @@ window.onload = function () {
         if ( $this.hasAttribute('href') ) {
             let url = $this.getAttribute('href');
             let rgx = new RegExp("^(http|https)://", "i");
+
+            /*if ( $this.closest('[data-toggle="collapse"]') ){
+                console.log('[data-toggle="collapse"]');
+                e.preventDefault();
+                shell.openExternal($this.href);
+            }*/
+
             if (rgx.test(url)) {
                 shell.openExternal($this.href);
             }
@@ -514,13 +521,14 @@ window.onload = function () {
             let $this = e.target;
             let url = $this.getAttribute('href');
             let rgx = new RegExp("^(http|https)://", "i");
-            if (e.which === 2) {
+            if (e.which === 2 || e.which === 1) {
                 if ($this.localName === 'a' && rgx.test(url)) {
                     e.preventDefault();
                     shell.openExternal($this.href);
                 }
-            } else // Проверяем нажата ли именно правая кнопка мыши:
-            if ( e.which === 3 ) {
+            }
+            // Проверяем нажата ли именно правая кнопка мыши:
+            else if ( e.which === 3 ) {
                 // console.log(e);
 
                 // Убираем css класс selected-html-element у абсолютно всех элементов на странице с помощью селектора "*":
@@ -1574,8 +1582,9 @@ window.onload = function () {
     });
 
     $('[data-toggle="collapse"]').collapse('toggle');
+
     $(document).on('click', '[data-toggle="collapse"] a', function (e) {
-        e.preventDefault();
+        e.stopPropagation();
     });
 
     let scrollBottom = (target = '[data-msg-history]', child = '[data-msg-list]') => {
