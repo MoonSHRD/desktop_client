@@ -1,5 +1,5 @@
 div(class="head_peer" id="head_peer")
-    a(class="peer_name" data-event="show_chat_info" href='#')
+    a(class="peer_name" data-event="show_chat_info")
         if (id)
             img.rounded-circle(src=avatar width=44 height=44)
             span #{name}
@@ -82,7 +82,7 @@ div(class="head_peer" id="head_peer")
                         //- li Write a message to administrator
 
 
-div#messaging_history.messaging_history.msgHistory(data-msg-history="")
+div#messaging_history.messaging_history.msgHistory.custom-scrollbar(data-msg-history="")
     div.msgHistory__list.clearfix(data-msg-list="") !{messages ? messages : ""}
 
         button.btn.btn-rounded.btn-primary(type="button" data-toggle="scrollDown")

@@ -335,13 +335,13 @@ a.join_button {
  * message history
  */
 .msgHistory{
-    height: auto;
+    //height: auto;
     //max-height: calc(100% - 120px);
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     //margin-top: 40px;
     //padding-bottom: 10px;
-    @extend .custom-scrollbar;
+    //@extend .custom-scrollbar;
 
     .dialogDate {
         text-align: center;
@@ -776,6 +776,7 @@ a.join_button {
     text-decoration: none;
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     span{
         @include fz(18);
@@ -869,7 +870,10 @@ a.join_button {
 }
 
 .modal-content {
-    border-radius: 30px;
+    border-radius: 5px;
+    &:hover {
+      background-color: #435f7a;
+    }
 }
 
 .groupInfoHeader {
@@ -896,15 +900,15 @@ a.join_button {
 
 .offerPublication,
 .getMoreTokens {
-    @include size(50%,40px);
-    background-color: $brand-blue;
+    @include size(100%,40px);
+    background-color: $brand-primary;
     border: 0;
     background-size: 18px;
-    border-radius: 10px;
+    //border-radius: 10px;
     color: $cf;
     outline: none;
     cursor: pointer;
-    box-shadow: 0 0 13px rgba(0, 123, 255, 0.5);
+    //box-shadow: 0 0 13px rgba(0, 123, 255, 0.5);
 }
 
 .showOnMapChannel {

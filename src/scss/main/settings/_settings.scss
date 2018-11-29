@@ -2,11 +2,19 @@
     &__left {
         width: 300px;
         min-width: 300px;
-        padding: 20px 0px;
+        //padding: 20px 0px;
         background-color: #FFFFFF;
         border-right: 1px solid #d0d0d0;
         margin-left: 70px;
         overflow-y: overlay;
+
+        &.ss-container{
+            padding: 0 !important;
+
+            .ss-wrapper{
+                padding: 20px 0;
+            }
+        }
 
         #optionsList {
             //> a {
@@ -150,11 +158,19 @@
 
     &__right{
         flex: 1;
-        display: flex;
+        //display: flex;
         background-color: $brand-gray-100;
         overflow-x: hidden;
         background-size: auto 110%;
         background-image: linear-gradient(180deg,hsla(0,0%,95.3%,.9) 0,hsla(0,0%,95.3%,.9)),url('#{$img}/messBlockBg.jpg');
+
+        &.ss-container{
+            padding: 0 !important;
+
+            .ss-wrapper{
+                padding: 1rem;
+            }
+        }
 
         textarea {
             border-radius: 15px;

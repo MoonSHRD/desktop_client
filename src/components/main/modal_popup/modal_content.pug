@@ -1,8 +1,11 @@
 .modal-header.modal-header_img
-    .modal-header__img
-        img.rounded-circle(src=avatar)
-    .modal-header__name
-        h5.modal-title #{name}
+    .row.position-static.w-100.p-3.m-0
+        .col-3
+            .modal-header__img
+                img.rounded-circle.avatarBg(src=avatar width=80 height=80)
+        .col-9.justify-content-around.flex-column.d-flex
+            .modal-header__name
+                h5.modal-title #{name}
     button.close(type='button', data-dismiss='modal', aria-label='Close')
         span(aria-hidden='true') ×
 .modal-body.modal-body_userinfo

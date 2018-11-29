@@ -312,30 +312,34 @@ button{
 
 /**  old STYLE 11 */
 .custom-scrollbar {
-    overflow: auto;
+    height: 100%;
+    /*overflow: overlay;
     transition: .2s ease;
     &::-webkit-scrollbar-track {
         //border-radius: 10px;
-        background-color: transparent;
+        //background-color: transparent;
         //border: 1px solid rgba($brand-gray-400, 0.1);
         transition: .2s ease;
     }
     &::-webkit-scrollbar {
         //width: 2px;
         position: absolute;
-        width: 4px;
+        width: 10px;
         background-color: transparent;
         transition: .2s ease;
-        right: 4px;
+        right: 10px;
     }
     &::-webkit-scrollbar-thumb{
         background-color: transparent;
         border-radius: 10px;
         transition: .12s ease;
+        border: 3px solid transparent;
+        background-clip: content-box;
+
     }
     &:hover{
         &::-webkit-scrollbar-track {
-            background: opacify($brand-gray-100, 0.3);
+            //background: opacify($brand-gray-100, 0.3);
         }
         &::-webkit-scrollbar-thumb{
             //border-radius: 10px;
@@ -352,8 +356,68 @@ button{
     //    &:active {
     //        //background: linear-gradient(left, #22ADD4, #1E98BA);
     //    }
-    //}
+    //}*/
 }
+
+.ss-wrapper {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  float: left;
+}
+
+.ss-content {
+    height: 100%;
+    width: 100%;
+    //width: calc(100% + 18px);
+    padding: 0 0 0 0;
+    position: relative;
+    overflow: auto;
+    box-sizing: border-box;
+
+    &.rtl {
+        //width: calc(100% + 18px);
+        right: auto;
+    }
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.ss-scroll {
+    position: relative;
+    background: rgba(0, 0, 0, 0.2);
+    width: 4px;
+    border-radius: 4px;
+    top: 0;
+    z-index: 2;
+    cursor: pointer;
+    opacity: 0;
+    transform: translate(-3px,0);
+    transition: opacity 0.25s linear;
+
+    .ss-container:hover &,
+    .ss-container:active & {
+        opacity: 1;
+    }
+}
+
+.ss-hidden {
+  display: none;
+}
+
+.ss-grabbed {
+  -o-user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/** old Style 11*/
 
 /* Tooltips */
 .tooltip{

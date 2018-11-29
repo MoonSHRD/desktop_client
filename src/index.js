@@ -8,9 +8,8 @@ require('waypoints/lib/shortcuts/sticky.min');
 require('bootstrap');
 require('bootstrap-notify');
 require('slick-carousel');
-
-const shell = require('electron').shell;
-//open links externally by default
+const SimpleScrollbar = require('simple-scrollbar');
+const shell = require('electron').shell; //open links externally by default
 
 let p = null;
 let d = null;
@@ -249,13 +248,14 @@ window.onload = function () {
     });
 
     document.addEventListener('click', (e) => {
+        let $this = e.target;
 
-        if (e.target.id === 'generate_mnemonic') {
+        if ($this.id === 'generate_mnemonic') {
             ipcRenderer.send('generate_mnemonic');
             document.getElementById('input_mnemonic_next').focus();
         }
 
-        else if (e.target.id === 'input_mnemonic_next') {
+        else if ($this.id === 'input_mnemonic_next') {
             let mnemonicVal = document.getElementById('input_mnemonic').value;
             if (validate_mnemonic(mnemonicVal)) {
                 mnemonic_text = mnemonicVal.trim();
@@ -270,8 +270,7 @@ window.onload = function () {
             }
         }
 
-        else if (e.target.classList.contains('mnemonic__item')){
-            let $this = e.target;
+        else if ($this.classList.contains('mnemonic__item')){
             let confirmMnemonic = document.getElementById('confirm_input_mnemonic');
             let confirmMnemonicText = confirmMnemonic.value;
 
@@ -512,9 +511,73 @@ window.onload = function () {
         let callback = (e) => {
             // let e = window.e || e;
             console.log(e);
-            if (e.target.localName === 'a') {
-                e.preventDefault();
-                shell.openExternal(e.target.href);
+            let $this = e.target;
+            let url = $this.getAttribute('href');
+            let rgx = new RegExp("^(http|https)://", "i");
+            if (e.which === 2) {
+                if ($this.localName === 'a' && rgx.test(url)) {
+                    e.preventDefault();
+                    shell.openExternal($this.href);
+                }
+            } else // Проверяем нажата ли именно правая кнопка мыши:
+            if ( e.which === 3 ) {
+                // console.log(e);
+
+                // Убираем css класс selected-html-element у абсолютно всех элементов на странице с помощью селектора "*":
+                let allEl = document.querySelectorAll('*');
+                for (let i=0; i < allEl.length; i++){
+                    allEl[i].classList.remove('selected-html-element');
+                } // $('*').removeClass('selected-html-element');
+
+                // Удаляем предыдущие вызванное контекстное меню:
+                let contextMenu = document.querySelectorAll('.context-menu');
+                for ( let i=0; i<contextMenu.length; i++){
+                    contextMenu[i].remove();
+                }
+                // $('.context-menu').remove();
+                if ( $this.classList.contains('chats__item') ) {
+
+                    console.log(e);
+                    console.log(window.innerHeight);
+
+                    let contextWidth = 165;
+                    let wWidth = window.innerWidth;
+
+                    /* TODO : сделать проверку на края экрана, что бы контекстное меню не заходило */
+                    let left = (event.pageX + contextWidth) > wWidth ? (event.pageX - contextWidth) : event.pageX;
+
+                    // Добавляем класс selected-html-element что бы наглядно показать на чем именно мы кликнули (исключительно для тестирования):
+                    $this.classList.add('selected-html-element');
+
+                    let div = document.createElement('div');
+                    let ul = document.createElement('ul')
+                    div.classList.add('context-menu');
+
+                    let linksMenu = [
+                        '<a href="#">Remove element</a>',
+                        '<a href="#">Add element</a>',
+                        '<a href="#">Element style</a>',
+                        '<a href="#">Element props</a>',
+                        '<a href="#">Open Inspector</a>'
+                    ];
+
+                    // console.log(linksMenu);
+
+                    for (let i = 0; i<linksMenu.length; i++){
+                        let li = document.createElement('li');
+                        li.innerHTML = linksMenu[i];
+                        ul.appendChild(li);
+                    }
+
+                    div.appendChild(ul);
+                    document.body.appendChild(div);
+
+                    div.style.left = `${left}px`;
+                    div.style.top = `${event.pageY}px`;
+                    div.style.display = 'block';
+
+                    // div.show('fast');
+                }
             }
             return
         };
@@ -601,11 +664,13 @@ window.onload = function () {
         // $('#view').html(obj.arg);
         document.getElementById('view').innerHTML = obj.arg;
         // $.html5Translate(dict, obj.language);
+        scrollbarInit();
         widthMsgWindow('[data-msgs-window]');
     });
 
     window.addEventListener('resize', function(e){
         widthMsgWindow('[data-msgs-window]');
+        scrollbarInit();
         e.preventDefault();
     });
 
@@ -639,6 +704,13 @@ window.onload = function () {
     document.addEventListener('keyup', (e) => {
         let $this = e.target;
         if ( $this.dataset.msg ){
+            autoResizeTextarea();
+            if($this.value === '') {
+                $this.setAttribute('rows', 1);
+            }
+            if($this.value === '' && event.keyCode === 13) {
+                event.preventDefault();
+            }
             if (event.ctrlKey && event.keyCode === 13 ) {
                 $this.setAttribute('rows', 1);
             }
@@ -651,7 +723,7 @@ window.onload = function () {
         }
     });*/
 
-    $(document).on('keydown','.send_message__input',function(e) {
+    /*$(document).on('keydown','.send_message__input',function(e) {
         autoResizeTextarea();
         if($(this).val() === '') {
             $(this).attr('rows', 1);
@@ -662,7 +734,7 @@ window.onload = function () {
         // if ( event.keyCode === 13 && $(this).val()!=='') {
         //     ResizeTextArea(this,0);
         // }
-    });
+    });*/
 
     /*$(document).on('input','.send_message__input',function(e) {
         // console.log('hello!')
@@ -835,7 +907,10 @@ window.onload = function () {
 
             msgList.insertAdjacentHTML('beforeend', obj.html);
 
-            scrollDown('[data-msg-history]');
+            scrollbarInit();
+            console.log('[[data-msg-history]]');
+
+            scrollDown('[data-msg-history] .ss-content');
         } else {
             // chat.find('[data-name=unread_messages]').text(obj.unread_messages);
             if (obj.message.fresh) {
@@ -856,6 +931,7 @@ window.onload = function () {
     /* Загразка блока с информацией */
     ipcRenderer.on('firstLoad', (event, obj) => {
         document.querySelector('.messaging_block').innerHTML = obj;
+        scrollbarInit();
     });
     /* /Загразка блока с информацией */
 
@@ -1018,9 +1094,10 @@ window.onload = function () {
 
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
-        $('.modal-content').html(data);
+        let modal = document.getElementById('AppModal').querySelector('[data-modal-content]');
+        modal.innerHTML = data;
         $('#AppModal').modal('toggle');
-
+        scrollbarInit();
     });
 
     ipcRenderer.on('offer_publication', (event, data) => {
@@ -1353,28 +1430,29 @@ window.onload = function () {
     });
 
 
-    $(document).on('mousedown', '.chats li', function (e) {
-        $('*').removeClass('selected-html-element');
-        $('.context-menu').remove();
-        if (e.which === 3) {
-            var target = $(e.target);
-            target.addClass('selected-html-element');
-            $('<div/>', {
-                class: 'context-menu'
-            })
-                .css({
-                    left: e.pageX + 'px',
-                    top: e.pageY + 'px'
-                })
-                .appendTo('body')
-                .append(
-                    $('<ul/>').append('<li><a href="#">Remove element</a></li>')
-                        .append('<li><a href="#">Add element</a></li>')
-                        .append('<li><a href="#">Element style</a></li>')
-                )
-                .fadeIn(300);
-        }
-    });
+    // $(document).on('mousedown', '.chats li', function (e) {
+    //     $('*').removeClass('selected-html-element');
+    //     $('.context-menu').remove();
+    //     if (e.which === 3) {
+    //         var target = $(e.target);
+    //         target.addClass('selected-html-element');
+    //         $('<div/>', {
+    //             class: 'context-menu'
+    //         })
+    //             .css({
+    //                 left: e.pageX + 'px',
+    //                 top: e.pageY + 'px'
+    //             })
+    //             .appendTo('body')
+    //             .append(
+    //                 $('<ul/>').append('<li><a href="#">Remove element</a></li>')
+    //                     .append('<li><a href="#">Add element</a></li>')
+    //                     .append('<li><a href="#">Element style</a></li>')
+    //             )
+    //             .fadeIn(300);
+    //     }
+    //     e.preventDefault();
+    // });
 
     $(document).on('click', '.dropDown_menu > ul > li ', function (e) {
         $(this).children('ul').toggleClass('d-block');
@@ -1665,10 +1743,12 @@ window.onload = function () {
     };
     ipcRenderer.on('change_wallet_menu', (event, obj) => {
         renderRight('.walletRight', obj);
+        scrollbarInit('.walletLeft, .walletRight');
 
     });
     ipcRenderer.on('change_settings_menu', (event, obj) => {
         renderRight('.settings__right', obj);
+        scrollbarInit('.settings__left, .settings__right');
     });
     /*
      * /WALLET/SETTINGS MENU
@@ -1743,7 +1823,7 @@ window.onload = function () {
     });
     /* /Поиск каналов и пользователей */
 
-    $(document).on('mousedown',function(event) {
+    /*$(document).on('mousedown',function(event) {
 
         // Убираем css класс selected-html-element у абсолютно всех элементов на странице с помощью селектора "*":
         $('*').removeClass('selected-html-element');
@@ -1753,8 +1833,16 @@ window.onload = function () {
         // Проверяем нажата ли именно правая кнопка мыши:
         if (event.which === 3)  {
 
+            console.log(event);
+            console.log(window.innerHeight);
+
             // Получаем элемент на котором был совершен клик:
-            var target = $(event.target);
+            let target = $(event.target);
+
+            let contextWidth = 165;
+            let wWidth = window.innerWidth;
+
+            let left = (event.pageX + contextWidth) > wWidth ? (event.pageX - contextWidth) : event.pageX;
 
             // Добавляем класс selected-html-element что бы наглядно показать на чем именно мы кликнули (исключительно для тестирования):
             target.addClass('selected-html-element');
@@ -1764,7 +1852,7 @@ window.onload = function () {
                 class: 'context-menu' // Присваиваем блоку наш css класс контекстного меню:
             })
                 .css({
-                    left: event.pageX+'px', // Задаем позицию меню на X
+                    left: left+'px', // Задаем позицию меню на X
                     top: event.pageY+'px' // Задаем позицию меню по Y
                 })
                 .appendTo('body') // Присоединяем наше меню к body документа:
@@ -1777,5 +1865,77 @@ window.onload = function () {
                 )
                 .show('fast'); // Показываем меню с небольшим стандартным эффектом jQuery. Как раз очень хорошо подходит для меню
         }
-    });
+    });*/
+
+    // document.addEventListener('click', (event) => {
+    //     console.log('right', event);
+    //
+    //     let $this = event.target;
+    //
+    //     // Проверяем нажата ли именно правая кнопка мыши:
+    //     if ( event.which === 3 ) {
+    //
+    //         // Убираем css класс selected-html-element у абсолютно всех элементов на странице с помощью селектора "*":
+    //         let allEl = document.querySelectorAll('*');
+    //         for (let i=0; i < allEl.length; i++){
+    //             allEl[i].classList.remove('selected-html-element');
+    //         } // $('*').removeClass('selected-html-element');
+    //
+    //         // Удаляем предыдущие вызванное контекстное меню:
+    //         let contextMenu = document.querySelectorAll('.context-menu');
+    //         for ( let i=0; i<contextMenu.length; i++){
+    //             contextMenu[i].remove();
+    //         }
+    //         // $('.context-menu').remove();
+    //         if ( $this.classList.contains('chats__item') ) {
+    //
+    //             console.log(event);
+    //             console.log(window.innerHeight);
+    //
+    //             let contextWidth = 165;
+    //             let wWidth = window.innerWidth;
+    //
+    //             let left = (event.pageX + contextWidth) > wWidth ? (event.pageX - contextWidth) : event.pageX;
+    //
+    //             // Добавляем класс selected-html-element что бы наглядно показать на чем именно мы кликнули (исключительно для тестирования):
+    //             $this.classList.add('selected-html-element');
+    //
+    //             let div = document.createElement('div');
+    //             div.classList.add('context-menu');
+    //             document.body.appendChild(div);
+    //
+    //             let linksMenu = [
+    //                 '<a href="#">Remove element</a>',
+    //                 '<a href="#">Add element</a>',
+    //                 '<a href="#">Element style</a>',
+    //                 '<a href="#">Element props</a>',
+    //                 '<a href="#">Open Inspector</a>'
+    //             ];
+    //
+    //             console.log(linksMenu);
+    //
+    //             for (let i = 0; i<linksMenu.length; i++){
+    //                 let li = document.createElement('li');
+    //                 li.innerHTML = linksMenu[i];
+    //                 div.appendChild(li);
+    //             }
+    //
+    //             div.style.left = left;
+    //             div.style.top = event.pageY;
+    //
+    //             div.show('fast');
+    //         }
+    //     }
+    // });
+
+    /* Инициализация кастомного скролла */
+    let scrollbarInit = (target = '.ss-container, .custom-scrollbar') => {
+        let el = document.querySelectorAll(target);
+        for (let i = 0; i<el.length; i++) {
+            el[i].setAttribute('ss-container', true);
+            SimpleScrollbar.initEl(el[i]);
+            // console.log(i + ' : ' + el[i]);
+        }
+    };
+    /* /Инициализация кастомного скролла */
 };
