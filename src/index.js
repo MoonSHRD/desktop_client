@@ -9,10 +9,7 @@ require('bootstrap');
 require('bootstrap-notify');
 require('slick-carousel');
 const SimpleScrollbar = require('simple-scrollbar');
-
-
-const shell = require('electron').shell;
-//open links externally by default
+const shell = require('electron').shell; //open links externally by default
 
 let p = null;
 let d = null;
@@ -251,13 +248,14 @@ window.onload = function () {
     });
 
     document.addEventListener('click', (e) => {
+        let $this = e.target;
 
-        if (e.target.id === 'generate_mnemonic') {
+        if ($this.id === 'generate_mnemonic') {
             ipcRenderer.send('generate_mnemonic');
             document.getElementById('input_mnemonic_next').focus();
         }
 
-        else if (e.target.id === 'input_mnemonic_next') {
+        else if ($this.id === 'input_mnemonic_next') {
             let mnemonicVal = document.getElementById('input_mnemonic').value;
             if (validate_mnemonic(mnemonicVal)) {
                 mnemonic_text = mnemonicVal.trim();
@@ -272,8 +270,7 @@ window.onload = function () {
             }
         }
 
-        else if (e.target.classList.contains('mnemonic__item')){
-            let $this = e.target;
+        else if ($this.classList.contains('mnemonic__item')){
             let confirmMnemonic = document.getElementById('confirm_input_mnemonic');
             let confirmMnemonicText = confirmMnemonic.value;
 
@@ -385,15 +382,35 @@ window.onload = function () {
 
     document.addEventListener('click', (e) => {
         let $this = e.target;
+        // console.log(e.which);
         /* Обработка ссылок */
         if ( $this.hasAttribute('href') ) {
             let url = $this.getAttribute('href');
-            let rgx = new RegExp("^(http|https)://", "i")
+            let rgx = new RegExp("^(http|https)://", "i");
             if (rgx.test(url)) {
                 shell.openExternal($this.href);
             }
+            e.preventDefault();
         }
         /* /Обработка ссылок */
+
+        /* Обработка ссылок стартовой странице */
+        else if ( $this.dataset.id === 'start' ){
+            let menuId = $this.dataset.menu; // id основного пункта меню
+            let submenuId = $this.dataset.submenu; // id подпункта меню
+            let menuItem = document.querySelector('.menu__item[data-id='+menuId+']'); // основной пункт меню
+
+            menuItem.click(); // эмуляция клика на пункт меню
+
+            if ( menuItem.classList.contains('active_menu') ){ // проверяем активность искомого меню
+                setTimeout(() => { // даем задержку для обработки
+                    if (document.querySelector('.nav_menu')) { // проверяем наличие подменю
+                        document.querySelector('[data-toggle="nav"][data-name=' + submenuId + ']').click(); // Эмулируем клик по подменю
+                    }
+                }, 500);
+            }
+        }
+        /* /Обработка ссылок стартовой странице */
 
         /* Копирование id пользователя */
         else if ( $this.classList.contains('copyButton') ){
@@ -481,7 +498,33 @@ window.onload = function () {
             }
         }
         /* /Обработка клика на меню */
+
+        /* Клик по аватрке */
+        else if ( $this.classList.contains('infopanel') ){
+            ipcRenderer.send('get_my_vcard');
+        }
+        /* /Клик по аватрке */
     });
+
+    /* Запрет средней кнопки мыши */
+    (function() {
+        let callback = (e) => {
+            // let e = window.e || e;
+            console.log(e);
+            if (e.target.localName === 'a') {
+                e.preventDefault();
+                shell.openExternal(e.target.href);
+            }
+            return
+        };
+
+        if (document.addEventListener) {
+            document.addEventListener('auxclick', callback, false);
+        } else {
+            document.attachEvent('onauxclick', callback);
+        }
+    })();
+    /* /Запрет средней кнопки мыши */
 
     /* Обработка добавления файлов/картинок в чат */
     document.addEventListener('change', (e) => {
@@ -526,10 +569,6 @@ window.onload = function () {
     //     $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
     // });
 
-    /*$(document).on('click','[data-id=menu_create_chat]',function (e) {
-        ipcRenderer.send('change_menu_state', 'menu_create_chat');
-    });*/
-
     document.addEventListener('click', (e) => {
         let $this = e.target;
         if ( $this.dataset.id === 'menu_create_chat' ){
@@ -538,7 +577,6 @@ window.onload = function () {
     });
 
     ipcRenderer.on('change_menu_state', (event, arg) => {
-        // console.log('change_menu_state', arg);
         document.getElementById('working_side').innerHTML = arg;
     });
 
@@ -562,11 +600,13 @@ window.onload = function () {
         // $('#view').html(obj.arg);
         document.getElementById('view').innerHTML = obj.arg;
         // $.html5Translate(dict, obj.language);
+        scrollbarInit();
         widthMsgWindow('[data-msgs-window]');
     });
 
     window.addEventListener('resize', function(e){
         widthMsgWindow('[data-msgs-window]');
+        scrollbarInit();
         e.preventDefault();
     });
 
@@ -575,24 +615,51 @@ window.onload = function () {
         $('.icon-bar').toggleClass('resize', 400);
     });*/
 
-    $(document).on('click', 'a.infopanel', function () {
+    /*$(document).on('click', 'a.infopanel', function () {
         ipcRenderer.send('get_my_vcard');
-    });
+    });*/
 
 
-    $(document).on('keydown', '[data-msg="data-msg"]', function () {
+    /*$(document).on('keydown', '[data-msg="data-msg"]', function () {
         if (event.ctrlKey && event.keyCode === 13) {
             send_message();
         }
+    });*/
+
+    document.addEventListener('keydown', (e) => {
+        let $this = e.target;
+        /* Отправка сообщение на CTRL+ENTER */
+        if ( $this.dataset.msg ){
+            if (event.ctrlKey && event.keyCode === 13) {
+                send_message();
+            }
+        }
+        /* /Отправка сообщение на CTRL+ENTER */
     });
 
-    $(document).on('keyup', '[data-msg="data-msg"]', function () {
-        if (event.ctrlKey && event.keyCode === 13 ) {
-            $(this).attr('rows', 1);
+    document.addEventListener('keyup', (e) => {
+        let $this = e.target;
+        if ( $this.dataset.msg ){
+            autoResizeTextarea();
+            if($this.value === '') {
+                $this.setAttribute('rows', 1);
+            }
+            if($this.value === '' && event.keyCode === 13) {
+                event.preventDefault();
+            }
+            if (event.ctrlKey && event.keyCode === 13 ) {
+                $this.setAttribute('rows', 1);
+            }
         }
     });
 
-    $(document).on('keydown','.send_message__input',function(e) {
+    /*$(document).on('keyup', '[data-msg="data-msg"]', function () {
+        if (event.ctrlKey && event.keyCode === 13 ) {
+            $(this).attr('rows', 1);
+        }
+    });*/
+
+    /*$(document).on('keydown','.send_message__input',function(e) {
         autoResizeTextarea();
         if($(this).val() === '') {
             $(this).attr('rows', 1);
@@ -603,7 +670,7 @@ window.onload = function () {
         // if ( event.keyCode === 13 && $(this).val()!=='') {
         //     ResizeTextArea(this,0);
         // }
-    });
+    });*/
 
     /*$(document).on('input','.send_message__input',function(e) {
         // console.log('hello!')
@@ -633,54 +700,66 @@ window.onload = function () {
         $('[data-msg="data-msg"]').focus();
     });
 
-    function send_message(){
-        let msg_input = $('.send_message__input');
-        msg_input.attr('rows', 1);
-        if (msg_input.val().trim() === '') {
+    let send_message = () => {
+        // let msg_input = $('.send_message__input');
+        const msg_input = document.querySelector('.send_message__input'); // поле ввода сообщения
+        const active_dialog = document.querySelector('.active_dialog'); // активный диалог
+        const chatFiles = document.getElementById('attachFileToChat'); // загрузка файлов для чата
+        const groupFiles = document.getElementById('attachFileToGroup'); // загрузка файлов для канала/группы
+        const uploadFile = document.getElementById('upload_file'); // отображение загруженного файла
+        let files = chatFiles.files;
 
-            msg_input.val('');
+        msg_input.setAttribute('rows', 1);
+
+        if (msg_input.value.trim() === '') {
+            msg_input.value = '';
             return;
         }
-        let active_dialog = $('.active_dialog');
+
         let obj = {
             user: {
-                id: active_dialog.attr('id'),
-                domain: active_dialog.attr('data-domain'),
+                id: active_dialog.getAttribute('id'),
+                domain: active_dialog.dataset.domain,
             },
-            text: msg_input.val().trim(),
-            group: $('.active_dialog').attr('data-type') === 'channel',
+            text: msg_input.value.trim(),
+            group: active_dialog.dataset.type === 'channel',
         };
 
         obj = {
-            id: active_dialog.attr('id'),
-            text: msg_input.val().trim()
+            id: active_dialog.getAttribute('id'),
+            text: msg_input.value.trim()
         };
 
-        // console.log(obj);
-        let files = $('#attachFileToChat').prop('files');
         if (files && files[0]) {
-            msg_input.attr('rows', 1);
-
+            msg_input.setAttribute('rows', 1);
             let file = files[0];
             console.log(file);
             let reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onloadend = function () {
-                obj.file = {file: reader.result, type: file.type, name: file.name};
+                obj.file = {
+                    file: reader.result,
+                    type: file.type,
+                    name: file.name
+                };
+                console.log('send file', file);
                 // console.log(obj);
                 ipcRenderer.send('send_message', obj);
             };
         } else {
             ipcRenderer.send('send_message', obj);
         }
-        // console.log(file);
-        msg_input.val('');
-        $('input[id="attachFileToChat"], input[id="attachFileToGroup"]').prop('value', null);
-        $('#upload_file')
-            .attr('src', '')
-            .css('cursor', 'default')
-            .removeClass('added');
-    }
+
+        msg_input.value = '';
+
+        if ( chatFiles ) chatFiles.value = '';
+        if ( groupFiles ) groupFiles.value = '';
+
+        /* Очистка прикрепленных файлов */
+        uploadFile.setAttribute('src', '');
+        uploadFile.style.cursor = 'default';
+        uploadFile.classList.remove('added');
+    };
 
     /*ipcRenderer.on('add_out_msg', (event, obj) => {
         console.log(obj);
@@ -729,52 +808,68 @@ window.onload = function () {
     // });
 
     ipcRenderer.on('received_message', (event, obj) => {
-        let chat = $('#'+obj.id);
+        // let chat = $('#'+obj.id);
+        const chat = document.getElementById(obj.id);
+        const chatActive = document.querySelector('.active_dialog');
+        const msgList = document.querySelector('[data-msg-list]');
 
-        console.log(obj);
+        // console.log(chat, obj);
 
         //console.log('received_message', obj);
 
         if (obj.message.fresh) {
-            if (chat) {
-                chat.find('[data-name=chat_last_time]').text(obj.message.time);
-                chat.find('[data-name=chat_last_text]').text(obj.message.text);
-                // console.log(obj);
 
-                // chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
-                // chat.find('[data-name=unread_messages]').show();
+            if (chat) {
+                // chat.find('[data-name=chat_last_time]').text(obj.message.time);
+                // chat.find('[data-name=chat_last_text]').text(obj.message.text);
+                chat.querySelector('[data-name=chat_last_time]').innerText = obj.message.time;
+                chat.querySelector('[data-name=chat_last_text]').innerText = obj.message.text;
             }
-            chat.prependTo($('.chats ul')[0]);
+
+            // chat.prependTo($('.chats ul')[0]);
+            document.querySelector('.chats__list').prepend(chat);
             console.log('1');
         }
-        if ($('.active_dialog').attr('id') === obj.id) {
-            chat.find('[data-name=unread_messages]').hide();
+        if ( chatActive.id === obj.id ) {
+            chat.querySelector('[data-name=unread_messages]').style.display = 'none';
             ipcRenderer.send('reading_messages', obj.id);
 
+            /* TODO: подумай над этим */
             let p_count = ($('p:contains(' + obj.time + ')'));
 
             if (p_count.length === 0) {
-                $('[data-msg-list]').append(obj.html_date);
+                msgList.insertAdjacentHTML('beforeend', obj.html_date);
             }
 
-            $('[data-msg-list]').append(obj.html);
-            scrollDown('[data-msg-history]');
+            msgList.insertAdjacentHTML('beforeend', obj.html);
+
+            scrollbarInit();
+            console.log('[[data-msg-history]]');
+
+            scrollDown('[data-msg-history] .ss-content');
         } else {
             // chat.find('[data-name=unread_messages]').text(obj.unread_messages);
             if (obj.message.fresh) {
-                let un_m=chat.find('[data-name=unread_messages]');
-                let txt_now=un_m.text();
-                if (txt_now=='0')
-                    un_m.text(1);
+                let un_m = chat.querySelector('[data-name=unread_messages]');
+                let txt_now = un_m.innerText;
+                if (txt_now == 0)
+                    un_m.innerText = 1;
                 else
-                    un_m.text(un_m.text()+1);
-                un_m.show();
+                    un_m.innerText = un_m.innerText + 1;
+                un_m.style.display = 'inherit';
                 // chat.find('[data-name=unread_message]').text(obj.message.unread_messages);
                 // chat.find('[data-name=unread_messages]').show();
             }
         }
         // ipcRenderer.send('load_chat s', 'menu_chats');
     });
+
+    /* Загразка блока с информацией */
+    ipcRenderer.on('firstLoad', (event, obj) => {
+        document.querySelector('.messaging_block').innerHTML = obj;
+        scrollbarInit();
+    });
+    /* /Загразка блока с информацией */
 
     ipcRenderer.on('buddy', (event, obj) => {
         // if (
@@ -783,13 +878,17 @@ window.onload = function () {
         // ) {
         //     return;
         // }
-        const chat_box = $('.chats ul');
-        const user = chat_box.find('#' + obj.id);
+        console.log(obj);
+        // const chatList = $('.chats ul');
+        const chatList = document.querySelector('.chats__list');
+        // const user = chatList.find('#' + obj.id);
+        const user = document.getElementById(obj.id);
         widthMsgWindow();
-        if (user.length) {
+        if (user) {
             user.replaceWith(obj.html);
         } else {
-            chat_box.prepend(obj.html);
+            // chatList.prepend(obj.html);
+            chatList.insertAdjacentHTML('afterbegin', obj.html);
         }
 
     });
@@ -797,8 +896,6 @@ window.onload = function () {
     ipcRenderer.on('reload_chat', (event, obj) => {
         // $('#messaging_block').html(obj);
         document.getElementById('messaging_block').innerHTML = obj;
-        // let el = document.querySelector('.msgHistory');
-        // SimpleScrollbar.initEl(el);
         if (document.querySelector('[data-msg]')) {
             document.querySelector('[data-msg]').focus();
         }
@@ -933,11 +1030,10 @@ window.onload = function () {
 
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
-        $('.modal-content').html(data);
+        let modal = document.getElementById('AppModal').querySelector('[data-modal-content]');
+        modal.innerHTML = data;
         $('#AppModal').modal('toggle');
-        // let el = document.querySelector('.freq');
-        // SimpleScrollbar.initEl(el);
-
+        scrollbarInit();
     });
 
     ipcRenderer.on('offer_publication', (event, data) => {
@@ -1582,12 +1678,12 @@ window.onload = function () {
     };
     ipcRenderer.on('change_wallet_menu', (event, obj) => {
         renderRight('.walletRight', obj);
+        scrollbarInit('.walletLeft, .walletRight');
 
     });
     ipcRenderer.on('change_settings_menu', (event, obj) => {
         renderRight('.settings__right', obj);
-        var el = document.querySelector('.settings__left');
-        SimpleScrollbar.initEl(el);
+        scrollbarInit('.settings__left, .settings__right');
     });
     /*
      * /WALLET/SETTINGS MENU
@@ -1697,4 +1793,15 @@ window.onload = function () {
                 .show('fast'); // Показываем меню с небольшим стандартным эффектом jQuery. Как раз очень хорошо подходит для меню
         }
     });
+
+    /* Инициализация кастомного скролла */
+    let scrollbarInit = (target = '.ss-container, .custom-scrollbar') => {
+        let el = document.querySelectorAll(target);
+        for (let i = 0; i<el.length; i++) {
+            el[i].setAttribute('ss-container', true);
+            SimpleScrollbar.initEl(el[i]);
+            console.log(i + ' : ' + el[i]);
+        }
+    };
+    /* /Инициализация кастомного скролла */
 };

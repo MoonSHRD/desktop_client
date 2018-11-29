@@ -1,9 +1,16 @@
-#AppModal.modal.fade.p-0.owe(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true' )
+#AppModal.modal.fade.p-0.owe(
+    tabindex='-1',
+    role='dialog',
+    aria-labelledby='exampleModalCenterTitle',
+    style="overflow: hidden; display: none;"
+    aria-hidden="true"
+)
     //.modal-dialog.modal-dialog-centered.modal-lg(role='document')
     .modal-dialog(role='document')
         //include wqer
 
-        form.modal-content.d-block#my-modal(style='background-color: #FFFFFF')
+        form.ss-container.modal-content.d-block#my-modal(style='background-color: #FFFFFF; height: 500px')
+            div(data-modal-content='')
 
 
 #AppModal1.modal.fade.p-0(tabindex='-1', role='dialog', aria-labelledby='exampleModalCenterTitle', aria-hidden='true')
