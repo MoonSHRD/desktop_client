@@ -1,0 +1,16 @@
+{
+  "type": "sqlite",
+  "database": "/home/nikita/.config/moonshard/data.db",
+  "synchronize": true,
+  "logging": false,
+  "entities": [
+    "models/*.js"
+  ],
+  "migrations": [
+    "migrations/*.js"
+  ],
+  "cli": {
+    "entitiesDir": "src/entity",
+    "migrationsDir": "src/migration"
+  }
+}
