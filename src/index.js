@@ -881,11 +881,12 @@ window.onload = function () {
 
     ipcRenderer.on('received_message', (event, obj) => {
         // let chat = $('#'+obj.id);
-        const chat = document.getElementById(obj.id);
-        const chatActive = document.querySelector('.active_dialog');
-        const msgList = document.querySelector('[data-msg-list]');
+        //console.log(obj);
+        let chat = document.getElementById(obj.id);
+        let chatActive = document.querySelector('.active_dialog');
+        let msgList = document.querySelector('[data-msg-list]');
 
-        // console.log(chat, obj);
+        console.log('received_message', chat, obj);
 
         //console.log('received_message', obj);
 
@@ -922,6 +923,9 @@ window.onload = function () {
         } else {
             // chat.find('[data-name=unread_messages]').text(obj.unread_messages);
             if (obj.message.fresh) {
+
+                console.log('obj.fresh', obj.message.fresh, chat);
+
                 let un_m = chat.querySelector('[data-name=unread_messages]');
                 let txt_now = un_m.innerText;
                 if (txt_now == 0)

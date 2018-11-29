@@ -2,6 +2,7 @@
     height: calc(100% - 200px);
     background: $cf;
     overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
 
     ul {
