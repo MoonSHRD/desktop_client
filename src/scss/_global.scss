@@ -372,7 +372,7 @@ button{
   width: calc(100% + 18px);
   padding: 0 0 0 0;
   position: relative;
-  overflow: auto;
+  overflow: overlay;
   box-sizing: border-box;
 }
 
@@ -384,7 +384,7 @@ button{
 .ss-scroll {
   position: relative;
   background: rgba(0, 0, 0, 0.1);
-  width: 9px;
+  width: 4px;
   border-radius: 4px;
   top: 0;
   z-index: 2;

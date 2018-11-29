@@ -797,6 +797,8 @@ window.onload = function () {
     ipcRenderer.on('reload_chat', (event, obj) => {
         // $('#messaging_block').html(obj);
         document.getElementById('messaging_block').innerHTML = obj;
+        // let el = document.querySelector('.msgHistory');
+        // SimpleScrollbar.initEl(el);
         if (document.querySelector('[data-msg]')) {
             document.querySelector('[data-msg]').focus();
         }
@@ -933,11 +935,9 @@ window.onload = function () {
     ipcRenderer.on('get_my_vcard', (event, data) => {
         $('.modal-content').html(data);
         $('#AppModal').modal('toggle');
-        let el = document.querySelectorAll('.modal-content');
-        for (let i = 0; i<el.length; i++) {
-            SimpleScrollbar.initEl(el[i]);
-            console.log(el[i]);
-        }
+        // let el = document.querySelector('.freq');
+        // SimpleScrollbar.initEl(el);
+
     });
 
     ipcRenderer.on('offer_publication', (event, data) => {
