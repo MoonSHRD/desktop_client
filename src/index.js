@@ -1740,14 +1740,15 @@ window.onload = function () {
     let renderRight = (selector, content) => {
         let $this = document.querySelector(selector);
         $this.innerHTML = content;
+        console.log('renderRight');
     };
     ipcRenderer.on('change_wallet_menu', (event, obj) => {
-        renderRight('.walletRight', obj);
+        renderRight('[data-right-content]', obj);
         scrollbarInit('.walletLeft, .walletRight');
 
     });
     ipcRenderer.on('change_settings_menu', (event, obj) => {
-        renderRight('.settings__right', obj);
+        renderRight('[data-right-content]', obj);
         scrollbarInit('.settings__left, .settings__right');
     });
     /*
