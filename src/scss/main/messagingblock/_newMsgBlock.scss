@@ -776,6 +776,7 @@ a.join_button {
     text-decoration: none;
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     span{
         @include fz(18);
