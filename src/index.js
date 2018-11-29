@@ -9,10 +9,7 @@ require('bootstrap');
 require('bootstrap-notify');
 require('slick-carousel');
 const SimpleScrollbar = require('simple-scrollbar');
-
-
-const shell = require('electron').shell;
-//open links externally by default
+const shell = require('electron').shell; //open links externally by default
 
 let p = null;
 let d = null;
@@ -603,11 +600,13 @@ window.onload = function () {
         // $('#view').html(obj.arg);
         document.getElementById('view').innerHTML = obj.arg;
         // $.html5Translate(dict, obj.language);
+        scrollbarInit();
         widthMsgWindow('[data-msgs-window]');
     });
 
     window.addEventListener('resize', function(e){
         widthMsgWindow('[data-msgs-window]');
+        scrollbarInit();
         e.preventDefault();
     });
 
@@ -844,7 +843,10 @@ window.onload = function () {
 
             msgList.insertAdjacentHTML('beforeend', obj.html);
 
-            scrollDown('[data-msg-history]');
+            scrollbarInit();
+            console.log('[[data-msg-history]]');
+
+            scrollDown('[data-msg-history] .ss-content');
         } else {
             // chat.find('[data-name=unread_messages]').text(obj.unread_messages);
             if (obj.message.fresh) {
@@ -865,6 +867,7 @@ window.onload = function () {
     /* Загразка блока с информацией */
     ipcRenderer.on('firstLoad', (event, obj) => {
         document.querySelector('.messaging_block').innerHTML = obj;
+        scrollbarInit();
     });
     /* /Загразка блока с информацией */
 
@@ -1027,13 +1030,10 @@ window.onload = function () {
 
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
-        $('.modal-content').html(data);
+        let modal = document.getElementById('AppModal').querySelector('[data-modal-content]');
+        modal.innerHTML = data;
         $('#AppModal').modal('toggle');
-        let el = document.querySelectorAll('.modal-content');
-        for (let i = 0; i<el.length; i++) {
-            SimpleScrollbar.initEl(el[i]);
-            console.log(el[i]);
-        }
+        scrollbarInit();
     });
 
     ipcRenderer.on('offer_publication', (event, data) => {
@@ -1678,12 +1678,12 @@ window.onload = function () {
     };
     ipcRenderer.on('change_wallet_menu', (event, obj) => {
         renderRight('.walletRight', obj);
+        scrollbarInit('.walletLeft, .walletRight');
 
     });
     ipcRenderer.on('change_settings_menu', (event, obj) => {
         renderRight('.settings__right', obj);
-        var el = document.querySelector('.settings__left');
-        SimpleScrollbar.initEl(el);
+        scrollbarInit('.settings__left, .settings__right');
     });
     /*
      * /WALLET/SETTINGS MENU
@@ -1793,4 +1793,15 @@ window.onload = function () {
                 .show('fast'); // Показываем меню с небольшим стандартным эффектом jQuery. Как раз очень хорошо подходит для меню
         }
     });
+
+    /* Инициализация кастомного скролла */
+    let scrollbarInit = (target = '.ss-container, .custom-scrollbar') => {
+        let el = document.querySelectorAll(target);
+        for (let i = 0; i<el.length; i++) {
+            el[i].setAttribute('ss-container', true);
+            SimpleScrollbar.initEl(el[i]);
+            console.log(i + ' : ' + el[i]);
+        }
+    };
+    /* /Инициализация кастомного скролла */
 };

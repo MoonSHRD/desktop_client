@@ -312,7 +312,8 @@ button{
 
 /**  old STYLE 11 */
 .custom-scrollbar {
-    overflow: overlay;
+    height: 100%;
+    /*overflow: overlay;
     transition: .2s ease;
     &::-webkit-scrollbar-track {
         //border-radius: 10px;
@@ -355,7 +356,7 @@ button{
     //    &:active {
     //        //background: linear-gradient(left, #22ADD4, #1E98BA);
     //    }
-    //}
+    //}*/
 }
 
 .ss-wrapper {
@@ -368,17 +369,22 @@ button{
 }
 
 .ss-content {
-  height: 100%;
-  width: calc(100% + 18px);
-  padding: 0 0 0 0;
-  position: relative;
-  overflow: auto;
-  box-sizing: border-box;
-}
+    height: 100%;
+    width: 100%;
+    //width: calc(100% + 18px);
+    padding: 0 0 0 0;
+    position: relative;
+    overflow: auto;
+    box-sizing: border-box;
 
-.ss-content.rtl {
-  width: calc(100% + 18px);
-  right: auto;
+    &.rtl {
+        //width: calc(100% + 18px);
+        right: auto;
+    }
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .ss-scroll {
@@ -391,15 +397,15 @@ button{
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.25s linear;
+
+    .ss-container:hover &,
+    .ss-container:active & {
+        opacity: 1;
+    }
 }
 
 .ss-hidden {
   display: none;
-}
-
-.ss-container:hover .ss-scroll,
-.ss-container:active .ss-scroll {
-  opacity: 1;
 }
 
 .ss-grabbed {

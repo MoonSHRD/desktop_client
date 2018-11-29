@@ -335,13 +335,13 @@ a.join_button {
  * message history
  */
 .msgHistory{
-    height: auto;
+    //height: auto;
     //max-height: calc(100% - 120px);
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     //margin-top: 40px;
     //padding-bottom: 10px;
-    @extend .custom-scrollbar;
+    //@extend .custom-scrollbar;
 
     .dialogDate {
         text-align: center;
