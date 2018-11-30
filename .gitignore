@@ -14,6 +14,7 @@ package-lock.json
 yarn.lock
 yarn-error.log
 dev-app-update.yml
+ormconfig.json
 
 not_for_git/
 .git-old/

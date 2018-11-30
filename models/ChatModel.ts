@@ -29,8 +29,10 @@ export class ChatModel extends BaseEntity {
     contract_address: string = '';
     @Column()
     unread_messages: number = 0;
-    @Column()
-    total_supply: string = '';
+    @Column({
+        nullable:true
+    })
+    total_supply: string = null;
 
 
     @OneToMany(type => MessageModel, messages => messages.chat)
