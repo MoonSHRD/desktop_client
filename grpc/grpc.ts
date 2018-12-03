@@ -2,7 +2,7 @@ import * as grpc from 'grpc';
 import * as util from 'util';
 import * as protoLoader from '@grpc/proto-loader';
 import {UserModel} from "../models/UserModel";
-import {LocalAddress, CryptoUtils} from 'loom-js';
+// import {LocalAddress, CryptoUtils} from 'loom-js';
 import * as tweetnacl from 'tweetnacl';
 import {grpc_config} from "../src/env_config";
 import ethers = require('ethers');
@@ -68,6 +68,28 @@ export class Grpc {
             })();
             await sleep(1000 * 60 * 5);
         }
+    }
+
+    async GetUser(id:string):Promise<UserModel>{
+        let userModel=await UserModel.findOne(id);
+        if (!userModel) {
+            userModel=new UserModel();
+            let res = await this.CallMethod("GetObjData",{id: id,obj:'user'});
+            userModel.id=id;
+            userModel.domain='localhost';
+            if (res.err){
+                console.log(res.err);
+            } else {
+                let user= JSON.parse(res.data.data);
+                userModel.name=user.name;
+                userModel.last_active=user.last_active;
+                userModel.avatar=user.avatar;
+                userModel.lastname=user.lastname;
+                userModel.firstname=user.firstname;
+                userModel.name=user.firstname+(user.lastname?" "+user.lastname:"");
+            }
+        }
+        return userModel
     }
 
     // private signData(data) {

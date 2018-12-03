@@ -29,6 +29,11 @@ export class ChatModel extends BaseEntity {
     contract_address: string = '';
     @Column()
     unread_messages: number = 0;
+    @Column({
+        nullable:true
+    })
+    total_supply: string = null;
+
 
     @OneToMany(type => MessageModel, messages => messages.chat)
     messages: MessageModel[];
@@ -147,8 +152,8 @@ export class ChatModel extends BaseEntity {
         let data:UserModel=(await ChatModel.get_chat_opponent(this.id,self_id));
         this.avatar=data.avatar;
         this.name=data.name;
-        console.log("active",data.last_active);
-        console.log("data",data);
+        // console.log("active",data.last_active);
+        // console.log("data",data);
         this.online=data.last_active>(Date.now()-1000*60*5);
         this.domain=data.domain;
         return data.id

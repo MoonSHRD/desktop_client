@@ -6,11 +6,11 @@
 
 import "reflect-metadata";
 import {createConnection} from "typeorm";
-import {dxmpp} from "moonshard_core";
+import {Dxmpp} from "moonshard_core";
 import {ipcMain} from "electron";
 import {ControllerRegister} from "../controllers/ControllerRegister";
 import {helper} from "./var_helper";
-import {Loom} from "../loom/loom";
+// import {Loom} from "../loom/loom";
 import {Web3S} from "../web3/web3";
 
 export class Router {
@@ -26,7 +26,7 @@ export class Router {
     private connection_tries: number=0;
     // private connecting: boolean = false;
     private types: any;
-    private loom: Loom = Loom.getInstance();
+    // private loom: Loom = Loom.getInstance();
 
     constructor(window) {
         this.window = window;
@@ -34,26 +34,13 @@ export class Router {
         this.online = false;
         this.paths = helper.paths;
         this.ipcMain = ipcMain;
-        this.dxmpp = dxmpp.getInstance();
+        this.dxmpp = Dxmpp.getInstance();
         this.web3 = Web3S.GetInstance();
-        this.loom = Loom.getInstance();
+        // this.loom = Loom.getInstance();
         this.events = helper.events;
         this.types = helper.paths;
     };
 
-    private init_sqlite() {
-        createConnection({
-            type: "sqlite",
-            database: "sqlite/data.db",
-            entities: [
-                this.paths.models + "*.js"
-            ],
-            synchronize: true,
-            logging: false
-        }).then(async connection => {
-            await this.init_app();
-        }).catch(error => console.log(error));
-    }
 
     private listen_event(from, event_name, callback) {
         from.on(event_name, async (...args) => {
@@ -66,13 +53,7 @@ export class Router {
         });
     }
 
-    public start_loading() {
-        setTimeout(() => {
-            this.init_sqlite();
-        }, 2000)
-    }
-
-    private async init_app() {
+    public async init_app() {
         await this.controller_register.run_controller('AuthController', 'init_auth');
         this.start_listening();
     }
@@ -95,8 +76,6 @@ export class Router {
                     setTimeout(resolve, ms)
                 });
             }
-            // console.log("Loom reconecting");
-            // await this.controller_register.queue_controller("AuthController", "auth");
             await this.controller_register.queue_controller('AuthController', 'init_auth');
             await sleep(10000);
         });
@@ -107,8 +86,13 @@ export class Router {
             this.online = true;
             if (this.loading) {
                 await this.controller_register.queue_controller('MenuController', 'init_main');
+                await this.controller_register.run_controller('EventsController', 'checking_updates');
+
                 this.loading=false;
             }
+
+
+
         });
 
 
@@ -121,6 +105,14 @@ export class Router {
 
         this.listen_event(this.ipcMain, 'generate_mnemonic', async (event, arg) => {
             await this.controller_register.queue_controller('AuthController', 'generate_mnemonic', (arg));
+        });
+
+        this.listen_event(this.ipcMain, 'get_updates', async (event, arg) => {
+            await this.controller_register.queue_controller('EventsController', 'get_updates');
+        });
+
+        this.listen_event(this.ipcMain, 'install_updates', async (event, arg) => {
+            await this.controller_register.queue_controller('EventsController', 'install_updates');
         });
 
 
@@ -159,7 +151,7 @@ export class Router {
 
         this.listen_event(this.ipcMain, 'show_popup', async (event, arg) => {
             console.log('show_popup');
-            await this.controller_register.queue_controller('ChatsController', 'show_chat_info', arg);
+            await this.controller_register.run_controller('ChatsController', 'show_chat_info', arg);
         });
 
         this.listen_event(this.ipcMain, 'find_groups', async (event, group_name) => {
@@ -236,7 +228,7 @@ export class Router {
         });
 
         this.listen_event(this.ipcMain, "reading_messages", async (event, chat_id) => {
-            console.log("Reading msg from", chat_id);
+            // console.log("Reading msg from", chat_id);
             await this.controller_register.run_controller("MessagesController", "reading_messages", chat_id);
         });
 
@@ -246,11 +238,11 @@ export class Router {
 
         this.listen_event(this.ipcMain, 'change_wallet_menu', async (event, arg) => {
             console.log('change_wallet_menu');
-            await this.controller_register.queue_controller('WalletController', 'change_wallet_menu', arg);
+            await this.controller_register.run_controller('WalletController', 'change_wallet_menu', arg);
         });
 
         this.listen_event(this.ipcMain, 'transfer_token', async (event, arg) => {
-            await this.controller_register.queue_controller('WalletController', 'transfer_token', arg);
+            await this.controller_register.run_controller('WalletController', 'transfer_token', arg);
         });
 
         this.listen_event(this.ipcMain, 'get_contacts', async () => {
@@ -266,6 +258,16 @@ export class Router {
             await this.controller_register.queue_controller('SettingsController', 'change_settings_menu', arg);
         });
 
+        this.listen_event(this.ipcMain, "change_directory", async (event, path) => {
+            // console.log("Change directory:", path);
+            await this.controller_register.run_controller('SettingsController', 'change_directory', path);
+        });
+
+        // this.listen_event(this.ipcMain, "change_last_chat", async (event, chat_id) => {
+        //     // console.log("Change last chat:", chat_id);
+        //     await this.controller_register.run_controller('SettingsController', 'update_last_chat', chat_id);
+        // });
+
 
         /** Menu events **/
 
@@ -277,45 +279,45 @@ export class Router {
 
         /** Account events **/
 
-        this.listen_event(this.ipcMain, "change_directory", async (event, path) => {
-           console.log("Change directory:", path);
-            await this.controller_register.run_controller('AccountController', 'update_directory', path);
+        this.listen_event(this.ipcMain, "decrypt_db", async (event) => {
+            await this.controller_register.run_controller('AccountController', 'decrypt_db');
         });
 
-        this.listen_event(this.ipcMain, "change_last_chat", async (event, chat_id) => {
-            console.log("Change last chat:", chat_id);
-            await this.controller_register.run_controller('AccountController', 'update_last_chat', chat_id);
+        this.listen_event(this.ipcMain, "encrypt_db", async (event) => {
+            await this.controller_register.run_controller('AccountController', 'encrypt_db');
         });
 
 
         /** Window events **/
         this.listen_event(this.ipcMain, "change_size_window", async (events, width, height) => {
-            console.log("Changed windows size");
-            console.log("Width:", width);
-            console.log("height:", height);
-            await this.controller_register.run_controller('AccountController', 'change_windows_size', width, height);
+            // console.log("Changed windows size");
+            // console.log("Width:", width);
+            // console.log("height:", height);
+            await this.controller_register.run_controller('SettingsController', 'change_windows_size', width, height);
         });
 
         this.listen_event(this.ipcMain, "change_chats_size", async (events, width) => {
-            console.log("New chats width:", width);
-            await this.controller_register.run_controller('AccountController', 'change_chats_width', width);
+            // console.log("New chats width:", width);
+            await this.controller_register.run_controller('SettingsController', 'change_chats_width', width);
         });
 
 
         /** Eth events **/
-        this.listen_event(this.web3, 'received_eth', async (tx)=>{
-            console.log(`Received ${tx.value/Math.pow(10,18)}Eth from ${tx.from.toLowerCase()}`);
-            console.log(tx);
-            let text=`Received transaction
-From: ${tx.from.toLowerCase()}.
-Amount: ${tx.value/Math.pow(10,18)} Coin.
-Link: https://blocks.moonshard.io/tx/${tx.hash}`;
-            await this.controller_register.queue_controller('MessagesController', 'received_message', {id:tx.from.toLowerCase(),domain:'localhost'}, text, Date.now(), []);
+        this.listen_event(this.web3, 'new_transaction', async (tx)=>{
+            console.log(`Received ${tx.amount/Math.pow(10,18)}Eth from ${tx.from.id}`);
+            await this.controller_register.run_controller('WalletController', 'handle_tx', tx);
+//             console.log(tx);
+//             let text=`Transaction
+// Amount: ${tx.value/Math.pow(10,18)} Coin.
+// Link: http://blocks.moonshrd.io/tx/${tx.hash}`;
+//             await this.controller_register.run_controller('MessagesController', 'received_message', {id:tx.from.toLowerCase(),domain:'localhost'}, text, Date.now(), []);
         });
 
-        this.listen_event(this.web3, 'received_eth', async (one,two,three)=>{
-            console.log(one,two,three);
-        });
+        // this.events.emit('new_transaction',transactionModel)
+        // this.listen_event(this.web3, 'new_transaction', async (tx)=>{
+        //     // console.log(one,two,three);
+        //
+        // });
     }
 }
 

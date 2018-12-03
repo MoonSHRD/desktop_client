@@ -1,71 +1,127 @@
-style
-    include modal-content.css
-script
-    include slick.js
+//style
+//    include modal-content.css
+//script
+//    include slick.js
 
-//.modal-header
-//    //h5.modal-title #{name}
-//    button.close(type='button', data-dismiss='modal', aria-label='Close')
-//        span(aria-hidden='true') ×
-.modal-body
-
+.modal-header.p-0
     if (role !== "moderator")
-
-        .scrollbar#style-10(style='overflow-y: scroll; overflow-x: hidden; height: 630px')
-            .row.m-0.groupInfoHeader
-                .gradient
-                .col-sm-4.text-left
-
-                    .col-sm-6.text-left.m-0.p-0
-                        p.m-0.p-0.pt-2
-                            span
-                                b.mr-1 Section:
-                                | Celebrities
-                        p.m-0.p-0
-                            span
-                                b.mr-1 Category:
-                                | Culture
-                .col-sm-4.o.text-center(style='margin-top: -60px')
+        .row.position-static.w-100.p-3.m-0
+            .col-3
+                .modal-header__img
                     img.rounded-circle.avatarBg(src=avatar width=80 height=80)
+            .col-9.justify-content-around.flex-column.d-flex
+                .modal-header__name
                     h5.modal-title #{name}
-                .col-sm-3.offset-1.text-left
-                    img.mr-3(src='components/main/modal_popup/img/bell.png')
-                    p.m-0(style='line-height: 1') Switch on notifications
 
-            .row.mt-3(style='margin-top: 80px !important')
-                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
-                    img(src='components/main/modal_popup/img/groups.png')
-                    p.m-0.ml-3(style="color: #2BC2F9") Join a group
-            .row.m-3
-                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+                .p-0.d-inline-flex.align-items-center
+                    img(src='components/main/modal_popup/img/lock.png')
+                    p.m-0.ml-3() Private group
+        .row.m-0
+            .col-sm-12.text-center.d-flex.justify-content-center.align-items-center.p-0
+                button.offerPublication Offer a publication
+        //.row.w-100.flex-nowrap.m-0.align-items-end
+        //    .col-4.bild-hidden
+        //        .group-info.group-info_section
+        //            strong.mr-1 Section:
+        //            span Celebrities
+        //        .group-info.group-info_category
+        //            strong.mr-1 Category:
+        //            span Culture
+        //
+        //    .col-4.text-right.bild-hidden
+        //        button.btn.btn-link.group-notification(type="button")
+        //            //div.group-notification__icon.group-notification__icon_notie
+        //            //    include ../../../img/icons/bell.svg
+        //            //    span.group-notification__notie  99+
+        //            div.group-notification__icon
+        //                include ../../../img/icons/bell.svg
+        //                span.group-notification__notie
+        //            span Switch on <br /> notifications
+    else
+        .row.position-static.w-100.p-3.m-0
+            .col-3
+                .modal-header__img
+                    img.rounded-circle.avatarBg(src=avatar width=80 height=80)
+
+            .col-9.position-static.d-flex.justify-content-around.flex-column
+
+                .modal-header__name
+                    h5.modal-title #{name}
+
+
+                .p-0.d-inline-flex.align-items-center
                     img(src='components/main/modal_popup/img/lock.png')
                     p.m-0.ml-3() Private group
 
-            .row.m-3
-                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
-                    button.offerPublication.col-sm-7 Offer a publication
+        .row.m-0
+            .col-sm-12.text-center.d-flex.justify-content-center.align-items-center.p-0
+                button.offerPublication Create a publication
 
-            .row.mt-4
-                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
-                    p.m-0.p-0 Token price:
-                        b 1Grdn=2MnShrd
+        //.row.w-100.flex-nowrap.m-0.align-items-end
+        //    .col-4.bild-hidden
+        //        .group-info.group-info_section
+        //            strong.mr-1 Section:
+        //            input.form-control(name='sectionName' value='Celebrities' disabled="disabled")
+        //            button.btn.btn-xs.btn-link(type="button" data-toggle="edit" data-target="sectionName")
+        //                include ../../../img/icons/pencil.svg
+        //        .group-info.group-info_category
+        //            strong.mr-1 Category:
+        //            input.form-control(name='categoryName' value='Culture' disabled="disabled")
+        //            button.btn.btn-xs.btn-link(type="button" data-toggle="edit" data-target="categoryName")
+        //                include ../../../img/icons/pencil.svg
+        //
+        //    .col-4.text-right.bild-hidden
+        //        button.btn.btn-link.group-notification(type="button")
+        //            //div.group-notification__icon.group-notification__icon_notie
+        //            //    include ../../../img/icons/bell.svg
+        //            //    span.group-notification__notie  99+
+        //            div.group-notification__icon
+        //                include ../../../img/icons/bell.svg
+        //                span.group-notification__notie
+        //            span Switch on <br /> notifications
+.modal-body.bild-none.p-3()
+    if (role !== "moderator")
+        //.scrollbar#style-10(style='overflow-y: scroll; overflow-x: hidden; height: 630px')
+        .scrollbar
 
-            .row.m-2.justify-content-around
-                .col-sm-7
-                    .row.cardInfo.m-0.pb-3
-                        .col-sm-6.text-center
-                            p.my-3
-                                b Token name
-                            p.my-3
-                                b Total supply
-                        .col-sm-6
-                            p.my-3 gordon_token
-                            p.my-3 100 000
-                        button.getMoreTokens.col-sm-6.offset-3 Get more tokens
+            .row.p-0.mt-2(style='border-top: 2px solid #E5E5E5; border-bottom: 2px solid #E5E5E5')
+                ul.m-0.d-flex.align-items-center.w-100(style='list-style: none; height: 50px')
+                    li.w-100
+                        img.mr-4(src='img/modal_popup/bell.svg')
+                        a Notifications
+                        span.switch1.float-right
+                            input#switch-lg.switch1(type="checkbox")
+                            |
+                            label.m-0.mx-4(for="switch-lg")
 
-                        .col-md-12.text-right
-                            a(href='#')
-                                img(src='components/main/modal_popup/img/gift.png')
+            //.row.mt-3(style='margin-top: 80px !important')
+            //    .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+            //        img(src='components/main/modal_popup/img/groups.png')
+            //        p.m-0.ml-3(style="color: #2BC2F9") Join a group
+            //
+            //
+            //
+            //
+            //.row.mt-4
+            //    .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+            //        p.m-0.p-0 Token price:
+            //            b 1Grdn=2MnShrd
+
+            //.row.m-2
+            //
+            //    .col-sm-4
+            //        p.my-3
+            //            b Token name
+            //        p.my-3
+            //            b Total supply
+            //    .col-sm-8
+            //        p.my-3 #{name}
+            //        p.my-3 100 000
+                //button.getMoreTokens.col-sm-6.offset-3 Get more tokens
+                //
+                //.col-md-12.text-right
+                //    a(href='#')
+                //        img(src='components/main/modal_popup/img/gift.png')
 
 
 
@@ -76,61 +132,89 @@ script
                 //.col-sm-5.p-0
                 //    button.calendarChannel.col-sm-12 Сalendar of events
 
+            .row.p-0.mt-2
+                ul.m-0.d-flex.w-100.flex-column(style='list-style: none; padding: 10px 40px')
+                    p
+                        b Token info
+
+                    li.mt-2.w-100.my-1
+                        img.mr-4(src='img/modal_popup/chip.svg')
+                        a #{name}
+                        span.switch1.float-right
+
+                    li.mt-2.w-100.my-1
+                        img.mr-4(src='img/modal_popup/token.svg')
+                        a 120 000
+                        span.switch1.float-right
+
+                    p.mt-4
+                        b Channel
+
+                    li.mt-2.w-100.my-1
+                        img.mr-4(src='img/modal_popup/images.svg')
+                        a 14 Images
+                        span.switch1.float-right
+
+
+                    li.mt-2w-100.my-1
+                        img.mr-4(src='img/modal_popup/videos.svg')
+                        a 28 Videos
+                        span.switch1.float-right
 
 
             .row.m-0
-                .col-sm-12.text-left
-                    p
-                        b Channel gallery
-                    div.slick
-                        div
-                            //h1 1
-                            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
-                        div
-                            //h1 2
-                            img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
-                        div
-                            //h1 3
-                            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+                //.col-sm-12.text-left
+                //    p
+                //        b Channel gallery
+                //    div.slick
+                //        div
+                //            //h1 1
+                //            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+                //        div
+                //            //h1 2
+                //            img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
+                //        div
+                //            //h1 3
+                //            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+                //
+                //        div
+                //            //h1 4
+                //            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                //
+                //        div
+                //            //h1 5
+                //            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                //
+                //        div
+                //            //h1 6
+                //            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                //        div
+                //            //h1 1
+                //            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+                //        div
+                //            //h1 2
+                //            img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
+                //        div
+                //            //h1 3
+                //            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+                //
+                //        div
+                //            //h1 4
+                //            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                //
+                //        div
+                //            //h1 5
+                //            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                //
+                //        div
+                //            //h1 6
+                //            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+            //.row.m-4
+            //    .col-sm-5.p-0
+            //        input.serchInChannel.col-sm-12(placeholder="search")
 
-                        div
-                            //h1 4
-                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-
-                        div
-                            //h1 5
-                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-
-                        div
-                            //h1 6
-                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-                        div
-                            //h1 1
-                            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
-                        div
-                            //h1 2
-                            img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
-                        div
-                            //h1 3
-                            img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
-
-                        div
-                            //h1 4
-                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-
-                        div
-                            //h1 5
-                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-
-                        div
-                            //h1 6
-                            img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
             .row.m-4
-                .col-sm-5.p-0
-                    input.serchInChannel.col-sm-12(placeholder="search")
-
-            .row.m-4
-                .col-sm-5.p-0
+                .col-sm-12.p-0
                     p
                         b Participants
                     .row.w-100.d-flex.justify-content-between.align-items-center.my-2.mx-0
@@ -150,49 +234,26 @@ script
 
 
 
-                .col-sm-5.p-0.offset-2
-                    p
-                        b Goals
-                    .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
-                        | #administrator
-
-                    .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
-                        p.m-0(style="color: #2BC2F9") #fan #journalist #getanautograph
-
-                    .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
-                        p.m-0(style="color: #2BC2F9") #blogger
+                //.col-sm-5.p-0.offset-2
+                //    p
+                //        b Goals
+                //    .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                //        | #administrator
+                //
+                //    .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                //        p.m-0(style="color: #2BC2F9") #fan #journalist #getanautograph
+                //
+                //    .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                //        p.m-0(style="color: #2BC2F9") #blogger
 
 
     else
-        .scrollbar#style-10(style='overflow-y: scroll; overflow-x: hidden; height: 630px')
-            .row.m-0.groupInfoHeader
-                .gradient
-                .col-sm-4.text-left
-
-                    .col-sm-6.text-left.m-0.p-0.position-relative
-                        p.m-0.p-0.pt-2
-                            span.d-flex
-                                b.mr-1 Section:
-                                input(name='sectionName' value='Celebrities' disabled="disabled")
-                                a(href='#')
-                                    img(src='components/main/modal_popup/img/edit.png')
-                        p.m-0.p-0
-                            span.d-flex
-                                b.mr-1 Category:
-                                input(name='categoryName' value='Culture' disabled="disabled")
-                                a(href='#')
-                                    img(src='components/main/modal_popup/img/edit.png')
-                .col-sm-4.o.text-center(style='margin-top: -60px')
-                    img.rounded-circle.avatarBg(src=avatar width=80 height=80)
-                    h5.modal-title #{name}
-                .col-sm-3.offset-1.text-left
-                    img.mr-3(src='components/main/modal_popup/img/bell.png')
-                    p.m-0(style='line-height: 1') Switch on notifications
-
-            .row.mt-3(style='margin-top: 85px !important')
-                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
-                    img(src='components/main/modal_popup/img/groups.png')
-                    p.m-0.ml-3(style="color: #2BC2F9") Administrator
+        //.scrollbar#style-10(style='overflow-y: scroll; overflow-x: hidden; height: 630px')
+        .scrollbar
+            //.row.mt-3(style='margin-top: 85px !important')
+            //    .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+            //        img(src='components/main/modal_popup/img/groups.png')
+            //        p.m-0.ml-3(style="color: #2BC2F9") Administrator
             .row.m-3
                 .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
                     img.m-2(src='components/main/modal_popup/img/lock.png')
@@ -204,50 +265,92 @@ script
                     img.m-2(src='components/main/modal_popup/img/face.png')
                     | Opened group
 
-            .row.m-3
-                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
-                    button.offerPublication.col-sm-7 Create a publication
+            //.row.m-3
+            //    .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+            //        button.offerPublication.col-sm-7 Create a publication
 
-            .row.mt-4
-                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
+
+
+
+
+
+            .row.mt-4.ml-4
+                .col-sm-12.d-flex.align-items-center.p-0.m-0
                     p.m-0.p-0 Token price:
                         b.ml-1 1Grdn=2MnShrd
                         a.p-2(href='#')
                             img(src='components/main/modal_popup/img/edit.png')
 
-            .row.my-4.p-0.justify-content-around
+            .row.ml-4
+                .col-sm-12.d-flex.align-items-center.p-0.m-0
+                    p.m-0.p-0 Publication price:
+                        b.ml-1 3MnShrd for 1 publication
+                        a.p-2(href='#')
+                            img(src='components/main/modal_popup/img/edit.png')
 
-                .col-sm-6.cardInfo.p-0.m-0.p-3.pl-5
-                    .row
-                        .col-sm-4.p-0
-                            p.my-3
-                                b Token name
-                            p.my-3
-                                b Total supply
-                        .col-sm-6
-                            p.my-3 gordon_token
-                            p.my-3 100 000
-                .col-sm-5.cardInfo.p-0.m-0.p-3.pl-5
-                    .row
-                        .col-sm-7.text-left.p-0
-                            p.my-3
-                                b Sold tokens
-                            p.my-3
-                                b Raffled off  tokens
-                        .col-sm-5
-                            p.my-3 2 784
-                            p.my-3 42
+            //.row.my-4.p-0.justify-content-around
+            //
+            //
+            //    .col-sm-5.cardInfo.p-0.m-0.p-3.pl-5
+            //        .row
+            //            .col-sm-7.text-left.p-0
+            //                p.my-3
+            //                    b Sold tokens
+            //                p.my-3
+            //                    b Raffled off  tokens
+            //            .col-sm-5
+            //                p.my-3 2 784
+            //                p.my-3 42
                     //button.col-sm-6.offset-3 Get more tokens
 
                     //.col-md-12.text-right
                     //    a(href='#')
                     //        img(src='components/main/modal_popup/img/gift.png')
 
+            .row.p-0.mt-2
+                ul.m-0.d-flex.w-100.flex-column(style='list-style: none; padding: 10px 40px')
+                    p
+                        b Token info
+
+                    li.mt-2.w-100.my-1
+                        img.mr-4(src='img/modal_popup/chip.svg')
+                        a #{name}
+                        span.switch1.float-right
+
+                    li.mt-2.w-100.my-1
+                        img.mr-4(src='img/modal_popup/token.svg')
+                        a 120 000
+                        span.switch1.float-right
+
+                    li.mt-2.w-100.my-1
+                        img.mr-4(src='img/modal_popup/chip.svg')
+                        a Sold tokens 1234
+                        span.switch1.float-right
+
+                    li.mt-2.w-100.my-1
+                        img.mr-4(src='img/modal_popup/token.svg')
+                        a Raffled off  tokens 34
+                        span.switch1.float-right
+
+                    p.mt-4
+                        b Channel
+
+                    li.mt-2.w-100.my-1
+                        img.mr-4(src='img/modal_popup/images.svg')
+                        a 14 Images
+                        span.switch1.float-right
 
 
-            .row.mx-0.my-5.justify-content-around
-                .col-sm-5.p-0.text-center
-                    button.showOnMapChannel.col-sm-12 Set the point on the map
+                    li.mt-2w-100.my-1
+                        img.mr-4(src='img/modal_popup/videos.svg')
+                        a 28 Videos
+                        span.switch1.float-right
+            //
+            //
+            //
+            //.row.mx-0.my-5.justify-content-around
+            //    .col-sm-5.p-0.text-center
+            //        button.showOnMapChannel.col-sm-12 Set the point on the map
 
                 //.col-sm-5.p-0
                 //    button.calendarChannel.col-sm-12 Сalendar of events
@@ -256,74 +359,69 @@ script
 
             .row.m-2
                 .col-sm-12.text-left.p-0
-                    ul#listGallery.p-0.m-0
-                        li
-                            a(href='#') Channel gallery
-                            p.float-right.m-0
-                                img.mr-3(src='components/main/modal_popup/img/addPhoto.png')
-                                span(style='color: #272B46; font-size: 13px') Add more photos
+                    //ul#listGallery.p-0.m-0
+                    //    li
+                    //        a(href='#') Channel gallery
+                    //        p.float-right.m-0
+                    //            img.mr-3(src='components/main/modal_popup/img/addPhoto.png')
+                    //            span(style='color: #272B46; font-size: 13px') Add more photos
+                    //
+                    //
+                    //        img.rotate(src='components/main/modal_popup/img/arrow.png')
+                    //        ul.mt-3
+                    //            div.slick
+                    //                div
+                    //                    //h1 1
+                    //                    img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+                    //                div
+                    //                    //h1 2
+                    //                    img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
+                    //                div
+                    //                    //h1 3
+                    //                    img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+                    //
+                    //                div
+                    //                    //h1 4
+                    //                    img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                    //
+                    //                div
+                    //                    //h1 5
+                    //                    img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                    //
+                    //                div
+                    //                    //h1 6
+                    //                    img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                    //                div
+                    //                    //h1 1
+                    //                    img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+                    //                div
+                    //                    //h1 2
+                    //                    img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
+                    //                div
+                    //                    //h1 3
+                    //                    img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
+                    //
+                    //                div
+                    //                    //h1 4
+                    //                    img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                    //
+                    //                div
+                    //                    //h1 5
+                    //                    img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                    //
+                    //                div
+                    //                    //h1 6
+                    //                    img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
+                    //
+                    //            .viewAllImages
+                    //                a(href='#') View all
 
 
-                            img.rotate(src='components/main/modal_popup/img/arrow.png')
-                            ul.mt-3
-                                div.slick
-                                    div
-                                        //h1 1
-                                        img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
-                                    div
-                                        //h1 2
-                                        img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
-                                    div
-                                        //h1 3
-                                        img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
-
-                                    div
-                                        //h1 4
-                                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-
-                                    div
-                                        //h1 5
-                                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-
-                                    div
-                                        //h1 6
-                                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-                                    div
-                                        //h1 1
-                                        img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
-                                    div
-                                        //h1 2
-                                        img(src='https://bipbap.ru/wp-content/uploads/2017/10/0_8eb56_842bba74_XL-640x400.jpg')
-                                    div
-                                        //h1 3
-                                        img(src='https://cdn.fishki.net/upload/post/2017/03/19/2245758/tn/02-funny-cat-wallpapercat-wallpaper.jpg')
-
-                                    div
-                                        //h1 4
-                                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-
-                                    div
-                                        //h1 5
-                                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-
-                                    div
-                                        //h1 6
-                                        img(src='http://kenwheeler.github.io/slick/img/lazyfonz1.png')
-
-                                .viewAllImages
-                                    a(href='#') View all
 
 
 
-            .row
-                .col-sm-12.text-center.d-flex.justify-content-center.align-items-center
-                    p.m-0.p-0 Publication price:
-                        b.ml-1 3MnShrd for 1 publication
-                        a.p-2(href='#')
-                            img(src='components/main/modal_popup/img/edit.png')
 
-
-            .row.m-2
+            .row.mx-4
                 .col-sm-12.align-items-center.p-0
                     ul#list.p-0
                         li
@@ -494,20 +592,20 @@ script
                                             td Detail
 
 
-            .row.m-0.my-4.d-flex.align-items-center.justify-content-between
-                .col-sm-5.p-0
-                    input.serchInChannel.col-sm-12(placeholder="search")
-                .col-sm-5.p-0.text-right
-                    span.switch1
-                        img.listOfParticipants(src='components/main/modal_popup/img/groups.png'  title="List of participants")
-                        input#switch-id.switch1(type="checkbox")
-                        |
-                        label.m-0.mx-4(for="switch-id")
-                        img.blockedParticipants(src='components/main/modal_popup/img/block.png' title="Blocked participants")
+            //.row.m-0.my-4.d-flex.align-items-center.justify-content-between
+            //    //.col-sm-5.p-0
+            //    //    input.serchInChannel.col-sm-12(placeholder="search")
+            //    .col-sm-5.p-0.text-right
+            //        span.switch1
+            //            img.listOfParticipants(src='components/main/modal_popup/img/groups.png'  title="List of participants")
+            //            input#switch-id.switch1(type="checkbox")
+            //            |
+            //            label.m-0.mx-4(for="switch-id")
+            //            img.blockedParticipants(src='components/main/modal_popup/img/block.png' title="Blocked participants")
 
-            .row.m-0.my-4(style='background-color: white; border-radius: 20px')
+            .row.m-0(style='background-color: white; border-radius: 20px')
                 .col-md-12.p-4.d-flex
-                    .col-sm-6.p-0
+                    .col-sm-12.p-0
                         p
                             b Participants
                         .row.w-100.d-flex.align-items-center.my-2.mx-0.position-relative
@@ -538,15 +636,15 @@ script
                                     img(src='components/main/modal_popup/img/blockUser.png')
 
 
-
-                    .col-sm-5.p-0.offset-1
-                        p
-                            b Goals
-                        .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
-                            | #administrator
-
-                        .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
-                            p.m-0(style="color: #2BC2F9") #fan #journalist #getanautograph
-
-                        .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
-                            p.m-0(style="color: #2BC2F9") #blogger
+                    //
+                    //.col-sm-5.p-0.offset-1
+                    //    p
+                    //        b Goals
+                    //    .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                    //        | #administrator
+                    //
+                    //    .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                    //        p.m-0(style="color: #2BC2F9") #fan #journalist #getanautograph
+                    //
+                    //    .row.w-100.text-left.align-items-center.pl-3.my-2(style='height: 50px')
+                    //        p.m-0(style="color: #2BC2F9") #blogger

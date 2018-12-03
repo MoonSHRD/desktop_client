@@ -2,25 +2,33 @@ import "reflect-metadata";
 import {AccountModel} from "../../models/AccountModel";
 import {Controller} from "../Controller";
 import {UserModel} from "../../models/UserModel";
-import {Loom} from "../../loom/loom";
+// import {Loom} from "../../loom/loom";
 import {TextEncoder,TextDecoder} from 'text-encoding';
 import {resize_b64_img, resize_img_from_path} from "../Helpers";
 import {paths} from "../../src/var_helper";
+import {SettingsModel} from "../../models/SettingsModel";
 import {bot_acc} from "../../src/env_config";
-const ethers = require('ethers');
-const bip39 = require('bip39');
+import {ChatModel} from "../../models/ChatModel";
+import ethers = require('ethers');
+import bip39 = require('bip39');
 // let {TextDecoder} = require('text-encoding');
 
 class AuthController extends Controller {
 
-    private connection_tries:number=-1;
+    // private connection_tries:number=-1;
 
     async init_auth() {
         let account = await AccountModel.findOne(1);
         if (account)
             await this.auth(account);
-        else
-            this.send_data(this.events.change_app_state, this.render('auth/auth.pug'));
+        else {
+            let obj = {
+                arg:this.render('auth/auth.pug'),
+                language:"en"
+            };
+            this.send_data(this.events.change_app_state, obj);
+        }
+
     };
 
     generate_mnemonic() {
@@ -30,12 +38,12 @@ class AuthController extends Controller {
     private async auth(account: AccountModel,first:boolean=false) {
         let user=await this.get_self_info();
         // let user_json=JSON.stringify(user);
-        if (this.connection_tries === 9)
-            this.connection_tries=0;
-        else
-            this.connection_tries+=1;
+        // if (this.connection_tries === 9)
+        //     this.connection_tries=0;
+        // else
+        //     this.connection_tries+=1;
         await this.ipfs.connect();
-        console.log('ipfs connected');
+        console.log('IPFS connected');
         // console.log(account);
         // await this.ipfs.ipfs_info();
         // await this.loom.connect(account.privKey);
@@ -43,6 +51,7 @@ class AuthController extends Controller {
         await this.web3.SetAccount(account.privKey);
 
         this.grpc.SetPrivKey(account.privKey);
+        let suc=await this.grpc.CallMethod('SetObjData',{pubKey: this.grpc.pubKey,obj:'user',data:user});
         if (first) {
             // let identyti_tx= await this.loom.set_identity(account.user.name);
             // console.log(identyti_tx);
@@ -53,11 +62,10 @@ class AuthController extends Controller {
         }
         this.grpc.StartPinging();
         this.grpc.StartUserPinging();
-        let suc=await this.grpc.CallMethod('SetObjData',{pubKey: this.grpc.pubKey,obj:'user',data:user});
         this.dxmpp.set_vcard(user.firstname, user.lastname, user.bio, user.avatar);
         account.host = this.dxmpp_config.host;
         account.jidhost = this.dxmpp_config.jidhost;
-        account.port = this.dxmpp_config.port+this.connection_tries;
+        account.port = this.dxmpp_config.port;
         await this.dxmpp.connect(account);
     }
 
@@ -69,7 +77,7 @@ class AuthController extends Controller {
         let mnem=bip39.generateMnemonic();
         const eth_data=ethers.Wallet.fromMnemonic(mnem);
         console.log(eth_data);
-        let {privateKey,publicKey}=eth_data.signingKey.keyPair;
+        let {privateKey,publicKey}=eth_data['signingKey'].keyPair;
         let user = new UserModel();
         user.id = eth_data.address.toLowerCase();
         user.domain = 'localhost';
@@ -82,10 +90,13 @@ class AuthController extends Controller {
         await user.save();
 
         let account = new AccountModel();
+        let settings = new SettingsModel();
         account.privKey = privateKey;
         account.passphrase = data.mnemonic;
-        account.last_chat = bot_acc.addr+'_' + eth_data.address.toLowerCase();
         account.user = user;
+        // settings.last_chat = '0x0000000000000000000000000000000000000000_' + loom_data.addr;
+        settings.last_chat = ChatModel.get_user_chat_id(user.id,bot_acc.addr);
+        await settings.save();
         await account.save();
 
         await this.auth(account,true);

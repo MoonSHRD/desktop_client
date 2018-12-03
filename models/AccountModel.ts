@@ -9,17 +9,7 @@ export class AccountModel extends BaseEntity {
     @Column()
     privKey: string;
     @Column()
-    downloads: string = "./downloads/";
-    @Column()
     passphrase: string;
-    @Column()
-    width: number = 1000;
-    @Column()
-    height: number = 700;
-    @Column()
-    width_chats: number = 370;
-    @Column()
-    last_chat: string;
 
     @OneToOne(type => UserModel, user => user.account)
     @JoinColumn()

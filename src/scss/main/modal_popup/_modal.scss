@@ -2,11 +2,25 @@
     //@extend .custom-scrollbar;
 
     &-dialog{
-        margin: 4rem auto 1.75rem;
+        margin: 6rem auto 3rem;
+        display: flex;
+        align-items: center;
+        min-height: calc(100% - (6rem + 3rem));
 
         @include media-breakpoint-up(sm){
-            margin: 4rem auto;
+            margin: 6rem auto;
+            min-height: calc(100% - (6rem * 2));
         }
+
+        //&-centered {
+        //    //min-height: auto;
+        //    min-height: calc(100% - (4rem + 1.75rem));
+        //
+        //    @include media-breakpoint-up(sm) {
+        //        //min-height: auto;
+        //        min-height: calc(100% - (4rem * 2));
+        //    }
+        //}
     }
 
     &-title{
@@ -17,32 +31,134 @@
     &-header{
         position: relative;
         border-bottom: 0;
+        display: block;
+
+        .group {
+            &-info {
+                //display: flex;
+                flex-wrap: nowrap;
+                align-items: center;
+                @include fz(14);
+
+                * {
+                    font-size: inherit;
+                }
+
+                .form-control {
+                    &:disabled {
+                        background-color: transparent;
+                        border: none;
+                        color: $brand-blue;
+                        border-radius: 0;
+                        box-shadow: none;
+                        height: auto;
+                        padding-top: 0;
+                        padding-bottom: 0;
+                    }
+                }
+
+                svg {
+                    @include size(.6rem);
+                }
+            }
+
+            &-notification{
+                display: inline-flex;
+                align-items: center;
+                text-decoration: none;
+                font-weight: 400;
+                padding: 0;
+                color: $brand-blue;
+
+                &:hover{
+                    color: $brand-blue;
+                }
+
+                &__notie{
+                    display: none;
+                    background-color: $cf;
+                    border: 1px solid $brand-blue;
+                    @include size(1.5rem);
+                    color: $primary-text;
+                    @include fz(14);
+                    font-weight: 400;
+                    border-radius: 50%;
+                }
+
+                &__icon {
+                    flex-shrink: 0;
+                    margin-right: 1rem;
+                    position: relative;
+
+                    svg {
+                        @include size(1.5rem);
+
+                        path {
+                            fill: $brand-gray-400;
+                        }
+                    }
+
+                    span{
+                        @include position(absolute,null 0 0 null);
+                    }
+
+                    &_notie{
+
+                        svg{
+
+                            path{
+                                fill: $brand-blue;
+                            }
+                        }
+
+                        span{
+                            display: block;
+                        }
+                    }
+                }
+            }
+        }
 
         &_img{
             flex-direction: column;
             align-items: center;
-            padding-top: 60px;
+            padding-top: 3.5rem;
+
+            .close{
+                @include position(absolute, 0 .5rem null null);
+                padding: .5rem;
+                margin: 0;
+            }
         }
 
         &__img{
-            @include size(80px);
-            @include gradient-y($brand-blue, $brand-blue-100);
-            @include position(absolute, 0 null null null);
+            @include size(5rem);
+            //@include gradient-y($brand-blue, $brand-blue-100);
+            //@include position(absolute, 0 null null 50%);
             line-height: 73px;
             border-radius: 50%;
             text-align: center;
-            transform: translate(0,-50%);
-            box-shadow: 2px 2px 20px $brand-blue;
+            //transform: translate(-50%,-50%);
+            //box-shadow: 2px 2px 20px $brand-blue;
+
+            img{
+                @include size(100%);
+            }
         }
 
         &__name{
-            width: 96%;
+            width: 100%;
+            //margin: 0 auto;
 
             .form-control{
                 text-align: center;
                 &::placeholder{
                     text-align: center;
                 }
+            }
+
+            .modal-title{
+                //text-align: center;
             }
         }
 
@@ -57,6 +173,17 @@
                 @include fz(18);
                 font-family: $ff-1;
                 font-weight: 500;
+            }
+        }
+
+        &_userinfo{
+            .row{
+                min-height: 40px;
+                border-bottom: 1px solid $brand-gray-400;
+
+                &:last-child{
+                    border-bottom: 0;
+                }
             }
         }
     }
@@ -131,5 +258,12 @@
         .crowdsale_focus &{
             color: $primary-text;
         }
+    }
+}
+
+.copyButton{
+
+    svg{
+        height: 1.25rem;
     }
 }

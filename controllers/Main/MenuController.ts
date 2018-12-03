@@ -5,16 +5,21 @@ import {Controller} from "../Controller";
 import {ChatModel} from "../../models/ChatModel";
 import {MessageModel} from "../../models/MessageModel";
 import {bot_acc} from "../../src/env_config";
+import {SettingsModel} from "../../models/SettingsModel";
 
 class MenuController extends Controller {
 
     async init_main() {
         console.log('init_main');
         await this.generate_initial_chats();
-        let self_info = await this.get_self_info();
+        let self_info = Object(await this.get_self_info());
+        let settings = await this.getSettings();
+        self_info.width_chats = settings.width_chats;
+        self_info.language = settings.language;
         self_info.eth_balance=await this.web3.GetMyBalance();
-        console.log(self_info);
-        this.send_data(this.events.change_app_state, this.render('main/main.pug', self_info));
+        self_info.arg = this.render('main/main.pug', self_info);
+        // console.log(self_info);
+        this.send_data(this.events.change_app_state, self_info);
         await this.load_menu_initial(true);
     };
 
@@ -31,23 +36,33 @@ class MenuController extends Controller {
     };
 
     // private async load_menu_user_chats(account) {
-    //     let self_info = await this.get_self_info();
+    //     let self_info = Object(await this.get_self_info());
+    //     let settings = await this.getSettings();
     //     self_info.state=this.chat_to_menu.user;
+    //     self_info.width_chats = settings.width_chats;
+    //     console.log("self", self_info);
     //     let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
-    //         this.render('main/messagingblock/messagingblock.pug');
+    //         this.render('main/messagingblock/messagingblock.pug', {width_chats:settings.width_chats});
     //     this.send_data('change_menu_state', html);
+    //     // this.send_data("set_chats_width", settings.width_chats);
     //     await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
     // }
 
     private async load_menu_chats(account) {
-        let self_info = await this.get_self_info();
+        let self_info = Object(await this.get_self_info());
+        // let set = await SettingsModel.findOne(1);
+        let settings = await this.getSettings();
         self_info.state=this.chat_to_menu.group;
+        self_info.width_chats = settings.width_chats;
+        // console.log("self", self_info);
         self_info.eth_balance=await this.web3.GetMyBalance();
-        console.log(self_info);
+        // console.log(self_info);
         let html = this.render('main/chatsblock/chatsblock.pug', self_info) +
-            this.render('main/messagingblock/messagingblock.pug');
+            this.render('main/messagingblock/messagingblock.pug', {width_chats:settings.width_chats});
         this.send_data('change_menu_state', html);
+        // this.send_data("set_chats_width", settings.width_chats);
         await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.group);
+        await this.controller_register.run_controller('MessagesController', 'get_chat_messages', {id:settings.last_chat,type:this.chat_types.user});
     }
 
     private async load_menu_wallet(account) {
@@ -148,13 +163,15 @@ To receive 100 Coin from our bot - send "claim".`;
 
     private async load_menu_initial(first: boolean = false) {
         console.log('load_menu_default');
+        // await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
+        // await this.controller_register.run_controller("AccountController", "set_sizes");
         let self_info = await this.get_self_info();
-        self_info.eth_balance=await this.web3.GetMyBalance();
-        console.log(self_info);
+        // self_info.eth_balance=await this.web3.GetMyBalance();
+        // console.log(self_info);
         await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user, first);
-        if (first) {
-            await this.controller_register.run_controller('MessagesController', 'get_chat_messages', {id:bot_acc.addr+'_' + self_info.id,type:this.chat_types.user});
-        }
+        // if (first) {
+        //     await this.controller_register.run_controller('MessagesController', 'get_chat_messages', {id:ChatModel.get_user_chat_id(self_info.id,bot_acc.addr),type:this.chat_types.user});
+        // }
     }
 
     private async load_menu_default() {

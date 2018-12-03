@@ -1,88 +1,88 @@
 div(class="head_peer" id="head_peer")
-    a(class="peer_name" data-event="show_chat_info" href='#')
+    a(class="peer_name" data-event="show_chat_info")
         if (id)
             img.rounded-circle(src=avatar width=44 height=44)
             span #{name}
 
-    //if (type === "channel")
-    //    ul.block.nav.nav-tabs.nav-justified(role='tablist')
-    //        li.nav-item
-    //            a.nav-link.active(href='#chat', role='tab', data-toggle='tab') Chat
-    //        li.nav-item
-    //            a.nav-link(href='#references', role='tab', data-toggle='tab') Channel info
-    //        li.nav-item
-    //            a.nav-link(href='#buzz', role='tab', data-toggle='tab') Notifications
-    //else
-    //    style(type='text/css').
-    //        .messaging_history {
-    //           margin-top: 0;
-    //            max-height: calc(100% - 155px);
-    //        }
+    //- if (type === "channel")
+    //-     ul.block.nav.nav-tabs.nav-justified(role='tablist')
+    //-         li.nav-item
+    //-             a.nav-link.active(href='#chat', role='tab', data-toggle='tab') Chat
+    //-         li.nav-item
+    //-             a.nav-link(href='#references', role='tab', data-toggle='tab') Channel info
+    //-         li.nav-item
+    //-             a.nav-link(href='#buzz', role='tab', data-toggle='tab') Notifications
+    //- else
+    //-     style(type='text/css').
+    //-         .messaging_history {
+    //-            margin-top: 0;
+    //-             max-height: calc(100% - 155px);
+    //-         }
 
     if (type==="user_chat" )
 
         div.block(class='dropDown_menu')
             ul
-                //li
-                //    a(data-id="")
-                //        div(class='image')
-                //            img(src="components/main/messagingblock/img/micr.png")
-                //li
-                //    a(data-id="")
-                //        div(class='image')
-                //            img(src="components/main/messagingblock/img/call.png")
-                //
-                //li
-                //
-                //    a(data-id="")
-                //
-                //
-                //        div(class='image')
-                //            img(src="components/main/messagingblock/img/videoCall.png")
+                //- li
+                //-     a(data-id="")
+                //-         div(class='image')
+                //-             img(src="components/main/messagingblock/img/micr.png")
+                //- li
+                //-     a(data-id="")
+                //-         div(class='image')
+                //-             img(src="components/main/messagingblock/img/call.png")
+                //- 
+                //- li
+                //- 
+                //-     a(data-id="")
+                //- 
+                //- 
+                //-         div(class='image')
+                //-             img(src="components/main/messagingblock/img/videoCall.png")
                 input(type="file" id="attachFileToChat" style="display:none" multiple)
-                //li.attachFileToChat
-                //
-                //    a(data-id="")
-                //        div(class='image')
-                //            img(src="components/main/messagingblock/img/files.png")
+                //- li.attachFileToChat
+                //- 
+                //-     a(data-id="")
+                //-         div(class='image')
+                //-             img(src="components/main/messagingblock/img/files.png")
                 li
                     a(data-id="")
                         div(class='image')
                             img(src="components/main/messagingblock/img/dropDown_menu.png")
-                    //ul.dropdownDoth
-                    //    li(data-event="show_chat_info") Info
-                    //    li Leave a channel
-                    //    li Switch off notifications
-                    //    li Write a message to administrator
+                    //- ul.dropdownDoth
+                    //-     li(data-event="show_chat_info") Info
+                    //-     li Leave a channel
+                    //-     li Switch off notifications
+                    //-     li Write a message to administrator
 
     else if  (type === "channel")
 
         div(class='dropDown_menu')
             ul
-                //li
-                //    a(data-id="")
-                //        div(class='image')
-                //            img(src="components/main/messagingblock/img/micr.png")
+                //- li
+                //-     a(data-id="")
+                //-         div(class='image')
+                //-             img(src="components/main/messagingblock/img/micr.png")
                 input(type="file" id="attachFileToChat" style="display:none")
-                //li.attachFileToGroup
-                //
-                //    a(data-id="" )
-                //        //input(type="file" id="attachFile" style="display:none;")
-                //
-                //        div(class='image')
-                //            img(src="components/main/messagingblock/img/files.png")
+                //- li.attachFileToGroup
+                //- 
+                //-     a(data-id="" )
+                //-         //- input(type="file" id="attachFile" style="display:none;")
+                //- 
+                //-         div(class='image')
+                //-             img(src="components/main/messagingblock/img/files.png")
                 li
                     a(href='#')
                         div(class='image')
                             img(src="components/main/messagingblock/img/dropDown_menu.png")
                     ul.dropdownDoth
                         li(data-event="show_chat_info") Info
-                        //li Leave a channel
-                        //li Switch off notifications
-                        //li Write a message to administrator
+                        //- li Leave a channel
+                        //- li Switch off notifications
+                        //- li Write a message to administrator
 
 
-div#messaging_history.messaging_history.msgHistory(data-msg-history="")
+div#messaging_history.messaging_history.msgHistory.custom-scrollbar(data-msg-history="")
     div.msgHistory__list.clearfix(data-msg-list="") !{messages ? messages : ""}
 
         button.btn.btn-rounded.btn-primary(type="button" data-toggle="scrollDown")
@@ -98,25 +98,22 @@ div#messaging_history.messaging_history.msgHistory(data-msg-history="")
                         div(class='alert alertBg notice-'+event.type)
                             strong #{event.time}
                             |  #{event.text}
-                //.alert.alertBg.notice-success
-                //    strong Success!
-                //    |  This alert box could indicate a successful or positive action.
-                //    .alert.alertBg.notice-info
-                //    strong Info!
-                //    |  This alert box could indicate a neutral informative change or action.
-                //.alert.alertBg.notice-danger
-                //    strong Danger!
-                //    |  This alert box could indicate a dangerous or potentially negative action.
-                //.alert.alertBg.notice-primary
-                //    strong Primary!
-                //    |  Indicates an important action.
+                //- .alert.alertBg.notice-success
+                //-     strong Success!
+                //-     |  This alert box could indicate a successful or positive action.
+                //-     .alert.alertBg.notice-info
+                //-     strong Info!
+                //-     |  This alert box could indicate a neutral informative change or action.
+                //- .alert.alertBg.notice-danger
+                //-     strong Danger!
+                //-     |  This alert box could indicate a dangerous or potentially negative action.
+                //- .alert.alertBg.notice-primary
+                //-     strong Primary!
+                //-     |  Indicates an important action.
 
 
         #references.tab-pane.fade(role='tabpanel')
-            style
-                include modal-content.css
-
-            //h5.modal-title.mt-4 #{chat_name}
+            //- h5.modal-title.mt-4 #{chat_name}
             .modal-body
                 .container
                     .row
@@ -152,7 +149,7 @@ div#messaging_history.messaging_history.msgHistory(data-msg-history="")
 
 div.send_message__block
     if (type === "join_channel" || type === "join_group_chat")
-        .btn.btn-primary.btn-block(data-name="join_channel" style="border-radius:0;") Join channel
+        button.btn.btn-primary.btn-block(data-name="join_channel" style="border-radius:0;", data-block=true) Join channel
     else if (type === "user_chat" || type === "group" || (type === "channel" && role === "moderator"))
         button.send_message__file.attachFileToChat
             img(src="components/main/messagingblock/img/files.png")

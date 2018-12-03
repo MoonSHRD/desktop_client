@@ -1,29 +1,27 @@
 git comm# Node.js package manager
 node_modules
-release-builds
-src/env_config.ts
-src/env_config.js
-src/env_config.js.map
 
 .eslintignore
 .idea
+.map
 .npmignore
 dist/
+updates/
 downloads/
 release-builds/
 Makefile
 package-lock.json
 yarn.lock
 yarn-error.log
-.eslintrc
-.eslintrc.json
-
-account.json
-sqlite/data.db
-yarn-error.log
+dev-app-update.yml
+ormconfig.json
 
 not_for_git/
 .git-old/
 
-src/css/index.css
-src/css/index.min.css
+src/css/*
+
+*.js
+*.js.map
+!src/index.js
+src/env_config*

@@ -1,42 +1,72 @@
 div.myTokens
-    div.myTokensHeader
-        span 1 names of token
+    div.myTokensHeader.bild-none
+        span
         input.searchTokens.float-right.form-control(placeholder='search history')
 
-    table.table.table_01_history(style='    ')
-        thead
-            tr
-                th(scope='col')
-                th(scope='col') Adress/Name
-                th(scope='col') Time/Date
-                th(scope='col') Type of operation
-                th(scope='col') Value
-                th(scope='col') Status
-        tbody
-            tr.table_02_history.t02
-                td.td_namb 1.
-                td.blue_font(class='td-token') #{contract_address} 0x78e9772ed91616e12cb1f3bc23c6a0d37034dd70
-                td.td_history_time.grey_font #{time} 17.09.2018
-                    br
-                    | 18:35
-                td.grey_font #{operation} Transaction
-                td.grey_font #{value} 0.001 Ether
-                td.grey_font #{status} Sent
-            tr.table_02_history.t02
-                td.td_namb 2.
-                td.blue_font(class='td-token') #{contract_address} 0x78e9772ed91616e12cb1f3bc23c6a0d37034dd70
-                td.td_history_time.grey_font #{time} 17.09.2018
-                    br
-                    | 16:35
-                td.grey_font #{operation} Transaction
-                td.grey_font #{value} 0.158 Ether
-                td.grey_font #{status} Sent
-            tr.table_02_history.t02
-                td.td_namb 3.
-                td.blue_font(class='td-token') #{contract_address} 0x78e9772ed91616e12cb1f3bc23c6a0d37034dd70
-                td.td_history_time.grey_font #{time} 17.09.2018
-                    br
-                    | 12:27
-                td.grey_font #{operation} Transaction
-                td.grey_font #{value} 0.051 Ether
-                td.grey_font #{status} Received
+    //- .table-responsive
+    //-     table.table.table_01_history
+    //-         thead
+    //-             tr
+    //-                 th(scope='col')
+    //-                 th(scope='col') From/To
+    //-                 th(scope='col') Amount
+    //-                 th(scope='col') Block explorer
+    //-                 th(scope='col') Date
+    //-                 //- th(scope='col') Value
+    //-                 //- th(scope='col') Status
+    //-         tbody(data-name="tx_history_table")
+
+    .wallet-history.container-fluid
+        .row.wallet-history__header.m-0
+            .col-1
+            .col-2 From/To
+            .col-2 Amount
+            .col-5 Block explorer
+            .col-2 Date
+        .wallet-history__body(data-name="tx_history_table")
+
+
+    //- .loader(data-name="wallet_loader")
+    //-     .dot.dot1
+    //-         |
+    //-         .dot.dot2
+    //-         |
+    //-         .dot.dot3
+    //-         |
+    //-         .dot.dot4
+            //- tr.table_02_history.t02
+            //-     td.td_namb 1.
+            //-     td.blue_font(class='td-token') #{contract_address} 0x78e9772ed91616e12cb1f3bc23c6a0d37034dd70
+            //-     td.td_history_time.grey_font #{time} 17.09.2018
+            //-         br
+            //-         | 18:35
+            //-     td.grey_font #{operation} Transaction
+            //-     td.grey_font #{value} 0.001 Ether
+            //-     td.grey_font #{status} Sent
+            //- tr.table_02_history.t02
+            //-     td.td_namb 1.
+            //-     td.blue_font(class='td-token') #{contract_address} 0x78e9772ed91616e12cb1f3bc23c6a0d37034dd70
+            //-     td.td_history_time.grey_font #{time} 17.09.2018
+            //-         br
+            //-         | 18:35
+            //-     td.grey_font #{operation} Transaction
+            //-     td.grey_font #{value} 0.001 Ether
+            //-     td.grey_font #{status} Sent
+            //- tr.table_02_history.t02
+            //-     td.td_namb 2.
+            //-     td.blue_font(class='td-token') #{contract_address} 0x78e9772ed91616e12cb1f3bc23c6a0d37034dd70
+            //-     td.td_history_time.grey_font #{time} 17.09.2018
+            //-         br
+            //-         | 16:35
+            //-     td.grey_font #{operation} Transaction
+            //-     td.grey_font #{value} 0.158 Ether
+            //-     td.grey_font #{status} Sent
+            //- tr.table_02_history.t02
+            //-     td.td_namb 3.
+            //-     td.blue_font(class='td-token') #{contract_address} 0x78e9772ed91616e12cb1f3bc23c6a0d37034dd70
+            //-     td.td_history_time.grey_font #{time} 17.09.2018
+            //-         br
+            //-         | 12:27
+            //-     td.grey_font #{operation} Transaction
+            //-     td.grey_font #{value} 0.051 Ether
+            //-     td.grey_font #{status} Received

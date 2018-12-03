@@ -269,6 +269,9 @@ a.join_button {
     }
 
     &__input {
+        @extend .custom-scrollbar;
+        overflow-x: hidden;
+        overflow-y: auto;
         @include size(auto, auto);
         border-radius: 10px;
         border-style: none;
@@ -332,25 +335,27 @@ a.join_button {
  * message history
  */
 .msgHistory{
-    height: auto;
+    //height: auto;
     //max-height: calc(100% - 120px);
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     //margin-top: 40px;
     //padding-bottom: 10px;
-    @extend .custom-scrollbar;
+    //@extend .custom-scrollbar;
 
-    #dialogDate {
+    .dialogDate {
         text-align: center;
+        margin: 15px 0;
         p {
-            background: rgba(0, 0, 0, 0.34);
+            background: rgba($c0, 0.34);
+            @include fz(14);
             display: inline-block;
             padding: 2px 15px;
+            margin: 0;
             border-radius: 15px;
-            color: white;
+            color: $cf;
             font-weight: 800;
-            font-size: 14px;
-            font-family: Roboto, sans-serif;
+            //font-family: Roboto, sans-serif;
         }
     }
 
@@ -372,7 +377,7 @@ a.join_button {
         padding: 15px;
         position: relative;
 
-        .btn{
+        [data-toggle="scrollDown"]{
             @include size(2.5rem);
             border-radius: 50%;
             display: flex;
@@ -383,6 +388,7 @@ a.join_button {
             transition: .2s ease;
             opacity: 0;
             visibility: hidden;
+            z-index: 2;
 
             &.show{
                 opacity: 1;
@@ -427,7 +433,7 @@ a.join_button {
         box-shadow: 0 0 13px rgba(214, 214, 214, 0.5);
         position: relative;
         display: inline-block;
-        padding: 10px 15px;
+        padding: (10rem/$fz-num) (15rem/$fz-num);
         border-radius: 10px;
         font-size: 1.2em;
         max-width: 400px;
@@ -464,7 +470,14 @@ a.join_button {
     }
 
     &__text{
-        user-select: auto;
+        user-select: text;
+
+        &_transaction{
+
+            .transaction{
+
+            }
+        }
     }
 
     &__date{
@@ -485,6 +498,63 @@ a.join_button {
     &_in {
     }
 }
+/* Сообщение о транзакции */
+.transaction{
+    padding: 0;
+
+    &__header{
+        border-bottom: 1px solid rgba($c0, .1);
+        padding: (5rem/$fz-num) (15rem/$fz-num);
+        *{
+            margin: 0;
+        }
+    }
+
+    &__title{
+        font-size: 1.25rem;
+        margin: 0;
+    }
+
+    &__body{
+        padding: (5rem/$fz-num) (15rem/$fz-num);
+    }
+
+    &__footer{
+        border-top: 1px solid rgba($c0, .1);
+        padding: 0;
+        overflow: hidden;
+
+        > .btn{
+            border-radius: 0 0 10px 10px;
+            box-shadow : none;
+            background-color: lighten($brand-primary,35%);
+            border-color: lighten($brand-primary,35%);
+            color: $cf;
+
+            &:hover,
+            &:active{
+                background-color: lighten($brand-primary,15%);
+                border-color: lighten($brand-primary,15%);
+            }
+
+            .message_out &{
+                background-color: darken($brand-blue,20%);
+                border-color: darken($brand-blue,20%);
+
+                &:hover,
+                &:active{
+                    background-color: darken($brand-blue,30%);
+                    border-color: darken($brand-blue,30%);
+                }
+            }
+        }
+
+        .message__date{
+            padding: 0 (15rem/$fz-num);
+        }
+    }
+}
+/* /Сообщение о транзакции */
 
 .imageOutputFile {
     margin-top: 10px;
@@ -706,6 +776,7 @@ a.join_button {
     text-decoration: none;
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     span{
         @include fz(18);
@@ -799,60 +870,16 @@ a.join_button {
 }
 
 .modal-content {
-    border-radius: 30px;
+    border-radius: 5px;
+    &:hover {
+      background-color: #435f7a;
+    }
 }
 
 .groupInfoHeader {
-    @include position(fixed, null null null 50%);
-    @include size(95%, 65px);
-    background-color: $brand-gray-100;
-    z-index: 99;
-    transform: translate(-50%, 0%);
 
     .modal-title {
         margin-top: 15px;
-    }
-}
-
-.gradient {
-    @include position(absolute, 65px 0 null 0);
-    z-index: 2;
-    height: 20px;
-    background: linear-gradient(to top, opacify($cf, 0) 0%, $brand-gray-100 90%);
-}
-
-#style-10 {
-    &::-webkit-scrollbar {
-        width: 2px;
-        background-color: $cf;
-    }
-
-    /**  STYLE 11 */
-    &::-webkit-scrollbar-track {
-        border-radius: 10px;
-        background: rgba(0, 0, 0, 0.1);
-        border: 1px solid #ccc;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background: linear-gradient(left, #fff, #e4e4e4);
-        border: 1px solid #aaa;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-        background: #fff;
-    }
-
-    &::-webkit-scrollbar-thumb:active {
-        background: linear-gradient(left, #22ADD4, #1E98BA);
-    }
-    &:hover{
-        &::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            background: linear-gradient(left, #fff, #e4e4e4);
-            border: 1px solid #aaa;
-        }
     }
 }
 
@@ -873,15 +900,15 @@ a.join_button {
 
 .offerPublication,
 .getMoreTokens {
-    @include size(50%,40px);
-    background-color: $brand-blue;
+    @include size(100%,40px);
+    background-color: $brand-primary;
     border: 0;
     background-size: 18px;
-    border-radius: 10px;
+    //border-radius: 10px;
     color: $cf;
     outline: none;
     cursor: pointer;
-    box-shadow: 0 0 13px rgba(0, 123, 255, 0.5);
+    //box-shadow: 0 0 13px rgba(0, 123, 255, 0.5);
 }
 
 .showOnMapChannel {

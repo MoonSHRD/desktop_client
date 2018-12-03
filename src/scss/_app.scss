@@ -10,7 +10,7 @@
     position: relative;
     height: 100vh;
     overflow: hidden;
-
+    border-top: 1px solid #424977;
     &-logo {
         animation: App-logo-spin infinite 20s linear;
         height: 80px;
@@ -51,6 +51,27 @@
 }
 .rippleEffect {
     animation: rippleDrop .4s linear;
+}
+
+.alert-minimalist {
+    background-color: #424977;
+    border-color: rgba(149, 149, 149, 0.3);
+    border-radius: 3px;
+    color: #cccccc;
+    padding: 10px;
+}
+.alert-minimalist > [data-notify="icon"] {
+    height: 50px;
+    margin: 0px 20px 0px 15px;
+}
+.alert-minimalist > [data-notify="title"] {
+    color: #ffffff;
+    display: block;
+    font-weight: bold;
+    margin-top: 5px;
+}
+.alert-minimalist > [data-notify="message"] {
+    font-size: 80%;
 }
 
 @keyframes rippleDrop {

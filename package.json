@@ -1,6 +1,6 @@
 {
-  "name": "messanger_desktop_client",
-  "version": "1.0.0",
+  "name": "moonshard",
+  "version": "0.3.2",
   "description": "Messanger desktop client",
   "main": "./src/main.js",
   "contributors": [
@@ -20,25 +20,19 @@
     "dist": "electron-builder",
     "dist-win": "electron-builder --win",
     "start": "electron .",
-    "npm_install": "npm install; ./node_modules/.bin/electron-rebuild  -f -w sqlite3",
-    "yarn_install": "yarn install; ./node_modules/.bin/electron-rebuild  -f -w sqlite3",
-    "yarn_update": "yarn add moonshard_core@latest; ./node_modules/.bin/electron-rebuild  -f -w sqlite3",
-    "package-linux": "electron-packager . Moonshard --overwrite --asar=true --platform=linux --arch=x64 --prune=true --out=release-builds --icon=src/icon.png --version-string.ProductName=\"Moonshard\"",
-    "package-mac": "electron-packager . Moonshard --overwrite --asar=true --platform=darwin --arch=x64 --prune=true --out=release-builds --version-string.ProductName=\"Moonshard\"",
-    "package-win32": "electron-packager . Moonshard --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Moonshard\"",
-    "package-win32-all": "electron-packager . Moonshard --overwrite --asar=true --platform=win32 --arch=ia32,x64 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Moonshard\"",
-    "package-win64": "electron-packager . Moonshard --overwrite --asar=false --platform=win32 --arch=x64 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Moonshard\"",
-    "rebuild_packages": "./node_modules/.bin/electron-rebuild  -f -w sqlite3",
-    "build_platforms": "npm run package-linux && npm run package-win64",
+    "rm-js-r": "find . -type f -name '*.js' | grep -vE '^./node_modules' | xargs -d'\n' rm",
+    "rm-js-map-r": "find . -type f -name '*.js.map' | grep -vE '^./node_modules' | xargs -d'\n' rm",
+    "compile-ts": "find . -type f -name '*.ts' | grep -vE '^./node_modules' | xargs -d'\n' tsc --lib 'es2015','es2016','es2017','dom' --experimentalDecorators true --types 'reflect-metadata' --emitDecoratorMetadata true",
     "dev:css": "node-sass --watch --include-path scss src/scss/index.scss src/css/index.min.css --source-map-embed true compressed",
     "prebuild:css": "node-sass --include-path scss src/scss/index.scss src/css/index.css --source-map-embed true",
     "build:css": "postcss --use autoprefixer -b \"last 2 versions\" < src/css/index.css | postcss --use cssnano > src/css/index.min.css",
-    "css": "npm run prebuild:css | npm run build:css"
+    "compile-css": "npm run prebuild:css | npm run build:css",
+    "postinstall": "electron-builder install-app-deps && yarn compile-css && yarn compile-ts"
   },
   "includeSources": true,
   "devDependencies": {
-    "electron": "^2.0.7",
-    "electron-builder": "^20.28.4",
+    "electron": "3.0.8",
+    "electron-builder": "^20.33.2",
     "electron-packager": "^12.1.0",
     "electron-rebuild": "^1.8.2"
   },
@@ -64,16 +58,21 @@
   "license": "CC0-1.0",
   "dependencies": {
     "@grpc/proto-loader": "^0.3.0",
+    "@types/node": "^10.12.9",
     "animate.css": "^3.7.0",
     "autoprefixer": "^9.2.1",
     "autoresize-textarea": "^1.1.3",
+    "benchmark": "^2.1.4",
     "better-queue": "^3.8.10",
     "bootstrap": "^4.1.3",
     "bootstrap-notify": "^3.1.3",
     "bourbon": "^5.1.0",
     "cssnano": "^4.1.5",
+    "electron-log": "^2.2.17",
     "electron-pug": "^2.0.0",
+    "electron-updater": "^4.0.4",
     "ethers": "^4.0.10",
+    "file-encryptor": "^0.1.1",
     "grpc": "^1.16.0",
     "ipfs-api": "^24.0.2",
     "jquery": "^3.3.1",
@@ -83,7 +82,7 @@
     "l20n": "^5.0.0",
     "loom-js": "^1.4.3",
     "loom-truffle-provider": "^0.5.0",
-    "moonshard_core": "0.1.58",
+    "moonshard_core": "^0.1.61",
     "node-sass": "^4.9.4",
     "peer-id": "^0.11.0",
     "popper.js": "^1.14.4",
@@ -91,13 +90,23 @@
     "pug": "^2.0.3",
     "qbox": "^0.1.7",
     "react": "^16.4.2",
+    "reflect-metadata": "^0.1.12",
+    "simple-scrollbar": "^0.4.0",
     "slick-carousel": "^1.8.1",
     "sqlite3": "^4.0.3",
     "text-encoding": "^0.7.0",
     "typeorm": "^0.2.7",
+    "waypoints": "^4.0.1",
     "web3": "^1.0.0-beta.36"
   },
   "build": {
+    "publish": [
+      {
+        "useMultipleRangeRequest": false,
+        "provider": "generic",
+        "url": "http://mnshrd.vialfeps.ru/updates/"
+      }
+    ],
     "appId": "moonshard",
     "linux": {
       "target": [

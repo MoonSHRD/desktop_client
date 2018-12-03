@@ -10,17 +10,15 @@ export const ipfs_config = {
 };
 
 export const grpc_config = {
-    host: '192.168.1.60',
+    host: "104.248.67.155",
     port: 50051,
 };
 
 export const web3_config = {
-    host: "192.168.1.21",
+    host: "104.248.67.155",
     port: 8546,
 };
 
-export const loom_config = {
-    host: 'node1.moonshrd.io',
-    port: 46658,
-    net_reg_addr: '0x53bcfb143d7737fedd257a8ba1984872025255fa',
+export const bot_acc={
+    addr:"0x100FEEB554dADbfe5d97763145807dBe0a5d0e34".toLowerCase(),
 };

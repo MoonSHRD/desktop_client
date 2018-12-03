@@ -2,6 +2,7 @@
     height: calc(100% - 200px);
     background: $cf;
     overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
 
     ul {
@@ -13,6 +14,13 @@
         //li {
         //    margin-bottom: 2px;
         //}
+    }
+
+    &__item{
+
+        * {
+            pointer-events: none;
+        }
     }
 }
 
@@ -84,6 +92,7 @@
 
         svg{
             height: .9em;
+            flex-shrink: 0;
             margin-right: .4em;
             path{
                 fill: $primary-text;

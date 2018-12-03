@@ -1,40 +1,37 @@
-style
-    include modal-content.css
-.modal-header
-    h5.modal-title #{name}
+.modal-header.modal-header_img
+    .row.position-static.w-100.p-3.m-0
+        .col-3
+            .modal-header__img
+                img.rounded-circle.avatarBg(src=avatar width=80 height=80)
+        .col-9.justify-content-around.flex-column.d-flex
+            .modal-header__name
+                h5.modal-title #{name}
     button.close(type='button', data-dismiss='modal', aria-label='Close')
         span(aria-hidden='true') ×
-.modal-body
+.modal-body.modal-body_userinfo
     .container-fluid
-        .row
-            .col-sm-3
-                img.rounded-circle(src=avatar width = 128 height = 128)
-            .col-sm-9
-
-                table.table
-                    tbody
-                        tr
-                            th(scope='row' ) Username
-                            td#copyTo.select-true #{id}
-                            td
-                                input.copyButton(value='copy' type='button' )
-                        tr
-                            th(scope='row') Firstname
-                            td #{firstname}
-                            td
-                        tr
-                            th(scope='row') Lastname
-                            td #{lastname}
-                            td
-                        tr
-                            th(scope='row') Balance
-                            td #{eth_balance} Coin.
-                            td
-if bio
-    .modal-footer
-        .container
-            .row
-                .col-sm-3
-                    strong Bio
-                .col-sm !{bio}
-
+        .row.align-items-center.flex-nowrap
+            .col-3 Username
+            .col-6.text-truncate
+                span#copyTo.d-inline.select-true #{id}
+            .col-3.text-right
+                button.copyButton.btn.btn-link(type='button')
+                    include ../../../img/icons/copy-solid.svg
+        .row.align-items-center.flex-nowrap
+            .col-3 Firstname
+            .col-6 #{firstname}
+            .col-3
+        .row.align-items-center.flex-nowrap
+            .col-3 Lastname
+            .col-6 #{lastname}
+            .col-3
+        if bio
+            .row.align-items-center.flex-nowrap
+                .col-3 Bio
+                .col-6 #{bio}
+                .col-3
+        .row.align-items-center.flex-nowrap
+            .col-3 Balance
+            .col-6 #{eth_balance} Coin.
+            .col-3
+.modal-footer
