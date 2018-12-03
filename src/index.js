@@ -843,7 +843,7 @@ window.onload = function () {
         targetBlock.scrollTop = targetBlock.scrollHeight;
     };
 
-    let scrollDownAnimate = (target = '[data-msg-history]', list = '[data-msg-list]') => {
+    let scrollDownAnimate = (target = '[data-msg-history] .ss-content', list = '[data-msg-list]') => {
         const targetBlock = document.querySelector(target);
         let targetHeight = document.querySelector(list).offsetHeight;
         animate(targetBlock, "scrollTop", "", targetBlock.scrollTop, targetHeight, 1000, true);
@@ -1622,20 +1622,28 @@ window.onload = function () {
     let scrollBottom = (target = '[data-msg-history]', child = '[data-msg-list]') => {
         let param = {
             bottom : '',
-            height : $(target).outerHeight(true)
+            // height : $(target).outerHeight(true)
+            height : document.querySelector(target).offsetHeight
         };
-        param.bottom = $(child).outerHeight(true) - ( $(target).scrollTop() + $(target).outerHeight(true));
+        // param.bottom = $(child).outerHeight(true) - ( $(target).scrollTop() + $(target).outerHeight(true));
+        param.bottom = document.querySelector(child).offsetHeight - ( document.querySelector(target).scrollTop + document.querySelector(target).offsetHeight);
         return param;
     };
 
-    document.addEventListener('scroll', function (event) {
+    document.addEventListener('scroll', function (e) {
+        const $this = e.target;
 
-        if (event.target.id === 'messaging_history') {
-            let {bottom, height} = scrollBottom();
-            if ( bottom > height ) {
-                $('[data-toggle="scrollDown"]').addClass('show');
+        // console.log($this);
+
+        if ( $this.id === 'messaging_history' || $this.classList.contains('ss-content') ) {
+            let {bottom, height} = scrollBottom('[data-msg-history] .ss-content', '[data-msg-list]');
+            const scrllDnw = document.querySelector('[data-toggle="scrollDown"]');
+            if ( bottom > height / 3 ) {
+                // $('[data-toggle="scrollDown"]').addClass('show');
+                scrllDnw.classList.add('show');
             } else {
-                $('[data-toggle="scrollDown"]').removeClass('show');
+                // $('[data-toggle="scrollDown"]').removeClass('show');
+                scrllDnw.classList.remove('show');
             }
 
             /* Скролл даты */
@@ -1648,7 +1656,7 @@ window.onload = function () {
     }, true);
 
 
-    const wayElem = document.getElementsByClassName('dialogDate');
+    /*const wayElem = document.getElementsByClassName('dialogDate');
     if (wayElem.length > 0) {
         let waypoint = new Waypoint({
             element: wayElem[0],
@@ -1657,7 +1665,7 @@ window.onload = function () {
             },
             context: document.querySelector('data-msg-list'),
         });
-    }
+    }*/
 
     $(document).on('click', '[name=change_download]', function (e) {
         dialog.showOpenDialog({
