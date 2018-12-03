@@ -582,8 +582,8 @@ window.onload = function () {
 
                     div.style.left = `${left}px`;
                     div.style.top = `${event.pageY}px`;
-                    div.style.display = 'block';
-
+                    // div.style.display = 'block';
+                    fadeIn(div);
                     // div.show('fast');
                 }
             }
@@ -1040,34 +1040,7 @@ window.onload = function () {
             });
             /*    ipcRenderer.send('load_chats', 'group_chat'); // Загружаем наши чаты
             }*/
-        }
-    });
-
-    /*let click_anim = (e) => {
-        $('.ripple').remove();
-        var posX = $(this).offset().left,
-            posY = $(this).offset().top,
-            buttonWidth = $(this).width(),
-            buttonHeight =  $(this).height();
-        $(this).children('a').prepend('<span class=\'ripple\'></span>');
-        if(buttonWidth >= buttonHeight) {
-            buttonHeight = buttonWidth;
-        } else {
-            buttonWidth = buttonHeight;
-        }
-        var x = e.pageX - posX - buttonWidth / 2;
-        var y = e.pageY - posY - buttonHeight / 2;
-        $('.ripple').css({
-            width: buttonWidth,
-            height: buttonHeight,
-            top: y + 'px',
-            left: x + 'px'
-        }).addClass('rippleEffect');
-    };*/
-
-    document.addEventListener('click', (e) => {
-        let $this = e.target;
-        if ( $this.classList.contains('chats__item') ){
+        } else if ( $this.classList.contains('chats__item') ){
             console.log('chat_clicked');
 
             let parent = $this.parentNode; // родитель
@@ -1104,6 +1077,27 @@ window.onload = function () {
         }
     });
 
+    /*let click_anim = (e) => {
+        $('.ripple').remove();
+        var posX = $(this).offset().left,
+            posY = $(this).offset().top,
+            buttonWidth = $(this).width(),
+            buttonHeight =  $(this).height();
+        $(this).children('a').prepend('<span class=\'ripple\'></span>');
+        if(buttonWidth >= buttonHeight) {
+            buttonHeight = buttonWidth;
+        } else {
+            buttonWidth = buttonHeight;
+        }
+        var x = e.pageX - posX - buttonWidth / 2;
+        var y = e.pageY - posY - buttonHeight / 2;
+        $('.ripple').css({
+            width: buttonWidth,
+            height: buttonHeight,
+            top: y + 'px',
+            left: x + 'px'
+        }).addClass('rippleEffect');
+    };*/
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
         let modal = document.getElementById('AppModal').querySelector('[data-modal-content]');
@@ -1115,7 +1109,7 @@ window.onload = function () {
     ipcRenderer.on('offer_publication', (event, data) => {
         $('#AppModal').modal('toggle');
         $('#AppModal1').modal('toggle');
-        $('.modal-content1').html(data);
+        document.querySelector('.modal-content1').innerHTML = data;
 
     });
 
@@ -1203,7 +1197,7 @@ window.onload = function () {
         }
     };*/
 
-    function checkFields(fieldset) {
+    let checkFields = (fieldset) => {
         let err = false;
         const $this=$(fieldset);
         let els = $this.serializeArray();
@@ -1239,7 +1233,7 @@ window.onload = function () {
         });
 
         return ret;
-    }
+    };
 
     $(document).on('submit', '.modal-content', function (e) {
         let button = $(this).find('.btn-primary');
@@ -1286,12 +1280,23 @@ window.onload = function () {
      * /Форма создания группы/канала
      */
 
-    $(document).on('click', '[data-event=show_chat_info]', function () {
+    /*$(document).on('click', '[data-event=show_chat_info]', function () {
         const active_dialog = $('.active_dialog');
         const id = active_dialog.attr('id');
         const type = active_dialog.attr('data-type');
         // let data = $this.attr('href');
         ipcRenderer.send('show_popup', {id, type});
+    });*/
+
+    document.addEventListener('click', (e) => {
+        let $this = e.target;
+        if ( $this.dataset.event === 'show_chat_info' ){
+            const active_dialog = document.querySelector('.active_dialog');
+            const id = active_dialog.id;
+            const type = active_dialog.dataset.type;
+            // let data = $this.attr('href');
+            ipcRenderer.send('show_popup', {id, type});
+        }
     });
 
     function update_notify(title, message){
@@ -1377,8 +1382,9 @@ window.onload = function () {
     });
 
     ipcRenderer.on('get_notice', (event, obj) => {
-        if ($('.active_dialog').attr('id') === obj.id) {
-            $('.notifyBlock').append((obj.html));
+        let dialog = document.querySelector('.active_dialog');
+        if ( dialog.id === obj.id ) {
+            document.querySelector('.notifyBlock').append((obj.html));
         }
     });
 
@@ -1387,57 +1393,79 @@ window.onload = function () {
         console.log(data);
         if(data) {
             setTimeout(() => {
-                if (data) $('#update_button').fadeIn().addClass('update_animate');
-
+                if (data) {
+                    // $('#update_button').fadeIn().addClass('update_animate');
+                    const updateBtn = document.getElementById('update_button');
+                    fadeIn(updateBtn);
+                    updateBtn.classList.add('update_animate')
+                }
                 update_notify( 'New Version !', 'A new version of the Moonshard is available');
-
-
-
             }, 1000);
         }
     });
 
     ipcRenderer.on('get_updates', (event, obj) => {
-
         console.log(typeof(obj));
+        const updateBtn = document.getElementById('update_button');
+        const downImg = document.getElementById('download_img');
+        const downUpdates = document.getElementById('download_updates');
         if(obj === 100){
-
+            // const updateDown = document.querySelector('[data-name=download_updates]');
             update_notify( 'Install updates', 'Now you can install updates');
-
-            $('#update_button').fadeIn();
-            $('[data-name=download_updates]').attr('data-name','install_updates');
+            // $('#update_button').fadeIn();
+            fadeIn(updateBtn);
+            // $('[data-name=download_updates]').attr('data-name','install_updates');
+            updateBtn.dataset.name = 'install_updates';
             setTimeout(() => {
-                $('#download_img').fadeOut();
+                // $('#download_img').fadeOut();
+                fadeOut(downImg);
 
                 setTimeout(() => {
-                    $('#update_img').fadeIn();
+                    // $('#update_img').fadeIn();
+                    fadeIn(downImg);
                 },500);
             },500);
 
         }
-        $('#download_updates').css('width', obj+'%');
+        // $('#download_updates').css('width', obj+'%');
+        downUpdates.style.width = `${obj}%`
     });
 
-    $(document).on('click', '[data-name=download_updates]', function (e) {
-        $('#update_button').fadeOut();
-        update_notify('Download updates', 'Updates will download in the background');
+    // $(document).on('click', '[data-name=download_updates]', function (e) {
+    //     $('#update_button').fadeOut();
+    //     update_notify('Download updates', 'Updates will download in the background');
+    //
+    //     ipcRenderer.send('get_updates', {});
+    // });
 
-        ipcRenderer.send('get_updates', {});
+    // $(document).on('click', '[data-name=install_updates]', function (e) {
+    //     ipcRenderer.send('install_updates', {});
+    // });
+    document.addEventListener('click', (e) => {
+       const $this = e.target;
+       if ( $this.dataset.name === 'download_updates' ){
+           fadeOut($this);
+           update_notify('Download updates', 'Updates will download in the background');
+           ipcRenderer.send('get_updates', {});
+       } else if ( $this.dataset.name === 'install_updates' ){
+           ipcRenderer.send('install_updates', {});
+       }
     });
-
-    $(document).on('click', '[data-name=install_updates]', function (e) {
-        ipcRenderer.send('install_updates', {});
-
-    });
-
-
-
 
     // Context menu
-    $(document).mousedown(function (event) {
-        if (event.which === 1) {
-            $('.context-menu').remove();
+    // $(document).mousedown(function (event) {
+    //     if (event.which === 1) {
+    //         $('.context-menu').remove();
+    //     }
+    // });
 
+    // Удаляем контекстное меню
+    document.addEventListener('mousedown', (e) => {
+        if (event.which === 1) {
+            const contextMenu = document.querySelectorAll('.context-menu');
+            for (let i = 0; i<contextMenu.length; i++) {
+                contextMenu[i].remove();
+            }
         }
     });
 
@@ -1952,4 +1980,33 @@ window.onload = function () {
         }
     };
     /* /Инициализация кастомного скролла */
+
+    /* FadeOut */
+    let fadeOut = (el) => {
+        el.style.opacity = 1;
+
+        (function fade() {
+            if ((el.style.opacity -= .1) < 0) {
+                el.style.display = "none";
+            } else {
+                requestAnimationFrame(fade);
+            }
+        })();
+    };
+    /* /FadeOut */
+
+    /* FadeIn */
+    let fadeIn = (el, display) => {
+        el.style.opacity = 0;
+        el.style.display = display || "block";
+
+        (function fade() {
+            let val = parseFloat(el.style.opacity);
+            if (!((val += .1) > 1)) {
+                el.style.opacity = val;
+                requestAnimationFrame(fade);
+            }
+        })();
+    };
+    /* /FadeIn */
 };
