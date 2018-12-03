@@ -387,6 +387,13 @@ window.onload = function () {
         if ( $this.hasAttribute('href') ) {
             let url = $this.getAttribute('href');
             let rgx = new RegExp("^(http|https)://", "i");
+
+            /*if ( $this.closest('[data-toggle="collapse"]') ){
+                console.log('[data-toggle="collapse"]');
+                e.preventDefault();
+                shell.openExternal($this.href);
+            }*/
+
             if (rgx.test(url)) {
                 shell.openExternal($this.href);
             }
@@ -514,13 +521,14 @@ window.onload = function () {
             let $this = e.target;
             let url = $this.getAttribute('href');
             let rgx = new RegExp("^(http|https)://", "i");
-            if (e.which === 2) {
+            if (e.which === 2 || e.which === 1) {
                 if ($this.localName === 'a' && rgx.test(url)) {
                     e.preventDefault();
                     shell.openExternal($this.href);
                 }
-            } else // Проверяем нажата ли именно правая кнопка мыши:
-            if ( e.which === 3 ) {
+            }
+            // Проверяем нажата ли именно правая кнопка мыши:
+            else if ( e.which === 3 ) {
                 // console.log(e);
 
                 // Убираем css класс selected-html-element у абсолютно всех элементов на странице с помощью селектора "*":
@@ -574,8 +582,8 @@ window.onload = function () {
 
                     div.style.left = `${left}px`;
                     div.style.top = `${event.pageY}px`;
-                    div.style.display = 'block';
-
+                    // div.style.display = 'block';
+                    fadeIn(div);
                     // div.show('fast');
                 }
             }
@@ -835,7 +843,7 @@ window.onload = function () {
         targetBlock.scrollTop = targetBlock.scrollHeight;
     };
 
-    let scrollDownAnimate = (target = '[data-msg-history]', list = '[data-msg-list]') => {
+    let scrollDownAnimate = (target = '[data-msg-history] .ss-content', list = '[data-msg-list]') => {
         const targetBlock = document.querySelector(target);
         let targetHeight = document.querySelector(list).offsetHeight;
         animate(targetBlock, "scrollTop", "", targetBlock.scrollTop, targetHeight, 1000, true);
@@ -873,11 +881,12 @@ window.onload = function () {
 
     ipcRenderer.on('received_message', (event, obj) => {
         // let chat = $('#'+obj.id);
-        const chat = document.getElementById(obj.id);
-        const chatActive = document.querySelector('.active_dialog');
-        const msgList = document.querySelector('[data-msg-list]');
+        //console.log(obj);
+        let chat = document.getElementById(obj.id);
+        let chatActive = document.querySelector('.active_dialog');
+        let msgList = document.querySelector('[data-msg-list]');
 
-        // console.log(chat, obj);
+        console.log('received_message', chat, obj);
 
         //console.log('received_message', obj);
 
@@ -914,6 +923,9 @@ window.onload = function () {
         } else {
             // chat.find('[data-name=unread_messages]').text(obj.unread_messages);
             if (obj.message.fresh) {
+
+                console.log('obj.fresh', obj.message.fresh, chat);
+
                 let un_m = chat.querySelector('[data-name=unread_messages]');
                 let txt_now = un_m.innerText;
                 if (txt_now == 0)
@@ -1028,34 +1040,7 @@ window.onload = function () {
             });
             /*    ipcRenderer.send('load_chats', 'group_chat'); // Загружаем наши чаты
             }*/
-        }
-    });
-
-    /*let click_anim = (e) => {
-        $('.ripple').remove();
-        var posX = $(this).offset().left,
-            posY = $(this).offset().top,
-            buttonWidth = $(this).width(),
-            buttonHeight =  $(this).height();
-        $(this).children('a').prepend('<span class=\'ripple\'></span>');
-        if(buttonWidth >= buttonHeight) {
-            buttonHeight = buttonWidth;
-        } else {
-            buttonWidth = buttonHeight;
-        }
-        var x = e.pageX - posX - buttonWidth / 2;
-        var y = e.pageY - posY - buttonHeight / 2;
-        $('.ripple').css({
-            width: buttonWidth,
-            height: buttonHeight,
-            top: y + 'px',
-            left: x + 'px'
-        }).addClass('rippleEffect');
-    };*/
-
-    document.addEventListener('click', (e) => {
-        let $this = e.target;
-        if ( $this.classList.contains('chats__item') ){
+        } else if ( $this.classList.contains('chats__item') ){
             console.log('chat_clicked');
 
             let parent = $this.parentNode; // родитель
@@ -1092,6 +1077,27 @@ window.onload = function () {
         }
     });
 
+    /*let click_anim = (e) => {
+        $('.ripple').remove();
+        var posX = $(this).offset().left,
+            posY = $(this).offset().top,
+            buttonWidth = $(this).width(),
+            buttonHeight =  $(this).height();
+        $(this).children('a').prepend('<span class=\'ripple\'></span>');
+        if(buttonWidth >= buttonHeight) {
+            buttonHeight = buttonWidth;
+        } else {
+            buttonWidth = buttonHeight;
+        }
+        var x = e.pageX - posX - buttonWidth / 2;
+        var y = e.pageY - posY - buttonHeight / 2;
+        $('.ripple').css({
+            width: buttonWidth,
+            height: buttonHeight,
+            top: y + 'px',
+            left: x + 'px'
+        }).addClass('rippleEffect');
+    };*/
 
     ipcRenderer.on('get_my_vcard', (event, data) => {
         let modal = document.getElementById('AppModal').querySelector('[data-modal-content]');
@@ -1103,7 +1109,7 @@ window.onload = function () {
     ipcRenderer.on('offer_publication', (event, data) => {
         $('#AppModal').modal('toggle');
         $('#AppModal1').modal('toggle');
-        $('.modal-content1').html(data);
+        document.querySelector('.modal-content1').innerHTML = data;
 
     });
 
@@ -1191,7 +1197,7 @@ window.onload = function () {
         }
     };*/
 
-    function checkFields(fieldset) {
+    let checkFields = (fieldset) => {
         let err = false;
         const $this=$(fieldset);
         let els = $this.serializeArray();
@@ -1227,7 +1233,7 @@ window.onload = function () {
         });
 
         return ret;
-    }
+    };
 
     $(document).on('submit', '.modal-content', function (e) {
         let button = $(this).find('.btn-primary');
@@ -1274,12 +1280,23 @@ window.onload = function () {
      * /Форма создания группы/канала
      */
 
-    $(document).on('click', '[data-event=show_chat_info]', function () {
+    /*$(document).on('click', '[data-event=show_chat_info]', function () {
         const active_dialog = $('.active_dialog');
         const id = active_dialog.attr('id');
         const type = active_dialog.attr('data-type');
         // let data = $this.attr('href');
         ipcRenderer.send('show_popup', {id, type});
+    });*/
+
+    document.addEventListener('click', (e) => {
+        let $this = e.target;
+        if ( $this.dataset.event === 'show_chat_info' ){
+            const active_dialog = document.querySelector('.active_dialog');
+            const id = active_dialog.id;
+            const type = active_dialog.dataset.type;
+            // let data = $this.attr('href');
+            ipcRenderer.send('show_popup', {id, type});
+        }
     });
 
     function update_notify(title, message){
@@ -1365,8 +1382,9 @@ window.onload = function () {
     });
 
     ipcRenderer.on('get_notice', (event, obj) => {
-        if ($('.active_dialog').attr('id') === obj.id) {
-            $('.notifyBlock').append((obj.html));
+        let dialog = document.querySelector('.active_dialog');
+        if ( dialog.id === obj.id ) {
+            document.querySelector('.notifyBlock').append((obj.html));
         }
     });
 
@@ -1375,57 +1393,79 @@ window.onload = function () {
         console.log(data);
         if(data) {
             setTimeout(() => {
-                if (data) $('#update_button').fadeIn().addClass('update_animate');
-
+                if (data) {
+                    // $('#update_button').fadeIn().addClass('update_animate');
+                    const updateBtn = document.getElementById('update_button');
+                    fadeIn(updateBtn);
+                    updateBtn.classList.add('update_animate')
+                }
                 update_notify( 'New Version !', 'A new version of the Moonshard is available');
-
-
-
             }, 1000);
         }
     });
 
     ipcRenderer.on('get_updates', (event, obj) => {
-
         console.log(typeof(obj));
+        const updateBtn = document.getElementById('update_button');
+        const downImg = document.getElementById('download_img');
+        const downUpdates = document.getElementById('download_updates');
         if(obj === 100){
-
+            // const updateDown = document.querySelector('[data-name=download_updates]');
             update_notify( 'Install updates', 'Now you can install updates');
-
-            $('#update_button').fadeIn();
-            $('[data-name=download_updates]').attr('data-name','install_updates');
+            // $('#update_button').fadeIn();
+            fadeIn(updateBtn);
+            // $('[data-name=download_updates]').attr('data-name','install_updates');
+            updateBtn.dataset.name = 'install_updates';
             setTimeout(() => {
-                $('#download_img').fadeOut();
+                // $('#download_img').fadeOut();
+                fadeOut(downImg);
 
                 setTimeout(() => {
-                    $('#update_img').fadeIn();
+                    // $('#update_img').fadeIn();
+                    fadeIn(downImg);
                 },500);
             },500);
 
         }
-        $('#download_updates').css('width', obj+'%');
+        // $('#download_updates').css('width', obj+'%');
+        downUpdates.style.width = `${obj}%`
     });
 
-    $(document).on('click', '[data-name=download_updates]', function (e) {
-        $('#update_button').fadeOut();
-        update_notify('Download updates', 'Updates will download in the background');
+    // $(document).on('click', '[data-name=download_updates]', function (e) {
+    //     $('#update_button').fadeOut();
+    //     update_notify('Download updates', 'Updates will download in the background');
+    //
+    //     ipcRenderer.send('get_updates', {});
+    // });
 
-        ipcRenderer.send('get_updates', {});
+    // $(document).on('click', '[data-name=install_updates]', function (e) {
+    //     ipcRenderer.send('install_updates', {});
+    // });
+    document.addEventListener('click', (e) => {
+       const $this = e.target;
+       if ( $this.dataset.name === 'download_updates' ){
+           fadeOut($this);
+           update_notify('Download updates', 'Updates will download in the background');
+           ipcRenderer.send('get_updates', {});
+       } else if ( $this.dataset.name === 'install_updates' ){
+           ipcRenderer.send('install_updates', {});
+       }
     });
-
-    $(document).on('click', '[data-name=install_updates]', function (e) {
-        ipcRenderer.send('install_updates', {});
-
-    });
-
-
-
 
     // Context menu
-    $(document).mousedown(function (event) {
-        if (event.which === 1) {
-            $('.context-menu').remove();
+    // $(document).mousedown(function (event) {
+    //     if (event.which === 1) {
+    //         $('.context-menu').remove();
+    //     }
+    // });
 
+    // Удаляем контекстное меню
+    document.addEventListener('mousedown', (e) => {
+        if (event.which === 1) {
+            const contextMenu = document.querySelectorAll('.context-menu');
+            for (let i = 0; i<contextMenu.length; i++) {
+                contextMenu[i].remove();
+            }
         }
     });
 
@@ -1574,40 +1614,51 @@ window.onload = function () {
     });
 
     $('[data-toggle="collapse"]').collapse('toggle');
+
     $(document).on('click', '[data-toggle="collapse"] a', function (e) {
-        e.preventDefault();
+        e.stopPropagation();
     });
 
     let scrollBottom = (target = '[data-msg-history]', child = '[data-msg-list]') => {
         let param = {
             bottom : '',
-            height : $(target).outerHeight(true)
+            // height : $(target).outerHeight(true)
+            height : document.querySelector(target).offsetHeight
         };
-        param.bottom = $(child).outerHeight(true) - ( $(target).scrollTop() + $(target).outerHeight(true));
+        // param.bottom = $(child).outerHeight(true) - ( $(target).scrollTop() + $(target).outerHeight(true));
+        param.bottom = document.querySelector(child).offsetHeight - ( document.querySelector(target).scrollTop + document.querySelector(target).offsetHeight);
         return param;
     };
 
-    document.addEventListener('scroll', function (event) {
+    document.addEventListener('scroll', function (e) {
+        const $this = e.target;
 
-        if (event.target.id === 'messaging_history') {
-            let {bottom, height} = scrollBottom();
-            if ( bottom > height ) {
-                $('[data-toggle="scrollDown"]').addClass('show');
-            } else {
-                $('[data-toggle="scrollDown"]').removeClass('show');
+        // console.log($this);
+
+        if ( $this.id === 'messaging_history' || $this.classList.contains('ss-content') ) {
+            if ($this.closest('#messaging_history')) {
+                let {bottom, height} = scrollBottom('[data-msg-history] .ss-content', '[data-msg-list]');
+                const scrllDnw = document.querySelector('[data-toggle="scrollDown"]');
+                if (bottom > height / 3) {
+                    // $('[data-toggle="scrollDown"]').addClass('show');
+                    scrllDnw.classList.add('show');
+                } else {
+                    // $('[data-toggle="scrollDown"]').removeClass('show');
+                    scrllDnw.classList.remove('show');
+                }
+
+                /* Скролл даты */
+                // if ( $('.dialogDate').length ) {
+                //     $('.dialogDate').addClass('slicky');
+                // }
+                /* /Скролл даты */
             }
-
-            /* Скролл даты */
-            // if ( $('.dialogDate').length ) {
-            //     $('.dialogDate').addClass('slicky');
-            // }
-            /* /Скролл даты */
         }
 
     }, true);
 
 
-    const wayElem = document.getElementsByClassName('dialogDate');
+    /*const wayElem = document.getElementsByClassName('dialogDate');
     if (wayElem.length > 0) {
         let waypoint = new Waypoint({
             element: wayElem[0],
@@ -1616,15 +1667,15 @@ window.onload = function () {
             },
             context: document.querySelector('data-msg-list'),
         });
-    }
+    }*/
 
-    $(document).on('click', '[name=change_download]', function (e) {
+    /*$(document).on('click', '[name=change_download]', function (e) {
         dialog.showOpenDialog({
             properties: ['openDirectory','openFile']
         },function (directory) {
             ipcRenderer.send('change_directory', directory + '/');
         });
-    });
+    });*/
 
     /*$(document).on('click', '[data-toggle="scrollDown"]', function (e){
         e.preventDefault();
@@ -1634,6 +1685,26 @@ window.onload = function () {
         let $this = e.target;
         if ( $this.dataset.toggle === 'scrollDown' ) {
             scrollDownAnimate();
+        } else if ( $this.name === 'change_download' ){
+            dialog.showOpenDialog({
+                properties: ['openDirectory','openFile']
+            },function (directory) {
+                ipcRenderer.send('change_directory', directory + '/');
+            });
+        } else if ( $this.classList.contains('sendTokenButton') ) {
+            let sendTo = document.getElementById('sendTokenTo');
+            let data_arr = $(this).closest('tr').find('input').serializeArray();
+            let data = {};
+            data_arr.forEach((el) => {
+                data[el.name] = el.value;
+            });
+            if (sendTo.value.length > 0) {
+                sendTo.classList.remove('error');
+                ipcRenderer.send('transfer_token', data);
+            } else {
+                sendTo.classList.add('error');
+                sendTo.focus();
+            }
         }
     });
 
@@ -1690,7 +1761,7 @@ window.onload = function () {
         ipcRenderer.send('decrypt_db');
     });*/
 
-    $(document).on('click', '.sendTokenButton', function (e) {
+    /*$(document).on('click', '.sendTokenButton', function (e) {
         // let data_arr=$(this).closest('form');
         // console.log(data_arr);
         // return;
@@ -1709,17 +1780,17 @@ window.onload = function () {
             sendTo.classList.add('error');
             sendTo.focus();
         }
-    });
+    });*/
 
     /*
      * WALLET/SETTINGS MENU
      */
     document.addEventListener('click', function (e) {
-        let target = e.target;
-        if (target.dataset.toggle === 'nav') {
-            let nav = target.dataset.nav; // data-nav
-            let name = target.dataset.name; // data-name
-            let parent = target.parentNode; // родитель - li
+        let $this = e.target;
+        if ($this.dataset.toggle === 'nav') {
+            let nav = $this.dataset.nav; // data-nav
+            let name = $this.dataset.name; // data-name
+            let parent = $this.parentNode; // родитель - li
             let parentList = parent.parentNode; // родитель - ul
 
             ipcRenderer.send(`change_${nav}_menu`, name);
@@ -1740,14 +1811,15 @@ window.onload = function () {
     let renderRight = (selector, content) => {
         let $this = document.querySelector(selector);
         $this.innerHTML = content;
+        console.log('renderRight');
     };
     ipcRenderer.on('change_wallet_menu', (event, obj) => {
-        renderRight('.walletRight', obj);
+        renderRight('[data-right-content]', obj);
         scrollbarInit('.walletLeft, .walletRight');
 
     });
     ipcRenderer.on('change_settings_menu', (event, obj) => {
-        renderRight('.settings__right', obj);
+        renderRight('[data-right-content]', obj);
         scrollbarInit('.settings__left, .settings__right');
     });
     /*
@@ -1938,4 +2010,33 @@ window.onload = function () {
         }
     };
     /* /Инициализация кастомного скролла */
+
+    /* FadeOut */
+    let fadeOut = (el) => {
+        el.style.opacity = 1;
+
+        (function fade() {
+            if ((el.style.opacity -= .1) < 0) {
+                el.style.display = "none";
+            } else {
+                requestAnimationFrame(fade);
+            }
+        })();
+    };
+    /* /FadeOut */
+
+    /* FadeIn */
+    let fadeIn = (el, display) => {
+        el.style.opacity = 0;
+        el.style.display = display || "block";
+
+        (function fade() {
+            let val = parseFloat(el.style.opacity);
+            if (!((val += .1) > 1)) {
+                el.style.opacity = val;
+                requestAnimationFrame(fade);
+            }
+        })();
+    };
+    /* /FadeIn */
 };

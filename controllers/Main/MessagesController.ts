@@ -443,6 +443,7 @@ class MessagesController extends Controller {
             }
         }
         messageModel.sender_avatar=chat.avatar;
+        messageModel.chatId=chat.id;
 
         await this.render_message(messageModel);
     }

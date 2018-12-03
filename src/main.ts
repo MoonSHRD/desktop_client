@@ -31,16 +31,46 @@ app.on('ready', async () => {
     let width = 1000;
     let height = 700;
 
-    await createConnection({
-        type: "sqlite",
-        // database: `${__dirname}/../sqlite/data.db`,
-        database: path+'/data.db',
-        entities: [
-            __dirname + '/../models/' + "*.js"
-        ],
-        synchronize: true,
-        logging: false
-    });
+    console.log(__dirname +"/../migrations/*.js");
+    try {
+        let connection = await createConnection({
+            type: "sqlite",
+            // database: `${__dirname}/../sqlite/data.db`,
+            database: path+'/data.db',
+            entities: [
+                __dirname + '/../models/' + "*.js"
+            ],
+            synchronize: true,
+            logging: false,
+            // migrationsRun: true,
+            // migrations: [__dirname +"/../migrations/*.js"],
+            // cli: {
+            //     migrationsDir: __dirname +"/../migrations"
+            // }
+        });
+    } catch (e) {
+        let connection = await createConnection({
+            type: "sqlite",
+            // database: `${__dirname}/../sqlite/data.db`,
+            database: path+'/data.db',
+            entities: [
+                __dirname + '/../models/' + "*.js"
+            ],
+            // synchronize: true,
+            logging: false,
+            // migrationsRun: true,
+            migrations: [__dirname +"/../migrations/*.js"],
+            cli: {
+                migrationsDir: __dirname +"/../migrations"
+            }
+        });
+        await connection.query("PRAGMA foreign_keys=OFF;");
+        await connection.runMigrations();
+        await connection.query("PRAGMA foreign_keys=ON;");
+        // throw e;
+        console.log(e)
+    }
+    console.log("ok");
     let settings = (await SettingsModel.find({where: {id:1}}))[0];
     if (settings) {
         width = settings.width;

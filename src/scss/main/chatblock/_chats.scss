@@ -2,6 +2,7 @@
     height: calc(100% - 200px);
     background: $cf;
     overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
 
     ul {
@@ -155,6 +156,7 @@
         //@include size(100%, 38px);
         //border-radius: 10px;
         //outline:none;
+        padding-right: 2.3rem;
         margin: 0 15px 0 20px;
         //padding: 0 40px 0 10px;
         //border: 1px solid rgba(0, 208, 255, 0.2);
