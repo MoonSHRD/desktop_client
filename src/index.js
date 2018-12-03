@@ -1667,13 +1667,13 @@ window.onload = function () {
         });
     }*/
 
-    $(document).on('click', '[name=change_download]', function (e) {
+    /*$(document).on('click', '[name=change_download]', function (e) {
         dialog.showOpenDialog({
             properties: ['openDirectory','openFile']
         },function (directory) {
             ipcRenderer.send('change_directory', directory + '/');
         });
-    });
+    });*/
 
     /*$(document).on('click', '[data-toggle="scrollDown"]', function (e){
         e.preventDefault();
@@ -1683,6 +1683,26 @@ window.onload = function () {
         let $this = e.target;
         if ( $this.dataset.toggle === 'scrollDown' ) {
             scrollDownAnimate();
+        } else if ( $this.name === 'change_download' ){
+            dialog.showOpenDialog({
+                properties: ['openDirectory','openFile']
+            },function (directory) {
+                ipcRenderer.send('change_directory', directory + '/');
+            });
+        } else if ( $this.classList.contains('sendTokenButton') ) {
+            let sendTo = document.getElementById('sendTokenTo');
+            let data_arr = $(this).closest('tr').find('input').serializeArray();
+            let data = {};
+            data_arr.forEach((el) => {
+                data[el.name] = el.value;
+            });
+            if (sendTo.value.length > 0) {
+                sendTo.classList.remove('error');
+                ipcRenderer.send('transfer_token', data);
+            } else {
+                sendTo.classList.add('error');
+                sendTo.focus();
+            }
         }
     });
 
@@ -1739,7 +1759,7 @@ window.onload = function () {
         ipcRenderer.send('decrypt_db');
     });*/
 
-    $(document).on('click', '.sendTokenButton', function (e) {
+    /*$(document).on('click', '.sendTokenButton', function (e) {
         // let data_arr=$(this).closest('form');
         // console.log(data_arr);
         // return;
@@ -1758,17 +1778,17 @@ window.onload = function () {
             sendTo.classList.add('error');
             sendTo.focus();
         }
-    });
+    });*/
 
     /*
      * WALLET/SETTINGS MENU
      */
     document.addEventListener('click', function (e) {
-        let target = e.target;
-        if (target.dataset.toggle === 'nav') {
-            let nav = target.dataset.nav; // data-nav
-            let name = target.dataset.name; // data-name
-            let parent = target.parentNode; // родитель - li
+        let $this = e.target;
+        if ($this.dataset.toggle === 'nav') {
+            let nav = $this.dataset.nav; // data-nav
+            let name = $this.dataset.name; // data-name
+            let parent = $this.parentNode; // родитель - li
             let parentList = parent.parentNode; // родитель - ul
 
             ipcRenderer.send(`change_${nav}_menu`, name);

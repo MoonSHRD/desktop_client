@@ -27,7 +27,8 @@
     "prebuild:css": "node-sass --include-path scss src/scss/index.scss src/css/index.css --source-map-embed true",
     "build:css": "postcss --use autoprefixer -b \"last 2 versions\" < src/css/index.css | postcss --use cssnano > src/css/index.min.css",
     "compile-css": "npm run prebuild:css | npm run build:css",
-    "postinstall": "electron-builder install-app-deps && yarn compile-css && yarn compile-ts"
+    "compile-js": "uglifyjs -c -o src/index.min.js src/index.js",
+    "postinstall": "electron-builder install-app-deps && yarn compile-css && yarn compile-js && yarn compile-ts"
   },
   "includeSources": true,
   "devDependencies": {
@@ -96,6 +97,8 @@
     "sqlite3": "^4.0.3",
     "text-encoding": "^0.7.0",
     "typeorm": "^0.2.7",
+    "uglify-es": "^3.3.9",
+    "uglify-js": "^3.4.9",
     "waypoints": "^4.0.1",
     "web3": "^1.0.0-beta.36"
   },
