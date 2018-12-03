@@ -1636,21 +1636,23 @@ window.onload = function () {
         // console.log($this);
 
         if ( $this.id === 'messaging_history' || $this.classList.contains('ss-content') ) {
-            let {bottom, height} = scrollBottom('[data-msg-history] .ss-content', '[data-msg-list]');
-            const scrllDnw = document.querySelector('[data-toggle="scrollDown"]');
-            if ( bottom > height / 3 ) {
-                // $('[data-toggle="scrollDown"]').addClass('show');
-                scrllDnw.classList.add('show');
-            } else {
-                // $('[data-toggle="scrollDown"]').removeClass('show');
-                scrllDnw.classList.remove('show');
-            }
+            if ($this.closest('#messaging_history')) {
+                let {bottom, height} = scrollBottom('[data-msg-history] .ss-content', '[data-msg-list]');
+                const scrllDnw = document.querySelector('[data-toggle="scrollDown"]');
+                if (bottom > height / 3) {
+                    // $('[data-toggle="scrollDown"]').addClass('show');
+                    scrllDnw.classList.add('show');
+                } else {
+                    // $('[data-toggle="scrollDown"]').removeClass('show');
+                    scrllDnw.classList.remove('show');
+                }
 
-            /* Скролл даты */
-            // if ( $('.dialogDate').length ) {
-            //     $('.dialogDate').addClass('slicky');
-            // }
-            /* /Скролл даты */
+                /* Скролл даты */
+                // if ( $('.dialogDate').length ) {
+                //     $('.dialogDate').addClass('slicky');
+                // }
+                /* /Скролл даты */
+            }
         }
 
     }, true);

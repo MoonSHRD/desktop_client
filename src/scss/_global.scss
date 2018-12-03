@@ -185,6 +185,7 @@ img{
             left: -2rem;
             border-radius: 50%;
             background-color: $cf;
+            border: 1px solid $brand-gray-400;
             box-shadow: none;
             transition: .15s ease-in-out;
         }
@@ -231,7 +232,12 @@ img{
         @include button-outline-variant($value);
     }
 }
+[class*='btn'] {
 
+    > * {
+        pointer-events: none;
+    }
+}
 .btn{
     @include fz(14);
     font-weight: 700;
