@@ -964,7 +964,7 @@ window.onload = function () {
         // ) {
         //     return;
         // }
-        console.log(obj);
+        // console.log('buddy', obj);
         // const chatList = $('.chats ul');
         const chatList = document.querySelector('.chats__list');
         // const user = chatList.find('#' + obj.id);
@@ -973,7 +973,11 @@ window.onload = function () {
         if (user) {
             user.replaceWith(obj.html);
         } else {
-            // chatList.prepend(obj.html);
+            // $('.chats__list').prepend(obj.html);
+            // let div = document.createElement('div');
+            // div.innerHTML = obj.html;
+            // console.log('buddy', div);
+            // chatList.prepend(div);
             chatList.insertAdjacentHTML('afterbegin', obj.html);
         }
 
@@ -982,9 +986,9 @@ window.onload = function () {
     ipcRenderer.on('reload_chat', (event, obj) => {
         // $('#messaging_block').html(obj);
         document.getElementById('messaging_block').innerHTML = obj;
-        if (document.querySelector('[data-msg]')) {
-            document.querySelector('[data-msg]').focus();
-        }
+        // if (document.querySelector('[data-msg]')) {
+        //     document.querySelector('[data-msg]').focus();
+        // }
     });
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
@@ -1070,6 +1074,10 @@ window.onload = function () {
                 ipcRenderer.send('get_chat_msgs', chat);
                 console.log(chat);
                 $this.classList.add('have_history');
+
+                if (document.querySelector('[data-msg]')) {
+                    document.querySelector('[data-msg]').focus();
+                }
             }
 
             // Перебераем весь список элементов
@@ -1919,6 +1927,40 @@ window.onload = function () {
             }
         }
     });
+
+    document.addEventListener('click', (e) => {
+        const $this = e.target;
+        if ( $this.dataset.toggle === 'search-btn' ){
+            const searchInput = document.querySelector('[data-name="group_search"]');
+            const chatsList = document.querySelector('.chats__list');
+
+            searchInput.focus();
+
+            if ( $this.classList.contains('delete') ){
+                $this.classList.remove('delete');
+                searchInput.value = '';
+                if (!(searchInput.value)) {
+                    console.log(!(searchInput.value));
+                    while (chatsList.firstChild) {
+                        chatsList.removeChild(chatsList.firstChild)
+                    }
+                    ipcRenderer.send('load_chats', 'group_chat');
+                    searchInput.focus();
+                } else {
+                    while (chatsList.firstChild) {
+                        chatsList.removeChild(chatsList.firstChild)
+                    }
+                    searchInput.focus();
+                }
+                // while (chatsList.firstChild) {
+                //     chatsList.removeChild(chatsList.firstChild)
+                // }
+                // ipcRenderer.send('load_chats', 'group_chat');
+                // searchInput.focus();
+            }
+        }
+    });
+
     /* /Поиск каналов и пользователей */
 
     /*$(document).on('mousedown',function(event) {
