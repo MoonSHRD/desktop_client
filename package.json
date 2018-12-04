@@ -1,7 +1,7 @@
 {
   "name": "moonshard",
   "version": "0.3.2",
-  "description": "Messanger desktop client",
+  "description": "Moonshard desktop client",
   "main": "./src/main.js",
   "contributors": [
     {
@@ -15,6 +15,7 @@
     "email": "moonshard@team.com",
     "url": "https://github.com/MoonSHRD"
   },
+  "repository": "https://github.com/MoonSHRD/desktop_client",
   "scripts": {
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
@@ -22,7 +23,7 @@
     "start": "electron .",
     "rm-js-r": "find . -type f -name '*.js' | grep -vE '^./node_modules' | xargs -d'\n' rm",
     "rm-js-map-r": "find . -type f -name '*.js.map' | grep -vE '^./node_modules' | xargs -d'\n' rm",
-    "compile-ts": "find . -type f -name '*.ts' | grep -vE '^./node_modules' | xargs -d'\n' tsc --lib 'es2015','es2016','es2017','dom' --experimentalDecorators true --types 'reflect-metadata' --emitDecoratorMetadata true",
+    "compile-ts": "tsc",
     "dev:css": "node-sass --watch --include-path scss src/scss/index.scss src/css/index.min.css --source-map-embed true compressed",
     "prebuild:css": "node-sass --include-path scss src/scss/index.scss src/css/index.css --source-map-embed true",
     "build:css": "postcss --use autoprefixer -b \"last 2 versions\" < src/css/index.css | postcss --use cssnano > src/css/index.min.css",
@@ -32,26 +33,11 @@
   "includeSources": true,
   "devDependencies": {
     "electron": "3.0.8",
-    "electron-builder": "^20.33.2",
-    "electron-packager": "^12.1.0",
-    "electron-rebuild": "^1.8.2"
+    "electron-builder": "^20.33.2"
   },
-  "bake": {
-    "description": "Scaffold a basic ES6 setup",
-    "scripts": {
-      "start": "echo Starting generation of default template",
-      "prestart": "echo prestart",
-      "poststart": "echo poststart",
-      "install": "npm install --loglevel warn --cache-min Infinity",
-      "preinstall": "echo Installing dependencies ...",
-      "postinstall": "npm ls --depth 0"
-    }
-  },
-  "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
-    "Electron",
+    "electron",
     "messenger",
-    "libp2p",
     "moonshard",
     "decentralized"
   ],
@@ -78,7 +64,7 @@
     "jquery": "^3.3.1",
     "jquery-autogrow-textarea": "^1.2.1",
     "jqueryui": "^1.11.1",
-    "js-x25519": "https://github.com/CryptoEsel/js-x25519",
+    "js-x25519": "git://github.com/CryptoEsel/js-x25519.git",
     "l20n": "^5.0.0",
     "loom-js": "^1.4.3",
     "loom-truffle-provider": "^0.5.0",
@@ -112,12 +98,29 @@
       "target": [
         "AppImage"
       ],
-      "category": "Network"
+      "category": "Network",
+      "icon": "src/img/icon.png"
     },
     "win": {
-      "target": [
-        "nsis"
+      "target": ["nsis-web"],
+      "compression": "maximum",
+      "icon": "src/img/icon.ico",
+      "files": [
+        "**/*",
+        "dev-app-update.yml",
+        "!dist/",
+        "!wwwroot/"
       ]
+    },
+    "nsis": {
+      "installerIcon": "src/img/icon.ico",
+      "createDesktopShortcut": "always",
+      "menuCategory": true,
+      "runAfterFinish": false,
+      "differentialPackage" : false
+    },
+    "appImage": {
+      "systemIntegration": "doNotAsk"
     }
   }
 }

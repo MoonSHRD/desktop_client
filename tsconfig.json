@@ -10,5 +10,15 @@
   },
   "exclude": [
     "node_modules"
+  ],
+  "include": [
+    "controllers/**/*",
+    "migrations/*",
+    "models/*",
+    "grpc/*",
+    "ipfs/*",
+    "src/*",
+    "testing/**/*",
+    "web3/*"
   ]
 }
