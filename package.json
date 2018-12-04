@@ -23,7 +23,7 @@
     "rm-js-r": "find . -type f -name '*.js' | grep -vE '^./node_modules' | xargs -d'\n' rm",
     "rm-js-map-r": "find . -type f -name '*.js.map' | grep -vE '^./node_modules' | xargs -d'\n' rm",
     "compile-ts": "find . -type f -name '*.ts' | grep -vE '^./node_modules' | xargs -d'\n' tsc --lib 'es2015','es2016','es2017','dom' --experimentalDecorators true --types 'reflect-metadata' --emitDecoratorMetadata true",
-    "dev:css": "node-sass --watch --include-path scss src/scss/index.scss src/css/index.min.css --source-map-embed true compressed",
+    "dev:css": "node-sass --watch --include-path scss src/scss/index.scss src/css/index.min.css --source-map-embed true",
     "prebuild:css": "node-sass --include-path scss src/scss/index.scss src/css/index.css --source-map-embed true",
     "build:css": "postcss --use autoprefixer -b \"last 2 versions\" < src/css/index.css | postcss --use cssnano > src/css/index.min.css",
     "compile-css": "npm run prebuild:css | npm run build:css",

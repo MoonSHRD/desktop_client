@@ -313,6 +313,25 @@ button{
     border-radius: 10px;
 }
 
+.card-first{
+    background-color: rgba($cf,.5);
+    border: none;
+    box-shadow: 2px 2px 20px rgba($brand-blue,.1);
+}
+
+.image-logo-first {
+    width: 20rem;
+    max-width: 22rem;
+    svg{
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.text-h2-first {
+    font-weight: 600;
+    font-size: large;
+}
 
 
 
