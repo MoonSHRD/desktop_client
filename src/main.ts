@@ -3,7 +3,7 @@
 
 import {Router} from "./router";
 import * as fs from "fs";
-import {createConnection} from "typeorm";
+import {ConnectionOptions, createConnection} from "typeorm";
 import "reflect-metadata";
 import {AccountModel} from "../models/AccountModel";
 import {SettingsModel} from "../models/SettingsModel";
@@ -17,7 +17,7 @@ const { autoUpdater } = require("electron-updater")
 
 // const Router = require('./router');
 
-let mainWindow
+let mainWindow;
 app.on('ready', async () => {
     let path = app.getPath('userData');
     console.log(`path ${path}`);
@@ -31,37 +31,50 @@ app.on('ready', async () => {
     let width = 1000;
     let height = 700;
 
-    console.log(__dirname +"/../migrations/*.js");
+    // console.log(__dirname +"/../migrations/*.js");
+    // let conn_op:ConnectionOptions= {
+    //     type: "sqlite",
+    //     database: path + '/data.db',
+    //     entities: [
+    //         __dirname + '/../models/' + "*.js"
+    //     ],
+    //     synchronize: true,
+    //     logging: false,
+    //     migrations: [__dirname + "/../migrations/*.js"],
+    //     cli: {
+    //         migrationsDir: __dirname + "/../migrations"
+    //     }
+    // };
+    // let conn_opp=Object(conn_op);
+    // conn_opp.synchronize=false;
+
     try {
-        let connection = await createConnection({
+        await createConnection({
             type: "sqlite",
-            // database: `${__dirname}/../sqlite/data.db`,
-            database: path+'/data.db',
+            database: path + '/data.db',
             entities: [
                 __dirname + '/../models/' + "*.js"
             ],
             synchronize: true,
             logging: false,
-            // migrationsRun: true,
-            // migrations: [__dirname +"/../migrations/*.js"],
-            // cli: {
-            //     migrationsDir: __dirname +"/../migrations"
-            // }
+            migrationsRun:true,
+            migrations: [__dirname + "/../migrations/*.js"],
+            cli: {
+                migrationsDir: __dirname + "/../migrations"
+            }
         });
     } catch (e) {
         let connection = await createConnection({
             type: "sqlite",
-            // database: `${__dirname}/../sqlite/data.db`,
-            database: path+'/data.db',
+            database: path + '/data.db',
             entities: [
                 __dirname + '/../models/' + "*.js"
             ],
             // synchronize: true,
             logging: false,
-            // migrationsRun: true,
-            migrations: [__dirname +"/../migrations/*.js"],
+            migrations: [__dirname + "/../migrations/*.js"],
             cli: {
-                migrationsDir: __dirname +"/../migrations"
+                migrationsDir: __dirname + "/../migrations"
             }
         });
         await connection.query("PRAGMA foreign_keys=OFF;");
