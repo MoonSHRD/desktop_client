@@ -766,10 +766,20 @@ window.onload = function () {
     });*/
 
 
-    $(document).on('click', '[data-toggle="send-msg"]', function () {
+    /*$(document).on('click', '[data-toggle="send-msg"]', function () {
         send_message();
         autoResizeTextarea();
         $('[data-msg="data-msg"]').focus();
+    });*/
+
+    document.addEventListener('click', (e) => {
+        const $this = e.target;
+
+        if ( $this.dataset.toggle === 'send-msg' ){
+            send_message();
+            autoResizeTextarea();
+            document.querySelector('[data-msg="data-msg"]').focus();
+        }
     });
 
     let send_message = () => {
@@ -1046,6 +1056,22 @@ window.onload = function () {
             let parent = $this.parentNode; // родитель
             let sibling = parent.firstChild;
 
+            let chat = {
+                id : $this.getAttribute('id'),
+                type : $this.dataset.type
+            };
+
+            $this.querySelector('[data-name="unread_messages"]').style.display = 'none';
+            $this.querySelector('[data-name="unread_messages"]').innerText = '0';
+
+            // console.log( $this.classList );
+
+            if ( !( $this.classList.contains('active_dialog') ) ) {
+                ipcRenderer.send('get_chat_msgs', chat);
+                console.log(chat);
+                $this.classList.add('have_history');
+            }
+
             // Перебераем весь список элементов
             while (sibling) {
                 // Удаляем все активные классы
@@ -1055,24 +1081,6 @@ window.onload = function () {
                 if (sibling.nodeType === 1 && $this === sibling)
                     sibling.classList.add('active_dialog');
                 sibling = sibling.nextSibling;
-            }
-
-            let chat = {
-                id : $this.getAttribute('id'),
-                type : $this.dataset.type
-            };
-
-            $this.querySelector('[data-name="unread_messages"]').style.display = 'none';
-            $this.querySelector('[data-name="unread_messages"]').innerText = '0';
-
-            if ( !(
-                $this.classList.contains('active_dialog')
-                &&
-                $this.classList.contains('have_history')
-            ) ) {
-                ipcRenderer.send('get_chat_msgs', chat);
-                console.log(chat);
-                $this.classList.add('have_history');
             }
         }
     });
@@ -1428,7 +1436,7 @@ window.onload = function () {
 
         }
         // $('#download_updates').css('width', obj+'%');
-        downUpdates.style.width = `${obj}%`
+        downUpdates.style.width = `${obj}%`;
     });
 
     // $(document).on('click', '[data-name=download_updates]', function (e) {
@@ -1498,16 +1506,27 @@ window.onload = function () {
         $(this).children('ul').toggleClass('d-block');
     });
 
-    $(document).on('click', '.offerPublication', function (e) {
+    /*$(document).on('click', '.offerPublication', function (e) {
         ipcRenderer.send('channel_suggestion', {});
+    });*/
+
+    document.addEventListener('click', (e) => {
+        const $this = e.target;
+        if ( $this.classList.contains('.offerPublication') ){
+            ipcRenderer.send('channel_suggestion', {});
+        } else if ( $this.dataset.type === 'file' && $this.dataset.subtype === 'file' ){
+            if ( !$this.classList.contains('load') )
+                $this.classList.add('load');
+            ipcRenderer.send('download_file', $this.dataset.id);
+        }
     });
 
-    $(document).on('click', '[data-type=file][data-subtype=file]', function (e) {
+    /*$(document).on('click', '[data-type=file][data-subtype=file]', function (e) {
         // todo: возможность отменить закачку файла
         if (!$(this).hasClass('load'))
             $(this).addClass('load');
         ipcRenderer.send('download_file', $(this).attr('data-id'));
-    });
+    });*/
 
     ipcRenderer.on('file_downloaded', (event, obj) => {
         let file=$(`[data-id=${obj.id}]`);
@@ -1872,24 +1891,31 @@ window.onload = function () {
         if ($this.dataset.name === 'group_search') {
             let group = $this.value;
             let chatsList = document.querySelector('.chats__list');
+            let btn = document.querySelector('#search_user_form .btn-add-old');
             if (!group) {
                 // console.log(`!group`);
                 ipcRenderer.send('load_chats', 'group_chat');
+                $this.focus();
             } else {
                 // $('.chats ul').empty();
                 while (chatsList.firstChild) {
                     chatsList.removeChild(chatsList.firstChild)
                 }
+                $this.focus();
             }
 
             if (group.length > 2) {
                 // console.log(`length > 2`);
+                btn.classList.add('delete');
                 ipcRenderer.send('find_groups', group);
+                $this.focus();
             } else if (group.length === 0) {
                 // $('.chats ul').empty();
+                btn.classList.remove('delete');
                 while (chatsList.firstChild) {
                     chatsList.removeChild(chatsList.firstChild)
                 }
+                $this.focus();
             }
         }
     });
