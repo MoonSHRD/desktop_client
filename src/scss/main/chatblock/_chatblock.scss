@@ -120,12 +120,46 @@
 }
 
 .btn-add-old{
-    background: url('#{$img}/chatblock/search.svg') no-repeat;
-    width: 30px;
-    height: 27px;
+    //background: url('#{$img}/chatblock/search.svg') no-repeat;
+    //width: 30px;
+    //height: 27px;
+    @include size(30px);
     position: absolute;
     right: 22px;
     cursor: pointer;
+
+    span{
+        @include position(absolute, 0 0 0 0);
+        transition: .2s ease;
+        display: block;
+
+        svg{
+            @include size(20px);
+            @include position(absolute, 50% null null 50%);
+            transform: translate(-50%, -50%);
+        }
+
+        &.search-icon{
+            opacity: 1;
+            visibility: visible;
+        }
+        &.delete-icon{
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+
+    &.delete{
+
+        span.delete-icon{
+            opacity: .5;
+            visibility: visible;
+        }
+        span.search-icon{
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
 }
 
 

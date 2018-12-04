@@ -766,10 +766,20 @@ window.onload = function () {
     });*/
 
 
-    $(document).on('click', '[data-toggle="send-msg"]', function () {
+    /*$(document).on('click', '[data-toggle="send-msg"]', function () {
         send_message();
         autoResizeTextarea();
         $('[data-msg="data-msg"]').focus();
+    });*/
+
+    document.addEventListener('click', (e) => {
+        const $this = e.target;
+
+        if ( $this.dataset.toggle === 'send-msg' ){
+            send_message();
+            autoResizeTextarea();
+            document.querySelector('[data-msg="data-msg"]').focus();
+        }
     });
 
     let send_message = () => {
@@ -954,7 +964,7 @@ window.onload = function () {
         // ) {
         //     return;
         // }
-        console.log(obj);
+        // console.log('buddy', obj);
         // const chatList = $('.chats ul');
         const chatList = document.querySelector('.chats__list');
         // const user = chatList.find('#' + obj.id);
@@ -963,7 +973,11 @@ window.onload = function () {
         if (user) {
             user.replaceWith(obj.html);
         } else {
-            // chatList.prepend(obj.html);
+            // $('.chats__list').prepend(obj.html);
+            // let div = document.createElement('div');
+            // div.innerHTML = obj.html;
+            // console.log('buddy', div);
+            // chatList.prepend(div);
             chatList.insertAdjacentHTML('afterbegin', obj.html);
         }
 
@@ -972,9 +986,9 @@ window.onload = function () {
     ipcRenderer.on('reload_chat', (event, obj) => {
         // $('#messaging_block').html(obj);
         document.getElementById('messaging_block').innerHTML = obj;
-        if (document.querySelector('[data-msg]')) {
-            document.querySelector('[data-msg]').focus();
-        }
+        // if (document.querySelector('[data-msg]')) {
+        //     document.querySelector('[data-msg]').focus();
+        // }
     });
 
     ipcRenderer.on('get_chat_msgs', (event, obj) => {
@@ -1046,6 +1060,26 @@ window.onload = function () {
             let parent = $this.parentNode; // родитель
             let sibling = parent.firstChild;
 
+            let chat = {
+                id : $this.getAttribute('id'),
+                type : $this.dataset.type
+            };
+
+            $this.querySelector('[data-name="unread_messages"]').style.display = 'none';
+            $this.querySelector('[data-name="unread_messages"]').innerText = '0';
+
+            // console.log( $this.classList );
+
+            if ( !( $this.classList.contains('active_dialog') ) ) {
+                ipcRenderer.send('get_chat_msgs', chat);
+                console.log(chat);
+                $this.classList.add('have_history');
+
+                if (document.querySelector('[data-msg]')) {
+                    document.querySelector('[data-msg]').focus();
+                }
+            }
+
             // Перебераем весь список элементов
             while (sibling) {
                 // Удаляем все активные классы
@@ -1055,24 +1089,6 @@ window.onload = function () {
                 if (sibling.nodeType === 1 && $this === sibling)
                     sibling.classList.add('active_dialog');
                 sibling = sibling.nextSibling;
-            }
-
-            let chat = {
-                id : $this.getAttribute('id'),
-                type : $this.dataset.type
-            };
-
-            $this.querySelector('[data-name="unread_messages"]').style.display = 'none';
-            $this.querySelector('[data-name="unread_messages"]').innerText = '0';
-
-            if ( !(
-                $this.classList.contains('active_dialog')
-                &&
-                $this.classList.contains('have_history')
-            ) ) {
-                ipcRenderer.send('get_chat_msgs', chat);
-                console.log(chat);
-                $this.classList.add('have_history');
             }
         }
     });
@@ -1428,7 +1444,7 @@ window.onload = function () {
 
         }
         // $('#download_updates').css('width', obj+'%');
-        downUpdates.style.width = `${obj}%`
+        downUpdates.style.width = `${obj}%`;
     });
 
     // $(document).on('click', '[data-name=download_updates]', function (e) {
@@ -1498,16 +1514,27 @@ window.onload = function () {
         $(this).children('ul').toggleClass('d-block');
     });
 
-    $(document).on('click', '.offerPublication', function (e) {
+    /*$(document).on('click', '.offerPublication', function (e) {
         ipcRenderer.send('channel_suggestion', {});
+    });*/
+
+    document.addEventListener('click', (e) => {
+        const $this = e.target;
+        if ( $this.classList.contains('.offerPublication') ){
+            ipcRenderer.send('channel_suggestion', {});
+        } else if ( $this.dataset.type === 'file' && $this.dataset.subtype === 'file' ){
+            if ( !$this.classList.contains('load') )
+                $this.classList.add('load');
+            ipcRenderer.send('download_file', $this.dataset.id);
+        }
     });
 
-    $(document).on('click', '[data-type=file][data-subtype=file]', function (e) {
+    /*$(document).on('click', '[data-type=file][data-subtype=file]', function (e) {
         // todo: возможность отменить закачку файла
         if (!$(this).hasClass('load'))
             $(this).addClass('load');
         ipcRenderer.send('download_file', $(this).attr('data-id'));
-    });
+    });*/
 
     ipcRenderer.on('file_downloaded', (event, obj) => {
         let file=$(`[data-id=${obj.id}]`);
@@ -1872,27 +1899,68 @@ window.onload = function () {
         if ($this.dataset.name === 'group_search') {
             let group = $this.value;
             let chatsList = document.querySelector('.chats__list');
+            let btn = document.querySelector('#search_user_form .btn-add-old');
             if (!group) {
                 // console.log(`!group`);
                 ipcRenderer.send('load_chats', 'group_chat');
+                $this.focus();
             } else {
                 // $('.chats ul').empty();
                 while (chatsList.firstChild) {
                     chatsList.removeChild(chatsList.firstChild)
                 }
+                $this.focus();
             }
 
             if (group.length > 2) {
                 // console.log(`length > 2`);
+                btn.classList.add('delete');
                 ipcRenderer.send('find_groups', group);
+                $this.focus();
             } else if (group.length === 0) {
                 // $('.chats ul').empty();
+                btn.classList.remove('delete');
                 while (chatsList.firstChild) {
                     chatsList.removeChild(chatsList.firstChild)
                 }
+                $this.focus();
             }
         }
     });
+
+    document.addEventListener('click', (e) => {
+        const $this = e.target;
+        if ( $this.dataset.toggle === 'search-btn' ){
+            const searchInput = document.querySelector('[data-name="group_search"]');
+            const chatsList = document.querySelector('.chats__list');
+
+            searchInput.focus();
+
+            if ( $this.classList.contains('delete') ){
+                $this.classList.remove('delete');
+                searchInput.value = '';
+                if (!(searchInput.value)) {
+                    console.log(!(searchInput.value));
+                    while (chatsList.firstChild) {
+                        chatsList.removeChild(chatsList.firstChild)
+                    }
+                    ipcRenderer.send('load_chats', 'group_chat');
+                    searchInput.focus();
+                } else {
+                    while (chatsList.firstChild) {
+                        chatsList.removeChild(chatsList.firstChild)
+                    }
+                    searchInput.focus();
+                }
+                // while (chatsList.firstChild) {
+                //     chatsList.removeChild(chatsList.firstChild)
+                // }
+                // ipcRenderer.send('load_chats', 'group_chat');
+                // searchInput.focus();
+            }
+        }
+    });
+
     /* /Поиск каналов и пользователей */
 
     /*$(document).on('mousedown',function(event) {
