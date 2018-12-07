@@ -1310,6 +1310,7 @@ window.onload = function () {
             const active_dialog = document.querySelector('.active_dialog');
             const id = active_dialog.id;
             const type = active_dialog.dataset.type;
+            console.log(id, type);
             // let data = $this.attr('href');
             ipcRenderer.send('show_popup', {id, type});
         }
@@ -1583,19 +1584,19 @@ window.onload = function () {
     });
 
     $(document).on('mousedown','#resize01',function(e) {
-        // console.log('resize_clicked');
+        console.log('resize_clicked');
         unlock = true;
         $(document).on('mouseup', function(e) {
             ipcRenderer.send('change_chats_size', p.width());
         });
     });
 
-    $(document).on('click','[data-id=add_new_user]',function(e) {
+    /*$(document).on('click','[data-id=add_new_user]',function(e) {
         let input = $('[data-name=user_search]');
         let data={id:input.val(),domain:'localhost'};
         input.val('');
         ipcRenderer.send('send_subscribe', data);
-    });
+    });*/
 
     $(document).mouseup(function(e) {
         unlock = false;
@@ -1604,15 +1605,15 @@ window.onload = function () {
 
 
     function countLines(strtocount, cols) {
-        var hard_lines = 1;
-        var last = 0;
+        let hard_lines = 1;
+        let last = 0;
         while ( true ) {
-            last = strtocount.indexOf('\n', last+1);
+            last = strtocouletnt.indexOf('\n', last+1);
             hard_lines ++;
             if ( last === -1 ) break;
         }
-        var soft_lines = Math.ceil(strtocount.length / (cols-1));
-        var hard = eval('hard_lines ' + unescape('%3e') + 'soft_lines;');
+        let soft_lines = Math.ceil(strtocount.length / (cols-1));
+        let hard = eval('hard_lines ' + unescape('%3e') + 'soft_lines;');
         if ( hard ) soft_lines = hard_lines;
         return soft_lines;
     }
