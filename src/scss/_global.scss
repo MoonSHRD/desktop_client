@@ -319,6 +319,10 @@ button{
     box-shadow: 2px 2px 20px rgba($brand-blue,.1);
 }
 
+.flex-inherit {
+    flex-direction: inherit;
+}
+
 .image-logo-first {
     width: 20rem;
     max-width: 22rem;
