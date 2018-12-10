@@ -42,7 +42,7 @@ img{
     &-control{
         padding-left: 1.125rem;
         padding-right: 1.125rem;
-        border-radius: 2em;
+        border-radius: (5rem / $fz-num);
         background-color: $cf;
         border-color: $brand-gray-400;
         color: $primary-text;
@@ -66,6 +66,12 @@ img{
     }
 }
 
+textarea.form-control{
+    height: auto;
+    min-height: 10rem;
+    resize: none;
+}
+
 .control-switcher{
     display: flex;
     align-items: center;
@@ -77,6 +83,12 @@ img{
 
 .custom-control {
 
+    &-inline{
+        + .custom-control-inline{
+            margin-left: 1rem;
+        }
+    }
+
     &-vertical {
         flex-direction: column;
         margin-left: 1rem;
@@ -84,10 +96,30 @@ img{
         min-width: 80px;
     }
 
+    &-horizontal{
+        margin: .5rem .25rem;
+        flex-direction: row;
+
+        .custom-control-label{
+
+            &:before{
+                top: 0;
+                left: -2rem;
+                transform: translate(0, 0);
+            }
+
+            &:after {
+                top: 0;
+                left: -1.6rem;
+                transform: translate(0, 0);
+            }
+        }
+    }
+
     &-input {
         display: none;
 
-        .custom-radio & {
+        .custom-radio-vertical & {
 
             ~ label {
 
@@ -101,6 +133,24 @@ img{
                     top: -1.6rem;
                     left: 50%;
                     transform: translate(-50%, 0);
+                }
+            }
+        }
+
+        .custom-radio-horizontal & {
+
+            ~ label {
+
+                &:before{
+                    top: 50%;
+                    left: 0;
+                    transform: translate(0, -50%);
+                }
+
+                &:after {
+                    top: 50%;
+                    left: 0;
+                    transform: translate(0, -50%);
                 }
             }
         }
@@ -147,9 +197,32 @@ img{
 
 
     &-label {
+        font-weight: 400;
+        > span {
+            width: auto;
+            font-weight: 400;
+            float: none;
+        }
 
         .custom-control-vertical & {
             margin-top: 3rem;
+        }
+
+        .custom-control-horizontal &{
+            position: relative;
+            padding-left: 2rem;
+
+            &:before{
+                top: 50%;
+                left: 0;
+                transform: translate(0, -50%);
+            }
+
+            &:after {
+                top: 50%;
+                left: .42rem;
+                transform: translate(0, -50%);
+            }
         }
 
         &_icon {
@@ -241,8 +314,9 @@ img{
 .btn{
     @include fz(14);
     font-weight: 700;
-    border-radius: .75rem;
+    border-radius: (5rem / $fz-num); //5px
     padding: .525rem 1.5rem;
+    box-shadow: none;
 
     > * {
         pointer-events: none;
@@ -262,7 +336,8 @@ img{
     }
 
     &-link{
-        color: $brand-blue;
+        //color: $brand-blue;
+        color: $primary-text;
     }
 }
 

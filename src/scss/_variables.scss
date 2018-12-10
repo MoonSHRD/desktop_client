@@ -12,6 +12,8 @@ $cf: #fff;
 $c0: #000;
 
 $brand-primary : #272B46 !default;
+$brand-primary-300: lighten($brand-primary,15%);
+$brand-primary-100: lighten($brand-primary,35%);
 $brand-blue-100 : #BFEAF9 !default;
 $brand-blue : #2BC2F9 !default;
 $brand-gray-100 : #F3F3F3 !default;
