@@ -1830,7 +1830,7 @@ window.onload = function () {
                 if (sibling.nodeType === 1)
                     sibling.classList.remove('active');
                 // Добавляем активный класс для назатого пункта
-                if (sibling.nodeType === 1 && target.parentNode === sibling )
+                if (sibling.nodeType === 1 && parent === sibling )
                     sibling.classList.add('active');
                 sibling = sibling.nextSibling;
             }
