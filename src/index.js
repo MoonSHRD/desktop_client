@@ -1145,12 +1145,22 @@ window.onload = function () {
     //     }
     // });
 
+    $(document).on('shown.bs.modal', '.modal', function () {
+        modalHeight();
+    });
+
+    $(document).on('shown.bs.collapse hidden.bs.collapse', '#token_row', function () {
+        modalHeight();
+        console.log('show/hide');
+    });
+
     $(document).on('change', '[name="openPrivate"]', function () {
         if ($(this).attr('id') === 'private') {
             $('#token_row').collapse('show');
         } else {
             $('#token_row').collapse('hide');
         }
+        // modalHeight();
     });
 
     /*
@@ -2071,6 +2081,7 @@ window.onload = function () {
 
     /* Инициализация кастомного скролла */
     let scrollbarInit = (target = '.ss-container, .custom-scrollbar') => {
+        console.log('scroll');
         let el = document.querySelectorAll(target);
         for (let i = 0; i<el.length; i++) {
             el[i].setAttribute('ss-container', true);
@@ -2079,6 +2090,22 @@ window.onload = function () {
         }
     };
     /* /Инициализация кастомного скролла */
+
+    /* Modal height */
+    let modalHeight = () => {
+        const modal = document.querySelector('.modal-content');
+        let height = modal.offsetHeight;
+        let windowHeight = document.body.clientHeight;
+        // modal.style.maxHeight = '70vh';
+        if ( height > windowHeight ) {
+            modal.style.height = ( windowHeight * .7 ) + 'px';
+            console.log(height, windowHeight);
+        } else {
+            modal.style.height = 'auto';
+        }
+        // console.log(height, windowHeight);
+    };
+    /* /Modal height */
 
     /* FadeOut */
     let fadeOut = (el) => {

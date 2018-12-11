@@ -1,18 +1,18 @@
 .modal-header.modal-header_img
-    .row.align-items-end
+    .row.align-items-center
         .col-3
             .modal-header__img
                 include ../../../img/icons/camera-solid.svg
         .col-9
             .modal-header__name
                 input.form-control(name="name" type="text" placeholder="Enter channel name (min 3, max 30 characters)" data-require="true" maxlength="30" data-toggle="tooltip2" title="min 3, max 30 characters")
-            .modal-header__category.text-center.bild-none
-                .custom-control-vertical.custom-control-inline.custom-radio.d-none
-                    input.custom-control-input#group(type="radio" name="openPrivate" value="off")
-                    label.custom-control-label.custom-control-label_icon(for="group")
-                        div.icon
-                            include ../../../img/modal_popup/group.svg
-                        span Group Chat
+            .modal-header__category.bild-none
+                //.custom-control-vertical.custom-control-inline.custom-radio.d-none
+                //    input.custom-control-input#group(type="radio" name="openPrivate" value="off")
+                //    label.custom-control-label.custom-control-label_icon(for="group")
+                //        div.icon
+                //            include ../../../img/modal_popup/group.svg
+                //        span Group Chat
                 .custom-control-horizontal.custom-control-inline.custom-radio
                     input.custom-control-input#free(type="radio" name="openPrivate" value="off" checked)
                     label.custom-control-label(for="free")
