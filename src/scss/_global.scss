@@ -388,13 +388,32 @@ button{
     border: none;
     box-shadow: 2px 2px 20px rgba($brand-blue,.1);
     border-radius: 10px;
+    &-header {
+        padding: .75rem 1.25rem;
+        margin-bottom: 0;
+        background-color: $brand-primary-200;
+        color: $cf;
+
+        &:first {
+            background-image: url('../img/icons/future-plans.svg');
+        }
+    }
+    &-social {
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+    }
+    &-first{
+        background-color: rgba($cf,.5);
+        border: none;
+        box-shadow: 2px 2px 20px rgba($brand-blue,.1);
+    }
 }
 
-.card-first{
-    background-color: rgba($cf,.5);
-    border: none;
-    box-shadow: 2px 2px 20px rgba($brand-blue,.1);
+.flpr10 {
+    float: left;
+    padding-right: 10px;
 }
+
 
 .flex-inherit {
     flex-direction: inherit;

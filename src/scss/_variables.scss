@@ -13,6 +13,7 @@ $c0: #000;
 
 $brand-primary : #272B46 !default;
 $brand-primary-300: lighten($brand-primary,15%);
+$brand-primary-200: lighten($brand-primary,20%);
 $brand-primary-100: lighten($brand-primary,35%);
 $brand-blue-100 : #BFEAF9 !default;
 $brand-blue : #2BC2F9 !default;
@@ -32,6 +33,7 @@ $brand-red : #C70039 !default;
 //$warning : $brand-orange!default;
 
 $primary-text : $brand-primary;
+
 
 
 $brand-colors: () !default;
