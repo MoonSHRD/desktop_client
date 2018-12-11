@@ -2,6 +2,11 @@
     //@extend .custom-scrollbar;
 
     &-content{
+        background-color: $cf;
+        //height: auto;
+        overflow: hidden;
+        border-radius: 5px;
+
         .ss-wrapper{
             position: relative;
 
@@ -46,6 +51,14 @@
         position: relative;
         border-bottom: 0;
         display: block;
+
+        .custom-control-horizontal{
+            margin: 1rem 0 0;
+
+            + .custom-control-horizontal{
+                margin-left: 1rem;
+            }
+        }
 
         .group {
             &-info {
@@ -295,3 +308,4 @@
         height: 1.25rem;
     }
 }
+

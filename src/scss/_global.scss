@@ -46,7 +46,8 @@ img{
         background-color: $cf;
         border-color: $brand-gray-400;
         color: $primary-text;
-        box-shadow: 2px 2px 20px rgba($brand-blue, 0.1);
+        //box-shadow: 2px 2px 20px rgba($brand-blue, 0.1);
+        box-shadow: none;
         outline: none;
         &::placeholder{
             color: rgba($primary-text, 0.5);
@@ -55,7 +56,8 @@ img{
         &:focus{
             border-color: $brand-gray-400;
             outline: none;
-            box-shadow: 4px 4px 20px rgba($brand-blue, 0.2);
+            //box-shadow: 4px 4px 20px rgba($brand-blue, 0.2);
+            box-shadow: none;
         }
 
         &.error,
