@@ -9,34 +9,40 @@
                         .text-logo-first.col-xs-8.col-sm-8.col-lg-8
                             .text-h2-first Welcom o MoonShad!
                             .text-logo-first-cont Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+        .row.align-items-center
             .col-xs-6.col-sm-4.col-lg-2
-                .card-social.text-center
-                    img(src="img/icons/gh.svg")
+                a.card-social.text-center.d-block(href="https://github.com/MoonSHRD/desktop_client")
+                    //- img(src="img/icons/gh.svg")
+                    include ../../../img/icons/github-brands.svg
                     div gitHub
             .col-xs-6.col-sm-4.col-lg-2
-                .card-social.text-center
-                    img(src="img/icons/fb.svg")
+                a.card-social.text-center.d-block(href="https://facebook.com/")
+                    //- img(src="img/icons/fb.svg")
+                    include ../../../img/icons/facebook-brands.svg
                     div facebook
             .col-xs-6.col-sm-4.col-lg-2
-                .card-social.text-center
-                    img(src="img/icons/vk.svg")
+                a.card-social.text-center.d-block(href="https://vk.com")
+                    //- img(src="img/icons/vk.svg")
+                    include ../../../img/icons/vk-brands.svg
                     div vkontakte
             .col-xs-6.col-sm-4.col-lg-2
-                .card-social.text-center
-                    img(src="img/icons/gh.svg")
+                a.card-social.text-center.d-block
+                    include ../../../img/icons/github-brands.svg
                     div Link 1
             .col-xs-6.col-sm-4.col-lg-2
-                .card-social.text-center
-                    img(src="img/icons/gh.svg")
+                a.card-social.text-center.d-block
+                    include ../../../img/icons/github-brands.svg
                     div Link 2
             .col-xs-6.col-sm-4.col-lg-2
-                .card-social.text-center
-                    img(src="img/icons/gh.svg")
+                a.card-social.text-center.d-block
+                    include ../../../img/icons/github-brands.svg
                     div Link 3
-            .col-xs-12.col-sm-12.col-lg-12.col-xl-6.p15
+        .row
+            .col-xs-12.col-sm-12.col-lg-12.p15
                 .card.h-100
                     .card-header
-                        img.flpr10(src="img/icons/new-version-list.svg")
+                        //- img.flpr10(src="img/icons/new-version-list.svg")
+                        include ../../../img/icons/new-version-list.svg
                         div What's new in this version? (rev. 0.0.5 beta build 131218)
                     .card-body
                         ul
@@ -55,10 +61,11 @@
                             li Centrifuge connection
                     .card-footer
                         a.btn.btn-block.btn-primary(href="https://github.com/MoonSHRD") Read more
-            .col-xs-12.col-sm-6.col-lg-6.col-xl-3.p15
+            .col-xs-12.col-sm-6.col-lg-6.p15
                 .card.h-100
                     .card-header
-                        img.flpr10(src="img/icons/future-plans.svg")
+                        //- img.flpr10(src="img/icons/future-plans.svg")
+                        include ../../../img/icons/future-plans.svg
                         div Future plans
                     .card-body
                         ul
@@ -67,10 +74,11 @@
                             li Fixed bug with path errors in dependencies
                             li Centrifuge connection
                             li and more...
-            .col-xs-12.col-sm-6.col-lg-6.col-xl-3.p15
+            .col-xs-12.col-sm-6.col-lg-6.p15
                 .card.h-100
                     .card-header
-                        img.flpr10(src="img/icons/future-plans.svg")
+                        //- img.flpr10(src="img/icons/future-plans.svg")
+                        include ../../../img/icons/future-plans.svg
                         div Last versions
                     .card-body
                         ul

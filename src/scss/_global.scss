@@ -394,6 +394,11 @@ button{
         background-color: $brand-primary-200;
         color: $cf;
 
+        svg{
+            float: left;
+            padding-right: .75rem;
+        }
+
         &:first {
             background-image: url('../img/icons/future-plans.svg');
         }
@@ -401,6 +406,15 @@ button{
     &-social {
         padding-top: 1.25rem;
         padding-bottom: 1.25rem;
+        color: $primary-text;
+        svg{
+            height: 2rem;
+        }
+
+        &:hover{
+            text-decoration: none;
+            color: $brand-primary-300
+        }
     }
     &-first{
         background-color: rgba($cf,.5);
@@ -409,10 +423,10 @@ button{
     }
 }
 
-.flpr10 {
-    float: left;
-    padding-right: 10px;
-}
+//.flpr10 {
+//    float: left;
+//    padding-right: 10px;
+//}
 
 
 .flex-inherit {
