@@ -8,7 +8,6 @@ require('waypoints/lib/shortcuts/sticky.min');
 require('bootstrap');
 require('bootstrap-notify');
 require('slick-carousel');
-const Choices = require('choices.js/public/assets/scripts/choices.min');
 const SimpleScrollbar = require('simple-scrollbar');
 const shell = require('electron').shell; //open links externally by default
 
@@ -2092,16 +2091,6 @@ window.onload = function () {
     //         }
     //     }
     // });
-
-    let selectCustom = (target = 'select') => {
-        if (document.querySelector(target)) {
-            const choices = new Choices(target,{
-                removeItemButton: true,
-                placeholder: true,
-                placeholderValue: 'Pick an Strokes record',
-            });
-        }
-    };
 
     /* Инициализация кастомного скролла */
     let scrollbarInit = (target = '.ss-container, .custom-scrollbar') => {
