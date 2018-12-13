@@ -88,6 +88,7 @@ class ChatsController extends Controller {
         let settings = await this.getSettings();
         let chats = await ChatModel.get_chats_with_last_msgs(self_info);
 
+        console.log(chats);
 
         let menu_chat: string;
         if (type === this.chat_types.user) {
@@ -106,11 +107,10 @@ class ChatsController extends Controller {
             }
             // if (chats[num].active)
             //     await this.controller_register.run_controller('MessagesController', 'get_chat_messages', {id:chats[num].id,type:this.chat_types.user});
-        }
-
-        /* Первая загрузка мессенджера */
-        if ( first ){
-            this.send_data('firstLoad',this.render('main/start/start.pug'));
+            /* Первая загрузка мессенджера */
+            if ( first ){
+                this.send_data('firstLoad',this.render('main/start/start.pug'));
+            }
         }
     }
 

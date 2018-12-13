@@ -9,10 +9,18 @@ div.myTokens.transfer
         tbody
             tr.trasfer_in.t02
                 th(scope='row')
-                    input.form-control.form-control#sendTokenTo(placeholder='Enter the name or address' name='address' list="browsers" )
+                    input.form-control.form-control#sendTokenTo(
+                        placeholder='Enter the name or address'
+                        name='address'
+                        list="browsers"
+                        onmouseover="focus();old = value;"
+                        onmousedown = "value = '';"
+                        onmouseup="value = old;")
                     datalist#browsers
-                        //input !{chats?chats:""}
-
+                        option(value="Enter the name or address" selected disabled)
+                //        //input !{chats?chats:""}
+                //td
+                //    select.form-control#sendTokenTo(name='address')
                 td
                     input.form-control(placeholder='How much?' name='amount')
                 td

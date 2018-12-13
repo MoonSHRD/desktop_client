@@ -8,9 +8,11 @@ require('waypoints/lib/shortcuts/sticky.min');
 require('bootstrap');
 require('bootstrap-notify');
 require('slick-carousel');
+const Choices = require('choices.js/public/assets/scripts/choices.min');
 const SimpleScrollbar = require('simple-scrollbar');
 const shell = require('electron').shell; //open links externally by default
 
+let old;
 let p = null;
 let d = null;
 let r = null;
@@ -479,6 +481,16 @@ window.onload = function () {
                 console.log($this.classList.contains('active_menu'), type);
                 ipcRenderer.send('change_menu_state', type);
             }
+
+            /*if ( $this.classList.contains('menu__item_logo')){
+                ipcRenderer.send('change_menu_state', 'menu_chats');
+                /!* Загразка блока с информацией *!/
+                ipcRenderer.on('firstLoad', (event, obj) => {
+                    document.querySelector('.messaging_block').innerHTML = obj;
+                    scrollbarInit();
+                });
+                /!* /Загразка блока с информацией *!/
+            }*/
 
             if (
                 (type !== 'menu_create_chat')
@@ -1560,9 +1572,11 @@ window.onload = function () {
     });
 
     ipcRenderer.on('get_contacts', (event, obj) => {
-        // console.log('1234567')
-        $('#browsers').html(obj);
-
+        console.log(obj);
+        // let selectTarget = document.getElementById('sendTokenTo');
+        $('#browsers').append(obj);
+        // selectTarget.innerHTML = obj;
+        // selectCustom('#sendTokenTo');
     });
 
     // var p = $(".dialogs");
@@ -2078,6 +2092,16 @@ window.onload = function () {
     //         }
     //     }
     // });
+
+    let selectCustom = (target = 'select') => {
+        if (document.querySelector(target)) {
+            const choices = new Choices(target,{
+                removeItemButton: true,
+                placeholder: true,
+                placeholderValue: 'Pick an Strokes record',
+            });
+        }
+    };
 
     /* Инициализация кастомного скролла */
     let scrollbarInit = (target = '.ss-container, .custom-scrollbar') => {

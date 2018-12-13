@@ -65,6 +65,13 @@ img{
             border-color: $brand-red;
             //box-shadow: 4px 4px 20px rgba($brand-red, 0.2);
         }
+
+        &[list]{
+            &::-webkit-calendar-picker-indicator {
+                display: none;
+                opacity: 0;
+            }
+        }
     }
 }
 

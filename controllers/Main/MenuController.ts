@@ -161,13 +161,14 @@ To receive 100 Coin from our bot - send "claim".`;
         this.send_data('get_my_vcard', this.render('main/modal_popup/create_chat.pug'));
     }
 
-    private async load_menu_initial(first: boolean = false) {
+    private async load_menu_initial(first: boolean = true) {
         console.log('load_menu_default');
         // await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user);
         // await this.controller_register.run_controller("AccountController", "set_sizes");
         let self_info = await this.get_self_info();
         // self_info.eth_balance=await this.web3.GetMyBalance();
         // console.log(self_info);
+        console.log(self_info);
         await this.controller_register.run_controller('ChatsController', 'load_chats', this.chat_types.user, first);
         // if (first) {
         //     await this.controller_register.run_controller('MessagesController', 'get_chat_messages', {id:ChatModel.get_user_chat_id(self_info.id,bot_acc.addr),type:this.chat_types.user});
