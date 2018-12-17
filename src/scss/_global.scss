@@ -37,6 +37,13 @@ img{
     }
 }
 
+a[href]{
+
+    *{
+        pointer-events: none;
+    }
+}
+
 .form{
 
     &-control{
