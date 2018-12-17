@@ -1749,18 +1749,33 @@ window.onload = function () {
                 ipcRenderer.send('change_directory', directory + '/');
             });
         } else if ( $this.classList.contains('sendTokenButton') ) {
+            let error = false
             let sendTo = document.getElementById('sendTokenTo');
-            let data_arr = $(this).closest('tr').find('input').serializeArray();
+            let thisForm = $this.closest('form');
+            console.log(thisForm);
+            let data_arr = serializeArray(thisForm);
             let data = {};
-            data_arr.forEach((el) => {
-                data[el.name] = el.value;
+
+            data_arr.forEach((elem) => {
+                console.log(elem.name);
+                const $element = thisForm.querySelector(`[name=${elem.name}]`);
+                if (!elem.value) {
+                    $element.classList.add('error');
+                    error = true;
+                } else {
+                    $element.classList.remove('error');
+                    data[elem.name] = elem.value;
+                    error = false;
+                }
             });
-            if (sendTo.value.length > 0) {
-                sendTo.classList.remove('error');
+
+            console.log(data, error);
+            if (error === false) {
+                // sendTo.classList.remove('error');
                 ipcRenderer.send('transfer_token', data);
-            } else {
-                sendTo.classList.add('error');
-                sendTo.focus();
+            // } else {
+            //     sendTo.classList.add('error');
+            //     sendTo.focus();
             }
         }
     });
