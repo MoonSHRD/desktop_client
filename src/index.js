@@ -55,7 +55,7 @@ let validate_firstname = (val) => {
     return (val);
 };
 
-let validate_mnemonic = (mnem) => {
+function validate_mnemonic(mnem){
     if (!mnem) return false;
     let mnemTrim = mnem.trim();
     console.log(`validate_mnemonic : ${mnem}`);
@@ -66,15 +66,15 @@ let validate_mnemonic = (mnem) => {
     let err = words_count !== 12;
     console.log(err);
     return (words_count === 12 && !err);
-};
+}
 
-let validate_confirm_mnemonic = (val) => {
+function validate_confirm_mnemonic(val){
     if (val.trim() === mnemonic_text) {
         console.log(val);
         console.log(mnemonic_text);
         return (val);
     }
-};
+}
 
 window.onload = function () {
 
@@ -89,6 +89,7 @@ window.onload = function () {
     /* AUTH.js */
     $(document).on('click', '.next', function(){
         if ( check_fields(this.closest('fieldset')) ) return;
+        console.log(this.closest('fieldset'));
 
         if(animating) return false;
         animating = true;
@@ -204,14 +205,19 @@ window.onload = function () {
         // let els = $this.serializeArray();
         let els = serializeArray($this);
         if (els.length===0) return err;
+        console.log(els);
 
         els.forEach(function (elem) {
-            // console.log(window['validate_'+elem.name]);
+            console.log(window['validate_'+elem.name]);
             if (window['validate_'+elem.name]!==undefined){
                 const $element = $this.querySelector(`[name=${elem.name}]`);
                 // console.log($element)
                 if (!window['validate_'+elem.name](elem.value)){
                     $element.classList.add('invalid');
+                    $element.focus();
+                    // let txtErr = $element.dataset.error;
+                    // $element.setAttribute('data-toggle', 'tooltip');
+                    // $element.setAttribute('title', txtErr);
                     err = true;
                 } else {
                     $element.classList.remove('invalid');

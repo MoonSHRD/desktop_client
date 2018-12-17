@@ -18,7 +18,13 @@
                     fieldset.fs(data-step="1")
                         h2.fs__title.h2 Step 1
                         h3.fs__subtitle.mb-4 Enter 12 words of backup phrase to restore your account or generate new one with a button below.
-                        textarea.invalid.fs__textarea(rows='4', name='mnemonic', placeholder='Enter any 12 words in a space, or click the "Generate" button' id='input_mnemonic' required=true)
+                        textarea.form-control.invalid.fs__textarea(
+                            rows='4',
+                            name='mnemonic',
+                            placeholder='Enter any 12 words in a space, or click the "Generate" button'
+                            id='input_mnemonic'
+                            required=true
+                            data-error="Enter any 12 words in a space, or click the \"Generate\" button")
                         button.action-button.btn.btn-primary.btn-block.btn-lg.mt-4.mb-5(type='button' id='generate_mnemonic') Generate
                         .fs__warning
                             span !Do not forget to save the phrase on paper to avoid loss!
@@ -28,7 +34,7 @@
                     fieldset.fs(data-step="2")
                         h2.fs__title.h2 Step 2
                         h3.fs__subtitle.mb-4 Confirm your 12 words.
-                        textarea.invalid.fs__textarea(rows='4', name='confirm_mnemonic', placeholder='Enter any 12 words in a space, or click the "Generate" button' id='confirm_input_mnemonic' required=true )
+                        textarea.form-control.invalid.fs__textarea(rows='4', name='confirm_mnemonic', placeholder='Enter any 12 words in a space, or click the "Generate" button' id='confirm_input_mnemonic' required=true )
                         div.words.fs__words
 
                         //h2.next-step-title Step 3
@@ -36,9 +42,9 @@
                     fieldset.fs(data-step="3")
                         h2.fs__title.h2 Step 3
                         h3.fs__subtitle.mb-4 How we can call you?
-                        input.invalid.fs__textarea(name='firstname', placeholder='Firstname', type='text' required=true)
-                        input.fs__textarea(name='lastname', placeholder='Lastname', type='text' )
-                        textarea.fs__textarea(rows='5', name='bio', placeholder='Enter bio')
+                        input.invalid.fs__textarea.form-control(name='firstname', placeholder='Firstname', type='text' required=true)
+                        input.fs__textarea.form-control(name='lastname', placeholder='Lastname', type='text' )
+                        textarea.form-control.fs__textarea(rows='5', name='bio', placeholder='Enter bio')
                         //h2.next-step-title Step 4
                         button.next.fs__next-btn.action-button.btn.btn-dark.btn-lg.btn-block(type='button', name='next') Step 4
                     fieldset.fs(data-step="4")

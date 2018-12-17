@@ -72,11 +72,11 @@
                 &__textarea{
                     width: 100%;
                     resize: none;
-                    border: 1px solid $brand-gray-400;
-                    border-radius: .3em;
+                    //border: 1px solid $brand-gray-400;
+                    //border-radius: .3em;
                     color: $primary-text;
                     @include fz(18);
-                    padding: .4em .6em;
+                    //padding: .4em .6em;
                     margin-bottom: 1.5rem;
                     &::placeholder{
                         color: lighten($c0,41%);
