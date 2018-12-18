@@ -343,48 +343,6 @@ window.onload = function () {
             e.target.blur();
         }
     });
-
-    /*!
-     * Serialize all form data into an array
-     * (c) 2018 Chris Ferdinandi, MIT License, https://gomakethings.com
-     * @param  {Node}   form The form to serialize
-     * @return {String}      The serialized form data
-     */
-    let serializeArray = (form) => {
-
-        // Setup our serialized data
-        let serialized = [];
-
-        // Loop through each field in the form
-        for (let i = 0; i < form.elements.length; i++) {
-
-            let field = form.elements[i];
-
-            // Don't serialize fields without a name, submits, buttons, file and reset inputs, and disabled fields
-            if (!field.name || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') continue;
-
-            // If a multi-select, get all selections
-            if (field.type === 'select-multiple') {
-                for (let n = 0; n < field.options.length; n++) {
-                    if (!field.options[n].selected) continue;
-                    serialized.push({
-                        name: field.name.trim(),
-                        value: field.options[n].value.trim()
-                    });
-                }
-            }
-
-            // Convert field data to a query string
-            else if ((field.type !== 'checkbox' && field.type !== 'radio') || field.checked) {
-                serialized.push({
-                    name: field.name.trim(),
-                    value: field.value.trim()
-                });
-            }
-        }
-
-        return serialized;
-    };
     /* /AUTH.js*/
 
     document.addEventListener('click', (e) => {
@@ -1200,50 +1158,11 @@ window.onload = function () {
     /*
      * Форма создная группы/канала
      */
-
-    /*function validationInputs(target = '[data-require]'){
-        const $this = $(target);
-        const minChars = $this.attr('minlength');
-        const maxChars = $this.attr('maxlength');
-        const typeChars = $this.data('require-chars');
-        let value = $this.val();
-        let rgx;
-
-        console.log($this);
-
-        if (value.length < minChars){
-            $this.addClass('error').removeClass('correct');
-        } else {
-            $this.removeClass('error').addClass('correct');
-        }
-
-        if (typeChars === 'integer') {
-            rgx = /[0-9]|\./;
-            if (!rgx.test(value)) {
-                // e.preventDefault();
-                $this.addClass('error').removeClass('correct');
-                // alert("введите латинские символы");
-                return false;
-            } else {
-                $this.removeClass('error').addClass('correct');
-            }
-        } else if (typeChars === 'num') {
-            rgx = /^[0-9]*\.?[0-9]*$/;
-            if (!rgx.test(value)) {
-                // e.preventDefault();
-                $this.addClass('error').removeClass('correct');
-                // alert("введите латинские символы");
-                return false;
-            } else {
-                $this.removeClass('error').addClass('correct');
-            }
-        }
-    };*/
-
-    let checkFields = (fieldset) => {
+    let checkFields = (id) => {
+        console.log(id);
         let err = false;
-        const $this=$(fieldset);
-        let els = $this.serializeArray();
+        const $this = document.getElementById(id);
+        let els = serializeArray($this);
         console.log(els);
         // if (els.length===0) return err;
         let ret={
@@ -1252,23 +1171,25 @@ window.onload = function () {
         };
 
         els.forEach(function (elem) {
-            const $element = $this.find(`[name=${elem.name}]`);
+            const $element = $this.querySelector(`[name=${elem.name}]`);
             if (window['validate_'+elem.name]!==undefined){
                 if (!window['validate_'+elem.name](elem.value)){
-                    $element.addClass('invalid');
+                    $element.classList.add('invalid');
+                    $element.focus();
                     ret.err = true;
                 } else {
-                    $element.removeClass('invalid');
+                    $element.classList.remove('invalid');
                     ret.data[elem.name]=elem.value;
                     ret.err = false;
                 }
             } else {
                 // data[elem.name] = elem.value;
                 if (!elem.value) {
-                    $element.addClass('invalid');
+                    $element.classList.add('invalid');
+                    $element.focus();
                     ret.err = true;
                 } else {
-                    $element.removeClass('invalid');
+                    $element.classList.remove('invalid');
                     ret.data[elem.name]=elem.value;
                     ret.err = false;
                 }
@@ -1278,7 +1199,7 @@ window.onload = function () {
         return ret;
     };
 
-    $(document).on('submit', '.modal-content', function (e) {
+    /*$(document).on('submit', '.modal-content', function (e) {
         let button = $(this).find('.btn-primary');
         button.attr('disabled', 'disabled');
         e.preventDefault();
@@ -1305,7 +1226,75 @@ window.onload = function () {
         }
         else
             button.removeAttr('disabled');
-    });
+    });*/
+
+    document.addEventListener('submit', (e) => {
+        let $this = e.target;
+        e.preventDefault();
+        if ( $this.classList.contains('modal-content') ){
+            let button = $this.querySelector('[type="submit"]');
+            button.setAttribute('disabled', 'disabled');
+            let groupNameEl = $this.querySelector('[name=\'name\']');
+            let groupName = groupNameEl.value.trim();
+            let openPrivateRadio = $this.querySelector('[name="openPrivate"]:checked');
+
+            let {data,err}=checkFields($this.id);
+
+            console.log(data);
+            console.log(err);
+
+            // let obj = {};
+            if (groupName.length > 2) {
+                if (openPrivateRadio.value === 'off' ){
+                    err = false;
+                }
+                if (!err) {
+                    ipcRenderer.send('create_group', data);
+                    console.log(data);
+                    $('#AppModal').modal('toggle');
+                }
+            }
+            else {
+                button.removeAttribute('disabled');
+            }
+        }
+        else if ( $this.id === 'sendToken' ){
+            let error = false;
+            let sendTo = document.getElementById('sendTokenTo');
+            let thisForm = $this.closest('form');
+
+            let {data,err}=checkFields($this.id);
+
+            console.log(err);
+            // let data_arr = serializeArray(thisForm);
+            // let data = {};
+
+            // data_arr.forEach((elem) => {
+            //     console.log(elem.name);
+            //     const $element = thisForm.querySelector(`[name=${elem.name}]`);
+            //     if (!elem.value) {
+            //         $element.classList.add('error');
+            //         error = true;
+            //     } else {
+            //         $element.classList.remove('error');
+            //         data[elem.name] = elem.value;
+            //         error = false;
+            //     }
+            // });
+            //
+            // console.log(data, error);
+            if (sendTo.value < 3) {
+                err = true;
+            }
+            if (!err) {
+                // sendTo.classList.remove('error');
+                ipcRenderer.send('transfer_token', data);
+                // } else {
+                //     sendTo.classList.add('error');
+                //     sendTo.focus();
+            }
+        }
+    }, false);
 
     $(document).on('focusin', '[data-name="crowdsale__input"]', function (e) {
         let $this = $(this);
@@ -1748,35 +1737,8 @@ window.onload = function () {
             },function (directory) {
                 ipcRenderer.send('change_directory', directory + '/');
             });
-        } else if ( $this.classList.contains('sendTokenButton') ) {
-            let error = false
-            let sendTo = document.getElementById('sendTokenTo');
-            let thisForm = $this.closest('form');
-            console.log(thisForm);
-            let data_arr = serializeArray(thisForm);
-            let data = {};
+        // } else if ( $this.classList.contains('sendTokenButton') ) {
 
-            data_arr.forEach((elem) => {
-                console.log(elem.name);
-                const $element = thisForm.querySelector(`[name=${elem.name}]`);
-                if (!elem.value) {
-                    $element.classList.add('error');
-                    error = true;
-                } else {
-                    $element.classList.remove('error');
-                    data[elem.name] = elem.value;
-                    error = false;
-                }
-            });
-
-            console.log(data, error);
-            if (error === false) {
-                // sendTo.classList.remove('error');
-                ipcRenderer.send('transfer_token', data);
-            // } else {
-            //     sendTo.classList.add('error');
-            //     sendTo.focus();
-            }
         }
     });
 
@@ -2169,4 +2131,47 @@ window.onload = function () {
         })();
     };
     /* /FadeIn */
+
+
+    /*!
+     * Serialize all form data into an array
+     * (c) 2018 Chris Ferdinandi, MIT License, https://gomakethings.com
+     * @param  {Node}   form The form to serialize
+     * @return {String}      The serialized form data
+     */
+    let serializeArray = (form) => {
+
+        // Setup our serialized data
+        let serialized = [];
+
+        // Loop through each field in the form
+        for (let i = 0; i < form.elements.length; i++) {
+
+            let field = form.elements[i];
+
+            // Don't serialize fields without a name, submits, buttons, file and reset inputs, and disabled fields
+            if (!field.name || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') continue;
+
+            // If a multi-select, get all selections
+            if (field.type === 'select-multiple') {
+                for (let n = 0; n < field.options.length; n++) {
+                    if (!field.options[n].selected) continue;
+                    serialized.push({
+                        name: field.name.trim(),
+                        value: field.options[n].value.trim()
+                    });
+                }
+            }
+
+            // Convert field data to a query string
+            else if ((field.type !== 'checkbox' && field.type !== 'radio') || field.checked) {
+                serialized.push({
+                    name: field.name.trim(),
+                    value: field.value.trim()
+                });
+            }
+        }
+
+        return serialized;
+    };
 };
