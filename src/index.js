@@ -944,9 +944,11 @@ window.onload = function () {
         const chatList = document.querySelector('.chats__list');
         // const user = chatList.find('#' + obj.id);
         const user = document.getElementById(obj.id);
+        // console.log(obj.html);
         widthMsgWindow();
         if (user) {
-            user.replaceWith(obj.html);
+            // user.replaceWith(obj.html);
+            user.innerHTML = obj.html;
         } else {
             // $('.chats__list').prepend(obj.html);
             // let div = document.createElement('div');
