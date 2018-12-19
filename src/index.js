@@ -1124,9 +1124,14 @@ window.onload = function () {
         modalHeight();
     });
 
+    $(document).on('hidden.bs.modal', '.modal', function () {
+        $(this).find('.modal-content').css({
+            'height' : 'auto',
+        });
+    });
+
     $(document).on('shown.bs.collapse hidden.bs.collapse', '#token_row', function () {
         modalHeight();
-        console.log('show/hide');
     });
 
     $(document).on('change', '[name="openPrivate"]', function () {
@@ -1164,7 +1169,6 @@ window.onload = function () {
         const $this = document.getElementById(id);
         let els = serializeArray($this);
         console.log(els);
-        // if (els.length===0) return err;
         let ret={
             err:true,
             data:{}
@@ -2093,6 +2097,7 @@ window.onload = function () {
         let height = modal.offsetHeight;
         let windowHeight = document.body.clientHeight;
         // modal.style.maxHeight = '70vh';
+        modal.style.height = ( windowHeight * .7 ) + 'px';
         if ( height > windowHeight ) {
             modal.style.height = ( windowHeight * .7 ) + 'px';
             console.log(height, windowHeight);

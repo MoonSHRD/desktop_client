@@ -1,6 +1,16 @@
 .modal{
     //@extend .custom-scrollbar;
 
+    &.fade .modal-dialog {
+        transition: transform 0.5s ease-out;
+        transform: translate(0, 25%);
+    }
+
+    &.show .modal-dialog {
+        transition: transform 0.5s ease-out;
+        transform: translate(0, 0);
+    }
+
     &-content{
         background-color: $cf;
         //height: auto;
